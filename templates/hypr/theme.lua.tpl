@@ -27,4 +27,6 @@ hl.config({
     },
 
     animations = { enabled = {{ effects.animations }} },
+
+    misc = { font_family = {{ font.mono | json }} },
 })

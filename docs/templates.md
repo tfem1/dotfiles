@@ -28,6 +28,7 @@ a suggestion when a close name exists. A literal `{{` is not allowed; write
 | Module colors | `modules.wifi`, `modules.audio`, … | |
 | Palette info | `palette.name` `palette.family` `palette.variant` `palette.author` | `"dark"` |
 | Settings | every key of `theme.toml` in dotted form | `shape.radius`, `font.sans` |
+| Shell settings | every key of `config.json` in dotted form | `shell.name` |
 
 `wallpaper.path` is always absolute (relative paths point into `wallpapers/`).
 

@@ -27,4 +27,6 @@ hl.config({
     },
 
     animations = { enabled = true },
+
+    misc = { font_family = "JetBrainsMono Nerd Font" },
 })

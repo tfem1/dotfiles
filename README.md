@@ -62,15 +62,54 @@ Run the tests with:
 PYTHONPATH=scripts:tests python3 -m unittest discover -s tests
 ```
 
+## Hyprland config
+
+`hypr/` is a complete Hyprland configuration in Lua (Hyprland 0.55 or newer),
+split into small modules: variables, monitors, settings, animations,
+autostart and keybinds. Every shortcut has a description; the full list is in
+[docs/roadmap.md](docs/roadmap.md#3-quickshell-shell-bar-osd-launcher-notifications)
+and in `hypr/config/keybinds.lua`.
+
+- Every screen runs at its highest refresh rate, including screens plugged
+  in later.
+- Apps, modifier key and keyboard layout are set in
+  `hypr/config/variables.lua`.
+- Colors, gaps, corners and blur come from `theme.toml` through the generated
+  `theme.lua`.
+
+The installer is not written yet. To use the config now, back up yours, copy
+this one, put the CLI on your `PATH` (the screenshot keys use it) and
+generate the theme:
+
+```bash
+cp -a ~/.config/hypr ~/.config/hypr.backup
+```
+```bash
+cp -r hypr/. ~/.config/hypr/
+```
+```bash
+ln -s "$PWD/tfem" ~/.local/bin/tfem
+```
+```bash
+./tfem generate
+```
+
+It expects these programs: Hyprland, Quickshell (`qs`), kitty, Firefox,
+Nautilus, wl-clipboard, cliphist, grim, slurp, satty, WirePlumber (`wpctl`),
+brightnessctl, playerctl and hyprlock. The shell panels opened by the keys
+(launcher, wallpaper, settings…) arrive with the Quickshell shell.
+
 ## Repository layout
 
 ```
 theme.toml            default look of the desktop (the single source of truth)
 config.json           default shell behaviour (shell name, and more later)
 tfem                  CLI
+hypr/                 Hyprland config in Lua (copied to ~/.config/hypr/)
 themes/               base16 palettes, one file per theme
 templates/            one template per generated file + targets.toml manifest
 scripts/generate.sh   entry point of the generator
+scripts/screenshot.sh screenshots (region or full screen, optional editing)
 scripts/theming/      generator: settings, palette, template engine, safe writer
 tests/                unit and end-to-end tests, golden files
 docs/                 architecture, template format, roadmap

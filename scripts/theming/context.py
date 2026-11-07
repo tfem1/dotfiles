@@ -9,10 +9,14 @@ from .paths import Paths
 from .schema import THEME_SCHEMA
 
 
-def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths) -> dict[str, object]:
-    context: dict[str, object] = {
-        key: value for key, value in theme.items() if not key.startswith("palette.overrides.")
-    }
+def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths,
+                  config: Mapping[str, object] | None = None) -> dict[str, object]:
+    # Shell settings (config.json) first: their keys ("shell.name") never
+    # clash with the appearance keys of theme.toml.
+    context: dict[str, object] = dict(config or {})
+    context.update(
+        {key: value for key, value in theme.items() if not key.startswith("palette.overrides.")}
+    )
     context.update(palette.variables())
 
     # A hue ("blue", "accent") becomes the matching color of the palette.

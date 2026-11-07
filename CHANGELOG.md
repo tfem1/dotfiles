@@ -19,6 +19,13 @@ All notable changes to this project are documented here. The format follows
 - Templates for Hyprland (Lua config, Hyprland 0.55+) and for the Quickshell
   shell (`theme.json`).
 - Unit and end-to-end tests with golden files.
+- Hyprland config in Lua (`hypr/`): modules for variables, monitors (highest
+  refresh rate on every screen), settings, animations, autostart (clipboard
+  history, shell) and keybinds with descriptions, using the same key layout
+  as Serpantinum. Checked by tests that load it in a fake Hyprland API.
+- Generated `hypr/shell.lua` (shell name from `config.json`) and Hyprland
+  font from `theme.toml`.
+- `tfem screenshot region|full [--edit]` (grim, slurp, satty).
 - Roadmap: themes before the shell, two styles (Material and Mono), look
   profiles, first-launch wizard, optional dock, game mode, do not disturb,
   stay awake, Polkit agent, two SDDM themes, wallhaven wallpaper collection.

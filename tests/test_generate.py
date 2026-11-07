@@ -39,7 +39,9 @@ class OutputTest(GenerateTest):
     def test_renders_every_target_like_the_golden_files(self):
         code, _ = self.run_generate("--all")
         self.assertEqual(code, 0)
-        for produced, golden in ((self.hypr_theme, "theme.lua"), (self.shell_theme, "theme.json")):
+        hypr_shell = self.paths.config_home / "hypr/shell.lua"
+        pairs = ((self.hypr_theme, "theme.lua"), (hypr_shell, "shell.lua"), (self.shell_theme, "theme.json"))
+        for produced, golden in pairs:
             with self.subTest(golden=golden):
                 if os.environ.get("UPDATE_GOLDEN"):
                     (GOLDEN / golden).write_text(produced.read_text())
@@ -59,7 +61,7 @@ class OutputTest(GenerateTest):
     def test_second_run_changes_nothing(self):
         self.run_generate("--all")
         _, output = self.run_generate("--all")
-        self.assertEqual(output.count("unchanged"), 2)
+        self.assertEqual(output.count("unchanged"), 3)
 
     def test_absent_apps_are_skipped(self):
         code, output = self.run_generate()
@@ -81,6 +83,16 @@ class OutputTest(GenerateTest):
         self.write_user_file("config.json", '{"shell": {"name": "aurora"}}')
         self.run_generate("--all")
         self.assertTrue((self.paths.config_home / "quickshell/aurora/theme.json").exists())
+        shell_lua = (self.paths.config_home / "hypr/shell.lua").read_text()
+        self.assertIn('shellName = "aurora"', shell_lua)
+
+    def test_shipped_hyprland_config_already_loads_the_theme(self):
+        shipped = (REPO / "hypr/hyprland.lua").read_text()
+        config = self.paths.config_home / "hypr/hyprland.lua"
+        config.parent.mkdir(parents=True)
+        config.write_text(shipped)
+        self.run_generate("--all")
+        self.assertEqual(config.read_text(), shipped)
 
 
 class SafetyTest(GenerateTest):

@@ -15,6 +15,7 @@ Commands:
                   --dry-run           show what would change, write nothing
                   --only NAME[,NAME]  render only these targets
                   --all               render even if the app is not installed
+  screenshot    Take a screenshot: region|full [--edit]
   help          Show this help
 
 Your settings: \${XDG_CONFIG_HOME:-~/.config}/tfem/theme.toml and config.json
@@ -27,6 +28,7 @@ if [[ $# -gt 0 ]]; then shift; fi
 
 case "$command" in
   generate) exec "$root/scripts/generate.sh" "$@" ;;
+  screenshot) exec "$root/scripts/screenshot.sh" "$@" ;;
   help | -h | --help) usage ;;
   *)
     echo "$prog: unknown command '$command'" >&2

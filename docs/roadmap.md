@@ -101,7 +101,7 @@ Themes come before the shell, so the shell is built with the final palettes.
   rounded dark bar of app icons (pinned and running), a small dot under each
   running app.
 - **Do not disturb**: notifications are kept but not shown.
-- **Hyprland base config** in Lua, split into small modules (variables, env,
+- **Hyprland base config** (done, in `hypr/`) in Lua, split into small modules (variables, env,
   monitors, autostart, settings, animations, keybinds), never overwriting an
   existing user config. Same behaviour as the user's reference config
   (Serpantinum's), written from scratch:

@@ -52,7 +52,7 @@ def main(argv: list[str] | None = None, env: Mapping[str, str] = os.environ) -> 
     if args.dry_run:
         print("Dry run: nothing is written.")
 
-    context = build_context(theme, palette, paths)
+    context = build_context(theme, palette, paths, config)
     writer = Writer(paths, dry_run=args.dry_run)
     results = [_run(target, context, writer, paths, args, env) for target in targets]
     writer.save()

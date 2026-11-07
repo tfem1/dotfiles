@@ -19,6 +19,13 @@ reload   = "hyprctl reload"
 # create = false: never create an empty hyprland.lua in place of yours.
 include  = { into = "{config}/hypr/hyprland.lua", line = 'require("theme")', comment = "--" }
 
+[hyprland-shell]
+template = "hypr/shell.lua.tpl"
+output   = "{config}/hypr/shell.lua"
+needs    = "Hyprland"
+reload   = "hyprctl reload"
+# Loaded by hyprland.lua (require("shell")): no include needed.
+
 [quickshell]
 template = "quickshell/theme.json.tpl"
 output   = "{config}/quickshell/{shell}/theme.json"
