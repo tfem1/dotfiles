@@ -44,15 +44,38 @@ Themes come before the shell, so the shell is built with the final palettes.
 - Colors read live from the generated `theme.json` (`FileView` + `JsonAdapter`).
 - **Two visual styles, switchable in Settings** (`shell.style` in
   `config.json`), sharing the same components where possible:
-  - *Material*: thin vertical bar, rounded pill buttons, side panel with quick
-    toggles, notifications and calendar, media card. Reference:
-    [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland)
-    (illogical-impulse).
+  - *Material* (**default, main target**): the look of end-4's
+    illogical-impulse from its AGS era (late 2023), as preserved in
+    [tibssy/hyprland-dotfiles](https://github.com/tibssy/hyprland-dotfiles)
+    (GPL-3.0, like this project). Details below.
   - *Mono*: top bar with grouped pills, monospace font, large pixel clock on
     the desktop, compact control panel with avatar, uptime, 2×2 tiles and wide
     sliders. Reference: [aelyx-shell](https://github.com/xZepyx/aelyx-shell).
-  - Both are original implementations; only the look is reproduced, without
-    the gradients some references use.
+  - Both are rebuilt in Quickshell: the reference runs on AGS v1 and ships a
+    hyprlang `.conf` that Hyprland 0.57 no longer reads, so it cannot be used
+    as is. No gradients, whatever the references do.
+- **Material style, element by element:**
+  - *Bar* (replaces Waybar, as planned): full width at the top. Center, side
+    by side: now playing (cover, title, artist, progress), the workspaces
+    (numbered circles, occupied ones highlighted) in a "notch" rounded at the
+    bottom, then the clock with the date. Left area: active window (app and
+    title), opens the left sidebar. Right area: keyboard layout, network,
+    Bluetooth, battery, tray, opens the right sidebar.
+  - *Right sidebar*: large time and uptime, power and settings buttons, a row
+    of quick toggle pills, grouped notifications with "Clear", a calendar with
+    Calendar and To-do tabs.
+  - *Left sidebar*: media card (cover, controls, progress), an anime image
+    panel and a quote widget. The image panel is **SFW only**: NSFW sources and
+    tags are never exposed.
+  - *Desktop*: large clock and date in a corner, credit of the current
+    wallpaper ("Illustration by …", from the wallpaper collection data),
+    rounded screen corners.
+  - *Overview*: open windows per workspace, with app search, calculator and
+    command runner; it doubles as the launcher.
+  - *Session menu* (lock, log out, suspend, reboot, shut down) and an optional
+    on-screen keyboard.
+  - Colors from the wallpaper by default (Material You), curated themes still
+    available.
 - **Optional dock**: `dock.enabled` in `config.json`, styled to match.
 - **Do not disturb**: notifications are kept but not shown.
 
