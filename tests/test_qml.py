@@ -27,7 +27,7 @@ VISUAL = [
     "components/Icon.qml", "components/Label.qml", "components/Pill.qml",
     "components/RingProgress.qml", "components/NotchCorner.qml",
     "bar/BarContent.qml", "bar/Workspaces.qml", "bar/MediaChip.qml", "bar/ClockChip.qml",
-    "bar/StatusArea.qml", "bar/ActiveWindow.qml", "osd/OsdContent.qml",
+    "bar/StatusArea.qml", "osd/OsdContent.qml",
     "notifications/NotificationCard.qml", "launcher/LauncherContent.qml", "launcher/LauncherItem.qml",
 ]
 

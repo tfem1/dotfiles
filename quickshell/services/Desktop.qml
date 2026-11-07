@@ -3,7 +3,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Hyprland
 
-// Hyprland state for the bar: workspaces 1 to 10 and the focused window.
+// Hyprland state for the bar: workspaces 1 to 10.
 Singleton {
     id: root
 
@@ -22,10 +22,6 @@ Singleton {
         }
         return list;
     }
-
-    readonly property var window: Hyprland.activeToplevel
-    readonly property string title: window ? window.title : ""
-    readonly property string appId: window && window.wayland ? window.wayland.appId : ""
 
     function focus(id) {
         const workspace = Hyprland.workspaces.values.find(w => w.id === id);

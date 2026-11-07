@@ -26,8 +26,6 @@ PanelWindow {
         id: content
         anchors.fill: parent
 
-        appId: Desktop.appId
-        title: Desktop.title
         workspaces: Desktop.workspaces
         hasMedia: Player.active
         mediaTitle: Player.title

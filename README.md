@@ -177,8 +177,7 @@ Hyprland. The installer copies it to `~/.config/quickshell/desktop/` (the
 folder name is `shell.name` in your `config.json`). Its colors follow
 `theme.toml` live: run `tfem generate` and the shell recolors itself.
 
-- **Bar** (look of illogical-impulse): the focused window on the left; in the
-  center now playing with a progress ring (click to play or pause), the
+- **Bar** (look of illogical-impulse): in the center now playing with a progress ring (click to play or pause), the
   workspaces 1 to 10 in a notch (click to switch), the clock and date; on the
   right the keyboard layout, sound, network, Bluetooth and battery, each in
   its module color.

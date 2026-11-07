@@ -28,8 +28,6 @@ Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        appId: "org.gnome.Nautilus"
-        title: "Pictures — Wallpapers"
         workspaces: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(id => ({
             id: id, focused: id === 2, occupied: [1, 2, 4, 7].includes(id), urgent: false
         }))

@@ -7,8 +7,6 @@ import "../components"
 Rectangle {
     id: bar
 
-    property string appId: ""
-    property string title: ""
     property var workspaces: []
     property bool hasMedia: false
     property string mediaTitle: ""
@@ -20,21 +18,10 @@ Rectangle {
 
     signal workspaceClicked(int id)
     signal mediaToggled
-    signal leftClicked
     signal rightClicked
 
     implicitHeight: 44
     color: Theme.panel
-
-    ActiveWindow {
-        anchors.left: parent.left
-        anchors.leftMargin: 18
-        anchors.verticalCenter: parent.verticalCenter
-        width: Math.max(0, center.x - 36)
-        appId: bar.appId
-        title: bar.title
-        TapHandler { onTapped: bar.leftClicked() }
-    }
 
     Row {
         id: center

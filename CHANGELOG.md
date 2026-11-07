@@ -44,7 +44,7 @@ All notable changes to this project are documented here. The format follows
 - Color checks (`theming.hues`): hue classes, neighbour rule, WCAG contrast.
 - 34 more My Little Pony wallpapers: 84 in total, 53 of them pony.
 - The Quickshell shell (`quickshell/`): bar in the illogical-impulse look
-  (focused window, now playing with progress ring, workspaces in a notch,
+  (now playing with progress ring, workspaces in a notch,
   clock, keyboard layout, sound, network, Bluetooth, battery), volume and
   brightness OSD, notification daemon with popups, app launcher, IPC for the
   keybinds. Visual parts are plain QtQuick; Quickshell services are wrapped in
