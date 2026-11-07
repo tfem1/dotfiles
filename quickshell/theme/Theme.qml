@@ -1,0 +1,88 @@
+pragma Singleton
+import QtQuick
+
+// Colors, fonts and shapes of the shell, filled from the generated theme.json
+// by ThemeFile. Plain QtQuick (no Quickshell) so tools/preview can render the
+// same components. Defaults are the Twilight theme.
+QtObject {
+    id: theme
+
+    property string name: "Twilight"
+    property string variant: "dark"
+
+    property color bg: "#171c2b"
+    property color bgAlt: "#121521"
+    property color surface: "#242b42"
+    property color muted: "#414d77"
+    property color subtle: "#6a79ae"
+    property color fg: "#e1cfe7"
+    property color fgBright: "#ece0f0"
+    property color accent: "#d19fe4"
+    property color red: "#e694a1"
+    property color orange: "#e6b694"
+    property color yellow: "#e6d594"
+    property color green: "#94e69a"
+    property color cyan: "#94e6e6"
+    property color blue: "#779bcb"
+    property color purple: "#d19fe4"
+    property color brown: "#ed438d"
+
+    // One color per module, chosen in theme.toml ([modules]).
+    component ModuleColors: QtObject {
+        property color workspaces: "#d19fe4"
+        property color clock: "#d19fe4"
+        property color media: "#94e6e6"
+        property color resources: "#e6b694"
+        property color battery: "#e6d594"
+        property color wifi: "#779bcb"
+        property color network: "#94e6e6"
+        property color bluetooth: "#d19fe4"
+        property color audio: "#94e69a"
+        property color brightness: "#e6d594"
+        property color notifications: "#d19fe4"
+    }
+    property ModuleColors modules: ModuleColors {}
+
+    property string fontSans: "Inter"
+    property string fontMono: "JetBrainsMono Nerd Font"
+    property int fontSize: 11
+    property int radius: 12
+    property int border: 0
+    property real opacity: 0.9
+    property bool animations: true
+    property string wallpaper: ""
+
+    // Derived values used everywhere.
+    readonly property int duration: animations ? 180 : 0
+    readonly property real fontPixels: fontSize * 4 / 3
+    readonly property color panel: Qt.alpha(bg, opacity)
+
+    // Copies the values of a parsed theme.json; unknown keys are ignored.
+    function apply(data) {
+        const copy = (target, values) => {
+            for (const key in values || {})
+                if (key in target)
+                    target[key] = values[key];
+        };
+        copy(theme, data.colors);
+        copy(theme.modules, data.modules);
+        if (data.palette) {
+            theme.name = data.palette.name;
+            theme.variant = data.palette.variant;
+        }
+        if (data.font) {
+            theme.fontSans = data.font.sans;
+            theme.fontMono = data.font.mono;
+            theme.fontSize = data.font.size;
+        }
+        if (data.shape) {
+            theme.radius = data.shape.radius;
+            theme.border = data.shape.border;
+        }
+        if (data.effects) {
+            theme.opacity = data.effects.opacity;
+            theme.animations = data.effects.animations;
+        }
+        theme.wallpaper = data.wallpaper || "";
+    }
+}

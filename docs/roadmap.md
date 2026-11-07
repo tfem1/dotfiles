@@ -70,6 +70,10 @@ Themes come before the shell, so the shell is built with the final palettes.
 
 ## 3. Quickshell shell: bar, OSD, launcher, notifications
 
+- **Done:** bar (Material style), OSD, notifications, launcher, IPC for the
+  keybinds, deployed by the installer. **Next:** sidebars, dock, Mono style,
+  bar autohide, do not disturb.
+
 - A single `shell.qml` that only composes; every hidden part in a `Loader`.
 - Colors read live from the generated `theme.json` (`FileView` + `JsonAdapter`).
 - **Two visual styles, switchable in Settings** (`shell.style` in

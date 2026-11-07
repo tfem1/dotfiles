@@ -9,6 +9,19 @@ BIN_DIR="$HOME/.local/bin"
 CLI_NAMES=(tfem dots wm)
 DEFAULT_WALLPAPER="pony/wallhaven-wymvyx.jpg"
 
+# The shell's folder: ~/.config/quickshell/<shell.name of your config.json>.
+shell_dir() {
+  local name
+  name="$(python3 -c 'import json, sys
+try:
+    print(json.load(open(sys.argv[1]))["shell"]["name"])
+except Exception:
+    print("desktop")' "$CONFIG_HOME/tfem/config.json" 2>/dev/null || true)"
+  [[ $name =~ ^[a-z0-9][a-z0-9_-]*$ ]] || name="desktop"
+  printf '%s/quickshell/%s\n' "$CONFIG_HOME" "$name"
+}
+SHELL_DIR="$(shell_dir)"
+
 # Appends a line to the install log, read back by --uninstall.
 record() {
   ((DRY_RUN)) && return 0
@@ -18,14 +31,15 @@ record() {
 
 # Every path the installer writes; existing ones are copied first.
 managed_paths() {
-  printf '%s\n' "$CONFIG_HOME/hypr" "$CONFIG_HOME/tfem"
+  printf '%s\n' "$CONFIG_HOME/hypr" "$CONFIG_HOME/tfem" "$SHELL_DIR"
   local name
   for name in "${CLI_NAMES[@]}"; do printf '%s\n' "$BIN_DIR/$name"; done
 }
 
 backup_existing() {
   local backup path
-  backup="$STATE_DIR/backups/install-$(date +%Y%m%d-%H%M%S)"
+  # Nanoseconds in the name: two runs never share (and mix) a backup.
+  backup="$STATE_DIR/backups/install-$(date +%Y%m%d-%H%M%S-%N)"
   while read -r path; do
     [[ -e $path || -L $path ]] || continue
     run mkdir -p "$backup$(dirname "$path")"
@@ -40,6 +54,25 @@ deploy_hypr() {
   run mkdir -p "$CONFIG_HOME/hypr"
   run cp -r "$ROOT/hypr/." "$CONFIG_HOME/hypr/"
   info "Hyprland config copied to $CONFIG_HOME/hypr"
+}
+
+deploy_shell() {
+  [[ -e $SHELL_DIR ]] || record "created $SHELL_DIR"
+  run mkdir -p "$SHELL_DIR"
+  run cp -r "$ROOT/quickshell/." "$SHELL_DIR/"
+  info "shell copied to $SHELL_DIR"
+}
+
+# Puts a folder back from the first backup, or removes it if we created it.
+restore_dir() {
+  local backup="$1" dir="$2"
+  if [[ -n $backup && -e $backup$dir ]]; then
+    run rm -rf "$dir"
+    run cp -a "$backup$dir" "$dir"
+    info "restored $dir"
+  elif grep -qx "created $dir" "$INSTALL_LOG"; then
+    run rm -rf "$dir"
+  fi
 }
 
 # Links the CLI and its neutral aliases; never replaces someone else's command.
@@ -84,13 +117,8 @@ uninstall() {
     path="${line#link }"
     [[ $line == link\ * && -L $path ]] && run rm -f "$path"
   done <"$INSTALL_LOG"
-  if [[ -n $backup && -e $backup$CONFIG_HOME/hypr ]]; then
-    run rm -rf "$CONFIG_HOME/hypr"
-    run cp -a "$backup$CONFIG_HOME/hypr" "$CONFIG_HOME/hypr"
-    info "your previous Hyprland config is back"
-  elif grep -qx "created $CONFIG_HOME/hypr" "$INSTALL_LOG"; then
-    run rm -rf "$CONFIG_HOME/hypr"
-  fi
+  restore_dir "$backup" "$CONFIG_HOME/hypr"
+  restore_dir "$backup" "$SHELL_DIR"
   run mv "$INSTALL_LOG" "$INSTALL_LOG.uninstalled-$(date +%Y%m%d-%H%M%S)"
   info "kept: your settings ($CONFIG_HOME/tfem), wallpapers, backups and installed packages"
   if grep -qx "cloned $ROOT" "$INSTALL_LOG"* 2>/dev/null; then

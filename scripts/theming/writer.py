@@ -7,7 +7,7 @@ import os
 import re
 import shutil
 import tempfile
-import time
+from datetime import datetime
 from pathlib import Path
 
 from .paths import Paths
@@ -40,7 +40,8 @@ class Writer:
     def __init__(self, paths: Paths, dry_run: bool = False):
         self.paths = paths
         self.dry_run = dry_run
-        self.backup_dir = paths.state_dir / "backups" / time.strftime("%Y%m%d-%H%M%S")
+        # Microseconds in the name: two runs never share (and mix) a backup.
+        self.backup_dir = paths.state_dir / "backups" / datetime.now().strftime("%Y%m%d-%H%M%S-%f")
         self.backups: list[Path] = []
         self._registry_file = paths.state_dir / REGISTRY
         self._registry = self._load_registry()

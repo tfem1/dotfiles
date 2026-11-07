@@ -38,6 +38,7 @@ class InstallTest(unittest.TestCase):
         for name, body in FAKES.items():
             self.write_tool(self.fake_bin / name, body)
         self.set_hyprland("0.57.1")
+        self.write_tool(self.hypr_bin / "qs", 'echo "qs $*" >> "$LOG"')  # Quickshell is installed
         self.log = self.home / "calls.log"
 
     def tearDown(self):
@@ -136,6 +137,8 @@ class DeployTest(InstallTest):
         self.assertEqual([b.read_text() for b in backups], ["-- mine\n"])
         self.assertEqual(self.config("hypr/hyprland.lua").read_text(), (REPO / "hypr/hyprland.lua").read_text())
         self.assertTrue(self.config("hypr/theme.lua").exists())
+        self.assertTrue(self.config("quickshell/desktop/shell.qml").exists())
+        self.assertTrue(self.config("quickshell/desktop/theme.json").exists())
         self.assertEqual(Path(os.readlink(self.home / ".local/bin/tfem")), REPO / "tfem")
 
     def test_someone_elses_command_is_not_replaced(self):
@@ -155,6 +158,7 @@ class DeployTest(InstallTest):
         self.assertEqual(code, 0)
         self.assertEqual(self.config("hypr/hyprland.lua").read_text(), "-- mine\n")
         self.assertFalse((self.home / ".local/bin/tfem").exists())
+        self.assertFalse(self.config("quickshell/desktop").exists())  # created by the install
 
 
 if __name__ == "__main__":

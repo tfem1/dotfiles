@@ -79,13 +79,15 @@ run("playerctl play-pause", "Play or pause", locked)("XF86AudioPause")
 run("playerctl previous", "Previous track", locked)("XF86AudioPrev")
 run("playerctl next", "Next track", locked)("XF86AudioNext")
 
--- Volume and brightness (the shell shows the OSD when the value changes) ---
+-- Volume and brightness: the shell shows the OSD (it watches the volume,
+-- brightness changes are announced to it).
 run("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+", "Raise the volume", held)("XF86AudioRaiseVolume")
 run("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-", "Lower the volume", held)("XF86AudioLowerVolume")
 run("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle", "Mute the sound", locked)("XF86AudioMute")
 run("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle", "Mute the microphone", locked)("XF86AudioMicMute")
-run("brightnessctl -e4 -n2 set 5%+", "Raise the brightness", held)("XF86MonBrightnessUp")
-run("brightnessctl -e4 -n2 set 5%-", "Lower the brightness", held)("XF86MonBrightnessDown")
+local osd = " && qs ipc -c " .. shell .. " call osd brightness"
+run("brightnessctl -e4 -n2 set 5%+" .. osd, "Raise the brightness", held)("XF86MonBrightnessUp")
+run("brightnessctl -e4 -n2 set 5%-" .. osd, "Lower the brightness", held)("XF86MonBrightnessDown")
 
 -- Screenshots (saved in ~/Pictures/Screenshots and copied) -----------------
 run("tfem screenshot region", "Screenshot of a region", locked)("Print")

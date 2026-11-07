@@ -1,0 +1,6 @@
+singleton Desktop 1.0 Desktop.qml
+singleton Keyboard 1.0 Keyboard.qml
+singleton Player 1.0 Player.qml
+singleton Audio 1.0 Audio.qml
+singleton Power 1.0 Power.qml
+singleton Connectivity 1.0 Connectivity.qml

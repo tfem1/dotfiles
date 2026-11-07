@@ -170,6 +170,36 @@ and in `hypr/config/keybinds.lua`.
 The installer copies it to `~/.config/hypr`. The shell panels opened by the
 keys (launcher, wallpaper, settings…) arrive with the Quickshell shell.
 
+## Shell
+
+`quickshell/` is the desktop shell, one Quickshell process started with
+Hyprland. The installer copies it to `~/.config/quickshell/desktop/` (the
+folder name is `shell.name` in your `config.json`). Its colors follow
+`theme.toml` live: run `tfem generate` and the shell recolors itself.
+
+- **Bar** (look of illogical-impulse): the focused window on the left; in the
+  center now playing with a progress ring (click to play or pause), the
+  workspaces 1 to 10 in a notch (click to switch), the clock and date; on the
+  right the keyboard layout, sound, network, Bluetooth and battery, each in
+  its module color.
+- **OSD** under the bar for the volume and the brightness.
+- **Notifications**: the shell is the notification daemon; popups in the
+  top-right corner, urgent ones stay until closed.
+- **Launcher** (`SUPER + D`): type to search, arrows to move, Enter to launch.
+
+Still to come: the sidebars, the dock, the Mono style, the settings window and
+the panels opened by the other keys.
+
+To see it without a Wayland session (it renders the shell's own QML files with
+sample data):
+
+```bash
+pip install PySide6-Essentials
+```
+```bash
+python3 tools/preview/render.py --theme pony-pinkie --wallpaper your-image.png --out preview/
+```
+
 ## Repository layout
 
 ```
@@ -177,6 +207,7 @@ theme.toml            default look of the desktop (the single source of truth)
 config.json           default shell behaviour (shell name, and more later)
 tfem                  CLI
 hypr/                 Hyprland config in Lua (copied to ~/.config/hypr/)
+quickshell/           the shell: bar, OSD, notifications, launcher
 install.sh, install/   one-command installer and its package table
 wallpapers/           wallpaper collection (list only, images are downloaded)
 themes/               base16 palettes, one file per theme
@@ -185,7 +216,9 @@ scripts/generate.sh   entry point of the generator
 scripts/screenshot.sh screenshots (region or full screen, optional editing)
 scripts/wallpapers.py wallpaper download (tfem wallpapers fetch)
 scripts/theming/      generator: settings, palette, template engine, safe writer
+tools/                icon generator, preview renderer
 tests/                unit and end-to-end tests, golden files
+licenses/             licenses of bundled third-party material
 docs/                 architecture, template format, roadmap
 ```
 
@@ -215,6 +248,11 @@ Settings window.
   theme file plus one marked include line instead of overwriting configs.
   Only ideas were reused: TFEM is an original implementation and contains no
   Serpantinum code.
+- **[Material Symbols](https://github.com/google/material-design-icons)**
+  (Google, Apache-2.0, see `licenses/Apache-2.0.txt`): the shell's icons,
+  extracted by `tools/fetch_icons.py`.
+- **[end-4/dots-hyprland](https://github.com/end-4/dots-hyprland)**
+  (illogical-impulse): the look of the bar, rebuilt with original code.
 - **[tinted-theming](https://github.com/tinted-theming/schemes)** (MIT) for
   the base16 palettes and the standard terminal color mapping.
 - Visual references for the upcoming shell and login screens are listed in
