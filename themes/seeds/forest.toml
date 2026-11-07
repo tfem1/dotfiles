@@ -1,0 +1,34 @@
+# Seeds of the forest themes: original colors of a pine wood (needles,
+# moss, fern, lichen, bark, sunlight), no other theme copied. Build the
+# theme files with:
+#   PYTHONPATH=scripts python3 -m theming.builder themes/seeds/forest.toml
+# Same keys as pony.toml: tint, text, accent and slots (hue slot -> color).
+# The builder keeps each hue and adjusts lightness until it is readable.
+
+prefix = "forest"
+family = "Forest"
+credit = "Original colors of a pine forest"
+
+[themes.pine]                     # deep pine shade, young leaves, lichen
+name    = "Pine"
+variant = "dark"
+tint    = "#1E4D3A"
+text    = "#D4E9C8"
+accent  = "#8FD18C"
+slots   = { green = "#8FD18C", cyan = "#6CC3B0", yellow = "#E8D27A", orange = "#D69A62" }
+
+[themes.moss]                     # olive moss on bark, sunlight through leaves
+name    = "Moss"
+variant = "dark"
+tint    = "#3B4A1E"
+text    = "#E6EBC6"
+accent  = "#8CC45A"
+slots   = { green = "#8CC45A", yellow = "#EBCB6B", orange = "#D9925A" }
+
+[themes.fern]                     # light: pale fern, dark pine text
+name    = "Fern"
+variant = "light"
+tint    = "#CFE3C4"
+text    = "#1F3A2A"
+accent  = "#3E8E55"
+slots   = { green = "#3E8E55", cyan = "#2F8A80", orange = "#B5652E" }

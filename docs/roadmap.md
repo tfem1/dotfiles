@@ -66,9 +66,11 @@ Themes come before the shell, so the shell is built with the final palettes.
     plan) are rebuilt from their official palettes.
 - **Featured themes**, shown first in the theme picker:
   - *Kanagawa* (and Kanagawa Dragon): dark night background, **green** accent
-    and green-leaning module colors.
-  - Many more green themes: Everforest, Gruvbox Material, and others found by
-    the hue check.
+    and green-leaning module colors. **Done**, with Everforest Dark Hard and
+    three original forest themes (Pine, Moss, Fern). Darkmoss, Gruvbox
+    Forest and Everforest Dark Medium were left out: hue in the wrong slot
+    or text too pale.
+  - More green themes found by the hue check.
   - *Tokyo Night* (Night, Storm, Moon): **night blue** accent with some
     **purple** modules, built from the official Tokyo Night palette so its
     blue and purple are the real ones.
@@ -203,7 +205,7 @@ palette from the wallpaper.
   character's theme (Luna wallpaper, Luna theme). Wallpapers without a
   character keep the current theme or use colors from the image.
 
-**Collection (done: 31 forests, 19 My Little Pony): at least 50 wallpapers
+**Collection (done: 52 forests, 21 of them green, and 53 My Little Pony): at least 50 wallpapers
 from [wallhaven.cc](https://wallhaven.cc), mostly forests, plus My Little Pony.** Real images taken from the site, none
 generated.
 

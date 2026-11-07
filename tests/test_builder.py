@@ -69,5 +69,31 @@ class PonyThemesTest(unittest.TestCase):
                 self.assertIsNotNone(palette.accent)
 
 
+class GreenThemesTest(unittest.TestCase):
+    """The green themes: three official palettes, three built from forest seeds."""
+    OFFICIAL = ("kanagawa", "kanagawa-dragon", "everforest-dark-hard")
+
+    def test_forest_files_match_their_seeds(self):
+        done = subprocess.run([sys.executable, "-m", "theming.builder", str(REPO / "themes/seeds/forest.toml"),
+                               "--check"], cwd=REPO, env={"PYTHONPATH": str(REPO / "scripts")},
+                              capture_output=True, text=True)
+        self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
+
+    def test_every_green_theme_is_green_and_well_formed(self):
+        names = [*self.OFFICIAL, *(p.stem for p in sorted((REPO / "themes").glob("forest-*.toml")))]
+        self.assertEqual(len(names), 6)
+        for name in names:
+            with self.subTest(theme=name):
+                palette = load_palette(REPO / "themes" / f"{name}.toml")
+                self.assertEqual(hue_problems(palette.colors), [])
+                self.assertEqual(hue_class(palette.accent), "green")
+                self.assertGreaterEqual(contrast(palette.colors["base05"], palette.colors["base00"]), 7)
+
+    def test_every_theme_keeps_each_hue_in_its_slot(self):
+        for path in sorted((REPO / "themes").glob("*.toml")):
+            with self.subTest(theme=path.stem):
+                self.assertEqual(hue_problems(load_palette(path).colors), [])
+
+
 if __name__ == "__main__":
     unittest.main()

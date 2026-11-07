@@ -83,6 +83,12 @@ All notable changes to this project are documented here. The format follows
   include line to `kitty.conf` (created if missing) and reloads open kitty
   windows (SIGUSR1).
 - Roadmap: the next ten steps, in the order chosen.
+- Six green themes with a green accent: Kanagawa, Kanagawa Dragon and
+  Everforest Dark Hard (official palettes from tinted-theming, unchanged),
+  and the original Pine, Moss and Fern (`themes/seeds/forest.toml`). A test
+  checks every theme keeps each hue in its slot.
+- 21 green forest wallpapers from wallhaven.cc (moss, canopy, paths,
+  streams), checked by eye: 105 wallpapers, 53 pony and 52 forest.
 - Roadmap: themes before the shell, two styles (Material and Mono), look
   profiles, first-launch wizard, optional dock, game mode, do not disturb,
   stay awake, Polkit agent, two SDDM themes, wallhaven wallpaper collection.

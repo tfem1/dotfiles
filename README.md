@@ -57,11 +57,12 @@ and run it again. Versions checked on Repology on 2026-11-07.
 
 ### Wallpapers
 
-`wallpapers/collection.toml` lists 84 wallpapers from
-[wallhaven.cc](https://wallhaven.cc): 53 My Little Pony and 31 forests, SFW,
+`wallpapers/collection.toml` lists 105 wallpapers from
+[wallhaven.cc](https://wallhaven.cc): 53 My Little Pony and 52 forests (21 of
+them picked for their green: moss, canopy, paths, streams), SFW,
 at most 10 MB each, picked by hand. They are downloaded to
 `~/Pictures/Wallpapers/pony/` and `~/Pictures/Wallpapers/forest/` (about
-230 MB) and never stored in this repository: the images remain the property
+290 MB) and never stored in this repository: the images remain the property
 of their authors. Download or complete them at any time with
 `tfem wallpapers fetch`.
 
@@ -104,6 +105,23 @@ them into full base16 themes, adjusting lightness until every color is
 readable (WCAG contrast 7:1 for text, 4.5:1 for colors) and checking that
 each hue stays in its place. My Little Pony is a trademark of Hasbro; these
 are fan color schemes, with no artwork.
+
+Six **green** themes, with a green accent, to go with the forest wallpapers:
+
+| Theme | Look |
+|---|---|
+| `kanagawa` | ink night, autumn green (official Kanagawa palette) |
+| `kanagawa-dragon` | warm black, sage green (official palette) |
+| `everforest-dark-hard` | dark forest grey, soft green (official palette) |
+| `forest-pine` | deep pine, young-leaf green, lichen teal |
+| `forest-moss` | olive moss, fresh green, sunlight yellow |
+| `forest-fern` | light: pale fern, dark pine text |
+
+The first three come unchanged from
+[tinted-theming/schemes](https://github.com/tinted-theming/schemes) (MIT);
+the `forest-*` ones are original, built like the pony themes from
+`themes/seeds/forest.toml`. Every theme is checked: each hue in its slot,
+text readable.
 
 ## How theming works
 
