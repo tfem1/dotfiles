@@ -63,6 +63,10 @@ Themes come before the shell, so the shell is built with the final palettes.
 - Terminal themes (foot, kitty, alacritty, ghostty, wezterm), GTK and Qt,
   never overwriting existing configs.
 - `tfem theme <name>`.
+- **Fastfetch in the theme colors**, with an original logo (no official
+  artwork).
+- **Matching cursor and icons** (pink or purple variants), from what each
+  distro packages; checked per distro before being added to the installer.
 
 ## 3. Quickshell shell: bar, OSD, launcher, notifications
 
@@ -171,6 +175,10 @@ supported.
 - Color filters use the dominant color of each wallpaper, computed once with
   Quickshell's `ColorQuantizer` and cached.
 - Applying a wallpaper also regenerates the palette.
+- **Wallpaper = character:** each pony wallpaper of the collection names the
+  character it shows (`character = "luna"`); picking it switches to that
+  character's theme (Luna wallpaper, Luna theme). Wallpapers without a
+  character keep the current theme or use colors from the image.
 
 **Collection (done: 31 forests, 19 My Little Pony): at least 50 wallpapers
 from [wallhaven.cc](https://wallhaven.cc), mostly forests, plus My Little Pony.** Real images taken from the site, none
