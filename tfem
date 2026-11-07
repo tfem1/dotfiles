@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# CLI du projet. Les alias neutres (dots, wm) sont de simples liens vers ce
+# script : l'aide affiche toujours le nom sous lequel on l'a appelé.
+set -euo pipefail
+
+root="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+prog="$(basename "$0")"
+
+usage() {
+  cat <<EOF
+Usage: $prog <command> [options]
+
+Commands:
+  generate      Render every theme file from theme.toml
+                  --dry-run           show what would change, write nothing
+                  --only NAME[,NAME]  render only these targets
+                  --all               render even if the app is not installed
+  help          Show this help
+
+Your settings: \${XDG_CONFIG_HOME:-~/.config}/tfem/theme.toml and config.json
+Defaults:      $root
+EOF
+}
+
+command="${1:-help}"
+if [[ $# -gt 0 ]]; then shift; fi
+
+case "$command" in
+  generate) exec "$root/scripts/generate.sh" "$@" ;;
+  help | -h | --help) usage ;;
+  *)
+    echo "$prog: unknown command '$command'" >&2
+    usage >&2
+    exit 64
+    ;;
+esac

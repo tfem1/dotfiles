@@ -1,0 +1,63 @@
+# theme.toml — apparence du desktop : source de vérité unique.
+#
+# Ce fichier porte les valeurs par défaut. Ta copie personnelle vit dans
+# ~/.config/tfem/theme.toml : seules les clés que tu y écris remplacent celles-ci.
+# Ne modifie jamais un fichier généré : change un réglage ici (ou dans les
+# Settings), puis lance `tfem generate`.
+#
+# Règle de partage : l'apparence vit ici, tout le reste (barre, widgets,
+# écrans, identité) vit dans config.json.
+
+schema = 1                      # version du format, pour migrer proprement
+
+[palette]
+source = "catppuccin-mocha"     # un thème de themes/ ou de ~/.config/tfem/themes/, ou "wallpaper"
+accent = "purple"               # red | orange | yellow | green | cyan | blue | purple | brown
+mode   = "dark"                 # dark | light : utilisé quand la palette vient du wallpaper
+
+[palette.overrides]             # remplace un slot base16 précis du thème choisi, ex. :
+# base00 = "#11111b"
+
+[wallpaper]
+path = ""                       # vide = aucun ; relatif à wallpapers/ ou chemin absolu
+
+[font]
+sans      = "Inter"
+mono      = "JetBrainsMono Nerd Font"
+size      = 11                  # pt, texte du shell
+mono_size = 11                  # pt, terminaux
+
+[shape]
+radius   = 12                   # px, coins des fenêtres et des surfaces du shell
+border   = 2                    # px, bordure des fenêtres
+gaps_in  = 5                    # px, entre fenêtres
+gaps_out = 12                   # px, entre fenêtres et bords de l'écran
+
+[effects]
+opacity     = 0.9               # opacité des surfaces du shell (0.5 à 1.0)
+blur        = true
+blur_size   = 6
+blur_passes = 2
+shadow      = true
+animations  = true
+
+[cursor]
+theme = "Adwaita"
+size  = 24
+
+[icons]
+theme = "Papirus-Dark"
+
+[modules]                       # couleur de chaque module du shell :
+                                # accent ou une teinte (red, orange, yellow, green, cyan, blue, purple, brown)
+workspaces    = "accent"
+clock         = "accent"        # horloge et calendrier
+media         = "cyan"          # now-playing
+resources     = "orange"        # CPU et RAM
+battery       = "yellow"
+wifi          = "blue"
+network       = "cyan"
+bluetooth     = "purple"
+audio         = "green"         # module de la barre, onglet du panneau et OSD volume
+brightness    = "yellow"        # OSD luminosité
+notifications = "accent"        # les notifications urgentes restent toujours rouges

@@ -1,0 +1,26 @@
+# Manifeste des cibles : chaque entrée transforme un template en un fichier
+# généré, à l'emplacement standard de l'app concernée.
+#
+# Clés obligatoires : template (relatif à templates/), output.
+# Clés facultatives :
+#   needs   = binaire requis ; la cible est ignorée s'il est absent
+#   reload  = commande lancée quand le fichier généré a changé
+#   include = ligne ajoutée (entre marqueurs) dans la config de l'app pour
+#             charger le fichier généré : { into, line, comment = "#",
+#             position = "end" | "start", create = false }
+# Placeholders : {config} = $XDG_CONFIG_HOME (ou ~/.config),
+#                {shell}  = nom du shell, défini dans config.json (shell.name).
+
+[hyprland]
+template = "hypr/theme.lua.tpl"
+output   = "{config}/hypr/theme.lua"
+needs    = "Hyprland"
+reload   = "hyprctl reload"
+# create = false : on ne crée jamais un hyprland.lua vide à la place du tien.
+include  = { into = "{config}/hypr/hyprland.lua", line = 'require("theme")', comment = "--" }
+
+[quickshell]
+template = "quickshell/theme.json.tpl"
+output   = "{config}/quickshell/{shell}/theme.json"
+needs    = "qs"
+# Pas de reload : le shell surveille ce fichier et se met à jour tout seul.

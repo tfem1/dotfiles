@@ -1,0 +1,52 @@
+{
+  "palette": {
+    "name": "Catppuccin Mocha",
+    "variant": "dark"
+  },
+  "colors": {
+    "bg": "#1e1e2e",
+    "bgAlt": "#181825",
+    "surface": "#313244",
+    "muted": "#45475a",
+    "subtle": "#585b70",
+    "fg": "#cdd6f4",
+    "fgBright": "#f5e0dc",
+    "accent": "#cba6f7",
+    "red": "#f38ba8",
+    "orange": "#fab387",
+    "yellow": "#f9e2af",
+    "green": "#a6e3a1",
+    "cyan": "#94e2d5",
+    "blue": "#89b4fa",
+    "purple": "#cba6f7",
+    "brown": "#f2cdcd"
+  },
+  "modules": {
+    "workspaces": "#cba6f7",
+    "clock": "#cba6f7",
+    "media": "#94e2d5",
+    "resources": "#fab387",
+    "battery": "#f9e2af",
+    "wifi": "#89b4fa",
+    "network": "#94e2d5",
+    "bluetooth": "#cba6f7",
+    "audio": "#a6e3a1",
+    "brightness": "#f9e2af",
+    "notifications": "#cba6f7"
+  },
+  "font": {
+    "sans": "Inter",
+    "mono": "JetBrainsMono Nerd Font",
+    "size": 11
+  },
+  "shape": {
+    "radius": 12,
+    "border": 2
+  },
+  "effects": {
+    "opacity": 0.9,
+    "blur": true,
+    "animations": true
+  },
+  "wallpaper": ""
+}
