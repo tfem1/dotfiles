@@ -5,6 +5,7 @@ import json
 import os
 import shutil
 import subprocess
+import tomllib
 import unittest
 
 from helpers import REPO, SandboxTest
@@ -40,14 +41,19 @@ class OutputTest(GenerateTest):
         code, _ = self.run_generate("--all")
         self.assertEqual(code, 0)
         hypr = self.paths.config_home / "hypr"
+        config = self.paths.config_home
         pairs = ((self.hypr_theme, "theme.lua"), (hypr / "shell.lua", "shell.lua"),
                  (self.shell_theme, "theme.json"), (hypr / "hyprlock.conf", "hyprlock.conf"),
-                 (self.paths.config_home / "kitty/theme.conf", "kitty-theme.conf"))
+                 (config / "kitty/theme.conf", "kitty-theme.conf"),
+                 (config / "gtk-3.0/theme.css", "gtk3-theme.css"), (config / "gtk-4.0/theme.css", "gtk4-theme.css"),
+                 (config / "qt6ct/colors/theme.conf", "qt-colors.conf"), (config / "qt6ct/qt6ct.conf", "qt6ct.conf"))
         for produced, golden in pairs:
             with self.subTest(golden=golden):
+                # The config folder of the sandbox changes each run.
+                text = produced.read_text().replace(str(config), "{config}")
                 if os.environ.get("UPDATE_GOLDEN"):
-                    (GOLDEN / golden).write_text(produced.read_text())
-                self.assertEqual(produced.read_text(), (GOLDEN / golden).read_text())
+                    (GOLDEN / golden).write_text(text)
+                self.assertEqual(text, (GOLDEN / golden).read_text())
 
     def test_shell_theme_is_valid_json(self):
         self.run_generate("--all")
@@ -64,7 +70,8 @@ class OutputTest(GenerateTest):
     def test_second_run_changes_nothing(self):
         self.run_generate("--all")
         _, output = self.run_generate("--all")
-        self.assertEqual(output.count("unchanged"), 5)
+        targets = tomllib.loads((REPO / "templates/targets.toml").read_text())
+        self.assertEqual(output.count("unchanged"), len(targets))
 
     def test_absent_apps_are_skipped(self):
         code, output = self.run_generate()
@@ -132,6 +139,24 @@ class SafetyTest(GenerateTest):
         self.assertEqual(sorted(used - known), [])
         self.assertEqual(len(used), len(known))
 
+    def test_gtk_css_gets_the_import_first_in_a_closed_comment(self):
+        mine = self.paths.config_home / "gtk-4.0/gtk.css"
+        mine.parent.mkdir(parents=True)
+        mine.write_text("window { border-radius: 0; }\n")
+        self.run_generate("--all")
+        self.run_generate("--all")
+        self.assertEqual(mine.read_text(), '/* >>> generated: gtk4 >>> */\n@import url("theme.css");\n'
+                                           '/* <<< generated: gtk4 <<< */\n\nwindow { border-radius: 0; }\n')
+
+    def test_qt_palette_has_every_role_for_each_state(self):
+        self.run_generate("--all")
+        text = (self.paths.config_home / "qt6ct/colors/theme.conf").read_text()
+        rows = dict(line.split("=", 1) for line in text.splitlines() if line.endswith(tuple("0123456789abcdef")))
+        self.assertEqual(sorted(rows), ["active_colors", "disabled_colors", "inactive_colors"])
+        for state, colors in rows.items():
+            with self.subTest(state=state):
+                self.assertEqual(len(colors.split(", ")), 21)  # QPalette roles up to PlaceholderText
+
     def test_kitty_conf_is_created_when_missing(self):
         self.run_generate("--all")
         self.assertIn("include theme.conf", (self.paths.config_home / "kitty/kitty.conf").read_text())
@@ -179,6 +204,16 @@ class ManifestTest(GenerateTest):
         marker.unlink()
         self.run_generate()
         self.assertFalse(marker.exists())
+
+    def test_reload_command_can_use_theme_values(self):
+        marker = self.home / "variant name"
+        self.use_manifest(
+            f'[demo]\ntemplate = "demo.tpl"\noutput = "{{config}}/demo.txt"\n'
+            f'reload = "printf %s {{{{ palette.name | quote }}}} > \'{marker}\'"\n',
+            {"demo.tpl": "{{ accent }}\n"},
+        )
+        self.run_generate()
+        self.assertEqual(marker.read_text(), "Twilight")
 
     def test_no_reload_for_an_app_that_is_not_installed(self):
         marker = self.home / "reloaded"

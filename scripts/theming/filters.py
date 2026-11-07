@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import shlex
 from typing import Callable
 
 from .colors import Color
@@ -58,6 +59,12 @@ def _json(value: object, arg: str | None) -> object:
     return json.dumps(value, ensure_ascii=False)
 
 
+def _quote(value: object, arg: str | None) -> object:
+    """Shell-quoted, for reload commands: names with spaces stay one argument."""
+    _no_arg("quote", arg)
+    return shlex.quote(format_value(value))
+
+
 FILTERS: dict[str, Callable[[object, str | None], object]] = {
     "hex": _color_format("hex", "hex"),
     "strip": _color_format("strip", "strip"),
@@ -66,6 +73,7 @@ FILTERS: dict[str, Callable[[object, str | None], object]] = {
     "rgb": _color_format("rgb", "rgb"),
     "alpha": _alpha,
     "json": _json,
+    "quote": _quote,
 }
 
 

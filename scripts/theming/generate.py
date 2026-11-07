@@ -101,7 +101,12 @@ def _run(target: Target, context: dict, writer: Writer, paths: Paths,
     changed = status != "unchanged" or included in ("added", "updated")
     # No reload for an app that is not installed (target rendered because of --all).
     if changed and target.reload and installed and not args.dry_run:
-        notes.append(_reload(target.reload))
+        # The command may use theme values too, e.g. {{ gtk.color_scheme | quote }}.
+        try:
+            command = render(target.reload, context, source=f"targets.toml [{target.name}] reload")
+        except TemplateError as error:
+            return Result(target, status, f"reload not run: {error}")
+        notes.append(_reload(command))
     return Result(target, status, "; ".join(notes))
 
 

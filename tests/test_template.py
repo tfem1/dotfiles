@@ -39,6 +39,10 @@ class RenderTest(unittest.TestCase):
     def test_json_filter_quotes_and_escapes(self):
         self.assertEqual(render("{{ font.sans | json }}", CONTEXT), '"My \\"Font\\""')
 
+    def test_quote_filter_keeps_one_shell_argument(self):
+        self.assertEqual(render("{{ font.sans | quote }}", CONTEXT), "'My \"Font\"'")
+        self.assertEqual(render("{{ shape.radius | quote }}", CONTEXT), "12")
+
     def test_json_filter_on_color_gives_string(self):
         self.assertEqual(render("{{ accent | json }}", CONTEXT), '"#cba6f7"')
 

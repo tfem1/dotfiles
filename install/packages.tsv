@@ -19,6 +19,11 @@ brightnessctl	core	brightnessctl	brightnessctl	brightnessctl
 playerctl	core	playerctl	playerctl	playerctl
 wireplumber	core	wireplumber	wireplumber	wireplumber
 networkmanager	core	networkmanager	network-manager	NetworkManager
+gsettings	core	glib2	libglib2.0-bin	glib2
+gtk-portal	core	xdg-desktop-portal-gtk	xdg-desktop-portal-gtk	xdg-desktop-portal-gtk
+qt5ct	core	qt5ct	qt5ct	qt5ct
+qt6ct	core	qt6ct	qt6ct	qt6ct
+adw-gtk3	core	adw-gtk-theme	-	adw-gtk3-theme
 bluez	core	bluez bluez-utils	bluez	bluez
 firefox	full	firefox	firefox-esr|firefox	firefox
 nautilus	full	nautilus	nautilus	nautilus

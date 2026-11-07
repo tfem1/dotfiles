@@ -32,6 +32,11 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths,
             context[key] = context[str(theme[key])]
 
     context["wallpaper.path"] = _wallpaper_path(str(theme["wallpaper.path"]), paths)
+    # GTK theme and color scheme that match the palette (adw-gtk3, gsettings values).
+    dark = palette.variant == "dark"
+    context["gtk.theme"] = "adw-gtk3-dark" if dark else "adw-gtk3"
+    context["gtk.color_scheme"] = "prefer-dark" if dark else "default"
+    context["dirs.config"] = str(paths.config_home)
     return context
 
 

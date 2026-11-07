@@ -135,6 +135,8 @@ theme.toml ──► validate ──► palette (base16) ──► templates ─
 themes/*.toml ─────────────────┘                             ~/.config/hypr/hyprlock.conf
                                                              ~/.config/quickshell/<shell>/theme.json
                                                              ~/.config/kitty/theme.conf
+                                                             ~/.config/gtk-3.0/theme.css, gtk-4.0/theme.css
+                                                             ~/.config/qt5ct/…, ~/.config/qt6ct/…
 ```
 
 - Palettes use the [base16](https://github.com/tinted-theming/home) format, so
@@ -150,6 +152,18 @@ themes/*.toml ─────────────────┘            
   every open kitty window take the new colors together. kitty loads them
   with one `include theme.conf` line at the end of your `kitty.conf`; move
   that block up if you want your own colors to win.
+- Apps follow as well:
+  - **GTK 4 / libadwaita** (Files, GNOME apps): `~/.config/gtk-4.0/theme.css`,
+    loaded by one `@import` line at the top of your `gtk.css`.
+  - **GTK 3**: the same in `~/.config/gtk-3.0/`, read by the adw-gtk3 theme
+    (installed on Arch and Fedora; Debian does not package it, so GTK 3 apps
+    keep the default look there).
+  - **Qt 5 and Qt 6** (VLC, qBittorrent, KDE apps): a palette for qt5ct and
+    qt6ct (`QT_QPA_PLATFORMTHEME=qt5ct` is set by the Hyprland config).
+  - `gsettings` gets the GTK theme, dark or light style, icons and cursor,
+    so open GTK apps change at once; Qt apps take the colors when they start.
+  - Firefox draws its own colors: to have it follow GTK, set
+    `widget.gtk.libadwaita-colors.enabled` to `false` in `about:config`.
 
 Details: [docs/architecture.md](docs/architecture.md) and the template format
 in [docs/templates.md](docs/templates.md).

@@ -31,7 +31,8 @@ def write_atomic(path: Path, text: str) -> None:
 
 def include_block(name: str, include: Include) -> str:
     mark = include.comment
-    return f"{mark} >>> generated: {name} >>>\n{include.line}\n{mark} <<< generated: {name} <<<\n"
+    end = f" {include.comment_end}" if include.comment_end else ""
+    return f"{mark} >>> generated: {name} >>>{end}\n{include.line}\n{mark} <<< generated: {name} <<<{end}\n"
 
 
 class Writer:

@@ -90,6 +90,15 @@ All notable changes to this project are documented here. The format follows
   short rescans, cable and "no internet" lines; Bluetooth tab with device
   types, battery, connect, forget, pairing of nearby devices (then trusted
   and connected), visibility switch. Themed with the module colors.
+- GTK and Qt apps follow the theme: `theme.css` for GTK 3 (adw-gtk3) and
+  GTK 4 / libadwaita (named colors and, for libadwaita 1.6+, CSS variables),
+  each loaded by one `@import` line at the top of `gtk.css`; qt5ct and qt6ct
+  palettes (21 roles, disabled state dimmed) with their config;
+  `QT_QPA_PLATFORMTHEME=qt5ct`; `gsettings` sets the GTK theme, style,
+  icons and cursor. Checked on real GTK 3, GTK 4 and Qt windows.
+- Targets: `reload` commands are rendered with the theme values, `quote`
+  filter for shell quoting, `comment_end` for include markers in CSS.
+- Installer: adw-gtk3, qt5ct, qt6ct, xdg-desktop-portal-gtk, gsettings.
 - Roadmap: the next ten steps, in the order chosen.
 - Six green themes with a green accent: Kanagawa, Kanagawa Dragon and
   Everforest Dark Hard (official palettes from tinted-theming, unchanged),

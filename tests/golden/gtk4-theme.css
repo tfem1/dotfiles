@@ -1,0 +1,83 @@
+/* Generated from theme.toml: do not edit by hand,
+   change a setting and run the generator again.
+   Loaded by the @import line at the top of gtk.css: libadwaita reads the
+   named colors (before 1.6) and the variables (1.6 and later).
+   Shade and border colors keep their defaults (transparent black).
+   Set with gsettings when this file changes: theme adw-gtk3-dark,
+   style prefer-dark, icons Papirus-Dark, cursor Adwaita 24. */
+
+@define-color accent_bg_color #d19fe4;
+@define-color accent_fg_color #171c2b;
+@define-color accent_color #d19fe4;
+@define-color destructive_bg_color #e694a1;
+@define-color destructive_fg_color #171c2b;
+@define-color destructive_color #e694a1;
+@define-color success_bg_color #94e69a;
+@define-color success_fg_color #171c2b;
+@define-color success_color #94e69a;
+@define-color warning_bg_color #e6d594;
+@define-color warning_fg_color #171c2b;
+@define-color warning_color #e6d594;
+@define-color error_bg_color #e694a1;
+@define-color error_fg_color #171c2b;
+@define-color error_color #e694a1;
+@define-color window_bg_color #171c2b;
+@define-color window_fg_color #e1cfe7;
+@define-color view_bg_color #121521;
+@define-color view_fg_color #e1cfe7;
+@define-color headerbar_bg_color #242b42;
+@define-color headerbar_fg_color #e1cfe7;
+@define-color headerbar_backdrop_color #171c2b;
+@define-color sidebar_bg_color #121521;
+@define-color sidebar_fg_color #e1cfe7;
+@define-color sidebar_backdrop_color #121521;
+@define-color secondary_sidebar_bg_color #171c2b;
+@define-color secondary_sidebar_fg_color #e1cfe7;
+@define-color secondary_sidebar_backdrop_color #171c2b;
+@define-color card_bg_color #242b42;
+@define-color card_fg_color #e1cfe7;
+@define-color dialog_bg_color #242b42;
+@define-color dialog_fg_color #e1cfe7;
+@define-color popover_bg_color #242b42;
+@define-color popover_fg_color #e1cfe7;
+@define-color thumbnail_bg_color #242b42;
+@define-color thumbnail_fg_color #e1cfe7;
+
+:root {
+  --accent-bg-color: #d19fe4;
+  --accent-fg-color: #171c2b;
+  --accent-color: #d19fe4;
+  --destructive-bg-color: #e694a1;
+  --destructive-fg-color: #171c2b;
+  --destructive-color: #e694a1;
+  --success-bg-color: #94e69a;
+  --success-fg-color: #171c2b;
+  --success-color: #94e69a;
+  --warning-bg-color: #e6d594;
+  --warning-fg-color: #171c2b;
+  --warning-color: #e6d594;
+  --error-bg-color: #e694a1;
+  --error-fg-color: #171c2b;
+  --error-color: #e694a1;
+  --window-bg-color: #171c2b;
+  --window-fg-color: #e1cfe7;
+  --view-bg-color: #121521;
+  --view-fg-color: #e1cfe7;
+  --headerbar-bg-color: #242b42;
+  --headerbar-fg-color: #e1cfe7;
+  --headerbar-backdrop-color: #171c2b;
+  --sidebar-bg-color: #121521;
+  --sidebar-fg-color: #e1cfe7;
+  --sidebar-backdrop-color: #121521;
+  --secondary-sidebar-bg-color: #171c2b;
+  --secondary-sidebar-fg-color: #e1cfe7;
+  --secondary-sidebar-backdrop-color: #171c2b;
+  --card-bg-color: #242b42;
+  --card-fg-color: #e1cfe7;
+  --dialog-bg-color: #242b42;
+  --dialog-fg-color: #e1cfe7;
+  --popover-bg-color: #242b42;
+  --popover-fg-color: #e1cfe7;
+  --thumbnail-bg-color: #242b42;
+  --thumbnail-fg-color: #e1cfe7;
+}

@@ -9,7 +9,7 @@ from pathlib import Path
 from .paths import Paths
 
 _TARGET_KEYS = {"template", "output", "needs", "reload", "include"}
-_INCLUDE_KEYS = {"into", "line", "comment", "position", "create"}
+_INCLUDE_KEYS = {"into", "line", "comment", "comment_end", "position", "create"}
 _PLACEHOLDER = re.compile(r"\{[a-z_]+\}")
 
 
@@ -22,6 +22,7 @@ class Include:
     into: Path              # app config that must load the generated file
     line: str               # line that loads it (include, require, @import...)
     comment: str = "#"      # comment prefix, used for the markers
+    comment_end: str = ""   # closes the comment where needed ("*/" in CSS)
     position: str = "end"   # "end" or "start" (CSS needs @import at the top)
     create: bool = False    # create the app config when it does not exist
 
@@ -76,6 +77,7 @@ def _include(where: str, entry: object, paths: Paths, shell: str) -> Include:
         into=_expand(where, entry["into"], paths, shell),
         line=entry["line"],
         comment=entry.get("comment", "#"),
+        comment_end=entry.get("comment_end", ""),
         position=position,
         create=bool(entry.get("create", False)),
     )

@@ -22,8 +22,8 @@ Themes come before the shell, so the shell is built with the final palettes.
 
 ## Next, in the order chosen on 2026-11-07
 
-1. **Terminal and apps follow the theme:** kitty (done: colors change with
-   the shell and the bar, open windows included), then GTK and Qt.
+1. **Terminal and apps follow the theme:** done for kitty (open windows
+   included), GTK 3, GTK 4 / libadwaita and Qt 5 / Qt 6.
 2. Volume panel (`SUPER + V`) and calendar (`SUPER + S`).
 3. Music panel (`SUPER + M`).
 4. Power menu (lock, log out, suspend, reboot, shut down).
@@ -78,7 +78,8 @@ Themes come before the shell, so the shell is built with the final palettes.
   it; you can still change them afterwards.
 - Terminal themes (foot, kitty, alacritty, ghostty, wezterm), GTK and Qt,
   never overwriting existing configs. **Done: kitty** (`kitty/theme.conf`,
-  loaded by one include line, reloaded live).
+  loaded by one include line, reloaded live), **GTK 3 / GTK 4** (`theme.css`
+  + `@import`, gsettings) and **Qt** (qt5ct / qt6ct palettes).
 - `tfem theme <name>`.
 - **Fastfetch in the theme colors**, with an original logo (no official
   artwork).

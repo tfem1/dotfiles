@@ -49,3 +49,42 @@ reload   = "pkill -USR1 -x kitty || true"
 # own colors win (the generator keeps it where it is). create = true: a new
 # kitty.conf holding only this line is fine.
 include  = { into = "{config}/kitty/kitty.conf", line = "include theme.conf", comment = "#", create = true }
+
+# GTK 3 and GTK 4 apps. Colors go in theme.css, loaded by one @import line
+# that must come first in gtk.css (CSS comments need the closing "*/").
+[gtk3]
+template = "gtk/gtk3.css.tpl"
+output   = "{config}/gtk-3.0/theme.css"
+include  = { into = "{config}/gtk-3.0/gtk.css", line = '@import url("theme.css");', comment = "/*", comment_end = "*/", position = "start", create = true }
+
+[gtk4]
+template = "gtk/gtk4.css.tpl"
+output   = "{config}/gtk-4.0/theme.css"
+needs    = "gsettings"
+include  = { into = "{config}/gtk-4.0/gtk.css", line = '@import url("theme.css");', comment = "/*", comment_end = "*/", position = "start", create = true }
+# The settings GTK apps read on any desktop: theme (adw-gtk3 reads the
+# colors), dark or light style, icons, cursor. Open apps follow at once.
+reload   = "gsettings set org.gnome.desktop.interface gtk-theme {{ gtk.theme | quote }} && gsettings set org.gnome.desktop.interface color-scheme {{ gtk.color_scheme | quote }} && gsettings set org.gnome.desktop.interface icon-theme {{ icons.theme | quote }} && gsettings set org.gnome.desktop.interface cursor-theme {{ cursor.theme | quote }} && gsettings set org.gnome.desktop.interface cursor-size {{ cursor.size }}"
+
+# Qt 5 and Qt 6 apps, through qt5ct and qt6ct (QT_QPA_PLATFORMTHEME=qt5ct is
+# set in hypr/config/variables.lua; qt6ct answers to that name too). Qt apps
+# read their palette when they start.
+[qt5ct-colors]
+template = "qt/colors.conf.tpl"
+output   = "{config}/qt5ct/colors/theme.conf"
+needs    = "qt5ct"
+
+[qt5ct]
+template = "qt/qt5ct.conf.tpl"
+output   = "{config}/qt5ct/qt5ct.conf"
+needs    = "qt5ct"
+
+[qt6ct-colors]
+template = "qt/colors.conf.tpl"
+output   = "{config}/qt6ct/colors/theme.conf"
+needs    = "qt6ct"
+
+[qt6ct]
+template = "qt/qt6ct.conf.tpl"
+output   = "{config}/qt6ct/qt6ct.conf"
+needs    = "qt6ct"

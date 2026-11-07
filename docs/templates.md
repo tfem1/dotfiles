@@ -67,9 +67,17 @@ include  = { into = "{config}/kitty/kitty.conf", line = "include palette.conf", 
 ```
 
 `include` keys: `into` and `line` (required), `comment` (marker prefix,
-default `#`), `position` (`end` or `start`), `create` (default `false`: an
-app config that does not exist is left alone and you are told which line to
-add). The `{shell}` placeholder is the shell name from `config.json`.
+default `#`), `comment_end` (closes the marker comment, e.g. `*/` for CSS),
+`position` (`end` or `start`), `create` (default `false`: an app config that
+does not exist is left alone and you are told which line to add). The
+`{shell}` placeholder is the shell name from `config.json`.
+
+`reload` is rendered like a template before it runs, so it can use theme
+values; pass them through `quote` (shell quoting), e.g.
+`gsettings set org.gnome.desktop.interface color-scheme {{ gtk.color_scheme | quote }}`.
+Extra values for this: `gtk.theme` (`adw-gtk3-dark` or `adw-gtk3`),
+`gtk.color_scheme` (`prefer-dark` or `default`) and `dirs.config` (the
+config folder).
 
 ## Adding an app
 
