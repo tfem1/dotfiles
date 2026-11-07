@@ -3,7 +3,7 @@ import "../theme"
 import "../components"
 
 // Keyboard layout, sound, network, Bluetooth and battery, each in its
-// module color. Clicking opens the system panel.
+// module color. Clicking opens the network panel.
 Pill {
     id: area
 

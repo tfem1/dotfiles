@@ -88,9 +88,10 @@ Themes come before the shell, so the shell is built with the final palettes.
 ## 3. Quickshell shell: bar, OSD, launcher, notifications
 
 - **Done:** bar (Material style) with autohide, OSD, notifications, launcher,
-  clipboard history, keybind cheatsheet, wallpaper selector, IPC for the
-  keybinds, deployed by the installer. **Next:** the panels of
-  `SUPER + B/M/S/N/V/H`, sidebars, dock, Mono style, do not disturb.
+  clipboard history, keybind cheatsheet, wallpaper selector, network panel
+  (Wi-Fi and Bluetooth), IPC for the keybinds, deployed by the installer.
+  **Next:** the panels of `SUPER + B/M/S/V/H`, sidebars, dock, Mono style,
+  do not disturb.
 
 - A single `shell.qml` that only composes; every hidden part in a `Loader`.
 - Colors read live from the generated `theme.json` (`FileView` + `JsonAdapter`).
@@ -225,6 +226,10 @@ generated.
 
 ## 5. Control panel and widgets
 
+- **Done (network panel, `SUPER + N`):** custom Wi-Fi and Bluetooth tabs
+  built on `Quickshell.Networking` and `Quickshell.Bluetooth` (no nmcli, no
+  applets). Still to do: a pairing-code prompt (Quickshell has no BlueZ
+  agent yet), renaming devices, the Audio tab.
 - Custom Wi-Fi, Bluetooth, Network and Audio tabs built on
   `Quickshell.Networking` and `Quickshell.Bluetooth` (no nmcli, no applets):
   networks with signal and security, password prompt, failure reason,

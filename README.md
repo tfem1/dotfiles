@@ -200,7 +200,7 @@ The installer copies it to `~/.config/hypr`. `SUPER + /` shows every
 shortcut on screen. The tests load the config in a fake Hyprland API and check
 every key: the dispatcher exists, the program it runs is installed by the
 installer, and the shell panel it opens exists. The keys of the panels still to
-build (system, music, calendar, network, volume, settings) do nothing yet.
+build (system, music, calendar, volume, settings) do nothing yet.
 
 - **Lock screen** (`SUPER + L`): hyprlock, with a config generated from
   `theme.toml` (`~/.config/hypr/hyprlock.conf`): hyprlock does not lock without
@@ -226,6 +226,16 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   looked for in the name, description, keywords and command, so `nautilus`
   finds Files. Terminal apps (btop, nvim…) open in your terminal
   (`terminal` in `hypr/config/variables.lua`).
+- **Network panel** (`SUPER + N`, or a click on the status icons of the
+  bar): quick toggles for Wi-Fi, Bluetooth and airplane mode, then two tabs.
+  *Wi-Fi*: every network with its signal, lock and "Saved" mark, connected
+  one first; the password is typed right under the network, a wrong one is
+  said so; disconnect, forget, rescan; cable connection and "no internet"
+  warning. *Bluetooth*: your devices with their type icon and battery,
+  connect or disconnect in one click, forget; devices nearby to pair (they
+  are then trusted and connected); "visible to other devices". Colors are
+  the Wi-Fi and Bluetooth module colors of the theme. Devices that ask for
+  a pairing code are not supported yet (pair them once with `bluetoothctl`).
 - **Wallpaper selector** (`SUPER + W`): slanted cards in a carousel, or a
   grid; filters by color (each image's main color is found once, in the
   background, then remembered), recent picks, random pick and search. Left

@@ -34,6 +34,8 @@ VISUAL = [
     "cheatsheet/CheatsheetContent.qml", "cheatsheet/KeyRow.qml",
     "wallpaper/SelectorContent.qml", "wallpaper/SelectorToolbar.qml", "wallpaper/Carousel.qml",
     "wallpaper/SlantedCard.qml", "wallpaper/Backdrop.qml",
+    "components/IconButton.qml", "components/Switch.qml", "network/NetworkContent.qml", "network/QuickTile.qml",
+    "network/WifiPage.qml", "network/WifiItem.qml", "network/BluetoothPage.qml", "network/DeviceItem.qml",
 ]
 
 
@@ -57,7 +59,7 @@ class VisualComponentsTest(unittest.TestCase):
             done = subprocess.run([sys.executable, str(REPO / "tools/preview/render.py"), "--out", out],
                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(done.returncode, 0, done.stderr)
-            modes = ["bar", "cheatsheet", "clipboard", "desktop", "launcher", "wallpaper"]
+            modes = ["bar", "bluetooth", "cheatsheet", "clipboard", "desktop", "launcher", "wallpaper", "wifi"]
             self.assertEqual(sorted(p.name for p in Path(out).iterdir()), [f"pony-twilight-{m}.png" for m in modes])
 
     def probe(self, script, expression, value):
@@ -163,6 +165,31 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual(press(Qt.Key.Key_Right), "w4")
         self.assertEqual(press(Qt.Key.Key_Left, Qt.Key.Key_Left), "w2")
         view.close()
+
+    def test_network_panel_icons_order_and_status_lines(self):
+        kinds = SHELL / "network/kinds.js"
+        self.assertEqual(self.probe(kinds, "[0.9, 0.6, 0.3, 0.1].map(Lib.wifiIcon)", None),
+                         ["wifi", "network_wifi_3_bar", "network_wifi_2_bar", "network_wifi_1_bar"])
+        self.assertEqual(self.probe(kinds, '["audio-headset", "input-mouse", "input-gaming", "phone", "", "printer"]'
+                                           ".map(Lib.deviceIcon)", None),
+                         ["headphones", "mouse", "sports_esports", "smartphone", "bluetooth", "bluetooth"])
+        networks = [{"name": "b", "strength": 0.9, "known": False, "connected": False},
+                    {"name": "a", "strength": 0.2, "known": True, "connected": False},
+                    {"name": "c", "strength": 0.1, "known": True, "connected": True}]
+        self.assertEqual(self.probe(kinds, "Lib.sortNetworks(input).map(n => n.name)", networks), ["c", "a", "b"])
+        lines = {
+            '{ connected: true, secured: true }': "Connected · secured",
+            '{ failed: "wrong" }': "Wrong password?",
+            '{ known: true }': "Saved",
+            '{ secured: false }': "Open network",
+            '{ busy: true }': "Connecting…",
+        }
+        for network, text in lines.items():
+            with self.subTest(network=network):
+                self.assertEqual(self.probe(kinds, f"Lib.networkStatus({network})", None), text)
+        self.assertEqual(self.probe(kinds, "Lib.deviceStatus({ paired: true, connected: true, battery: 0.8 })", None),
+                         "Connected · battery 80%")
+        self.assertEqual(self.probe(kinds, "Lib.deviceStatus({ paired: false, busy: true })", None), "Pairing…")
 
     def test_cheatsheet_rows_merge_and_fold_binds(self):
         # Shaped like `hyprctl binds -j`; key names as written in the config.

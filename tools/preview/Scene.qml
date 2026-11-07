@@ -7,6 +7,7 @@ import "../../quickshell/launcher"
 import "../../quickshell/clipboard"
 import "../../quickshell/cheatsheet"
 import "../../quickshell/wallpaper"
+import "../../quickshell/network"
 
 // A 1920x1080 desktop with the shell's components and sample data.
 Rectangle {
@@ -83,12 +84,43 @@ Rectangle {
         }
     }
 
-    // Launcher, clipboard and cheatsheet: the screen dims behind them.
+    // Launcher, clipboard, cheatsheet, selector, network: the screen dims behind them.
     Rectangle {
         visible: scene.mode !== "desktop"
         anchors.fill: parent
         anchors.topMargin: 44
-        color: Qt.alpha(Theme.bgAlt, 0.45)
+        color: Qt.alpha(Theme.bgAlt, scene.mode === "wifi" || scene.mode === "bluetooth" ? 0.2 : 0.45)
+
+        NetworkContent {
+            visible: scene.mode === "wifi" || scene.mode === "bluetooth"
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.margins: 10
+            width: implicitWidth
+            height: implicitHeight
+            tab: scene.mode === "bluetooth" ? "bluetooth" : "wifi"
+            wifi: ({
+                active: true, scanning: false, wired: "", connectivity: "full",
+                networks: [
+                    { name: "Ponyville Library", strength: 0.92, secured: true, known: true, connected: true },
+                    { name: "Sweet Apple Acres", strength: 0.71, secured: true, known: true },
+                    { name: "Sugarcube Corner", strength: 0.62, secured: true, needsPassword: true, failed: "wrong" },
+                    { name: "Canterlot Guest", strength: 0.55, secured: false },
+                    { name: "Cloudsdale 5G", strength: 0.38, secured: true, needsPassword: true },
+                    { name: "Everfree Forest", strength: 0.18, secured: true, needsPassword: true }
+                ]
+            })
+            bluetooth: ({
+                available: true, active: true, discovering: true, discoverable: false, name: "desktop",
+                devices: [
+                    { name: "Pinkie's Headphones", kind: "headphones", paired: true, connected: true, battery: 0.8 },
+                    { name: "MX Master 3", kind: "mouse", paired: true, connected: true, battery: 0.45 },
+                    { name: "Keychron K2", kind: "keyboard_alt", paired: true, connected: false, battery: -1 },
+                    { name: "DualSense", kind: "sports_esports", paired: false, battery: -1 },
+                    { name: "Rarity's Phone", kind: "smartphone", paired: false, busy: true, battery: -1 }
+                ]
+            })
+        }
 
         LauncherContent {
             visible: scene.mode === "launcher"

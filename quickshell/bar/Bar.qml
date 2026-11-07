@@ -12,6 +12,7 @@ PanelWindow {
 
     required property var modelData
     property bool autohide: false
+    signal statusClicked
     readonly property bool pointerIn: barHover.hovered || edgeHover.hovered
     readonly property bool revealed: !autohide || pointerIn || hideDelay.running
 
@@ -75,6 +76,7 @@ PanelWindow {
 
         onWorkspaceClicked: id => Desktop.focus(id)
         onMediaToggled: Player.toggle()
+        onRightClicked: window.statusClicked()
 
         HoverHandler { id: barHover }
     }

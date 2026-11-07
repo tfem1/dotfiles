@@ -10,6 +10,7 @@ PanelWindow {
     id: overlay
 
     required property string name
+    property real dim: 0.45   // how much the desktop is darkened
     signal dismissed
 
     anchors {
@@ -18,7 +19,7 @@ PanelWindow {
         left: true
         right: true
     }
-    color: Qt.alpha(Theme.bgAlt, 0.45)
+    color: Qt.alpha(Theme.bgAlt, dim)
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
     WlrLayershell.namespace: "shell-" + name

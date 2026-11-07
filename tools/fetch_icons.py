@@ -23,7 +23,11 @@ ICONS = {
     "notifications_off": False, "close": False, "search": False, "apps": False, "keyboard": False,
     "power_settings_new": False, "settings": False, "mic": True, "mic_off": True, "error": True,
     "content_paste": False, "image": False, "grid_view": False, "view_carousel": False, "history": False,
-    "shuffle": False, "wallpaper": False,
+    "shuffle": False, "wallpaper": False, "headphones": True, "mouse": True, "keyboard_alt": False,
+    "sports_esports": True, "smartphone": True, "computer": False, "speaker": True, "watch": True,
+    "lock": True, "refresh": False, "delete": False, "link_off": False, "airplanemode_active": True,
+    "visibility": False, "visibility_off": False, "check": False, "bluetooth_searching": False,
+    "cable": False, "devices": False,
 }
 
 

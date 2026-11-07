@@ -82,6 +82,14 @@ All notable changes to this project are documented here. The format follows
   (16 terminal colors, cursor, selection, borders, tabs, marks), adds one
   include line to `kitty.conf` (created if missing) and reloads open kitty
   windows (SIGUSR1).
+- Network panel (`SUPER + N`, or a click on the bar's status icons), on
+  Quickshell's Networking and Bluetooth (no applet, no nmcli): Wi-Fi,
+  Bluetooth and airplane toggles; Wi-Fi tab with signal, security, saved
+  networks, password typed in place with the failure reason (password
+  needed, wrong password, out of range, company login), disconnect, forget,
+  short rescans, cable and "no internet" lines; Bluetooth tab with device
+  types, battery, connect, forget, pairing of nearby devices (then trusted
+  and connected), visibility switch. Themed with the module colors.
 - Roadmap: the next ten steps, in the order chosen.
 - Six green themes with a green accent: Kanagawa, Kanagawa Dragon and
   Everforest Dark Hard (official palettes from tinted-theming, unchanged),
