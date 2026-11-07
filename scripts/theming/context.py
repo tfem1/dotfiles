@@ -1,4 +1,4 @@
-"""Contexte des templates : réglages, palette et valeurs dérivées, tous à plat."""
+"""Template context: settings, palette and derived values, all flat."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -15,7 +15,7 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths) -
     }
     context.update(palette.variables())
 
-    # Une teinte (« blue », « accent ») devient la couleur correspondante de la palette.
+    # A hue ("blue", "accent") becomes the matching color of the palette.
     context["accent"] = context[str(theme["palette.accent"])]
     for key, field in THEME_SCHEMA.items():
         if field.kind == "hue":
@@ -26,7 +26,7 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths) -
 
 
 def _wallpaper_path(value: str, paths: Paths) -> str:
-    """Chemin vide conservé ; relatif → dans wallpapers/ du repo ; « ~ » développé."""
+    """Empty stays empty; relative -> inside the repo's wallpapers/; "~" expanded."""
     if not value:
         return ""
     if value == "~" or value.startswith("~/"):

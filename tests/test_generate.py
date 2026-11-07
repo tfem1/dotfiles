@@ -1,4 +1,4 @@
-"""Tests de bout en bout de `generate`, dans un HOME isolé."""
+"""End-to-end tests of `generate`, in an isolated HOME."""
 import contextlib
 import io
 import json
@@ -18,7 +18,7 @@ class GenerateTest(SandboxTest):
         super().setUp()
         empty_bin = self.home / "bin"
         empty_bin.mkdir()
-        self.env["PATH"] = str(empty_bin)  # aucune app « installée » par défaut
+        self.env["PATH"] = str(empty_bin)  # no app "installed" by default
 
     def run_generate(self, *args):
         out = io.StringIO()
@@ -59,12 +59,12 @@ class OutputTest(GenerateTest):
     def test_second_run_changes_nothing(self):
         self.run_generate("--all")
         _, output = self.run_generate("--all")
-        self.assertEqual(output.count("inchangé"), 2)
+        self.assertEqual(output.count("unchanged"), 2)
 
     def test_absent_apps_are_skipped(self):
         code, output = self.run_generate()
         self.assertEqual(code, 0)
-        self.assertIn("Hyprland n'est pas installé", output)
+        self.assertIn("Hyprland not installed", output)
         self.assertFalse(self.hypr_theme.exists())
 
     def test_only_limits_the_targets(self):
@@ -162,7 +162,7 @@ class ManifestTest(GenerateTest):
         )
         code, output = self.run_generate()
         self.assertEqual(code, 2)
-        self.assertIn("variable inconnue 'nope'", output)
+        self.assertIn("unknown variable 'nope'", output)
         self.assertEqual((self.paths.config_home / "good.txt").read_text(), "#cdd6f4\n")
 
     def test_manifest_typos_are_reported(self):

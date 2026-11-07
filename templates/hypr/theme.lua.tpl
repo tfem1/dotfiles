@@ -1,5 +1,5 @@
--- Fichier généré depuis theme.toml : ne pas le modifier à la main,
--- change plutôt un réglage puis relance la génération.
+-- Generated from theme.toml: do not edit by hand,
+-- change a setting and run the generator again.
 
 hl.env("XCURSOR_THEME", {{ cursor.theme | json }})
 hl.env("XCURSOR_SIZE", "{{ cursor.size }}")

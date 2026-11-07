@@ -1,4 +1,4 @@
-"""Écriture sûre : comparaison, backup, écriture atomique et blocs d'include."""
+"""Safe writing: comparison, backup, atomic writes and include blocks."""
 from __future__ import annotations
 
 import hashlib
@@ -17,7 +17,7 @@ REGISTRY = "generated.json"
 
 
 def write_atomic(path: Path, text: str) -> None:
-    """Écrit dans un fichier temporaire voisin puis le renomme : jamais de fichier à moitié écrit."""
+    """Write to a temporary file next to the target, then rename it: never a half-written file."""
     path.parent.mkdir(parents=True, exist_ok=True)
     handle, temporary = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.")
     try:
@@ -35,7 +35,7 @@ def include_block(name: str, include: Include) -> str:
 
 
 class Writer:
-    """Applique une génération et retient ce qu'elle a produit (empreinte par fichier)."""
+    """Apply one generation run and remember what it produced (one digest per file)."""
 
     def __init__(self, paths: Paths, dry_run: bool = False):
         self.paths = paths
@@ -46,11 +46,11 @@ class Writer:
         self._registry = self._load_registry()
 
     def write_output(self, path: Path, text: str) -> str:
-        """Renvoie "unchanged", "created" ou "updated"."""
+        """Return "unchanged", "created" or "updated"."""
         current = path.read_text() if path.exists() else None
         if current == text:
             return "unchanged"
-        # Un fichier que nous n'avons pas écrit (ou retouché à la main) est sauvegardé.
+        # A file we did not write (or that was edited by hand) is backed up first.
         if current is not None and self._registry.get(str(path)) != _digest(current):
             self._backup(path)
         if not self.dry_run:
@@ -59,7 +59,7 @@ class Writer:
         return "created" if current is None else "updated"
 
     def ensure_include(self, name: str, include: Include) -> str:
-        """Renvoie "unchanged", "added", "updated" ou "missing" (config absente)."""
+        """Return "unchanged", "added", "updated" or "missing" (no app config)."""
         exists = include.into.exists()
         if not exists and not include.create:
             return "missing"

@@ -1,4 +1,4 @@
-"""Point d'entrée : python3 -m theming [options] (appelé par scripts/generate.sh)."""
+"""Entry point: python3 -m theming [options] (called by scripts/generate.sh)."""
 import os
 import sys
 
@@ -8,7 +8,7 @@ try:
     code = main(sys.argv[1:])
     sys.stdout.flush()
 except BrokenPipeError:
-    # Sortie coupée par le lecteur (ex. « | head ») : on s'arrête sans trace Python.
+    # Output closed by the reader (e.g. `| head`): stop without a Python traceback.
     os.dup2(os.open(os.devnull, os.O_WRONLY), sys.stdout.fileno())
     code = 1
 sys.exit(code)

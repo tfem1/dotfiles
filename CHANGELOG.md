@@ -1,26 +1,24 @@
-# Journal des modifications
+# Changelog
 
-Les changements notables du projet sont consignés ici. Le format suit
-[Keep a Changelog](https://keepachangelog.com/fr/1.1.0/).
+All notable changes to this project are documented here. The format follows
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Non publié]
+## [Unreleased]
 
-### Ajouté
+### Added
 
-- `theme.toml` : source de vérité unique de l'apparence du desktop (palette,
-  accent, polices, formes, effets, curseur, icônes, une couleur par module du
-  shell).
-- `config.json` : réglages du shell, en commençant par son nom.
-- Palette base16 Catppuccin Mocha (reprise de tinted-theming/schemes).
-- Génération du thème (`tfem generate`, `scripts/generate.sh`) : validation
-  des réglages avec des messages clairs, palette avec surcharges, moteur de
-  templates avec filtres de couleur, écriture sûre (écriture atomique,
-  sauvegardes, lignes d'include repérées, rechargement seulement si un fichier
-  a changé), `--dry-run`, `--only`, `--all`.
-- Templates pour Hyprland (config Lua, Hyprland 0.55+) et pour le shell
-  Quickshell (`theme.json`).
-- Tests unitaires et de bout en bout avec fichiers de référence.
-- Feuille de route : thèmes avant le shell, deux styles (Material et Mono),
-  profils de look, assistant de premier lancement, dock optionnel, mode jeu,
-  ne pas déranger, anti-veille, agent Polkit, deux thèmes SDDM, collection de
-  wallpapers wallhaven.
+- `theme.toml`: single source of truth for the look of the desktop (palette,
+  accent, fonts, shape, effects, cursor, icons, one color per shell module).
+- `config.json`: shell settings, starting with the shell name.
+- Catppuccin Mocha base16 palette (from tinted-theming/schemes).
+- Theme generator (`tfem generate`, `scripts/generate.sh`): settings
+  validation with clear messages, palette resolution with overrides, template
+  engine with color filters, safe writer (atomic writes, backups, marked
+  include lines, reload only when a file changed), `--dry-run`, `--only`,
+  `--all`.
+- Templates for Hyprland (Lua config, Hyprland 0.55+) and for the Quickshell
+  shell (`theme.json`).
+- Unit and end-to-end tests with golden files.
+- Roadmap: themes before the shell, two styles (Material and Mono), look
+  profiles, first-launch wizard, optional dock, game mode, do not disturb,
+  stay awake, Polkit agent, two SDDM themes, wallhaven wallpaper collection.

@@ -1,4 +1,4 @@
-"""Tests du type Color : lecture hex, transparence et formats de sortie."""
+"""Tests for the Color type: hex parsing, transparency and output formats."""
 import unittest
 
 from theming.colors import Color

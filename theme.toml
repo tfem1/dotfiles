@@ -1,40 +1,40 @@
-# theme.toml — apparence du desktop : source de vérité unique.
+# theme.toml — the look of the desktop: the single source of truth.
 #
-# Ce fichier porte les valeurs par défaut. Ta copie personnelle vit dans
-# ~/.config/tfem/theme.toml : seules les clés que tu y écris remplacent celles-ci.
-# Ne modifie jamais un fichier généré : change un réglage ici (ou dans les
-# Settings), puis lance `tfem generate`.
+# This file holds the defaults. Your personal copy lives in
+# ~/.config/tfem/theme.toml: only the keys you write there replace these.
+# Never edit a generated file: change a setting here (or in the Settings
+# window), then run `tfem generate`.
 #
-# Règle de partage : l'apparence vit ici, tout le reste (barre, widgets,
-# écrans, identité) vit dans config.json.
+# Rule of thumb: appearance lives here, everything else (bar, widgets,
+# displays, identity) lives in config.json.
 
-schema = 1                      # version du format, pour migrer proprement
+schema = 1                      # format version, for clean migrations
 
 [palette]
-source = "catppuccin-mocha"     # un thème de themes/ ou de ~/.config/tfem/themes/, ou "wallpaper"
+source = "catppuccin-mocha"     # a theme from themes/ or ~/.config/tfem/themes/, or "wallpaper"
 accent = "purple"               # red | orange | yellow | green | cyan | blue | purple | brown
-mode   = "dark"                 # dark | light : utilisé quand la palette vient du wallpaper
+mode   = "dark"                 # dark | light: used when the palette comes from the wallpaper
 
-[palette.overrides]             # remplace un slot base16 précis du thème choisi, ex. :
+[palette.overrides]             # replace one base16 slot of the chosen theme, e.g.:
 # base00 = "#11111b"
 
 [wallpaper]
-path = ""                       # vide = aucun ; relatif à wallpapers/ ou chemin absolu
+path = ""                       # empty = none; relative to wallpapers/ or an absolute path
 
 [font]
 sans      = "Inter"
 mono      = "JetBrainsMono Nerd Font"
-size      = 11                  # pt, texte du shell
-mono_size = 11                  # pt, terminaux
+size      = 11                  # pt, shell text
+mono_size = 11                  # pt, terminals
 
 [shape]
-radius   = 12                   # px, coins des fenêtres et des surfaces du shell
-border   = 2                    # px, bordure des fenêtres
-gaps_in  = 5                    # px, entre fenêtres
-gaps_out = 12                   # px, entre fenêtres et bords de l'écran
+radius   = 12                   # px, corners of windows and shell surfaces
+border   = 2                    # px, window border
+gaps_in  = 5                    # px, between windows
+gaps_out = 12                   # px, between windows and screen edges
 
 [effects]
-opacity     = 0.9               # opacité des surfaces du shell (0.5 à 1.0)
+opacity     = 0.9               # opacity of shell surfaces (0.5 to 1.0)
 blur        = true
 blur_size   = 6
 blur_passes = 2
@@ -48,16 +48,16 @@ size  = 24
 [icons]
 theme = "Papirus-Dark"
 
-[modules]                       # couleur de chaque module du shell :
-                                # accent ou une teinte (red, orange, yellow, green, cyan, blue, purple, brown)
+[modules]                       # color of each shell module:
+                                # accent or a hue (red, orange, yellow, green, cyan, blue, purple, brown)
 workspaces    = "accent"
-clock         = "accent"        # horloge et calendrier
-media         = "cyan"          # now-playing
-resources     = "orange"        # CPU et RAM
+clock         = "accent"        # clock and calendar
+media         = "cyan"          # now playing
+resources     = "orange"        # CPU and RAM
 battery       = "yellow"
 wifi          = "blue"
 network       = "cyan"
 bluetooth     = "purple"
-audio         = "green"         # module de la barre, onglet du panneau et OSD volume
-brightness    = "yellow"        # OSD luminosité
-notifications = "accent"        # les notifications urgentes restent toujours rouges
+audio         = "green"         # bar module, panel tab and volume OSD
+brightness    = "yellow"        # brightness OSD
+notifications = "accent"        # urgent notifications always stay red

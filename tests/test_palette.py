@@ -1,4 +1,4 @@
-"""Tests de la palette : recherche du thème, surcharges, rôles et contexte."""
+"""Palette tests: theme lookup, overrides, roles and context."""
 import unittest
 
 from helpers import SandboxTest

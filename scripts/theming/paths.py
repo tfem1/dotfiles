@@ -1,4 +1,4 @@
-"""Emplacements utilisés par la génération, selon les conventions XDG."""
+"""Locations used by the generator, following the XDG conventions."""
 from __future__ import annotations
 
 import os
@@ -6,17 +6,17 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Mapping
 
-# Nom du dossier projet dans ~/.config et ~/.local/state (jamais affiché dans le desktop).
+# Project folder name in ~/.config and ~/.local/state (never shown on the desktop).
 PROJECT_DIR = "tfem"
 
 
 @dataclass(frozen=True)
 class Paths:
-    root: Path         # le repo : défauts, thèmes, templates
-    home: Path         # $HOME, pour afficher les chemins en « ~/… »
-    config_home: Path  # $XDG_CONFIG_HOME, là où vivent les configs des apps
-    user_dir: Path     # réglages personnels : theme.toml, config.json, themes/
-    state_dir: Path    # backups et fichiers d'état, jamais édités à la main
+    root: Path         # the repository: defaults, themes, templates
+    home: Path         # $HOME, to print paths as "~/..."
+    config_home: Path  # $XDG_CONFIG_HOME, where app configs live
+    user_dir: Path     # personal settings: theme.toml, config.json, themes/
+    state_dir: Path    # backups and state files, never edited by hand
 
     @classmethod
     def from_env(cls, root: Path, env: Mapping[str, str] = os.environ) -> Paths:
@@ -32,7 +32,7 @@ class Paths:
         )
 
     def pretty(self, path: Path) -> str:
-        """Affiche un chemin avec « ~ » à la place du dossier personnel."""
+        """Print a path with "~" in place of the home folder."""
         try:
             return "~/" + str(Path(path).relative_to(self.home))
         except ValueError:

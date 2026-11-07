@@ -1,4 +1,4 @@
-"""Outils partagés des tests : un faux $HOME isolé autour d'une copie du repo."""
+"""Shared test helpers: an isolated fake $HOME around a copy of the repository."""
 from __future__ import annotations
 
 import os
@@ -13,7 +13,7 @@ REPO = Path(__file__).resolve().parent.parent
 
 
 class SandboxTest(unittest.TestCase):
-    """Chaque test reçoit un HOME vide et des chemins XDG qui pointent dedans."""
+    """Each test gets an empty HOME and XDG paths pointing inside it."""
 
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()
@@ -35,7 +35,7 @@ class SandboxTest(unittest.TestCase):
         return path
 
     def copy_repo(self) -> Paths:
-        """Copie le repo dans le sandbox, pour les tests qui modifient ses fichiers."""
+        """Copy the repository into the sandbox, for tests that change its files."""
         root = self.home / "repo"
         shutil.copytree(REPO, root, ignore=shutil.ignore_patterns(".git", "__pycache__"))
         self.paths = Paths.from_env(root, self.env)

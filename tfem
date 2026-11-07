@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# CLI du projet. Les alias neutres (dots, wm) sont de simples liens vers ce
-# script : l'aide affiche toujours le nom sous lequel on l'a appelé.
+# Project CLI. The neutral aliases (dots, wm) are plain links to this script:
+# the help always shows the name it was called with.
 set -euo pipefail
 
 root="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
@@ -8,17 +8,17 @@ prog="$(basename "$0")"
 
 usage() {
   cat <<EOF
-Utilisation : $prog <commande> [options]
+Usage: $prog <command> [options]
 
-Commandes :
-  generate      Génère tous les fichiers de thème depuis theme.toml
-                  --dry-run          montre ce qui changerait, sans rien écrire
-                  --only NOM[,NOM]   ne génère que ces cibles
-                  --all              génère même si l'app n'est pas installée
-  help          Affiche cette aide
+Commands:
+  generate      Render every theme file from theme.toml
+                  --dry-run           show what would change, write nothing
+                  --only NAME[,NAME]  render only these targets
+                  --all               render even if the app is not installed
+  help          Show this help
 
-Tes réglages : \${XDG_CONFIG_HOME:-~/.config}/tfem/theme.toml et config.json
-Défauts :      $root
+Your settings: \${XDG_CONFIG_HOME:-~/.config}/tfem/theme.toml and config.json
+Defaults:      $root
 EOF
 }
 
@@ -29,7 +29,7 @@ case "$command" in
   generate) exec "$root/scripts/generate.sh" "$@" ;;
   help | -h | --help) usage ;;
   *)
-    echo "$prog : commande inconnue '$command'" >&2
+    echo "$prog: unknown command '$command'" >&2
     usage >&2
     exit 64
     ;;

@@ -1,4 +1,4 @@
-"""Palette active : recherche du fichier de thème, lecture, surcharges, rôles et ANSI."""
+"""Active palette: theme file lookup, parsing, overrides, roles and ANSI colors."""
 from __future__ import annotations
 
 import difflib
@@ -14,7 +14,7 @@ from .schema import BASE16_KEYS
 WALLPAPER_SOURCE = "wallpaper"
 WALLPAPER_PALETTE = "wallpaper-palette.toml"
 
-# Rôles lisibles dans les templates → slot base16 (conventions de BASE16.md).
+# Readable roles for templates -> base16 slot (conventions from BASE16.md).
 ROLES = {
     "bg": "base00", "bg_alt": "base01", "surface": "base02", "muted": "base03",
     "subtle": "base04", "fg": "base05", "fg_bright": "base06",
@@ -22,7 +22,7 @@ ROLES = {
     "cyan": "base0C", "blue": "base0D", "purple": "base0E", "brown": "base0F",
 }
 
-# Couleurs 0 à 15 des terminaux, comme le template officiel tinted-theming/tinted-shell.
+# Terminal colors 0 to 15, as in the official tinted-theming/tinted-shell template.
 ANSI = (
     "base00", "base08", "base0B", "base0A", "base0D", "base0E", "base0C", "base05",
     "base03", "base08", "base0B", "base0A", "base0D", "base0E", "base0C", "base07",
@@ -30,7 +30,7 @@ ANSI = (
 
 
 class PaletteError(Exception):
-    """Thème introuvable ou fichier de thème invalide."""
+    """Theme not found, or invalid theme file."""
 
 
 @dataclass(frozen=True)
@@ -42,7 +42,7 @@ class Palette:
     colors: dict[str, Color]
 
     def variables(self) -> dict[str, object]:
-        """Couleurs brutes, rôles et ANSI, prêts pour le contexte des templates."""
+        """Raw colors, roles and ANSI colors, ready for the template context."""
         values: dict[str, object] = dict(self.colors)
         values.update({role: self.colors[slot] for role, slot in ROLES.items()})
         values.update({f"ansi{index}": self.colors[slot] for index, slot in enumerate(ANSI)})
@@ -54,7 +54,7 @@ class Palette:
 
 
 def theme_dirs(paths: Paths) -> list[Path]:
-    """Les thèmes personnels passent avant ceux du repo."""
+    """Personal themes take precedence over the bundled ones."""
     return [paths.user_dir / "themes", paths.root / "themes"]
 
 
@@ -63,8 +63,8 @@ def find_theme(name: str, paths: Paths) -> Path:
         path = paths.state_dir / WALLPAPER_PALETTE
         if not path.exists():
             raise PaletteError(
-                "palette.source vaut 'wallpaper' mais aucune palette n'a encore été "
-                "extraite d'un wallpaper ; choisis d'abord un wallpaper, ou un thème"
+                "palette.source is 'wallpaper' but no palette was extracted from a "
+                "wallpaper yet; pick a wallpaper first or choose a theme"
             )
         return path
     for folder in theme_dirs(paths):
@@ -72,8 +72,8 @@ def find_theme(name: str, paths: Paths) -> Path:
             return candidate
     available = sorted({p.stem for d in theme_dirs(paths) if d.is_dir() for p in d.glob("*.toml")})
     close = difflib.get_close_matches(name, available, n=1)
-    hint = f" (tu voulais dire '{close[0]}' ?)" if close else ""
-    raise PaletteError(f"thème '{name}' introuvable{hint}")
+    hint = f" (did you mean '{close[0]}'?)" if close else ""
+    raise PaletteError(f"theme '{name}' not found{hint}")
 
 
 def load_palette(path: Path) -> Palette:
@@ -81,10 +81,10 @@ def load_palette(path: Path) -> Palette:
         with path.open("rb") as handle:
             data = tomllib.load(handle)
     except (OSError, tomllib.TOMLDecodeError) as error:
-        raise PaletteError(f"impossible de lire le thème {path} : {error}") from None
+        raise PaletteError(f"cannot read theme {path}: {error}") from None
     problems = _check_theme(data)
     if problems:
-        raise PaletteError(f"thème invalide {path} : " + " ; ".join(problems))
+        raise PaletteError(f"invalid theme {path}: " + "; ".join(problems))
     return Palette(
         name=data["name"],
         family=data.get("family", data["name"]),
@@ -95,7 +95,7 @@ def load_palette(path: Path) -> Palette:
 
 
 def resolve_palette(theme: Mapping[str, object], paths: Paths) -> Palette:
-    """Charge le thème choisi dans theme.toml puis applique palette.overrides."""
+    """Load the theme chosen in theme.toml, then apply palette.overrides."""
     palette = load_palette(find_theme(str(theme["palette.source"]), paths))
     prefix = "palette.overrides."
     overrides = {k[len(prefix):]: Color.parse(v) for k, v in theme.items() if k.startswith(prefix)}
@@ -106,14 +106,14 @@ def resolve_palette(theme: Mapping[str, object], paths: Paths) -> Palette:
 def _check_theme(data: dict) -> list[str]:
     problems = []
     if not isinstance(data.get("name"), str) or not data["name"].strip():
-        problems.append("'name' est obligatoire")
+        problems.append("'name' is required")
     if data.get("variant") not in ("dark", "light"):
-        problems.append("'variant' doit valoir 'dark' ou 'light'")
+        problems.append("'variant' must be 'dark' or 'light'")
     colors = data.get("colors")
     if not isinstance(colors, dict):
-        return problems + ["une table [colors] est obligatoire"]
-    problems += [f"colors.{key} manquante" for key in BASE16_KEYS if key not in colors]
-    problems += [f"colors.{key} n'est pas un slot base16" for key in colors if key not in BASE16_KEYS]
+        return problems + ["a [colors] table is required"]
+    problems += [f"colors.{key} is missing" for key in BASE16_KEYS if key not in colors]
+    problems += [f"colors.{key} is not a base16 slot" for key in colors if key not in BASE16_KEYS]
     for key in BASE16_KEYS:
         try:
             if key in colors:

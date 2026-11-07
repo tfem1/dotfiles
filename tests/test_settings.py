@@ -1,4 +1,4 @@
-"""Tests du chargement des réglages : fusion avec les défauts et validation."""
+"""Settings loading tests: merge with the defaults and validation."""
 import unittest
 
 from helpers import SandboxTest
@@ -44,10 +44,10 @@ class ValidationTest(SandboxTest):
         return "\n".join(caught.exception.problems)
 
     def test_reports_out_of_range_with_dotted_key(self):
-        self.assertIn("shape.radius: doit être entre 0 et 32", self.problems_for("[shape]\nradius = 99\n"))
+        self.assertIn("shape.radius: must be between 0 and 32", self.problems_for("[shape]\nradius = 99\n"))
 
     def test_reports_wrong_type(self):
-        self.assertIn("effects.blur: doit valoir true ou false", self.problems_for('[effects]\nblur = "yes"\n'))
+        self.assertIn("effects.blur: expected true or false", self.problems_for('[effects]\nblur = "yes"\n'))
 
     def test_reports_all_problems_at_once(self):
         problems = self.problems_for("[shape]\nradius = -1\nborder = 50\n")
@@ -55,22 +55,22 @@ class ValidationTest(SandboxTest):
         self.assertIn("shape.border", problems)
 
     def test_unknown_key_suggests_the_right_one(self):
-        self.assertIn("tu voulais dire 'shape.radius'", self.problems_for("[shape]\nradus = 3\n"))
+        self.assertIn("did you mean 'shape.radius'", self.problems_for("[shape]\nradus = 3\n"))
 
     def test_unknown_override_slot(self):
         self.assertIn("palette.overrides.base10", self.problems_for('[palette.overrides]\nbase10 = "#000000"\n'))
 
     def test_invalid_override_color(self):
-        self.assertIn("couleur invalide", self.problems_for('[palette.overrides]\nbase00 = "black"\n'))
+        self.assertIn("invalid color", self.problems_for('[palette.overrides]\nbase00 = "black"\n'))
 
     def test_module_color_must_be_a_hue(self):
-        self.assertIn("modules.wifi: doit être l'une de ces valeurs", self.problems_for('[modules]\nwifi = "pink"\n'))
+        self.assertIn("modules.wifi: must be one of", self.problems_for('[modules]\nwifi = "pink"\n'))
 
     def test_empty_font_is_rejected(self):
-        self.assertIn("font.sans: ne doit pas être vide", self.problems_for('[font]\nsans = ""\n'))
+        self.assertIn("font.sans: must not be empty", self.problems_for('[font]\nsans = ""\n'))
 
     def test_newer_format_version_is_refused(self):
-        self.assertIn("version de format 9", self.problems_for("schema = 9\n"))
+        self.assertIn("format version 9", self.problems_for("schema = 9\n"))
 
     def test_broken_toml_points_to_the_file(self):
         self.assertIn("theme.toml", self.problems_for("[shape\nradius = 1\n"))

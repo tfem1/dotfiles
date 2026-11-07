@@ -1,4 +1,4 @@
-"""Filtres des templates ({{ valeur | filtre:arg }}) et mise en texte des valeurs."""
+"""Template filters ({{ value | filter:arg }}) and conversion of values to text."""
 from __future__ import annotations
 
 import json
@@ -8,28 +8,28 @@ from .colors import Color
 
 
 class FilterError(ValueError):
-    """Erreur d'application d'un filtre (message destiné à l'utilisateur)."""
+    """A filter could not be applied (message meant for the user)."""
 
 
 def _type_name(value: object) -> str:
-    return {bool: "un booléen", int: "un nombre", float: "un nombre", str: "une chaîne"}.get(
+    return {bool: "a boolean", int: "a number", float: "a number", str: "a string"}.get(
         type(value), type(value).__name__
     )
 
 
 def _color(name: str, value: object) -> Color:
     if not isinstance(value, Color):
-        raise FilterError(f"le filtre '{name}' attend une couleur, pas {_type_name(value)}")
+        raise FilterError(f"filter '{name}' expects a color, got {_type_name(value)}")
     return value
 
 
 def _no_arg(name: str, arg: str | None) -> None:
     if arg is not None:
-        raise FilterError(f"le filtre '{name}' ne prend pas d'argument")
+        raise FilterError(f"filter '{name}' takes no argument")
 
 
 def _color_format(name: str, method: str) -> Callable[[object, str | None], object]:
-    """Fabrique un filtre sans argument qui appelle une méthode de Color."""
+    """Build an argument-less filter that calls a Color method."""
 
     def apply(value: object, arg: str | None) -> object:
         _no_arg(name, arg)
@@ -40,11 +40,11 @@ def _color_format(name: str, method: str) -> Callable[[object, str | None], obje
 
 def _alpha(value: object, arg: str | None) -> object:
     if arg is None:
-        raise FilterError("le filtre 'alpha' a besoin d'une valeur, ex. alpha:0.8")
+        raise FilterError("filter 'alpha' needs a value, e.g. alpha:0.8")
     try:
         amount = float(arg)
     except ValueError:
-        raise FilterError(f"alpha : {arg!r} n'est pas un nombre") from None
+        raise FilterError(f"alpha: {arg!r} is not a number") from None
     try:
         return _color("alpha", value).with_alpha(amount)
     except ValueError as error:
@@ -74,12 +74,12 @@ def apply_filter(name: str, value: object, arg: str | None) -> object:
         function = FILTERS[name]
     except KeyError:
         known = ", ".join(sorted(FILTERS))
-        raise FilterError(f"filtre inconnu '{name}' (disponibles : {known})") from None
+        raise FilterError(f"unknown filter '{name}' (available: {known})") from None
     return function(value, arg)
 
 
 def format_value(value: object) -> str:
-    """Convertit une valeur finale en texte à insérer dans le fichier."""
+    """Turn a final value into the text inserted in the file."""
     if isinstance(value, Color):
         return value.hex()
     if isinstance(value, bool):

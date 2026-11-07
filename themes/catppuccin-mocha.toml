@@ -1,4 +1,4 @@
-# Catppuccin Mocha — schéma base16 repris de tinted-theming/schemes (MIT).
+# Catppuccin Mocha — base16 scheme from tinted-theming/schemes (MIT).
 name    = "Catppuccin Mocha"
 family  = "Catppuccin"
 variant = "dark"

@@ -1,4 +1,4 @@
-"""Tests du moteur de templates : substitution, filtres et messages d'erreur."""
+"""Template engine tests: substitution, filters and error messages."""
 import unittest
 
 from theming.colors import Color
@@ -59,25 +59,25 @@ class ErrorTest(unittest.TestCase):
         self.assert_error("ok\n{{ shape.radus }}", "demo.tpl:2", "shape.radus", "shape.radius")
 
     def test_unknown_filter(self):
-        self.assert_error("{{ accent | shiny }}", "filtre inconnu 'shiny'")
+        self.assert_error("{{ accent | shiny }}", "unknown filter 'shiny'")
 
     def test_color_filter_on_number(self):
-        self.assert_error("{{ shape.radius | hypr }}", "attend une couleur")
+        self.assert_error("{{ shape.radius | hypr }}", "expects a color")
 
     def test_filter_missing_argument(self):
         self.assert_error("{{ accent | alpha }}", "alpha")
 
     def test_filter_bad_argument(self):
-        self.assert_error("{{ accent | alpha:lots }}", "n'est pas un nombre")
+        self.assert_error("{{ accent | alpha:lots }}", "not a number")
 
     def test_filter_unexpected_argument(self):
-        self.assert_error("{{ accent | hypr:2 }}", "ne prend pas d'argument")
+        self.assert_error("{{ accent | hypr:2 }}", "takes no argument")
 
     def test_invalid_expression(self):
-        self.assert_error("{{ 1 + 1 }}", "expression invalide")
+        self.assert_error("{{ 1 + 1 }}", "invalid expression")
 
     def test_unclosed_tag(self):
-        self.assert_error("a {{ accent", "non fermé")
+        self.assert_error("a {{ accent", "unclosed")
 
 
 if __name__ == "__main__":
