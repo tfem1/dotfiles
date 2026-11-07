@@ -98,8 +98,8 @@ class VisualComponentsTest(unittest.TestCase):
                 self.assertEqual(names, expected)
 
     def test_wallpaper_filters_by_color_recent_and_search(self):
-        images = [{"path": f"/w/{c}/{n}.jpg", "name": n, "category": c}
-                  for c, n in (("forest", "moss"), ("pony", "twilight #1"), ("pony", "luna"))]
+        images = [{"path": f"/w/{c}/{n}.jpg", "name": n, "category": c, "theme": t}
+                  for c, n, t in (("forest", "moss", "Pine"), ("pony", "twilight #1", ""), ("pony", "luna", "Luna"))]
         colors = {"/w/forest/moss.jpg": "green", "/w/pony/twilight #1.jpg": "purple", "/w/pony/luna.jpg": "blue"}
         library = SHELL / "wallpaper/library.js"
         cases = {
@@ -107,6 +107,7 @@ class VisualComponentsTest(unittest.TestCase):
             f'Lib.filter(input, {json.dumps(colors)}, null, "purple", "")': ["twilight #1"],
             'Lib.filter(input, {}, ["/w/pony/luna.jpg", "/gone.jpg", "/w/forest/moss.jpg"], "", "")': ["luna", "moss"],
             'Lib.filter(input, {}, null, "", "PONY tw")': ["twilight #1"],
+            'Lib.filter(input, {}, null, "", "pine")': ["moss"],
         }
         for expression, expected in cases.items():
             with self.subTest(expression=expression):

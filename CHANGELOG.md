@@ -122,6 +122,13 @@ All notable changes to this project are documented here. The format follows
   shuffle and repeat when the player supports them, player choice, and
   synced lyrics from lrclib.net fetched only when the lyrics view is open.
   Position asked twice a second only while the panel shows a playing song.
+- Wallpaper = character: 24 pony wallpapers of the collection name the
+  character they show (from their wallhaven tags); picking one with
+  `SUPER + W` or `tfem wallpapers set` switches to that character's theme
+  (Luna wallpaper, Luna theme), and a forest wallpaper to the green
+  `wallpaper.forest_theme` (Pine by default). Other images keep the theme.
+  Turn it off with `wallpaper.follow = false`. The selector shows the theme
+  a wallpaper brings, and searching "luna" finds Luna's wallpapers.
 - Minimal themes: every shell module now uses the theme's own three colors
   (`accent`, `accent2`, `accent3`) instead of eight hues. Themes may set
   `accent2` / `accent3`; otherwise they are derived from the accent (same
@@ -136,6 +143,10 @@ All notable changes to this project are documented here. The format follows
   checks every theme keeps each hue in its slot.
 - 21 green forest wallpapers from wallhaven.cc (moss, canopy, paths,
   streams), checked by eye: 105 wallpapers, 53 pony and 52 forest.
+- Collection checked again through the wallhaven tags: a drug parody and a
+  humanized pony removed (they break the collection rules), and two weak
+  forest pictures, so pony stays the majority: 101 wallpapers, 51 pony and
+  50 forest.
 - Roadmap: themes before the shell, two styles (Material and Mono), look
   profiles, first-launch wizard, optional dock, game mode, do not disturb,
   stay awake, Polkit agent, two SDDM themes, wallhaven wallpaper collection.

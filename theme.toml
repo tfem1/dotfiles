@@ -21,6 +21,10 @@ mode   = "dark"                 # dark | light: used when the palette comes from
 
 [wallpaper]
 path = ""                       # empty = none; relative to ~/Pictures/Wallpapers, or absolute
+follow = true                   # a wallpaper of the collection brings its theme: the
+                                # pony's own (Luna wallpaper, Luna theme), green for a
+                                # forest; other images keep the current theme
+forest_theme = "forest-pine"    # the theme of the forest wallpapers
 
 [font]
 sans      = "Inter"

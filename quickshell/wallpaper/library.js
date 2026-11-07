@@ -8,8 +8,9 @@ function fileUrl(path) {
     return path ? "file://" + path.split("/").map(encodeURIComponent).join("/") : "";
 }
 
-// `images`: [{ path, name, category }]; `colors`: { path: color class };
+// `images`: [{ path, name, category, theme }]; `colors`: { path: color class };
 // `recent`: paths, newest first, or null; `color`, `query`: "" for none.
+// The search also reads the theme a wallpaper brings: "luna" finds Luna.
 function filter(images, colors, recent, color, query) {
     let list = images;
     if (recent) {
@@ -23,7 +24,7 @@ function filter(images, colors, recent, color, query) {
     const words = (query || "").trim().toLowerCase().split(/\s+/).filter(word => word);
     if (words.length)
         list = list.filter(image => {
-            const text = (image.category + " " + image.name).toLowerCase();
+            const text = (image.category + " " + image.name + " " + (image.theme || "")).toLowerCase();
             return words.every(word => text.includes(word));
         });
     return list;

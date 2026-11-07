@@ -6,7 +6,8 @@ import "library.js" as Library
 
 // The wallpaper selector: toolbar, then the wallpapers as a slanted
 // carousel or a grid. Arrows browse, Enter applies, typing searches, Escape
-// closes. `images` is [{ path, name, category }], `colors` { path: class },
+// closes. `images` is [{ path, name, category, theme }] (`theme`: the name
+// of the theme the wallpaper brings, or ""), `colors` { path: class },
 // `recent` the paths picked last, newest first.
 Item {
     id: selector
@@ -152,11 +153,31 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: 4
 
-        Label {
+        Row {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: selector.selected ? (selector.selected.category ? selector.selected.category + " · " : "") + selector.selected.name
-                : selector.images.length ? "No wallpaper matches" : "No wallpaper yet: run tfem wallpapers fetch"
-            color: Theme.fgBright
+            spacing: 10
+            Label {
+                anchors.verticalCenter: parent.verticalCenter
+                text: selector.selected ? (selector.selected.category ? selector.selected.category + " · " : "") + selector.selected.name
+                    : selector.images.length ? "No wallpaper matches" : "No wallpaper yet: run tfem wallpapers fetch"
+                color: Theme.fgBright
+            }
+            // The theme this wallpaper brings along.
+            Rectangle {
+                visible: !!(selector.selected && selector.selected.theme)
+                anchors.verticalCenter: parent.verticalCenter
+                width: themeLabel.implicitWidth + 20
+                height: 24
+                radius: 12
+                color: Qt.alpha(Theme.accent, 0.18)
+                Label {
+                    id: themeLabel
+                    anchors.centerIn: parent
+                    text: selector.selected && selector.selected.theme ? selector.selected.theme + " theme" : ""
+                    color: Theme.accent
+                    small: true
+                }
+            }
         }
         Label {
             anchors.horizontalCenter: parent.horizontalCenter

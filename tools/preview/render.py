@@ -22,14 +22,17 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from theming.context import build_context  # noqa: E402
-from theming.palette import resolve_palette  # noqa: E402
+from theming.palette import find_theme, load_palette, resolve_palette  # noqa: E402
 from theming.paths import Paths  # noqa: E402
 from theming.settings import load_theme  # noqa: E402
 from theming.template import render as render_template  # noqa: E402
+from wallpaper_collection import find, load_collection, theme_for  # noqa: E402
 
 MODES = ("desktop", "launcher", "clipboard", "cheatsheet", "wallpaper", "wifi", "bluetooth", "volume", "calendar", "music", "power", "system")
 # Hues of the sample landscapes drawn for the wallpaper selector (degrees).
 SAMPLE_HUES = (215, 280, 330, 140, 25, 195, 255, 0, 50, 100, 300, 230, 160, 10)
+# The theme some samples bring, as a pony or forest wallpaper would.
+SAMPLE_THEMES = {215: "Luna", 280: "Twilight", 330: "Pinkie", 140: "Pine", 195: "Rainbow"}
 MODIFIERS = {"SHIFT": 1, "CTRL": 4, "ALT": 8, "SUPER": 64}
 SAMPLE_BINDS = [("SUPER + RETURN", "Open the terminal"), ("SUPER + D", "Open the launcher"),
                 ("SUPER + C", "Open the clipboard history"), ("SUPER + slash", "Show the keybind cheatsheet")]
@@ -86,7 +89,8 @@ def sample_wallpapers(folder: Path) -> list[dict[str, str]]:
         painter.end()
         target = folder / f"sample-{number:02}.png"
         image.save(str(target))
-        images.append({"path": str(target), "name": target.stem, "category": "samples"})
+        images.append({"path": str(target), "name": target.stem, "category": "samples",
+                       "theme": SAMPLE_THEMES.get(hue, "")})
     return images
 
 
@@ -94,7 +98,13 @@ def wallpaper_list(folder: Path | None, scratch: Path) -> list[dict[str, str]]:
     if folder is None:
         return sample_wallpapers(scratch)
     found = sorted(p for p in folder.rglob("*") if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp"))
-    return [{"path": str(p), "name": p.stem, "category": p.parent.name} for p in found]
+    collection = load_collection(ROOT / "wallpapers/collection.toml")
+    paths = Paths.from_env(ROOT, {"HOME": "/nonexistent"})
+    themes = {}
+    for p in found:
+        name = theme_for(find(p, collection), "forest-pine")
+        themes[p] = load_palette(find_theme(name, paths)).name if name else ""
+    return [{"path": str(p), "name": p.stem, "category": p.parent.name, "theme": themes[p]} for p in found]
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -18,6 +18,7 @@ Commands:
   screenshot    Take a screenshot: region|full [--edit]
   wallpapers    fetch [--category NAME]: download the collection
                 list [--json]: list your wallpapers; set IMAGE: use one
+                (a pony or forest wallpaper also brings its theme)
   help          Show this help
 
 Your settings: \${XDG_CONFIG_HOME:-~/.config}/tfem/theme.toml and config.json

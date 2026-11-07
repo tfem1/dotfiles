@@ -57,8 +57,8 @@ and run it again. Versions checked on Repology on 2026-11-07.
 
 ### Wallpapers
 
-`wallpapers/collection.toml` lists 105 wallpapers from
-[wallhaven.cc](https://wallhaven.cc): 53 My Little Pony and 52 forests (21 of
+`wallpapers/collection.toml` lists 101 wallpapers from
+[wallhaven.cc](https://wallhaven.cc): 51 My Little Pony and 50 forests (19 of
 them picked for their green: moss, canopy, paths, streams), SFW,
 at most 10 MB each, picked by hand. They are downloaded to
 `~/Pictures/Wallpapers/pony/` and `~/Pictures/Wallpapers/forest/` (about
@@ -70,6 +70,19 @@ Pick one with `SUPER + W` (see [Shell](#shell)) or `tfem wallpapers set
 IMAGE`: the choice is saved in your `theme.toml`, and the desktop and the
 lock screen follow. `tfem wallpapers list` shows what is in the folder; any
 image you add there (jpg, png, webp) shows up in the selector.
+
+**Wallpaper = character.** A pony wallpaper that shows one character with
+a theme brings that theme: pick a Luna wallpaper and the whole desktop
+(shell, terminal, GTK, Qt, lock screen) turns Luna. A forest wallpaper
+brings the green `forest_theme` (Pine by default). Group pictures and your
+own images keep the current theme. The selector shows the theme a wallpaper
+brings, and searching a name ("luna") finds that character's wallpapers.
+
+```toml
+[wallpaper]
+follow = true                   # false: a wallpaper never changes the theme
+forest_theme = "forest-pine"    # or forest-moss, kanagawa, everforest-dark-hard…
+```
 
 ## Themes
 

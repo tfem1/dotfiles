@@ -6,14 +6,15 @@ Usage: wallpapers.py fetch [--category NAME] [--dest DIR] [--dry-run]
        wallpapers.py set IMAGE
 Files land in ~/Pictures/Wallpapers/<category>/wallhaven-<id>.<ext>; files
 already there are kept, so the command can be run again safely. `set` writes
-the wallpaper in your theme.toml and regenerates the files that use it.
+the wallpaper in your theme.toml and regenerates the files that use it. With
+`wallpaper.follow` on, a wallpaper of the collection also brings its theme
+(the pony's own, the forest theme): then every file is regenerated.
 """
 from __future__ import annotations
 
 import argparse
 import json
 import os
-import re
 import sys
 import time
 import tomllib
@@ -24,31 +25,17 @@ from typing import Mapping
 
 from theming.edit import set_value  # noqa: E402  (scripts/ is on sys.path)
 from theming.generate import main as generate  # noqa: E402
+from theming.palette import WALLPAPER_SOURCE, PaletteError, find_theme, load_palette  # noqa: E402
 from theming.paths import Paths  # noqa: E402
+from theming.settings import SettingsError, load_theme  # noqa: E402
 from theming.writer import write_atomic  # noqa: E402
+from wallpaper_collection import Wallpaper, find, load_collection, theme_for  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 IMAGES = {".jpg", ".jpeg", ".png", ".webp"}
 BASE_URL = os.environ.get("TFEM_WALLPAPER_BASE", "https://w.wallhaven.cc")
 USER_AGENT = "dotfiles-wallpaper-fetch/1.0"
-_ID = re.compile(r"[a-z0-9]{6}")
-_CATEGORY = re.compile(r"[a-z][a-z0-9_-]*")
-
-
-def load_collection(path: Path) -> list[tuple[str, str, str]]:
-    """Returns (category, id, extension) for every wallpaper; rejects bad entries."""
-    with path.open("rb") as handle:
-        data = tomllib.load(handle)
-    entries = []
-    for category, table in data.items():
-        if not _CATEGORY.fullmatch(category) or not isinstance(table, dict):
-            raise ValueError(f"invalid category '{category}' in {path}")
-        for item in table.get("wallpapers", []):
-            wallpaper_id, ext = item.get("id", ""), item.get("ext", "")
-            if not _ID.fullmatch(wallpaper_id) or ext not in ("jpg", "png"):
-                raise ValueError(f"invalid wallpaper {item!r} in {path}")
-            entries.append((category, wallpaper_id, ext))
-    return entries
+COLLECTION = ROOT / "wallpapers/collection.toml"
 
 
 def default_dest() -> Path:
@@ -87,25 +74,43 @@ def download(url: str, target: Path, attempts: int = 3) -> None:
 def fetch(args: argparse.Namespace) -> int:
     entries = load_collection(args.collection)
     if args.category:
-        entries = [entry for entry in entries if entry[0] == args.category]
+        entries = [entry for entry in entries if entry.category == args.category]
     done = kept = failed = 0
-    for category, wallpaper_id, ext in entries:
-        target = args.dest / category / f"wallhaven-{wallpaper_id}.{ext}"
+    for entry in entries:
+        target = args.dest / entry.category / entry.file_name
         if target.exists() and target.stat().st_size > 0:
             kept += 1
             continue
         if args.dry_run:
-            print(f"would download {url_for(wallpaper_id, ext)} -> {target}")
+            print(f"would download {url_for(entry.id, entry.ext)} -> {target}")
             continue
         try:
-            download(url_for(wallpaper_id, ext), target)
+            download(url_for(entry.id, entry.ext), target)
             done += 1
-            print(f"  {category}/{target.name}")
+            print(f"  {entry.category}/{target.name}")
         except (urllib.error.URLError, OSError) as error:
             failed += 1
-            print(f"  failed: {category}/{target.name} ({error})", file=sys.stderr)
+            print(f"  failed: {entry.category}/{target.name} ({error})", file=sys.stderr)
     print(f"{done} downloaded, {kept} already there, {failed} failed -> {args.dest}")
     return 2 if failed else 0
+
+
+def followed_theme(image: Path, wallpapers: list[Wallpaper], theme: Mapping[str, object]) -> str | None:
+    """The theme picking `image` switches to: none when `wallpaper.follow` is
+    off, when the palette comes from the wallpaper, or for an image without one."""
+    if not theme["wallpaper.follow"] or theme["palette.source"] == WALLPAPER_SOURCE:
+        return None
+    return theme_for(find(image, wallpapers), str(theme["wallpaper.forest_theme"]))
+
+
+def theme_title(name: str, paths: Paths, known: dict[str, str]) -> str:
+    """The readable name of a theme ("Luna"), "" when it does not exist."""
+    if name not in known:
+        try:
+            known[name] = load_palette(find_theme(name, paths)).name
+        except PaletteError:
+            known[name] = ""
+    return known[name]
 
 
 def images(folder: Path) -> list[dict[str, str]]:
@@ -120,6 +125,15 @@ def images(folder: Path) -> list[dict[str, str]]:
 
 def list_images(args: argparse.Namespace, paths: Paths) -> int:
     found = images(paths.wallpapers)
+    try:
+        theme, wallpapers = load_theme(paths), load_collection(COLLECTION)
+    except SettingsError as error:
+        print(f"warning: {error}", file=sys.stderr)
+        theme, wallpapers = None, []
+    known: dict[str, str] = {}
+    for image in found:
+        name = followed_theme(Path(image["path"]), wallpapers, theme) if theme else None
+        image["theme"] = theme_title(name, paths, known) if name else ""
     if args.json:
         print(json.dumps(found, ensure_ascii=False))
     else:
@@ -140,12 +154,23 @@ def set_wallpaper(args: argparse.Namespace, paths: Paths, env: Mapping[str, str]
         value = str(image.relative_to(paths.wallpapers))
     except ValueError:
         value = str(image)
+    theme = load_theme(paths)
+    switch = followed_theme(image, load_collection(COLLECTION), theme)
+    if switch == theme["palette.source"]:
+        switch = None
+    elif switch and not theme_title(switch, paths, {}):
+        print(f"warning: theme '{switch}' not found: the theme is kept", file=sys.stderr)
+        switch = None
     settings = paths.user_dir / "theme.toml"
     text = settings.read_text() if settings.exists() else "# Your settings: only the keys written here replace the defaults.\n"
-    write_atomic(settings, set_value(text, "wallpaper", "path", value))
-    print(f"wallpaper: {paths.pretty(image)}")
-    # Only the files that show the wallpaper: no compositor reload needed.
-    return generate(["--root", str(ROOT), "--only", "quickshell,hyprlock"], env=env)
+    text = set_value(text, "wallpaper", "path", value)
+    if switch:
+        text = set_value(text, "palette", "source", switch)
+    write_atomic(settings, text)
+    print(f"wallpaper: {paths.pretty(image)}" + (f"\ntheme: {switch}" if switch else ""))
+    # Same theme: only the files that show the wallpaper, no compositor reload.
+    only = [] if switch else ["--only", "quickshell,hyprlock"]
+    return generate(["--root", str(ROOT), *only], env=env)
 
 
 def main(argv: list[str] | None = None, env: Mapping[str, str] = os.environ) -> int:
@@ -155,7 +180,7 @@ def main(argv: list[str] | None = None, env: Mapping[str, str] = os.environ) -> 
     fetch_cmd.add_argument("--category", help="only this category (e.g. forest, pony)")
     fetch_cmd.add_argument("--dest", type=Path, default=default_dest(), help="target folder")
     fetch_cmd.add_argument("--dry-run", action="store_true", help="list what would be downloaded")
-    fetch_cmd.add_argument("--collection", type=Path, default=ROOT / "wallpapers/collection.toml",
+    fetch_cmd.add_argument("--collection", type=Path, default=COLLECTION,
                            help=argparse.SUPPRESS)
     list_cmd = commands.add_parser("list", help="list the images of the wallpaper folder")
     list_cmd.add_argument("--json", action="store_true", help="as JSON (used by the shell)")
@@ -169,7 +194,7 @@ def main(argv: list[str] | None = None, env: Mapping[str, str] = os.environ) -> 
         if args.command == "set":
             return set_wallpaper(args, paths, env)
         return fetch(args)
-    except (OSError, ValueError, tomllib.TOMLDecodeError) as error:
+    except (OSError, ValueError, tomllib.TOMLDecodeError, SettingsError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 1
 

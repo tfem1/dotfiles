@@ -7,13 +7,15 @@ import "../overlay"
 // The wallpaper selector (SUPER + W). The list comes from
 // `tfem wallpapers list`, a pick goes through `tfem wallpapers set`, which
 // saves it in theme.toml and regenerates the files that show it (this
-// shell's wallpaper, the lock screen). Recent picks and the color of each
-// image are kept in the shell's state folder. Only loaded while open.
+// shell's wallpaper, the lock screen); a wallpaper of the collection also
+// brings its theme (Luna wallpaper, Luna theme), then the whole desktop
+// recolors. Recent picks and the color of each image are kept in the
+// shell's state folder. Only loaded while open.
 Scope {
     id: root
 
     property bool open: false
-    property var images: []    // [{ path, name, category }]
+    property var images: []    // [{ path, name, category, theme }]
     property var colors: ({})  // path -> color class, found once per image
     property var recent: []    // paths, newest first
     readonly property string cli: Quickshell.env("HOME") + "/.local/bin/tfem"

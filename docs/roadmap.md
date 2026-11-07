@@ -29,7 +29,8 @@ Themes come before the shell, so the shell is built with the final palettes.
 4. **Done:** power menu (lock, log out, suspend, reboot, shut down).
 5. **Done:** notification center (history), do not disturb and stay awake,
    in the system panel (`SUPER + B`), with hypridle.
-6. Wallpaper = character (pony wallpapers), forest wallpapers = green theme.
+6. **Done:** wallpaper = character (pony wallpapers), forest wallpapers =
+   green theme.
 7. Settings window (`SUPER + H`).
 8. Optional dock.
 9. Fastfetch in the theme colors, matching cursor and icons.
@@ -191,7 +192,7 @@ supported.
 
 **Selector**, look of Serpantinum's selector (original code). **Done:** the
 carousel, the grid, color filters, recent picks, random pick, search, the
-wallpaper drawn by the shell. **Next:** favorites, wallpaper = character,
+wallpaper drawn by the shell, wallpaper = character. **Next:** favorites,
 palette from the wallpaper.
 
 - A carousel of slanted (parallelogram) cards over the current wallpaper;
@@ -203,12 +204,15 @@ palette from the wallpaper.
 - Color filters use the dominant color of each wallpaper, computed once with
   Quickshell's `ColorQuantizer` and kept in the shell's state folder.
 - Applying a wallpaper also regenerates the palette.
-- **Wallpaper = character:** each pony wallpaper of the collection names the
-  character it shows (`character = "luna"`); picking it switches to that
-  character's theme (Luna wallpaper, Luna theme). Wallpapers without a
-  character keep the current theme or use colors from the image.
+- **Wallpaper = character (done):** each pony wallpaper of the collection
+  that shows one character with a theme names it (`character = "luna"`, read
+  from its wallhaven tags); picking it switches to that character's theme
+  (Luna wallpaper, Luna theme). Forest wallpapers switch to
+  `wallpaper.forest_theme` (Pine). Wallpapers without a character keep the
+  current theme (later: colors from the image). `wallpaper.follow = false`
+  turns it off.
 
-**Collection (done: 52 forests, 21 of them green, and 53 My Little Pony): at least 50 wallpapers
+**Collection (done: 50 forests, 19 of them green, and 51 My Little Pony): at least 50 wallpapers
 from [wallhaven.cc](https://wallhaven.cc), mostly forests, plus My Little Pony.** Real images taken from the site, none
 generated.
 
