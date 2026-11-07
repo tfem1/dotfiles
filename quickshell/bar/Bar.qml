@@ -1,11 +1,21 @@
 import QtQuick
 import Quickshell
 import Quickshell.Wayland
+import "../theme"
 import "../services"
 
 // The bar on one screen: live data from the services into BarContent.
+// With autohide, windows use the whole screen and the bar slides down when
+// the pointer touches the top edge.
 PanelWindow {
+    id: window
+
     required property var modelData
+    property bool autohide: false
+    readonly property bool pointerIn: barHover.hovered || edgeHover.hovered
+    readonly property bool revealed: !autohide || pointerIn || hideDelay.running
+
+    onPointerInChanged: if (!pointerIn) hideDelay.restart()
 
     screen: modelData
     anchors {
@@ -15,6 +25,9 @@ PanelWindow {
     }
     implicitHeight: content.implicitHeight
     color: "transparent"
+    exclusionMode: autohide ? ExclusionMode.Ignore : ExclusionMode.Auto
+    // Hidden, only a thin strip at the top edge takes the pointer.
+    mask: Region { item: window.revealed ? area : edge }
     WlrLayershell.namespace: "shell-bar"
 
     SystemClock {
@@ -22,9 +35,24 @@ PanelWindow {
         precision: SystemClock.Minutes
     }
 
+    // Keeps the bar out a moment after the pointer leaves it.
+    Timer {
+        id: hideDelay
+        interval: 400
+    }
+
+    // Input regions: they stay in place while the bar slides.
+    Item {
+        id: area
+        anchors.fill: parent
+    }
+
     BarContent {
         id: content
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height
+        y: window.revealed ? 0 : -height
+        Behavior on y { NumberAnimation { duration: Theme.duration; easing.type: Easing.OutCubic } }
 
         workspaces: Desktop.workspaces
         hasMedia: Player.active
@@ -47,5 +75,17 @@ PanelWindow {
 
         onWorkspaceClicked: id => Desktop.focus(id)
         onMediaToggled: Player.toggle()
+
+        HoverHandler { id: barHover }
+    }
+
+    Item {
+        id: edge
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 2
+
+        HoverHandler { id: edgeHover }
     }
 }

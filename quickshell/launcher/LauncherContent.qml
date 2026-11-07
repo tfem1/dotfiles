@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import "../theme"
 import "../components"
@@ -8,13 +9,13 @@ Rectangle {
     id: launcher
 
     property var apps: []
-    property alias query: field.text
+    property alias query: search.text
     property alias currentIndex: list.currentIndex
     signal launched(int index)
     signal closed
 
     function focusSearch() {
-        field.forceActiveFocus();
+        search.focusInput();
     }
 
     implicitWidth: 560
@@ -27,51 +28,18 @@ Rectangle {
         anchors.fill: parent
     }
 
-    Rectangle {
+    SearchField {
         id: search
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: 12
-        height: 48
-        radius: 24
-        color: Theme.surface
-
-        Icon {
-            id: searchIcon
-            anchors.left: parent.left
-            anchors.leftMargin: 16
-            anchors.verticalCenter: parent.verticalCenter
-            name: "search"
-            color: Theme.accent
-            size: 20
-        }
-        TextInput {
-            id: field
-            anchors.left: searchIcon.right
-            anchors.leftMargin: 12
-            anchors.right: parent.right
-            anchors.rightMargin: 16
-            anchors.verticalCenter: parent.verticalCenter
-            color: Theme.fg
-            selectionColor: Theme.accent
-            font.family: Theme.fontSans
-            font.pixelSize: Theme.fontPixels * 1.15
-            focus: true
-            onTextChanged: list.currentIndex = 0
-            Keys.onDownPressed: list.incrementCurrentIndex()
-            Keys.onUpPressed: list.decrementCurrentIndex()
-            Keys.onReturnPressed: if (list.count > 0) launcher.launched(list.currentIndex)
-            Keys.onEscapePressed: launcher.closed()
-
-            Label {
-                anchors.verticalCenter: parent.verticalCenter
-                visible: field.text === ""
-                text: "Search apps…"
-                color: Theme.subtle
-                font.pixelSize: field.font.pixelSize
-            }
-        }
+        placeholder: "Search apps…"
+        onTextChanged: list.currentIndex = 0
+        onMoveDown: list.incrementCurrentIndex()
+        onMoveUp: list.decrementCurrentIndex()
+        onAccepted: if (list.count > 0) launcher.launched(list.currentIndex)
+        onCancelled: launcher.closed()
     }
 
     ListView {

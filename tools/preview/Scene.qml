@@ -4,12 +4,15 @@ import "../../quickshell/bar"
 import "../../quickshell/osd"
 import "../../quickshell/notifications"
 import "../../quickshell/launcher"
+import "../../quickshell/clipboard"
+import "../../quickshell/cheatsheet"
 
 // A 1920x1080 desktop with the shell's components and sample data.
 Rectangle {
     id: scene
 
     required property string themeJson
+    property string bindsJson: "[]"
     property url wallpaper
     property string mode: "desktop"
 
@@ -78,14 +81,15 @@ Rectangle {
         }
     }
 
-    // Launcher: the screen dims behind the search box.
+    // Launcher, clipboard and cheatsheet: the screen dims behind them.
     Rectangle {
-        visible: scene.mode === "launcher"
+        visible: scene.mode !== "desktop"
         anchors.fill: parent
         anchors.topMargin: 44
         color: Qt.alpha(Theme.bgAlt, 0.45)
 
         LauncherContent {
+            visible: scene.mode === "launcher"
             anchors.horizontalCenter: parent.horizontalCenter
             y: 220
             width: 560
@@ -98,6 +102,30 @@ Rectangle {
                 { name: "Flatseal", comment: "Manage Flatpak permissions" },
                 { name: "Font Viewer", comment: "View fonts on your system" }
             ]
+        }
+
+        ClipboardContent {
+            visible: scene.mode === "clipboard"
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: 220
+            width: 560
+            height: implicitHeight
+            entries: [
+                { text: "Friendship is magic" },
+                { text: "https://wallhaven.cc/w/wymvyx" },
+                { text: "Image · 214 KiB png 1920x1080", image: true },
+                { text: "sudo pacman -Syu" },
+                { text: "#d19fe4" },
+                { text: "Dear Princess Celestia, today I learned that…" }
+            ]
+        }
+
+        CheatsheetContent {
+            visible: scene.mode === "cheatsheet"
+            anchors.centerIn: parent
+            width: implicitWidth
+            height: implicitHeight
+            binds: JSON.parse(scene.bindsJson)
         }
     }
 }

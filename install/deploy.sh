@@ -90,7 +90,7 @@ link_cli() {
   done
   case ":$PATH:" in
     *":$BIN_DIR:"*) ;;
-    *) warn "add $BIN_DIR to your PATH to use the tfem command and the screenshot keys" ;;
+    *) warn "add $BIN_DIR to your PATH to type the tfem command (the keybinds do not need it)" ;;
   esac
 }
 

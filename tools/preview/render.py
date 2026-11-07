@@ -8,7 +8,10 @@ the same generator as `tfem generate`, only the data is made up.
 from __future__ import annotations
 
 import argparse
+import json
 import os
+import shutil
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -22,7 +25,10 @@ from theming.paths import Paths  # noqa: E402
 from theming.settings import load_theme  # noqa: E402
 from theming.template import render as render_template  # noqa: E402
 
-MODES = ("desktop", "launcher")
+MODES = ("desktop", "launcher", "clipboard", "cheatsheet")
+MODIFIERS = {"SHIFT": 1, "CTRL": 4, "ALT": 8, "SUPER": 64}
+SAMPLE_BINDS = [("SUPER + RETURN", "Open the terminal"), ("SUPER + D", "Open the launcher"),
+                ("SUPER + C", "Open the clipboard history"), ("SUPER + slash", "Show the keybind cheatsheet")]
 
 
 def theme_json(name: str) -> str:
@@ -32,6 +38,25 @@ def theme_json(name: str) -> str:
     theme["palette.source"] = name
     context = build_context(theme, resolve_palette(theme, paths), paths, {"shell.name": "desktop"})
     return render_template((ROOT / "templates/quickshell/theme.json.tpl").read_text(), context)
+
+
+def binds_json() -> str:
+    """The keybinds of hypr/ as `hyprctl binds -j` lists them (read in the fake
+    Hyprland API of the tests when Lua is installed, a short sample otherwise)."""
+    lua = shutil.which("lua5.4") or shutil.which("lua")
+    binds = SAMPLE_BINDS
+    if lua:
+        done = subprocess.run([lua, str(ROOT / "tests/lua/check_hypr.lua"), str(ROOT / "hypr")],
+                              capture_output=True, text=True, check=True)
+        calls = [json.loads(line) for line in done.stdout.splitlines()]
+        binds = [(c["args"][0], c["args"][2]["description"]) for c in calls if c["call"] == "bind"]
+    result = []
+    for keys, description in binds:
+        names = keys.split(" + ")
+        mask = sum(MODIFIERS.get(name, 0) for name in names[:-1])
+        result.append({"has_description": True, "modmask": mask, "submap": "", "key": names[-1],
+                       "description": description})
+    return json.dumps(result)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -50,10 +75,12 @@ def main(argv: list[str] | None = None) -> int:
     app = QGuiApplication(sys.argv[:1])
     args.out.mkdir(parents=True, exist_ok=True)
     wallpaper = QUrl.fromLocalFile(str(args.wallpaper.resolve())) if args.wallpaper else QUrl()
+    binds = binds_json()
     for name in args.theme or ["pony-twilight"]:
         for mode in MODES:
             view = QQuickView()
-            view.setInitialProperties({"themeJson": theme_json(name), "wallpaper": wallpaper, "mode": mode})
+            view.setInitialProperties({"themeJson": theme_json(name), "bindsJson": binds, "wallpaper": wallpaper,
+                                       "mode": mode})
             view.setSource(QUrl.fromLocalFile(str(Path(__file__).with_name("Scene.qml"))))
             if view.errors():
                 for error in view.errors():

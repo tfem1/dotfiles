@@ -39,8 +39,9 @@ class OutputTest(GenerateTest):
     def test_renders_every_target_like_the_golden_files(self):
         code, _ = self.run_generate("--all")
         self.assertEqual(code, 0)
-        hypr_shell = self.paths.config_home / "hypr/shell.lua"
-        pairs = ((self.hypr_theme, "theme.lua"), (hypr_shell, "shell.lua"), (self.shell_theme, "theme.json"))
+        hypr = self.paths.config_home / "hypr"
+        pairs = ((self.hypr_theme, "theme.lua"), (hypr / "shell.lua", "shell.lua"),
+                 (self.shell_theme, "theme.json"), (hypr / "hyprlock.conf", "hyprlock.conf"))
         for produced, golden in pairs:
             with self.subTest(golden=golden):
                 if os.environ.get("UPDATE_GOLDEN"):
@@ -62,7 +63,7 @@ class OutputTest(GenerateTest):
     def test_second_run_changes_nothing(self):
         self.run_generate("--all")
         _, output = self.run_generate("--all")
-        self.assertEqual(output.count("unchanged"), 3)
+        self.assertEqual(output.count("unchanged"), 4)
 
     def test_absent_apps_are_skipped(self):
         code, output = self.run_generate()

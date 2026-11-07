@@ -70,9 +70,10 @@ Themes come before the shell, so the shell is built with the final palettes.
 
 ## 3. Quickshell shell: bar, OSD, launcher, notifications
 
-- **Done:** bar (Material style), OSD, notifications, launcher, IPC for the
-  keybinds, deployed by the installer. **Next:** sidebars, dock, Mono style,
-  bar autohide, do not disturb.
+- **Done:** bar (Material style) with autohide, OSD, notifications, launcher,
+  clipboard history, keybind cheatsheet, IPC for the keybinds, deployed by the
+  installer. **Next:** the panels of `SUPER + B/M/W/S/N/V/H`, sidebars, dock,
+  Mono style, do not disturb.
 
 - A single `shell.qml` that only composes; every hidden part in a `Loader`.
 - Colors read live from the generated `theme.json` (`FileView` + `JsonAdapter`).
@@ -260,7 +261,8 @@ Look of Serpantinum's settings window (original code):
 
 ## 7. Lock screen, login screens, authentication
 
-- `hyprlock` theme from `theme.toml`.
+- **Done:** `hyprlock` config generated from `theme.toml` (hyprlock does not
+  lock without one). **Next:** a custom lock screen in the chosen style.
 - **Built-in Polkit agent**: administrator password prompts drawn by the
   shell in the current theme (Quickshell 0.3 supports Polkit agents).
 - Two SDDM themes in `extras/sddm/`, installed separately, colors from the
@@ -275,9 +277,9 @@ Look of Serpantinum's settings window (original code):
 
 ## 8. Displays and keybinds
 
-`max-hz.sh` (best mode per monitor, hot-plug), Display tab, keybind
-cheatsheet (`super + /`). Runtime monitor changes with the Lua config are to be
-verified.
+`max-hz.sh` (best mode per monitor, hot-plug), Display tab. Runtime monitor
+changes with the Lua config are to be verified. **Done:** keybind cheatsheet
+(`SUPER + /`), every key checked by the tests.
 
 Checked in the Hyprland wiki: `hl.monitor({ output = "", mode = "highrr" })`
 picks the highest refresh rate on every screen, hot-plugged ones included,

@@ -109,7 +109,8 @@ their usual places:
 
 ```
 theme.toml ──► validate ──► palette (base16) ──► templates ──► ~/.config/hypr/theme.lua
-themes/*.toml ─────────────────┘                             ~/.config/quickshell/<shell>/theme.json
+themes/*.toml ─────────────────┘                             ~/.config/hypr/hyprlock.conf
+                                                             ~/.config/quickshell/<shell>/theme.json
 ```
 
 - Palettes use the [base16](https://github.com/tinted-theming/home) format, so
@@ -167,8 +168,16 @@ and in `hypr/config/keybinds.lua`.
 - Colors, gaps, corners and blur come from `theme.toml` through the generated
   `theme.lua`.
 
-The installer copies it to `~/.config/hypr`. The shell panels opened by the
-keys (launcher, wallpaper, settings…) arrive with the Quickshell shell.
+The installer copies it to `~/.config/hypr`. `SUPER + /` shows every
+shortcut on screen. The tests load the config in a fake Hyprland API and check
+every key: the dispatcher exists, the program it runs is installed by the
+installer, and the shell panel it opens exists. The keys of the panels still to
+build (system, music, wallpaper, calendar, network, volume, settings) do
+nothing yet.
+
+- **Lock screen** (`SUPER + L`): hyprlock, with a config generated from
+  `theme.toml` (`~/.config/hypr/hyprlock.conf`): hyprlock does not lock without
+  one.
 
 ## Shell
 
@@ -185,6 +194,12 @@ folder name is `shell.name` in your `config.json`). Its colors follow
 - **Notifications**: the shell is the notification daemon; popups in the
   top-right corner, urgent ones stay until closed.
 - **Launcher** (`SUPER + D`): type to search, arrows to move, Enter to launch.
+- **Clipboard history** (`SUPER + C`): what you copied (kept by cliphist),
+  searchable; Enter copies it again.
+- **Keybind cheatsheet** (`SUPER + /`): read from Hyprland itself, so your own
+  binds show up too.
+- **Bar autohide** (`SUPER + A`): windows get the whole screen, the bar comes
+  down when the pointer touches the top edge.
 
 Still to come: the sidebars, the dock, the Mono style, the settings window and
 the panels opened by the other keys.

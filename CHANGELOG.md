@@ -55,6 +55,18 @@ All notable changes to this project are documented here. The format follows
 - The installer deploys the shell; brightness keys show the OSD.
 - Backups get unique folder names, so two runs in the same second never mix
   them (found by the uninstall test).
+- Keybinds checked one by one against Hyprland's source and wiki. Tests now
+  load every key in the fake Hyprland API and check that its dispatcher
+  exists, that the program it runs comes from the installer, and that the
+  shell handles its IPC call (the panels still to build are listed).
+- Lock screen: generated `hyprlock.conf` in the theme colors (wallpaper,
+  clock, date, password field). Without it hyprlock exits and `SUPER + L`
+  did not lock.
+- Shell: clipboard history (`SUPER + C`), keybind cheatsheet read from
+  `hyprctl binds -j` (`SUPER + /`) and bar autohide (`SUPER + A`); shared
+  search field and overlay window.
+- Screenshot keys call `~/.local/bin/tfem`: Hyprland started from a login
+  manager often has no `~/.local/bin` in its PATH.
 - Roadmap: themes before the shell, two styles (Material and Mono), look
   profiles, first-launch wizard, optional dock, game mode, do not disturb,
   stay awake, Polkit agent, two SDDM themes, wallhaven wallpaper collection.

@@ -31,3 +31,9 @@ template = "quickshell/theme.json.tpl"
 output   = "{config}/quickshell/{shell}/theme.json"
 needs    = "qs"
 # No reload: the shell watches this file and updates itself.
+
+[hyprlock]
+template = "hypr/hyprlock.conf.tpl"
+output   = "{config}/hypr/hyprlock.conf"
+needs    = "hyprlock"
+# No reload: hyprlock reads its config each time it starts.

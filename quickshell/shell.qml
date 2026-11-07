@@ -5,22 +5,26 @@ import "bar"
 import "osd"
 import "notifications"
 import "launcher"
+import "clipboard"
+import "cheatsheet"
 import "ipc"
 
 // Entry point: only composes the parts, each one lives in its own folder.
 ShellRoot {
     ThemeFile {}
 
-    Variants {
-        model: Quickshell.screens
-        Bar {}
-    }
-
+    Bars { id: barLayer }
     Osd { id: osdLayer }
     Notifications {}
     Launcher { id: launcherLayer }
+    Clipboard { id: clipboardLayer }
+    Cheatsheet { id: cheatsheetLayer }
+
     Shortcuts {
-        launcher: launcherLayer
+        bars: barLayer
         osd: osdLayer
+        launcher: launcherLayer
+        clipboard: clipboardLayer
+        cheatsheet: cheatsheetLayer
     }
 }

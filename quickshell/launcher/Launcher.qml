@@ -1,7 +1,6 @@
 import QtQuick
 import Quickshell
-import Quickshell.Wayland
-import "../theme"
+import "../overlay"
 
 // The app launcher (SUPER + D): desktop apps matching the search, best
 // matches first. Only loaded while open.
@@ -45,23 +44,9 @@ Scope {
     LazyLoader {
         active: root.open
 
-        PanelWindow {
-            anchors {
-                top: true
-                bottom: true
-                left: true
-                right: true
-            }
-            color: Qt.alpha(Theme.bgAlt, 0.45)
-            WlrLayershell.layer: WlrLayer.Overlay
-            WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-            WlrLayershell.namespace: "shell-launcher"
-
-            // A click outside the box closes the launcher.
-            MouseArea {
-                anchors.fill: parent
-                onClicked: root.open = false
-            }
+        OverlayWindow {
+            name: "launcher"
+            onDismissed: root.open = false
 
             LauncherContent {
                 anchors.horizontalCenter: parent.horizontalCenter

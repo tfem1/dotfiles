@@ -4,6 +4,9 @@
 
 local mod = _G.mainMod or "SUPER"
 local shell = _G.shellName or "desktop"
+-- Full path: Hyprland started from a login manager often has no
+-- ~/.local/bin in its PATH (exec_cmd runs through sh, so "~" is expanded).
+local cli = "~/.local/bin/tfem"
 
 local function bind(keys, action, description, flags)
   local options = { description = description }
@@ -34,17 +37,20 @@ bind(mod .. " + SHIFT + F", hl.dsp.window.float({ action = "toggle" }), "Float o
 bind(mod .. " + mouse:272", hl.dsp.window.drag(), "Drag the window", { mouse = true })
 bind(mod .. " + mouse:273", hl.dsp.window.resize(), "Resize the window", { mouse = true })
 
+-- A list, not a table of keys, so the cheatsheet keeps this order. Key names
+-- are matched without case by Hyprland ("Left" = "left").
 local directions = {
-  Left = { "left", "l", -50, 0 },
-  Right = { "right", "r", 50, 0 },
-  Up = { "up", "u", 0, -50 },
-  Down = { "down", "d", 0, 50 },
+  { "Left", "left", -50, 0 },
+  { "Right", "right", 50, 0 },
+  { "Up", "up", 0, -50 },
+  { "Down", "down", 0, 50 },
 }
-for key, d in pairs(directions) do
-  bind(mod .. " + " .. key, hl.dsp.focus({ direction = d[1] }), "Focus the window " .. d[1])
-  bind(mod .. " + CTRL + " .. key, hl.dsp.window.move({ direction = d[2] }), "Move the window " .. d[1])
+for _, d in ipairs(directions) do
+  local key, direction = d[1], d[2]
+  bind(mod .. " + " .. key, hl.dsp.focus({ direction = direction }), "Focus the window " .. direction)
+  bind(mod .. " + CTRL + " .. key, hl.dsp.window.move({ direction = direction }), "Move the window " .. direction)
   bind(mod .. " + SHIFT + " .. key, hl.dsp.window.resize({ x = d[3], y = d[4], relative = true }),
-    "Resize the window towards " .. d[1], { repeating = true })
+    "Resize the window " .. direction, { repeating = true })
 end
 
 -- Workspaces: keys 1 to 9, then 0 for workspace 10 --------------------------
@@ -90,7 +96,7 @@ run("brightnessctl -e4 -n2 set 5%+" .. osd, "Raise the brightness", held)("XF86M
 run("brightnessctl -e4 -n2 set 5%-" .. osd, "Lower the brightness", held)("XF86MonBrightnessDown")
 
 -- Screenshots (saved in ~/Pictures/Screenshots and copied) -----------------
-run("tfem screenshot region", "Screenshot of a region", locked)("Print")
-run("tfem screenshot region --edit", "Screenshot of a region, then edit it", locked)("SHIFT + Print")
-run("tfem screenshot full", "Screenshot of the whole screen", locked)(mod .. " + Print")
-run("tfem screenshot full --edit", "Screenshot of the whole screen, then edit it", locked)(mod .. " + SHIFT + Print")
+run(cli .. " screenshot region", "Screenshot of a region", locked)("Print")
+run(cli .. " screenshot region --edit", "Edit a screenshot of a region", locked)("SHIFT + Print")
+run(cli .. " screenshot full", "Screenshot of the screen", locked)(mod .. " + Print")
+run(cli .. " screenshot full --edit", "Edit a screenshot of the screen", locked)(mod .. " + SHIFT + Print")
