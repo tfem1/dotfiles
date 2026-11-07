@@ -26,6 +26,15 @@ All notable changes to this project are documented here. The format follows
 - Generated `hypr/shell.lua` (shell name from `config.json`) and Hyprland
   font from `theme.toml`.
 - `tfem screenshot region|full [--edit]` (grim, slurp, satty).
+- One-command installer (`install.sh`) for the Arch, Debian and Fedora
+  families: package table with per-distro names and alternatives, every
+  package checked before installing, backup of every replaced file, Hyprland
+  version check, CLI and aliases in `~/.local/bin`, `--profile`,
+  `--dry-run`, `--uninstall`, `--yes`. No third-party repository is added.
+- Wallpaper collection: 50 wallhaven.cc wallpapers (31 forests, 19 My Little
+  Pony), downloaded by `tfem wallpapers fetch` into `~/Pictures/Wallpapers`;
+  relative wallpaper paths in `theme.toml` now point there.
+- Screenshot editing falls back to a plain capture when satty is missing.
 - Roadmap: themes before the shell, two styles (Material and Mono), look
   profiles, first-launch wizard, optional dock, game mode, do not disturb,
   stay awake, Polkit agent, two SDDM themes, wallhaven wallpaper collection.

@@ -87,8 +87,8 @@ class ContextTest(SandboxTest):
         self.assertEqual(ctx["modules.wifi"], Color(0x11, 0x11, 0x11))
 
     def test_relative_wallpaper_is_made_absolute(self):
-        ctx = self.context('[wallpaper]\npath = "nature/lake.jpg"\n')
-        self.assertEqual(ctx["wallpaper.path"], str(self.paths.root / "wallpapers/nature/lake.jpg"))
+        ctx = self.context('[wallpaper]\npath = "forest/lake.jpg"\n')
+        self.assertEqual(ctx["wallpaper.path"], str(self.home / "Pictures/Wallpapers/forest/lake.jpg"))
 
     def test_tilde_wallpaper_uses_home(self):
         ctx = self.context('[wallpaper]\npath = "~/Pictures/a.png"\n')

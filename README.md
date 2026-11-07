@@ -7,8 +7,63 @@ single settings file.
 > desktop.** Nothing on screen carries the TFEM name: no branding in the bar,
 > lock screen, launcher or notifications. See [Make it yours](#make-it-yours).
 
-**Status:** early work. Step 1 of 10 is done (theme pipeline); palettes and app themes come next. The full plan,
-including what is coming next, is in [docs/roadmap.md](docs/roadmap.md).
+**Status:** early work. Done: theme pipeline, Hyprland config, installer and
+wallpaper collection. Next: palettes and app themes, then the Quickshell
+shell. The full plan is in [docs/roadmap.md](docs/roadmap.md).
+
+## Install
+
+One command, on Arch, Debian or Fedora and their derivatives:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/tfem1/dotfiles/main/install.sh)
+```
+
+It downloads the project to `~/.local/share/tfem`, installs the packages,
+backs up every file it is about to replace (in
+`~/.local/state/tfem/backups/`), copies the Hyprland config to
+`~/.config/hypr`, puts the `tfem` command (and the `dots` and `wm` aliases) in
+`~/.local/bin`, downloads the wallpapers and generates the theme. It asks
+before changing anything.
+
+| Option | Effect |
+|---|---|
+| `--profile minimal` | desktop essentials only, no apps, fonts or wallpapers |
+| `--dry-run` | show every step, change nothing |
+| `--uninstall` | put your previous config back and remove the links |
+| `--yes` | do not ask for confirmation |
+| `--no-packages`, `--no-wallpapers` | skip that step |
+
+Run the same command again to update. Installed packages are never removed.
+
+### What each distro provides
+
+The Hyprland config is written in Lua, which needs **Hyprland 0.55 or
+newer**. Everything not listed below is in the official repositories of all
+three families. The installer checks every package first and skips the
+missing ones instead of failing.
+
+| Package | Arch | Debian / Ubuntu | Fedora |
+|---|---|---|---|
+| hyprland | ✅ 0.57 | ✅ Debian testing/unstable (0.57); ❌ Debian 13; ❌ Ubuntu 26.04 (0.53, too old) | ❌ COPR needed |
+| hyprlock | ✅ | ✅ Debian unstable, Ubuntu 26.04 | ❌ COPR needed |
+| quickshell | ✅ 0.3 | ✅ 0.3 (Debian 13 via backports) | ⚠️ 0.2 snapshot |
+| satty (screenshot editor) | ✅ | ❌ (screenshots are saved unedited) | ❌ (same) |
+| cliphist | ✅ | ✅ | ✅ Fedora 44 |
+
+On Fedora, the installer does not add third-party repositories by itself:
+enable a COPR you trust (for example `sudo dnf copr enable sdegler/hyprland`)
+and run it again. Versions checked on Repology on 2026-11-07.
+
+### Wallpapers
+
+`wallpapers/collection.toml` lists 50 wallpapers from
+[wallhaven.cc](https://wallhaven.cc): 31 forests and 19 My Little Pony, SFW,
+at most 10 MB each, picked by hand. They are downloaded to
+`~/Pictures/Wallpapers/forest/` and `~/Pictures/Wallpapers/pony/` (about
+190 MB) and never stored in this repository: the images remain the property
+of their authors. Download or complete them at any time with
+`tfem wallpapers fetch`.
 
 ## How theming works
 
@@ -77,27 +132,8 @@ and in `hypr/config/keybinds.lua`.
 - Colors, gaps, corners and blur come from `theme.toml` through the generated
   `theme.lua`.
 
-The installer is not written yet. To use the config now, back up yours, copy
-this one, put the CLI on your `PATH` (the screenshot keys use it) and
-generate the theme:
-
-```bash
-cp -a ~/.config/hypr ~/.config/hypr.backup
-```
-```bash
-cp -r hypr/. ~/.config/hypr/
-```
-```bash
-ln -s "$PWD/tfem" ~/.local/bin/tfem
-```
-```bash
-./tfem generate
-```
-
-It expects these programs: Hyprland, Quickshell (`qs`), kitty, Firefox,
-Nautilus, wl-clipboard, cliphist, grim, slurp, satty, WirePlumber (`wpctl`),
-brightnessctl, playerctl and hyprlock. The shell panels opened by the keys
-(launcher, wallpaper, settings…) arrive with the Quickshell shell.
+The installer copies it to `~/.config/hypr`. The shell panels opened by the
+keys (launcher, wallpaper, settings…) arrive with the Quickshell shell.
 
 ## Repository layout
 
@@ -106,10 +142,13 @@ theme.toml            default look of the desktop (the single source of truth)
 config.json           default shell behaviour (shell name, and more later)
 tfem                  CLI
 hypr/                 Hyprland config in Lua (copied to ~/.config/hypr/)
+install.sh, install/   one-command installer and its package table
+wallpapers/           wallpaper collection (list only, images are downloaded)
 themes/               base16 palettes, one file per theme
 templates/            one template per generated file + targets.toml manifest
 scripts/generate.sh   entry point of the generator
 scripts/screenshot.sh screenshots (region or full screen, optional editing)
+scripts/wallpapers.py wallpaper download (tfem wallpapers fetch)
 scripts/theming/      generator: settings, palette, template engine, safe writer
 tests/                unit and end-to-end tests, golden files
 docs/                 architecture, template format, roadmap

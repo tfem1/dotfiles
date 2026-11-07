@@ -30,10 +30,10 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths,
 
 
 def _wallpaper_path(value: str, paths: Paths) -> str:
-    """Empty stays empty; relative -> inside the repo's wallpapers/; "~" expanded."""
+    """Empty stays empty; relative -> inside ~/Pictures/Wallpapers; "~" expanded."""
     if not value:
         return ""
     if value == "~" or value.startswith("~/"):
         return str(paths.home / value[2:])
     path = Path(value)
-    return str(path if path.is_absolute() else paths.root / "wallpapers" / path)
+    return str(path if path.is_absolute() else paths.wallpapers / path)

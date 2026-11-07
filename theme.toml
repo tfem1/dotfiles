@@ -19,7 +19,7 @@ mode   = "dark"                 # dark | light: used when the palette comes from
 # base00 = "#11111b"
 
 [wallpaper]
-path = ""                       # empty = none; relative to wallpapers/ or an absolute path
+path = ""                       # empty = none; relative to ~/Pictures/Wallpapers, or absolute
 
 [font]
 sans      = "Inter"

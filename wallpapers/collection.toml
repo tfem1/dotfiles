@@ -1,0 +1,65 @@
+# Wallpapers from wallhaven.cc, downloaded on your machine by
+# `tfem wallpapers fetch` into ~/Pictures/Wallpapers/<category>/.
+#
+# The images are not stored in this repository: they remain the property of
+# their authors (wallhaven.cc), and My Little Pony belongs to Hasbro.
+# Picked on 2026-11-07: SFW only, at most 10 MB each, every image checked by
+# eye. Page of each wallpaper: https://wallhaven.cc/w/<id>
+
+[forest]
+wallpapers = [
+  { id = "pow2wp", ext = "jpg", size = "3840x2160" },
+  { id = "zpz11v", ext = "jpg", size = "3840x2160" },
+  { id = "oggp1m", ext = "jpg", size = "3840x2160" },
+  { id = "yqk2q7", ext = "jpg", size = "1920x1080" },
+  { id = "rqod21", ext = "png", size = "1920x1080" },
+  { id = "5ym8p1", ext = "jpg", size = "3840x2160" },
+  { id = "jevokm", ext = "jpg", size = "1920x1080" },
+  { id = "gwmo13", ext = "jpg", size = "3840x2160" },
+  { id = "jelye5", ext = "jpg", size = "2560x1440" },
+  { id = "9oo12x", ext = "jpg", size = "3840x2160" },
+  { id = "216zzg", ext = "jpg", size = "3840x2160" },
+  { id = "5yrzo3", ext = "png", size = "3840x2160" },
+  { id = "k88ozm", ext = "jpg", size = "3840x2160" },
+  { id = "jey355", ext = "jpg", size = "3840x2160" },
+  { id = "yq96lx", ext = "png", size = "3840x2160" },
+  { id = "rqyl6j", ext = "jpg", size = "3840x2160" },
+  { id = "5yyme5", ext = "jpg", size = "3840x2160" },
+  { id = "rqyxpw", ext = "jpg", size = "1920x1080" },
+  { id = "w51vmr", ext = "jpg", size = "3840x2160" },
+  { id = "216p8y", ext = "jpg", size = "3840x2160" },
+  { id = "vp2rol", ext = "png", size = "3840x2160" },
+  { id = "8g82jo", ext = "jpg", size = "3840x2160" },
+  { id = "qrj12q", ext = "png", size = "2560x1440" },
+  { id = "vpzv5l", ext = "jpg", size = "3840x2160" },
+  { id = "1qq923", ext = "png", size = "2560x1440" },
+  { id = "jevdow", ext = "png", size = "2560x1440" },
+  { id = "21zw3x", ext = "jpg", size = "3840x2160" },
+  { id = "5y33x3", ext = "jpg", size = "3840x2160" },
+  { id = "9ok8kx", ext = "png", size = "1920x1080" },
+  { id = "gw57dd", ext = "jpg", size = "1920x1080" },
+  { id = "9ooj78", ext = "jpg", size = "3840x2160" },
+]
+
+[pony]
+wallpapers = [
+  { id = "wymvyx", ext = "jpg", size = "3840x2160" },
+  { id = "y857ol", ext = "png", size = "1920x1080" },
+  { id = "4962dk", ext = "jpg", size = "1920x1080" },
+  { id = "3kjko6", ext = "jpg", size = "5255x3026" },
+  { id = "4lmwyq", ext = "png", size = "1920x1200" },
+  { id = "481rwk", ext = "jpg", size = "2613x1467" },
+  { id = "d5jx6m", ext = "png", size = "1920x1080" },
+  { id = "j3w97p", ext = "png", size = "3840x2160" },
+  { id = "gpw8ge", ext = "jpg", size = "4800x3000" },
+  { id = "439ojy", ext = "png", size = "2560x1600" },
+  { id = "ne3eko", ext = "jpg", size = "1920x1200" },
+  { id = "57zlo8", ext = "png", size = "1920x1080" },
+  { id = "nerj2w", ext = "jpg", size = "1920x1080" },
+  { id = "48ve20", ext = "png", size = "1920x1080" },
+  { id = "nz7mgg", ext = "jpg", size = "1920x1080" },
+  { id = "nk9egd", ext = "png", size = "2560x1600" },
+  { id = "4yjked", ext = "jpg", size = "1920x1080" },
+  { id = "1kjwx1", ext = "png", size = "2560x1440" },
+  { id = "49owo8", ext = "png", size = "1920x1080" },
+]

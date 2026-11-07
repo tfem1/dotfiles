@@ -68,6 +68,14 @@ class ScreenshotTest(unittest.TestCase):
         self.assertIn("--filename - --output-filename", satty[0])
         self.assertIn(str(self.pictures / "Screenshots"), satty[0])
 
+    def test_edit_without_satty_still_saves_the_capture(self):
+        (self.root / "bin/satty").unlink()
+        self.env["PATH"] = f"{self.root / 'bin'}:/usr/bin:/bin"
+        done = self.run_script("full", "--edit")
+        self.assertEqual(done.returncode, 0)
+        self.assertIn("satty is not installed", done.stderr)
+        self.assertEqual(len(self.shots()), 1)
+
     def test_bad_arguments_are_refused(self):
         self.assertEqual(self.run_script("everything").returncode, 64)
         self.assertEqual(self.run_script("full", "--paint").returncode, 64)

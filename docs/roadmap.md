@@ -167,8 +167,8 @@ supported.
   Quickshell's `ColorQuantizer` and cached.
 - Applying a wallpaper also regenerates the palette.
 
-**Collection: at least 50 wallpapers from [wallhaven.cc](https://wallhaven.cc),
-mostly forests, plus My Little Pony.** Real images taken from the site, none
+**Collection (done: 31 forests, 19 My Little Pony): at least 50 wallpapers
+from [wallhaven.cc](https://wallhaven.cc), mostly forests, plus My Little Pony.** Real images taken from the site, none
 generated.
 
 - wallhaven states that "all images remain property of their original
@@ -269,6 +269,8 @@ but may lower the resolution to get it. Two choices for the Display tab:
 resolution and picks its highest refresh rate.
 
 ## 9. Installer and CI
+
+Installer done (`install.sh`); still to do: CI and the SDDM extras.
 
 One `install.sh` for Arch, Debian and Fedora, `--profile`, `--dry-run`,
 `--uninstall`, mandatory backup, aliases `dots` and `wm`, CI with shellcheck,

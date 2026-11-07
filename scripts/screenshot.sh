@@ -25,6 +25,12 @@ if [[ $mode == region ]]; then
   geometry=(-g "$region")
 fi
 
+if [[ $edit == --edit ]] && ! command -v satty >/dev/null 2>&1; then
+  # satty is only packaged on Arch: elsewhere, keep the capture unedited.
+  echo "satty is not installed: saving the screenshot without editing" >&2
+  edit=""
+fi
+
 if [[ $edit == --edit ]]; then
   grim "${geometry[@]}" - | satty --filename - --output-filename "$file"
 else

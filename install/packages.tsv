@@ -1,0 +1,29 @@
+# Packages per distro family, read by install.sh.
+# Columns (tab separated): key, profile, arch, debian, fedora.
+# profile: core = always installed, full = only with --profile full.
+# "-" = not in the official repositories; "a|b" = first available name;
+# several packages in one cell are separated by spaces.
+# The installer checks every name before installing and skips missing ones.
+hyprland	core	hyprland	hyprland	-
+hyprlock	core	hyprlock	hyprlock	-
+quickshell	core	quickshell	quickshell	quickshell
+python	core	python	python3	python3
+git	core	git	git	git
+curl	core	curl	curl	curl
+kitty	core	kitty	kitty	kitty
+wl-clipboard	core	wl-clipboard	wl-clipboard	wl-clipboard
+cliphist	core	cliphist	cliphist	cliphist
+grim	core	grim	grim	grim
+slurp	core	slurp	slurp	slurp
+brightnessctl	core	brightnessctl	brightnessctl	brightnessctl
+playerctl	core	playerctl	playerctl	playerctl
+wireplumber	core	wireplumber	wireplumber	wireplumber
+networkmanager	core	networkmanager	network-manager	NetworkManager
+bluez	core	bluez bluez-utils	bluez	bluez
+firefox	full	firefox	firefox-esr|firefox	firefox
+nautilus	full	nautilus	nautilus	nautilus
+satty	full	satty	-	-
+font-inter	full	inter-font	fonts-inter	rsms-inter-fonts
+font-mono	full	ttf-jetbrains-mono-nerd	fonts-jetbrains-mono	jetbrains-mono-fonts
+icons	full	papirus-icon-theme	papirus-icon-theme	papirus-icon-theme
+cursor	full	adwaita-cursors	adwaita-icon-theme	adwaita-cursor-theme

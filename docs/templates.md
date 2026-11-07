@@ -30,7 +30,8 @@ a suggestion when a close name exists. A literal `{{` is not allowed; write
 | Settings | every key of `theme.toml` in dotted form | `shape.radius`, `font.sans` |
 | Shell settings | every key of `config.json` in dotted form | `shell.name` |
 
-`wallpaper.path` is always absolute (relative paths point into `wallpapers/`).
+`wallpaper.path` is always absolute (relative paths point into
+`~/Pictures/Wallpapers`, where `tfem wallpapers fetch` downloads them).
 
 Roles map to base16 slots: `bg`=00, `bg_alt`=01, `surface`=02, `muted`=03,
 `subtle`=04, `fg`=05, `fg_bright`=06, `red`=08, `orange`=09, `yellow`=0A,

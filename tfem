@@ -16,11 +16,19 @@ Commands:
                   --only NAME[,NAME]  render only these targets
                   --all               render even if the app is not installed
   screenshot    Take a screenshot: region|full [--edit]
+  wallpapers    Download the wallpaper collection: fetch [--category NAME]
   help          Show this help
 
 Your settings: \${XDG_CONFIG_HOME:-~/.config}/tfem/theme.toml and config.json
 Defaults:      $root
 EOF
+}
+
+need_python() {
+  if ! python3 -c 'import sys; sys.exit(sys.version_info < (3, 11))' 2>/dev/null; then
+    echo "$prog: python 3.11 or newer is required" >&2
+    exit 1
+  fi
 }
 
 command="${1:-help}"
@@ -29,6 +37,7 @@ if [[ $# -gt 0 ]]; then shift; fi
 case "$command" in
   generate) exec "$root/scripts/generate.sh" "$@" ;;
   screenshot) exec "$root/scripts/screenshot.sh" "$@" ;;
+  wallpapers) need_python && exec python3 "$root/scripts/wallpapers.py" "$@" ;;
   help | -h | --help) usage ;;
   *)
     echo "$prog: unknown command '$command'" >&2
