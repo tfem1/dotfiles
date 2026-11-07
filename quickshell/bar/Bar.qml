@@ -16,7 +16,20 @@ PanelWindow {
     signal clockClicked
     signal powerClicked
     readonly property bool pointerIn: barHover.hovered || edgeHover.hovered
-    readonly property bool revealed: !autohide || pointerIn || hideDelay.running
+    readonly property bool revealed: !autohide || pointerIn || hideDelay.running || menuKey !== ""
+
+    // The app whose menu is open ("" for none), and where it opens.
+    property string menuKey: ""
+    property real menuX: 0
+    property real menuY: 0
+
+    // Right click: a new menu under that icon (an open one closes first).
+    function openMenu(app, x, y) {
+        menuKey = "";
+        menuX = x;
+        menuY = y;
+        Qt.callLater(() => window.menuKey = app.key);
+    }
 
     onPointerInChanged: if (!pointerIn) hideDelay.restart()
 
@@ -63,6 +76,7 @@ PanelWindow {
         y: window.revealed ? 0 : -height
         Behavior on y { NumberAnimation { duration: Theme.duration; easing.type: Easing.OutCubic } }
 
+        apps: Running.apps
         workspaces: Desktop.workspaces
         hasMedia: Player.active
         mediaTitle: Player.title
@@ -84,6 +98,8 @@ PanelWindow {
         status.quiet: Session.doNotDisturb
         status.awake: Session.stayAwake
 
+        onAppActivated: app => Running.focus(app)
+        onAppMenuRequested: (app, x, y) => window.openMenu(app, x, y)
         onWorkspaceClicked: id => Desktop.focus(id)
         onMediaToggled: Player.toggle()
         onRightClicked: window.statusClicked()
@@ -91,6 +107,19 @@ PanelWindow {
         onPowerClicked: window.powerClicked()
 
         HoverHandler { id: barHover }
+    }
+
+    // Only exists while a menu is open.
+    LazyLoader {
+        active: window.menuKey !== ""
+
+        AppMenu {
+            appKey: window.menuKey
+            barWindow: window
+            atX: window.menuX
+            atY: window.menuY
+            onDone: window.menuKey = ""
+        }
     }
 
     Item {

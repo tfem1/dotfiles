@@ -114,9 +114,10 @@ Themes come before the shell, so the shell is built with the final palettes.
   - *Bar* (replaces Waybar, as planned): full width at the top. Center, side
     by side: now playing (cover, title, artist, progress), the workspaces
     (numbered circles, occupied ones highlighted) in a "notch" rounded at the
-    bottom, then the clock with the date. Left area: active window (app and
-    title), opens the left sidebar. Right area: keyboard layout, network,
-    Bluetooth, battery, tray, opens the right sidebar.
+    bottom, then the clock with the date. Left area (**done**): the running
+    apps, windows and tray icons together, click to focus, right click for
+    a themed menu with the app's tray entries and Quit. Right area: keyboard
+    layout, network, Bluetooth, battery, opens the right sidebar.
   - *Right sidebar*: large time and uptime, power and settings buttons, a row
     of quick toggle pills, grouped notifications with "Clear", a calendar with
     Calendar and To-do tabs.

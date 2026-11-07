@@ -122,6 +122,14 @@ All notable changes to this project are documented here. The format follows
   shuffle and repeat when the player supports them, player choice, and
   synced lyrics from lrclib.net fetched only when the lyrics view is open.
   Position asked twice a second only while the panel shows a playing song.
+- Running apps at the top left of the bar: open windows (Wayland
+  toplevels) and tray icons (StatusNotifierItem) grouped into one icon per
+  app, with a mark for the windows and the focused one. Click brings the
+  app forward and cycles through its windows; right click opens a themed
+  menu with the app's own tray entries (submenus in place) and Quit, which
+  uses the app's quit entry or sends SIGTERM to the processes of its
+  windows. Grouping, tray matching and menu rows tested; preview mode
+  `apps`.
 - Wallpaper = character: 24 pony wallpapers of the collection name the
   character they show (from their wallhaven tags); picking one with
   `SUPER + W` or `tfem wallpapers set` switches to that character's theme

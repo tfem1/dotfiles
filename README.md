@@ -252,6 +252,14 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   workspaces 1 to 10 in a notch (click to switch), the clock and date; on the
   right the keyboard layout, sound, network, Bluetooth and battery, each in
   its module color.
+- **Running apps** (top left of the bar): one icon per running app, the
+  ones with a window (Discord, OBS, Roblox, your terminal…) and the ones
+  closed to the tray. A mark under an app with a window, longer for the
+  focused one. Click: bring it forward (again: its next window). Right
+  click: a menu in the theme colors with the app's own tray entries (Mute,
+  Deafen…) and **Quit**. Quit uses the app's own quit entry when it has
+  one, else asks its process to stop (SIGTERM, the same polite request as
+  its own Quit), so it can save first. The shell itself is never listed.
 - **OSD** under the bar for the volume and the brightness.
 - **Notifications**: the shell is the notification daemon; popups in the
   top-right corner, urgent ones stay until closed.
@@ -335,7 +343,8 @@ themes/               base16 palettes, one file per theme
 templates/            one template per generated file + targets.toml manifest
 scripts/generate.sh   entry point of the generator
 scripts/screenshot.sh screenshots (region or full screen, optional editing)
-scripts/wallpapers.py wallpaper download (tfem wallpapers fetch)
+scripts/wallpapers.py wallpapers: download, list, set (with the theme they bring)
+scripts/wallpaper_collection.py  the collection and the theme of each wallpaper
 scripts/theming/      generator: settings, palette, template engine, safe writer
 tools/                icon generator, preview renderer
 tests/                unit and end-to-end tests, golden files

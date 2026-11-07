@@ -28,12 +28,20 @@ from theming.settings import load_theme  # noqa: E402
 from theming.template import render as render_template  # noqa: E402
 from wallpaper_collection import find, load_collection, theme_for  # noqa: E402
 
-MODES = ("desktop", "launcher", "clipboard", "cheatsheet", "wallpaper", "wifi", "bluetooth", "volume", "calendar", "music", "power", "system")
+MODES = ("desktop", "apps", "launcher", "clipboard", "cheatsheet", "wallpaper", "wifi", "bluetooth", "volume",
+         "calendar", "music", "power", "system")
 # Hues of the sample landscapes drawn for the wallpaper selector (degrees).
 SAMPLE_HUES = (215, 280, 330, 140, 25, 195, 255, 0, 50, 100, 300, 230, 160, 10)
 # The theme some samples bring, as a pony or forest wallpaper would.
 SAMPLE_THEMES = {215: "Luna", 280: "Twilight", 330: "Pinkie", 140: "Pine", 195: "Rainbow"}
 MODIFIERS = {"SHIFT": 1, "CTRL": 4, "ALT": 8, "SUPER": 64}
+# Running apps of the bar: name, generic stand-in icon (from an installed
+# icon theme, when there is one), windows, focused, tray icon.
+SAMPLE_APPS = [("kitty", "utilities-terminal", 2, True, False),
+               ("Firefox", "applications-webbrowsers", 1, False, False),
+               ("Discord", "applications-chat", 1, False, True),
+               ("Roblox", "applications-games", 1, False, False),
+               ("OBS Studio", "applications-multimedia", 0, False, True)]
 SAMPLE_BINDS = [("SUPER + RETURN", "Open the terminal"), ("SUPER + D", "Open the launcher"),
                 ("SUPER + C", "Open the clipboard history"), ("SUPER + slash", "Show the keybind cheatsheet")]
 
@@ -64,6 +72,27 @@ def binds_json() -> str:
         result.append({"has_description": True, "modmask": mask, "submap": "", "key": names[-1],
                        "description": description})
     return json.dumps(result)
+
+
+def icon_file(name: str) -> str:
+    """A file of this icon in the installed icon themes, or "" (a letter is drawn then)."""
+    for theme in sorted(Path("/usr/share/icons").glob("*")):
+        for size in ("48", "scalable", "64", "32"):
+            for kind in ("apps", "categories"):
+                for ext in ("svg", "png"):
+                    if (path := theme / kind / size / f"{name}.{ext}").exists():
+                        return path.resolve().as_uri()
+    return ""
+
+
+def sample_apps() -> str:
+    trays = 0
+    apps = []
+    for name, icon, windows, focused, tray in SAMPLE_APPS:
+        apps.append({"key": name.lower(), "name": name, "icon": icon_file(icon), "windows": windows,
+                     "focused": focused, "tray": trays if tray else -1})
+        trays += tray
+    return json.dumps(apps)
 
 
 def sample_wallpapers(folder: Path) -> list[dict[str, str]]:
@@ -128,11 +157,13 @@ def main(argv: list[str] | None = None) -> int:
     binds = binds_json()
     scratch = tempfile.TemporaryDirectory()
     wallpapers = json.dumps(wallpaper_list(args.wallpapers, Path(scratch.name)))
+    apps = sample_apps()
     for name in args.theme or ["pony-twilight"]:
         for mode in MODES:
             view = QQuickView()
             view.setInitialProperties({"themeJson": theme_json(name), "bindsJson": binds, "wallpaper": wallpaper,
-                                       "wallpapersJson": wallpapers, "localeName": args.locale, "mode": mode})
+                                       "wallpapersJson": wallpapers, "appsJson": apps, "localeName": args.locale,
+                                       "mode": mode})
             view.setSource(QUrl.fromLocalFile(str(Path(__file__).with_name("Scene.qml"))))
             if view.errors():
                 for error in view.errors():

@@ -5,3 +5,4 @@ singleton Audio 1.0 Audio.qml
 singleton Power 1.0 Power.qml
 singleton Connectivity 1.0 Connectivity.qml
 singleton Session 1.0 Session.qml
+singleton Running 1.0 Running.qml
