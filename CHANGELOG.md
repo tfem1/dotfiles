@@ -78,6 +78,11 @@ All notable changes to this project are documented here. The format follows
 - Launcher: every word is looked for in the name, description, keywords, id
   and command; names sort without regard to case; terminal apps open in
   `$TERMINAL`, which Hyprland now sets from `variables.lua`.
+- kitty follows the theme: `tfem generate` writes `~/.config/kitty/theme.conf`
+  (16 terminal colors, cursor, selection, borders, tabs, marks), adds one
+  include line to `kitty.conf` (created if missing) and reloads open kitty
+  windows (SIGUSR1).
+- Roadmap: the next ten steps, in the order chosen.
 - Roadmap: themes before the shell, two styles (Material and Mono), look
   profiles, first-launch wizard, optional dock, game mode, do not disturb,
   stay awake, Polkit agent, two SDDM themes, wallhaven wallpaper collection.

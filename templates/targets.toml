@@ -37,3 +37,15 @@ template = "hypr/hyprlock.conf.tpl"
 output   = "{config}/hypr/hyprlock.conf"
 needs    = "hyprlock"
 # No reload: hyprlock reads its config each time it starts.
+
+[kitty]
+template = "kitty/theme.conf.tpl"
+output   = "{config}/kitty/theme.conf"
+needs    = "kitty"
+# Open windows take the new colors at once: kitty reloads its config on
+# SIGUSR1 (recent versions also reload by themselves when a file changes).
+reload   = "pkill -USR1 -x kitty || true"
+# At the end of kitty.conf so the theme wins; move the block up to let your
+# own colors win (the generator keeps it where it is). create = true: a new
+# kitty.conf holding only this line is fine.
+include  = { into = "{config}/kitty/kitty.conf", line = "include theme.conf", comment = "#", create = true }

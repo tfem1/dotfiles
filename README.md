@@ -116,6 +116,7 @@ their usual places:
 theme.toml ──► validate ──► palette (base16) ──► templates ──► ~/.config/hypr/theme.lua
 themes/*.toml ─────────────────┘                             ~/.config/hypr/hyprlock.conf
                                                              ~/.config/quickshell/<shell>/theme.json
+                                                             ~/.config/kitty/theme.conf
 ```
 
 - Palettes use the [base16](https://github.com/tinted-theming/home) format, so
@@ -127,6 +128,10 @@ themes/*.toml ─────────────────┘            
   would be overwritten is backed up first, in `~/.local/state/tfem/backups/`.
 - Invalid settings are rejected with a clear message before anything is
   written.
+- The terminal follows too: change the theme and the shell, the bar and
+  every open kitty window take the new colors together. kitty loads them
+  with one `include theme.conf` line at the end of your `kitty.conf`; move
+  that block up if you want your own colors to win.
 
 Details: [docs/architecture.md](docs/architecture.md) and the template format
 in [docs/templates.md](docs/templates.md).

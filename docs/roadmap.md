@@ -20,6 +20,20 @@ Themes come before the shell, so the shell is built with the final palettes.
   - wallpaper thumbnails are cached at a small size;
   - the `minimal` install profile only installs the core.
 
+## Next, in the order chosen on 2026-11-07
+
+1. **Terminal and apps follow the theme:** kitty (done: colors change with
+   the shell and the bar, open windows included), then GTK and Qt.
+2. Volume panel (`SUPER + V`) and calendar (`SUPER + S`).
+3. Music panel (`SUPER + M`).
+4. Power menu (lock, log out, suspend, reboot, shut down).
+5. Notification center: history, do not disturb, stay awake.
+6. Wallpaper = character (pony wallpapers), forest wallpapers = green theme.
+7. Settings window (`SUPER + H`).
+8. Optional dock.
+9. Fastfetch in the theme colors, matching cursor and icons.
+10. Custom lock screen and the two SDDM themes.
+
 ## 1. Theme pipeline — done
 
 `theme.toml`, `config.json`, base16 theme format, template engine, Hyprland
@@ -61,7 +75,8 @@ Themes come before the shell, so the shell is built with the final palettes.
 - Each theme can suggest an accent and module colors, applied when you pick
   it; you can still change them afterwards.
 - Terminal themes (foot, kitty, alacritty, ghostty, wezterm), GTK and Qt,
-  never overwriting existing configs.
+  never overwriting existing configs. **Done: kitty** (`kitty/theme.conf`,
+  loaded by one include line, reloaded live).
 - `tfem theme <name>`.
 - **Fastfetch in the theme colors**, with an original logo (no official
   artwork).

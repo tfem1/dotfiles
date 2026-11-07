@@ -41,7 +41,8 @@ class OutputTest(GenerateTest):
         self.assertEqual(code, 0)
         hypr = self.paths.config_home / "hypr"
         pairs = ((self.hypr_theme, "theme.lua"), (hypr / "shell.lua", "shell.lua"),
-                 (self.shell_theme, "theme.json"), (hypr / "hyprlock.conf", "hyprlock.conf"))
+                 (self.shell_theme, "theme.json"), (hypr / "hyprlock.conf", "hyprlock.conf"),
+                 (self.paths.config_home / "kitty/theme.conf", "kitty-theme.conf"))
         for produced, golden in pairs:
             with self.subTest(golden=golden):
                 if os.environ.get("UPDATE_GOLDEN"):
@@ -63,7 +64,7 @@ class OutputTest(GenerateTest):
     def test_second_run_changes_nothing(self):
         self.run_generate("--all")
         _, output = self.run_generate("--all")
-        self.assertEqual(output.count("unchanged"), 4)
+        self.assertEqual(output.count("unchanged"), 5)
 
     def test_absent_apps_are_skipped(self):
         code, output = self.run_generate()
@@ -111,6 +112,29 @@ class SafetyTest(GenerateTest):
         self.assertEqual(code, 1)
         self.assertIn("shape.radius", output)
         self.assertFalse(self.hypr_theme.exists())
+
+    def test_kitty_gets_the_theme_and_keeps_its_own_settings(self):
+        config = self.paths.config_home / "kitty/kitty.conf"
+        config.parent.mkdir(parents=True)
+        config.write_text("font_size 12\n")
+        self.run_generate("--all")
+        text = config.read_text()
+        self.assertTrue(text.startswith("font_size 12\n"))
+        self.assertTrue(text.rstrip().endswith("include theme.conf\n# <<< generated: kitty <<<"))
+        # Only option names kitty knows (kitty/options/definition.py).
+        known = {"foreground", "background", "selection_foreground", "selection_background", "cursor",
+                 "cursor_text_color", "url_color", "active_border_color", "inactive_border_color",
+                 "bell_border_color", "active_tab_foreground", "active_tab_background", "inactive_tab_foreground",
+                 "inactive_tab_background", "tab_bar_background", *(f"mark{i}_{side}" for i in (1, 2, 3)
+                 for side in ("foreground", "background")), *(f"color{i}" for i in range(16))}
+        theme = (self.paths.config_home / "kitty/theme.conf").read_text().splitlines()
+        used = {line.split()[0] for line in theme if line and not line.startswith("#")}
+        self.assertEqual(sorted(used - known), [])
+        self.assertEqual(len(used), len(known))
+
+    def test_kitty_conf_is_created_when_missing(self):
+        self.run_generate("--all")
+        self.assertIn("include theme.conf", (self.paths.config_home / "kitty/kitty.conf").read_text())
 
     def test_include_is_added_once_and_original_backed_up(self):
         config = self.paths.config_home / "hypr/hyprland.lua"
