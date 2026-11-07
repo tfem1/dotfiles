@@ -21,6 +21,12 @@ from .writer import Writer
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[2]
 
+# Statuts internes → libellés affichés dans le rapport.
+LABELS = {
+    "unchanged": "inchangé", "created": "créé", "updated": "mis à jour",
+    "skipped": "ignoré", "failed": "échec",
+}
+
 
 @dataclass
 class Result:
@@ -38,19 +44,19 @@ def main(argv: list[str] | None = None, env: Mapping[str, str] = os.environ) -> 
         palette = resolve_palette(theme, paths)
         targets = _select(load_targets(paths, str(config["shell.name"])), args.only)
     except SettingsError as error:
-        print(f"error: invalid settings in {paths.pretty(error.source)}:", file=sys.stderr)
+        print(f"erreur : réglages invalides dans {paths.pretty(error.source)} :", file=sys.stderr)
         for problem in error.problems:
             print(f"  - {problem}", file=sys.stderr)
         return 1
     except (PaletteError, ManifestError, ValueError) as error:
-        print(f"error: {error}", file=sys.stderr)
+        print(f"erreur : {error}", file=sys.stderr)
         return 1
 
     user_theme = paths.user_dir / "theme.toml"
-    origin = paths.pretty(user_theme) if user_theme.exists() else "defaults"
-    print(f"Theme {palette.name} ({palette.variant}), settings from {origin}")
+    origin = paths.pretty(user_theme) if user_theme.exists() else "valeurs par défaut"
+    print(f"Thème {palette.name} ({palette.variant}), réglages : {origin}")
     if args.dry_run:
-        print("Dry run: nothing is written.")
+        print("Simulation : rien n'est écrit.")
 
     context = build_context(theme, palette, paths)
     writer = Writer(paths, dry_run=args.dry_run)
@@ -61,11 +67,11 @@ def main(argv: list[str] | None = None, env: Mapping[str, str] = os.environ) -> 
 
 
 def _parse(argv: list[str] | None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(prog="generate", description="Render theme files from theme.toml.")
+    parser = argparse.ArgumentParser(prog="generate", description="Génère les fichiers de thème depuis theme.toml.")
     parser.add_argument("--root", type=Path, default=DEFAULT_ROOT, help=argparse.SUPPRESS)
-    parser.add_argument("--dry-run", action="store_true", help="show what would change, write nothing")
-    parser.add_argument("--only", metavar="NAME[,NAME]", help="render only these targets")
-    parser.add_argument("--all", action="store_true", help="render targets even if their app is not installed")
+    parser.add_argument("--dry-run", action="store_true", help="montre ce qui changerait, sans rien écrire")
+    parser.add_argument("--only", metavar="NOM[,NOM]", help="ne génère que ces cibles")
+    parser.add_argument("--all", action="store_true", help="génère même si l'app n'est pas installée")
     return parser.parse_args(argv)
 
 
@@ -75,7 +81,7 @@ def _select(targets: list[Target], only: str | None) -> list[Target]:
     wanted = {name.strip() for name in only.split(",") if name.strip()}
     known = {target.name for target in targets}
     if unknown := sorted(wanted - known):
-        raise ValueError(f"unknown target(s): {', '.join(unknown)} (available: {', '.join(sorted(known))})")
+        raise ValueError(f"cible(s) inconnue(s) : {', '.join(unknown)} (disponibles : {', '.join(sorted(known))})")
     return [target for target in targets if target.name in wanted]
 
 
@@ -83,7 +89,7 @@ def _run(target: Target, context: dict, writer: Writer, paths: Paths,
          args: argparse.Namespace, env: Mapping[str, str]) -> Result:
     installed = not target.needs or shutil.which(target.needs, path=env.get("PATH")) is not None
     if not installed and not args.all:
-        return Result(target, "skipped", f"{target.needs} not installed")
+        return Result(target, "skipped", f"{target.needs} n'est pas installé")
     try:
         text = render(target.template.read_text(), context, source=paths.pretty(target.template))
         if args.dry_run:
@@ -95,9 +101,10 @@ def _run(target: Target, context: dict, writer: Writer, paths: Paths,
 
     notes = []
     if target.include and included in ("added", "updated"):
-        notes.append(f"include {included} in {paths.pretty(target.include.into)}")
+        action = "ajouté" if included == "added" else "mis à jour"
+        notes.append(f"include {action} dans {paths.pretty(target.include.into)}")
     if target.include and included == "missing":
-        notes.append(f"{paths.pretty(target.include.into)} not found: add '{target.include.line}' to it")
+        notes.append(f"{paths.pretty(target.include.into)} introuvable : ajoute-y '{target.include.line}'")
     changed = status != "unchanged" or included in ("added", "updated")
     # Pas de reload pour une app absente (cible rendue grâce à --all).
     if changed and target.reload and installed and not args.dry_run:
@@ -109,17 +116,17 @@ def _reload(command: str) -> str:
     try:
         done = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=15)
     except subprocess.TimeoutExpired:
-        return f"reload timed out: {command}"
+        return f"rechargement trop long : {command}"
     if done.returncode != 0:
         detail = (done.stderr or done.stdout).strip().splitlines()
-        return f"reload failed ({command}): {detail[-1] if detail else done.returncode}"
-    return "reloaded"
+        return f"échec du rechargement ({command}) : {detail[-1] if detail else done.returncode}"
+    return "rechargé"
 
 
 def _print_diff(path: Path, text: str, paths: Paths) -> None:
     current = path.read_text().splitlines(keepends=True) if path.exists() else []
     name = paths.pretty(path)
-    sys.stdout.writelines(difflib.unified_diff(current, text.splitlines(keepends=True), name, f"{name} (new)"))
+    sys.stdout.writelines(difflib.unified_diff(current, text.splitlines(keepends=True), name, f"{name} (nouveau)"))
 
 
 def _report(results: list[Result], writer: Writer, paths: Paths) -> None:
@@ -127,6 +134,6 @@ def _report(results: list[Result], writer: Writer, paths: Paths) -> None:
     for result in results:
         where = paths.pretty(result.target.output) if result.status not in ("skipped", "failed") else ""
         note = f"  ({result.note})" if result.note and where else result.note
-        print(f"  {result.status:<9}  {result.target.name:<{width}}  {where}{note}".rstrip())
+        print(f"  {LABELS[result.status]:<10}  {result.target.name:<{width}}  {where}{note}".rstrip())
     if writer.backups:
-        print(f"Backups saved in {paths.pretty(writer.backup_dir)}")
+        print(f"Sauvegardes dans {paths.pretty(writer.backup_dir)}")

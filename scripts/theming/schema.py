@@ -32,19 +32,19 @@ class Field:
     def check(self, value: object) -> str | None:
         """Renvoie un message d'erreur, ou None si la valeur est valide."""
         if self.kind == "bool":
-            return None if isinstance(value, bool) else "expected true or false"
+            return None if isinstance(value, bool) else "doit valoir true ou false"
         if self.kind in ("int", "float"):
             return self._check_number(value)
         if self.kind in ("choice", "hue"):
-            return None if value in self.choices else f"must be one of: {', '.join(self.choices)}"
+            return None if value in self.choices else f"doit être l'une de ces valeurs : {', '.join(self.choices)}"
         if not isinstance(value, str):
-            return "expected a string"
+            return "doit être une chaîne de texte"
         if any(ord(char) < 32 for char in value):
-            return "control characters are not allowed"
+            return "les caractères de contrôle sont interdits"
         if self.kind == "text" and not value.strip():
-            return "must not be empty"
+            return "ne doit pas être vide"
         if self.kind == "name" and not _NAME.fullmatch(value):
-            return "use lowercase letters, digits, '-' or '_' only"
+            return "uniquement des minuscules, des chiffres, '-' ou '_'"
         if self.kind == "color":
             try:
                 Color.parse(value)
@@ -55,9 +55,9 @@ class Field:
     def _check_number(self, value: object) -> str | None:
         allowed = (int,) if self.kind == "int" else (int, float)
         if isinstance(value, bool) or not isinstance(value, allowed):
-            return "expected an integer" if self.kind == "int" else "expected a number"
+            return "doit être un nombre entier" if self.kind == "int" else "doit être un nombre"
         if not self.low <= value <= self.high:
-            return f"must be between {self.low:g} and {self.high:g}"
+            return f"doit être entre {self.low:g} et {self.high:g}"
         return None
 
 
@@ -120,7 +120,7 @@ def validate(
             problems.append(_unknown_key(key, schema, open_tables))
         elif message := field.check(value):
             problems.append(f"{key}: {message}")
-    problems += [f"{key}: missing" for key in schema if key not in values]
+    problems += [f"{key}: manquante" for key in schema if key not in values]
     return problems
 
 
@@ -134,4 +134,4 @@ def _open_field(key: str, open_tables: Mapping[str, tuple[tuple[str, ...], Field
 def _unknown_key(key: str, schema: Mapping[str, Field], open_tables: Mapping) -> str:
     known = list(schema) + [f"{p}.{k}" for p, (keys, _) in open_tables.items() for k in keys]
     close = difflib.get_close_matches(key, known, n=1)
-    return f"{key}: unknown key" + (f" (did you mean '{close[0]}'?)" if close else "")
+    return f"{key}: clé inconnue" + (f" (tu voulais dire '{close[0]}' ?)" if close else "")

@@ -59,8 +59,8 @@ def _load(defaults: Path, user: Path, reader: Callable[[Path], dict],
     found = values.pop("schema", version)
     if not isinstance(found, int) or isinstance(found, bool) or found > version:
         raise SettingsError(source, [
-            f"format version {found} is not supported (this version reads up to {version}); "
-            "update the project"
+            f"version de format {found} non prise en charge (cette version lit jusqu'à la {version}) ; "
+            "mets le projet à jour"
         ])
     problems = validate(values, schema, open_tables)
     if problems:
@@ -73,14 +73,14 @@ def _read_toml(path: Path) -> dict:
         with path.open("rb") as handle:
             return tomllib.load(handle)
     except (OSError, tomllib.TOMLDecodeError) as error:
-        raise SettingsError(path, [f"cannot read {path}: {error}"]) from None
+        raise SettingsError(path, [f"impossible de lire {path} : {error}"]) from None
 
 
 def _read_json(path: Path) -> dict:
     try:
         data = json.loads(path.read_text())
     except (OSError, json.JSONDecodeError) as error:
-        raise SettingsError(path, [f"cannot read {path}: {error}"]) from None
+        raise SettingsError(path, [f"impossible de lire {path} : {error}"]) from None
     if not isinstance(data, dict):
-        raise SettingsError(path, [f"{path} must contain a JSON object"])
+        raise SettingsError(path, [f"{path} doit contenir un objet JSON"])
     return data

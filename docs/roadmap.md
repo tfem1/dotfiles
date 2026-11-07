@@ -1,144 +1,158 @@
-# Roadmap
+# Feuille de route
 
-Each step is planned, approved, implemented, then reviewed before the next one.
-Themes come before the shell, so the shell is built with the final palettes.
+Chaque étape est planifiée, validée, implémentée, puis relue avant la
+suivante. Les thèmes passent avant le shell, pour que le shell soit construit
+directement avec les bonnes palettes.
 
-## Design rules
+## Règles de design
 
-- **No gradients, anywhere.** Window borders, buttons, sliders, panels,
-  backgrounds and login screens use solid colors only.
-- Colors always come from the active palette: a hue name, never a fixed hex.
+- **Jamais de dégradé, nulle part.** Bordures de fenêtres, boutons, sliders,
+  panneaux, fonds et écrans de connexion : uniquement des couleurs unies.
+- Les couleurs viennent toujours de la palette active : un nom de teinte,
+  jamais un code hex figé.
 
-## 1. Theme pipeline — done
+## 1. Génération du thème — terminé
 
-`theme.toml`, `config.json`, base16 theme format, template engine, Hyprland
-(Lua) and Quickshell templates, safe writer, `tfem generate`, tests.
+`theme.toml`, `config.json`, format de thème base16, moteur de templates,
+templates Hyprland (Lua) et Quickshell, écriture sûre, `tfem generate`, tests.
 
-## 2. Palettes and app themes — next
+## 2. Palettes et thèmes d'apps — prochaine étape
 
-- Import the base16 collection of
+- Importer la collection base16 de
   [tinted-theming/schemes](https://github.com/tinted-theming/schemes) (MIT,
-  362 themes) with a reproducible script, one file per theme, author kept.
-- **Hue check in the importer.** base16 slots are syntax-highlighting roles,
-  not guaranteed hues: tinted's Tokyo Night puts a pale blue (`#C0CAF5`) in
-  the "red" slot and a cyan (`#0DB9D7`) in the "yellow" slot. The importer
-  measures the hue of each slot and fixes or flags such themes, so `red`
-  always looks red in the UI (urgent notifications, low battery).
-- **Featured themes**, shown first in the theme picker:
-  - *Kanagawa* (and Kanagawa Dragon): dark night background, **green** accent
-    and green-leaning module colors.
-  - Many more green themes: Everforest, Gruvbox Material, and others found by
-    the hue check.
-  - *Tokyo Night* (Night, Storm, Moon): **night blue** accent with some
-    **purple** modules, built from the official Tokyo Night palette so its
-    blue and purple are the real ones.
-- Each theme can suggest an accent and module colors, applied when you pick
-  it; you can still change them afterwards.
-- Terminal themes (foot, kitty, alacritty, ghostty, wezterm), GTK and Qt,
-  never overwriting existing configs.
-- `tfem theme <name>`.
+  362 thèmes) avec un script reproductible, un fichier par thème, auteur
+  conservé.
+- **Vérification des teintes à l'import.** Les slots base16 sont des rôles de
+  coloration syntaxique, pas des teintes garanties : le Tokyo Night de
+  tinted-theming met un bleu pâle (`#C0CAF5`) dans le slot « rouge » et un
+  cyan (`#0DB9D7`) dans le slot « jaune ». L'importeur mesure la teinte de
+  chaque slot et corrige ou signale ces thèmes, pour que `red` soit toujours
+  rouge dans l'interface (notifications urgentes, batterie faible).
+- **Thèmes mis en avant**, affichés en premier dans le sélecteur :
+  - *Kanagawa* (et Kanagawa Dragon) : fond nuit, accent **vert** et couleurs
+    de modules dans les verts.
+  - Beaucoup d'autres thèmes verts : Everforest, Gruvbox Material, et ceux
+    repérés par la vérification des teintes.
+  - *Tokyo Night* (Night, Storm, Moon) : accent **bleu nuit** et quelques
+    modules en **violet**, construit à partir de la palette officielle de
+    Tokyo Night pour avoir le vrai bleu et le vrai violet.
+- Chaque thème peut proposer un accent et des couleurs de modules, appliqués
+  quand tu le choisis ; tu peux toujours les changer ensuite.
+- Thèmes de terminal (foot, kitty, alacritty, ghostty, wezterm), GTK et Qt,
+  sans jamais écraser les configs existantes.
+- `tfem theme <nom>`.
 
-## 3. Quickshell shell: bar, OSD, launcher, notifications
+## 3. Shell Quickshell : barre, OSD, launcher, notifications
 
-- A single `shell.qml` that only composes; every hidden part in a `Loader`.
-- Colors read live from the generated `theme.json` (`FileView` + `JsonAdapter`).
-- **Two visual styles, switchable in Settings** (`shell.style` in
-  `config.json`), sharing the same components where possible:
-  - *Material*: thin vertical bar, rounded pill buttons, side panel with quick
-    toggles, notifications and calendar, media card. Reference:
-    [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland)
+- Un seul `shell.qml` qui ne fait que composer ; chaque partie cachée dans un
+  `Loader`.
+- Couleurs lues à chaud depuis le `theme.json` généré (`FileView` +
+  `JsonAdapter`).
+- **Deux styles visuels, au choix dans les Settings** (`shell.style` dans
+  `config.json`), qui partagent les mêmes composants autant que possible :
+  - *Material* : barre verticale fine, boutons en pilules arrondies, panneau
+    latéral avec raccourcis, notifications et calendrier, carte média.
+    Référence : [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland)
     (illogical-impulse).
-  - *Mono*: top bar with grouped pills, monospace font, large pixel clock on
-    the desktop, compact control panel with avatar, uptime, 2×2 tiles and wide
-    sliders. Reference: [aelyx-shell](https://github.com/xZepyx/aelyx-shell).
-  - Both are original implementations; only the look is reproduced, without
-    the gradients some references use.
-- **Optional dock**: `dock.enabled` in `config.json`, styled to match.
-- **Do not disturb**: notifications are kept but not shown.
+  - *Mono* : barre en haut avec pilules groupées, police monospace, grosse
+    horloge pixel sur le bureau, panneau compact avec avatar, uptime, tuiles
+    2×2 et larges sliders. Référence :
+    [aelyx-shell](https://github.com/xZepyx/aelyx-shell).
+  - Deux implémentations originales : seul le look est reproduit, sans les
+    dégradés de certaines références.
+- **Dock optionnel** : `dock.enabled` dans `config.json`, assorti au style.
+- **Ne pas déranger** : les notifications sont gardées mais pas affichées.
 
 ## 4. Wallpapers
 
-Selector (grid, preview, transitions, keyboard, search, favorites), palette
-extracted from the wallpaper (matugen base16), animated wallpapers if
-supported.
+Sélecteur (grille, aperçu, transitions, clavier, recherche, favoris), palette
+extraite du wallpaper (matugen base16), wallpapers animés si c'est possible.
 
-**Collection: at least 50 wallpapers from [wallhaven.cc](https://wallhaven.cc),
-mostly forests, plus My Little Pony.** Real images taken from the site, none
-generated.
+**Collection : au moins 50 wallpapers de [wallhaven.cc](https://wallhaven.cc),
+surtout des forêts, plus des My Little Pony.** De vraies images prises sur le
+site, aucune générée.
 
-- wallhaven states that "all images remain property of their original
-  owners", and My Little Pony belongs to Hasbro, so the images are **not
-  committed** to this public repository. The repository holds the curated list
-  (`wallpapers/collection.toml`: wallhaven id, category, resolution, page
-  link) and `tfem wallpapers fetch` downloads them on your machine through the
-  official API.
-- SFW only (`purity=100`), at least 1920×1080, each pick reviewed by hand.
-- Available on wallhaven (checked through its API): 268 forest wallpapers
-  (16:9, top of the last year) and 125 My Little Pony wallpapers.
-- Categories: `forest` (majority), `pony`, then the original ones (abstract,
-  minimal, dark) if wanted.
-- Forest wallpapers pair naturally with the green palettes (Kanagawa,
-  Everforest) when the palette is extracted from the wallpaper.
+- wallhaven indique que « toutes les images restent la propriété de leurs
+  auteurs », et My Little Pony appartient à Hasbro : les images ne sont donc
+  **pas commitées** dans ce repo public. Le repo contient la liste choisie
+  (`wallpapers/collection.toml` : identifiant wallhaven, catégorie,
+  résolution, lien) et `tfem wallpapers fetch` les télécharge sur ta machine
+  via l'API officielle.
+- Contenu tout public uniquement (`purity=100`), au moins 1920×1080, chaque
+  image vérifiée à la main.
+- Disponible sur wallhaven (vérifié via son API) : 268 wallpapers de forêt
+  (16:9, les plus populaires de l'année) et 125 wallpapers My Little Pony.
+- Catégories : `forest` (la majorité), `pony`, puis les catégories prévues au
+  départ (abstrait, minimal, sombre) si tu les veux.
+- Les forêts s'accordent naturellement avec les palettes vertes (Kanagawa,
+  Everforest) quand la palette est extraite du wallpaper.
 
-## 5. Control panel and widgets
+## 5. Panneau de contrôle et widgets
 
-- Custom Wi-Fi, Bluetooth, Network and Audio tabs built on
-  `Quickshell.Networking` and `Quickshell.Bluetooth` (no nmcli, no applets):
-  networks with signal and security, password prompt, failure reason,
-  Bluetooth devices with type icon and battery, pair, connect, forget, rename.
-- Each tab uses its module color from `[modules]`.
-- Quick tiles:
-  - **Do not disturb**;
-  - **Stay awake**: blocks idle sleep (Quickshell idle inhibitor);
-  - **Game mode**: turns off blur, animations and gaps in one click, then
-    restores your settings (changing Hyprland options at runtime with the Lua
-    config is to be verified).
-- Widgets (clock, battery, now playing, CPU/RAM, calendar), each optional.
+- Onglets Wi-Fi, Bluetooth, Réseau et Audio faits sur mesure avec
+  `Quickshell.Networking` et `Quickshell.Bluetooth` (sans nmcli ni applet) :
+  réseaux avec signal et sécurité, saisie du mot de passe, raison d'un échec,
+  appareils Bluetooth avec icône de type et batterie, appairer, connecter,
+  oublier, renommer.
+- Chaque onglet prend la couleur de son module dans `[modules]`.
+- Tuiles rapides :
+  - **Ne pas déranger** ;
+  - **Anti-veille** : empêche la mise en veille (inhibiteur de veille de
+    Quickshell) ;
+  - **Mode jeu** : coupe flou, animations et espaces entre fenêtres en un
+    clic, puis remet tes réglages (le changement des options Hyprland à chaud
+    avec la config Lua reste à vérifier).
+- Widgets (horloge, batterie, now playing, CPU/RAM, calendrier), chacun
+  optionnel.
 
-## 6. Settings window
+## 6. Fenêtre de Settings
 
-Tabs: **Profiles**, **Display**, **Themes**, **Wallpaper**, Bar, Dock,
-Widgets (with module colors), System, Keybinds, Identity.
+Onglets : **Profils**, **Écrans**, **Thèmes**, **Wallpaper**, Barre, Dock,
+Widgets (avec les couleurs des modules), Système, Raccourcis, Identité.
 
-- **Look profiles**: save the whole look (theme, accent, wallpaper or
-  wallpaper category, style, module colors, dock) under a name and switch in
-  one click. Shipped examples: *Forest* (Kanagawa, forest wallpapers),
-  *Pony* (palette from the wallpaper, pony wallpapers), *Tokyo Night*. Stored
-  in `~/.config/tfem/profiles/`.
-- **First-launch wizard**: displayed name, style, theme, wallpaper
-  categories, dock or not. Everything stays editable afterwards.
-- Themes: browse every theme by family, search, dark/light filter, accent,
-  edit single colors and save the result as a personal theme in
-  `~/.config/tfem/themes/`.
-- Every change validated, applied live, with "reset to defaults".
+- **Profils de look** : enregistrer tout un look (thème, accent, wallpaper ou
+  catégorie de wallpapers, style, couleurs des modules, dock) sous un nom et
+  passer de l'un à l'autre en un clic. Exemples fournis : *Forêt* (Kanagawa,
+  wallpapers de forêt), *Pony* (palette du wallpaper, wallpapers Pony),
+  *Tokyo Night*. Rangés dans `~/.config/tfem/profiles/`.
+- **Assistant de premier lancement** : nom affiché, style, thème, catégories
+  de wallpapers, dock ou non. Tout reste modifiable ensuite.
+- Thèmes : parcourir tous les thèmes par famille, recherche, filtre
+  clair/sombre, accent, modifier une couleur et enregistrer le résultat comme
+  thème perso dans `~/.config/tfem/themes/`.
+- Chaque changement est validé, appliqué à chaud, avec « revenir aux valeurs
+  par défaut ».
 
-## 7. Lock screen, login screens, authentication
+## 7. Écran de verrouillage, écrans de connexion, authentification
 
-- `hyprlock` theme from `theme.toml`.
-- **Built-in Polkit agent**: administrator password prompts drawn by the
-  shell in the current theme (Quickshell 0.3 supports Polkit agents).
-- Two SDDM themes in `extras/sddm/`, installed separately, colors from the
-  palette:
-  - *Stacked clock*: full wallpaper, date top-left, large stacked hours over
-    minutes in the accent color, "press any key" then the login form.
-    Reference: [pixie-sddm](https://github.com/xCaptaiN09/pixie-sddm) (MIT).
-  - *Welcome panel*: blurred side panel over the wallpaper with a greeting,
-    clock, date, user and password fields, show password, session, and round
-    suspend / reboot / shutdown buttons. The image is yours to choose: no
-    copyrighted artwork is bundled.
+- Thème `hyprlock` tiré de `theme.toml`.
+- **Agent Polkit intégré** : les demandes de mot de passe administrateur sont
+  dessinées par le shell, dans le thème courant (Quickshell 0.3 sait créer un
+  agent Polkit).
+- Deux thèmes SDDM dans `extras/sddm/`, installés séparément, couleurs tirées
+  de la palette :
+  - *Horloge empilée* : wallpaper plein écran, date en haut à gauche, grandes
+    heures au-dessus des minutes dans la couleur d'accent, « appuie sur une
+    touche » puis le formulaire de connexion. Référence :
+    [pixie-sddm](https://github.com/xCaptaiN09/pixie-sddm) (MIT).
+  - *Panneau d'accueil* : panneau flouté sur le côté du wallpaper avec un
+    message d'accueil, l'heure, la date, les champs utilisateur et mot de
+    passe, « afficher le mot de passe », la session, et des boutons ronds
+    veille / redémarrer / éteindre. L'image est à ton choix : aucune
+    illustration sous copyright n'est fournie.
 
-## 8. Displays and keybinds
+## 8. Écrans et raccourcis
 
-`max-hz.sh` (best mode per monitor, hot-plug), Display tab, keybind
-cheatsheet (`super + /`). Runtime monitor changes with the Lua config are to be
-verified.
+`max-hz.sh` (meilleur mode par écran, branchement à chaud), onglet Écrans,
+aide-mémoire des raccourcis (`super + /`). Le changement d'écran à chaud avec
+la config Lua reste à vérifier.
 
-## 9. Installer and CI
+## 9. Installeur et CI
 
-One `install.sh` for Arch, Debian and Fedora, `--profile`, `--dry-run`,
-`--uninstall`, mandatory backup, aliases `dots` and `wm`, CI with shellcheck,
-tests and an Arch container dry run.
+Un seul `install.sh` pour Arch, Debian et Fedora, `--profile`, `--dry-run`,
+`--uninstall`, sauvegarde obligatoire, alias `dots` et `wm`, CI avec
+shellcheck, tests et une simulation dans un conteneur Arch.
 
 ## 10. Documentation
 
-Screenshots per theme, complete "Make it yours", credits.
+Captures par thème, section « Fais-le tien » complète, crédits.

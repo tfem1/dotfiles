@@ -1,65 +1,72 @@
 # Architecture
 
-## Where things live
+## Où vivent les fichiers
 
-| Location | Content | Who writes it |
+| Emplacement | Contenu | Qui l'écrit |
 |---|---|---|
-| Repository (installed in `~/.local/share/tfem`) | defaults, themes, templates, scripts | the project |
-| `~/.config/tfem/` | your `theme.toml`, `config.json`, personal `themes/` | you, the Settings window |
-| `~/.config/<app>/` | generated files (`hypr/theme.lua`, …) | the generator only |
-| `~/.local/state/tfem/` | backups, record of generated files | the generator only |
+| Le repo (installé dans `~/.local/share/tfem`) | défauts, thèmes, templates, scripts | le projet |
+| `~/.config/tfem/` | ton `theme.toml`, ton `config.json`, tes `themes/` | toi, la fenêtre de Settings |
+| `~/.config/<app>/` | fichiers générés (`hypr/theme.lua`, …) | la génération uniquement |
+| `~/.local/state/tfem/` | sauvegardes, registre des fichiers générés | la génération uniquement |
 
-Your files only contain the keys you changed: each one replaces the default
-with the same name, so updating the project never conflicts with your
-settings, and "reset to defaults" means removing a key.
+Tes fichiers ne contiennent que les clés que tu as changées : chacune remplace
+la valeur par défaut du même nom. Mettre le projet à jour n'entre donc jamais
+en conflit avec tes réglages, et « revenir aux valeurs par défaut » revient à
+supprimer une clé.
 
-## Two settings files, one rule
+## Deux fichiers de réglages, une règle
 
-- `theme.toml` holds **appearance**: palette, accent, fonts, shape, effects,
-  wallpaper, cursor, icons, module colors.
-- `config.json` holds **everything else**: shell name, and later bar, dock,
-  widgets, displays and identity. The shell reads it live.
+- `theme.toml` contient l'**apparence** : palette, accent, polices, formes,
+  effets, wallpaper, curseur, icônes, couleurs des modules.
+- `config.json` contient **tout le reste** : nom du shell, puis barre, dock,
+  widgets, écrans et identité. Le shell le lit à chaud.
 
-## Generation pipeline
+## Étapes de la génération
 
-1. **Load** the defaults from the repository, then your file on top
+1. **Charger** les défauts du repo, puis ton fichier par-dessus
    (`settings.py`).
-2. **Validate** every key against `schema.py`: type, range, allowed values.
-   All problems are reported at once and nothing is written if one is found.
-3. **Resolve the palette** (`palette.py`): find the theme file (your
-   `themes/` first), apply `[palette.overrides]`, derive the readable roles
-   (`bg`, `fg`, `accent`…) and the 16 terminal colors.
-4. **Build the context** (`context.py`): a flat map of every variable a
-   template can use; hues such as `"blue"` become real colors.
-5. **Render each target** listed in `templates/targets.toml`
-   (`template.py`, `filters.py`). A broken template only fails its own target.
-6. **Write safely** (`writer.py`):
-   - unchanged output: nothing is touched and the app is not reloaded;
-   - output not produced by the generator (or edited by hand): backed up first;
-   - writes are atomic (temporary file, then rename);
-   - include lines go between `>>> generated: <target> >>>` markers, are added
-     once, and an app config that does not exist is never created unless the
-     target allows it (an empty `hyprland.lua` would hide Hyprland's defaults).
-7. **Reload** the app when its file changed and the app is installed.
+2. **Valider** chaque clé avec `schema.py` : type, bornes, valeurs permises.
+   Tous les problèmes sont listés d'un coup, et rien n'est écrit s'il y en a un.
+3. **Résoudre la palette** (`palette.py`) : trouver le fichier de thème (tes
+   `themes/` d'abord), appliquer `[palette.overrides]`, en déduire les rôles
+   lisibles (`bg`, `fg`, `accent`…) et les 16 couleurs du terminal.
+4. **Construire le contexte** (`context.py`) : la liste à plat de toutes les
+   variables utilisables dans un template ; une teinte comme `"blue"` devient
+   une vraie couleur.
+5. **Rendre chaque cible** listée dans `templates/targets.toml`
+   (`template.py`, `filters.py`). Un template cassé ne fait échouer que sa
+   propre cible.
+6. **Écrire sans risque** (`writer.py`) :
+   - résultat identique : rien n'est touché et l'app n'est pas rechargée ;
+   - fichier que la génération n'a pas produit (ou modifié à la main) :
+     sauvegardé d'abord ;
+   - écriture atomique (fichier temporaire puis renommage) ;
+   - les lignes d'include sont placées entre des repères
+     `>>> generated: <cible> >>>`, ajoutées une seule fois, et une config d'app
+     absente n'est jamais créée, sauf si la cible l'autorise (un
+     `hyprland.lua` vide masquerait la config par défaut de Hyprland).
+7. **Recharger** l'app quand son fichier a changé et qu'elle est installée.
 
-## Patterns borrowed from Serpantinum
+## Idées reprises de Serpantinum
 
-Ideas only, no code (Serpantinum is AGPL-3.0):
+Des idées seulement, pas de code (Serpantinum est sous AGPL-3.0) :
 
-- a single Quickshell instance as the shell, separate from the compositor
-  config, which is split into small modules;
-- one settings file, watched and applied live;
-- palettes from presets or from the wallpaper, with per-color overrides;
-- app theming through a separate generated file and one marked include line,
-  never by overwriting the user's config;
-- reload an app only when its generated file changed;
-- a CLI that mirrors the Settings window, so both write through the same path.
+- une seule instance Quickshell comme shell, séparée de la config du
+  compositeur, elle-même découpée en petits modules ;
+- un fichier de réglages surveillé et appliqué à chaud ;
+- des palettes prédéfinies ou tirées du wallpaper, avec surcharge couleur par
+  couleur ;
+- des thèmes d'apps dans un fichier généré à part, chargé par une seule ligne
+  repérée, sans jamais écraser la config de l'utilisateur ;
+- ne recharger une app que si son fichier généré a changé ;
+- une CLI qui reflète la fenêtre de Settings, pour que les deux écrivent par
+  le même chemin.
 
-## Verified assumptions and open checks
+## Hypothèses vérifiées et points à confirmer
 
-- Hyprland 0.57 only reads `hyprland.lua` (the `.conf` format was removed), so
-  the Hyprland template produces Lua. `require("theme")` loads
+- Hyprland 0.57 ne lit plus que `hyprland.lua` (le format `.conf` a été
+  retiré), donc le template Hyprland produit du Lua. `require("theme")` charge
   `~/.config/hypr/theme.lua`.
-- To confirm on a real session: that `hyprctl reload` re-runs files loaded
-  with `require` (the wiki says each `require` runs in its own scope but does
-  not describe caching).
+- À confirmer sur une vraie session : que `hyprctl reload` relance bien les
+  fichiers chargés avec `require` (le wiki dit que chaque `require` s'exécute
+  dans son propre scope, sans parler de cache).

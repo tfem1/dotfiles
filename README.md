@@ -1,52 +1,54 @@
 # TFEM
 
-Modular Hyprland dotfiles with a complete Quickshell desktop shell, driven by a
-single settings file.
+Dotfiles Hyprland modulaires avec un shell Quickshell complet, pilotés par un
+seul fichier de réglages.
 
-> **TFEM is the name of this repository and of its CLI, not the name of your
-> desktop.** Nothing on screen carries the TFEM name: no branding in the bar,
-> lock screen, launcher or notifications. See [Make it yours](#make-it-yours).
+> **TFEM est le nom de ce repo et de sa CLI, pas celui de ton desktop.** Rien à
+> l'écran ne porte le nom TFEM : aucune marque dans la barre, l'écran de
+> verrouillage, le launcher ou les notifications. Voir
+> [Fais-le tien](#fais-le-tien).
 
-**Status:** early work. Step 1 of 10 is done (theme pipeline); palettes and app themes come next. The full plan,
-including what is coming next, is in [docs/roadmap.md](docs/roadmap.md).
+**État :** début du projet. L'étape 1 sur 10 est terminée (génération du
+thème) ; les palettes et les thèmes d'apps arrivent ensuite. Le plan complet
+est dans [docs/roadmap.md](docs/roadmap.md).
 
-## How theming works
+## Comment marche le thème
 
-One file, `theme.toml`, describes the look of the whole desktop: palette,
-accent, fonts, corners, gaps, blur, cursor, and the color of each shell module.
-`tfem generate` turns it into the configuration files each app expects, in
-their usual places:
+Un seul fichier, `theme.toml`, décrit l'apparence de tout le desktop :
+palette, accent, polices, arrondis, espacements, flou, curseur et couleur de
+chaque module du shell. `tfem generate` le transforme en fichiers de config
+pour chaque app, à leur emplacement habituel :
 
 ```
-theme.toml ──► validate ──► palette (base16) ──► templates ──► ~/.config/hypr/theme.lua
-themes/*.toml ─────────────────┘                             ~/.config/quickshell/<shell>/theme.json
+theme.toml ──► validation ──► palette (base16) ──► templates ──► ~/.config/hypr/theme.lua
+themes/*.toml ────────────────────┘                              ~/.config/quickshell/<shell>/theme.json
 ```
 
-- Palettes use the [base16](https://github.com/tinted-theming/home) format, so
-  curated themes and palettes extracted from a wallpaper look the same to every
-  template.
-- Generated files never replace your own configs. When an app needs a line to
-  load the generated file (for example `require("theme")` in `hyprland.lua`),
-  that single line is added between clearly marked comments. Anything that
-  would be overwritten is backed up first, in `~/.local/state/tfem/backups/`.
-- Invalid settings are rejected with a clear message before anything is
-  written.
+- Les palettes sont au format [base16](https://github.com/tinted-theming/home) :
+  les thèmes fournis et les palettes extraites d'un wallpaper se présentent de
+  la même façon à tous les templates.
+- Les fichiers générés ne remplacent jamais tes propres configs. Quand une app
+  a besoin d'une ligne pour charger le fichier généré (par exemple
+  `require("theme")` dans `hyprland.lua`), cette seule ligne est ajoutée entre
+  deux commentaires repères. Tout ce qui serait écrasé est d'abord sauvegardé
+  dans `~/.local/state/tfem/backups/`.
+- Un réglage invalide est refusé avec un message clair, avant toute écriture.
 
-Details: [docs/architecture.md](docs/architecture.md) and the template format
-in [docs/templates.md](docs/templates.md).
+Détails : [docs/architecture.md](docs/architecture.md) et le format des
+templates dans [docs/templates.md](docs/templates.md).
 
-## Try it
+## Essayer
 
-Requirements for this step: `bash` and Python 3.11 or newer.
+Prérequis pour cette étape : `bash` et Python 3.11 ou plus récent.
 
 ```bash
-./tfem generate --dry-run --all   # show what would be written
-./tfem generate                   # write files for the apps you have installed
+./tfem generate --dry-run --all   # montre ce qui serait écrit
+./tfem generate                   # écrit les fichiers des apps installées
 ```
 
-Your personal settings go in `~/.config/tfem/theme.toml` and
-`~/.config/tfem/config.json`. Only the keys you write there replace the
-defaults, for example:
+Tes réglages personnels vont dans `~/.config/tfem/theme.toml` et
+`~/.config/tfem/config.json`. Seules les clés que tu y écris remplacent les
+valeurs par défaut, par exemple :
 
 ```toml
 [palette]
@@ -56,56 +58,58 @@ accent = "green"
 radius = 8
 ```
 
-Run the tests with:
+Lancer les tests :
 
 ```bash
 PYTHONPATH=scripts:tests python3 -m unittest discover -s tests
 ```
 
-## Repository layout
+## Organisation du repo
 
 ```
-theme.toml            default look of the desktop (the single source of truth)
-config.json           default shell behaviour (shell name, and more later)
+theme.toml            apparence par défaut du desktop (source de vérité unique)
+config.json           comportement par défaut du shell (nom du shell, puis plus)
 tfem                  CLI
-themes/               base16 palettes, one file per theme
-templates/            one template per generated file + targets.toml manifest
-scripts/generate.sh   entry point of the generator
-scripts/theming/      generator: settings, palette, template engine, safe writer
-tests/                unit and end-to-end tests, golden files
-docs/                 architecture, template format, roadmap
+themes/               palettes base16, un fichier par thème
+templates/            un template par fichier généré + manifeste targets.toml
+scripts/generate.sh   point d'entrée de la génération
+scripts/theming/      moteur : réglages, palette, templates, écriture sûre
+tests/                tests unitaires et de bout en bout, fichiers de référence
+docs/                 architecture, format des templates, feuille de route
 ```
 
-## Make it yours
+## Fais-le tien
 
-- **Shell name:** the Quickshell config lives in
-  `~/.config/quickshell/<name>/`. Set `shell.name` in your `config.json`
-  (default `desktop`).
-- **Colors:** pick any theme with `palette.source`, an accent with
-  `palette.accent`, and change single colors with `[palette.overrides]`.
-- **Your own themes:** drop a base16 theme file in `~/.config/tfem/themes/`. It
-  takes precedence over the bundled one with the same name.
-- **CLI name:** prefer `dots` or `wm`? Link to the same script; its help uses
-  whatever name you called it with:
+- **Nom du shell :** la config Quickshell vit dans
+  `~/.config/quickshell/<nom>/`. Change `shell.name` dans ton `config.json`
+  (par défaut `desktop`).
+- **Couleurs :** choisis un thème avec `palette.source`, un accent avec
+  `palette.accent`, et remplace une couleur précise avec
+  `[palette.overrides]`.
+- **Tes propres thèmes :** dépose un fichier de thème base16 dans
+  `~/.config/tfem/themes/`. Il passe avant le thème fourni du même nom.
+- **Nom de la CLI :** tu préfères `dots` ou `wm` ? Crée un lien vers le même
+  script ; son aide affiche le nom sous lequel tu l'appelles :
   `ln -s "$PWD/tfem" ~/.local/bin/dots`
 
-More renaming options (displayed name, avatar, hostname) arrive with the
-Settings window.
+D'autres options (nom affiché, avatar, hostname) arrivent avec la fenêtre de
+Settings.
 
-## Credits and inspiration
+## Crédits et inspirations
 
-- **[Serpantinum](https://github.com/ilyamiro/serpantinum)** (AGPL-3.0) shaped
-  the architecture: a single Quickshell shell kept apart from the compositor
-  config, one settings file applied live, palettes from presets or from the
-  wallpaper with per-color overrides, and app theming that writes a separate
-  theme file plus one marked include line instead of overwriting configs.
-  Only ideas were reused: TFEM is an original implementation and contains no
-  Serpantinum code.
-- **[tinted-theming](https://github.com/tinted-theming/schemes)** (MIT) for
-  the base16 palettes and the standard terminal color mapping.
-- Visual references for the upcoming shell and login screens are listed in
-  [docs/roadmap.md](docs/roadmap.md).
+- **[Serpantinum](https://github.com/ilyamiro/serpantinum)** (AGPL-3.0) a
+  inspiré l'architecture : un seul shell Quickshell séparé de la config du
+  compositeur, un fichier de réglages appliqué à chaud, des palettes
+  prédéfinies ou tirées du wallpaper avec surcharge couleur par couleur, et
+  des thèmes d'apps écrits dans un fichier à part, chargé par une seule ligne
+  repérée, au lieu d'écraser les configs. Seules les idées ont été reprises :
+  TFEM est une implémentation originale et ne contient aucun code de
+  Serpantinum.
+- **[tinted-theming](https://github.com/tinted-theming/schemes)** (MIT) pour
+  les palettes base16 et la correspondance standard des couleurs du terminal.
+- Les références visuelles du futur shell et des écrans de connexion sont
+  listées dans [docs/roadmap.md](docs/roadmap.md).
 
-## License
+## Licence
 
 [GPL-3.0](LICENSE).

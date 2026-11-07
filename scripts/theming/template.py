@@ -40,29 +40,29 @@ def render(text: str, context: Mapping[str, object], source: str = "<template>")
 def _evaluate(expression: str, context: Mapping[str, object]) -> str:
     name, *filters = (part.strip() for part in expression.split("|"))
     if not _NAME.fullmatch(name):
-        raise ValueError(f"invalid expression '{expression.strip()}'")
+        raise ValueError(f"expression invalide '{expression.strip()}'")
     if name not in context:
         raise ValueError(_unknown_variable(name, context))
     value = context[name]
     for item in filters:
         parsed = _FILTER.fullmatch(item)
         if not parsed:
-            raise ValueError(f"invalid filter '{item}'")
+            raise ValueError(f"filtre invalide '{item}'")
         value = apply_filter(parsed.group(1), value, parsed.group(2))
     return format_value(value)
 
 
 def _unknown_variable(name: str, context: Mapping[str, object]) -> str:
     close = difflib.get_close_matches(name, list(context), n=1)
-    hint = f" (did you mean '{close[0]}'?)" if close else ""
-    return f"unknown variable '{name}'{hint}"
+    hint = f" (tu voulais dire '{close[0]}' ?)" if close else ""
+    return f"variable inconnue '{name}'{hint}"
 
 
 def _check_literal(text: str, start: int, end: int, source: str) -> None:
     """Refuse un « {{ » resté sans fermeture dans le texte littéral."""
     position = text.find("{{", start, end)
     if position != -1:
-        message = "unclosed '{{' (write '{ {' if you meant two braces)"
+        message = "'{{' non fermé (écris '{ {' si tu voulais deux accolades)"
         raise TemplateError(source, _line_of(text, position), message)
 
 

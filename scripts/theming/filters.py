@@ -12,20 +12,20 @@ class FilterError(ValueError):
 
 
 def _type_name(value: object) -> str:
-    return {bool: "a boolean", int: "a number", float: "a number", str: "a string"}.get(
+    return {bool: "un booléen", int: "un nombre", float: "un nombre", str: "une chaîne"}.get(
         type(value), type(value).__name__
     )
 
 
 def _color(name: str, value: object) -> Color:
     if not isinstance(value, Color):
-        raise FilterError(f"filter '{name}' expects a color, got {_type_name(value)}")
+        raise FilterError(f"le filtre '{name}' attend une couleur, pas {_type_name(value)}")
     return value
 
 
 def _no_arg(name: str, arg: str | None) -> None:
     if arg is not None:
-        raise FilterError(f"filter '{name}' takes no argument")
+        raise FilterError(f"le filtre '{name}' ne prend pas d'argument")
 
 
 def _color_format(name: str, method: str) -> Callable[[object, str | None], object]:
@@ -40,11 +40,11 @@ def _color_format(name: str, method: str) -> Callable[[object, str | None], obje
 
 def _alpha(value: object, arg: str | None) -> object:
     if arg is None:
-        raise FilterError("filter 'alpha' needs a value, e.g. alpha:0.8")
+        raise FilterError("le filtre 'alpha' a besoin d'une valeur, ex. alpha:0.8")
     try:
         amount = float(arg)
     except ValueError:
-        raise FilterError(f"alpha: {arg!r} is not a number") from None
+        raise FilterError(f"alpha : {arg!r} n'est pas un nombre") from None
     try:
         return _color("alpha", value).with_alpha(amount)
     except ValueError as error:
@@ -74,7 +74,7 @@ def apply_filter(name: str, value: object, arg: str | None) -> object:
         function = FILTERS[name]
     except KeyError:
         known = ", ".join(sorted(FILTERS))
-        raise FilterError(f"unknown filter '{name}' (available: {known})") from None
+        raise FilterError(f"filtre inconnu '{name}' (disponibles : {known})") from None
     return function(value, arg)
 
 

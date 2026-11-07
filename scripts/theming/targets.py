@@ -42,18 +42,18 @@ def load_targets(paths: Paths, shell_name: str) -> list[Target]:
         with manifest.open("rb") as handle:
             data = tomllib.load(handle)
     except (OSError, tomllib.TOMLDecodeError) as error:
-        raise ManifestError(f"cannot read {manifest}: {error}") from None
+        raise ManifestError(f"impossible de lire {manifest} : {error}") from None
     return [_target(name, entry, paths, shell_name) for name, entry in data.items()]
 
 
 def _target(name: str, entry: object, paths: Paths, shell: str) -> Target:
     where = f"targets.toml [{name}]"
     if not isinstance(entry, dict):
-        raise ManifestError(f"{where}: expected a table")
+        raise ManifestError(f"{where} : doit être une table")
     _check_keys(where, entry, _TARGET_KEYS, required={"template", "output"})
     template = paths.root / "templates" / entry["template"]
     if not template.is_file():
-        raise ManifestError(f"{where}: template {template} does not exist")
+        raise ManifestError(f"{where} : le template {template} n'existe pas")
     include = entry.get("include")
     return Target(
         name=name,
@@ -67,11 +67,11 @@ def _target(name: str, entry: object, paths: Paths, shell: str) -> Target:
 
 def _include(where: str, entry: object, paths: Paths, shell: str) -> Include:
     if not isinstance(entry, dict):
-        raise ManifestError(f"{where}: include must be a table")
+        raise ManifestError(f"{where} : include doit être une table")
     _check_keys(f"{where} include", entry, _INCLUDE_KEYS, required={"into", "line"})
     position = entry.get("position", "end")
     if position not in ("end", "start"):
-        raise ManifestError(f"{where}: include.position must be 'end' or 'start'")
+        raise ManifestError(f"{where} : include.position doit valoir 'end' ou 'start'")
     return Include(
         into=_expand(where, entry["into"], paths, shell),
         line=entry["line"],
@@ -84,15 +84,15 @@ def _include(where: str, entry: object, paths: Paths, shell: str) -> Include:
 def _expand(where: str, text: str, paths: Paths, shell: str) -> Path:
     value = text.replace("{config}", str(paths.config_home)).replace("{shell}", shell)
     if leftover := _PLACEHOLDER.search(value):
-        raise ManifestError(f"{where}: unknown placeholder {leftover.group()}")
+        raise ManifestError(f"{where} : placeholder inconnu {leftover.group()}")
     path = Path(value)
     if not path.is_absolute():
-        raise ManifestError(f"{where}: '{text}' must start with {{config}} or be absolute")
+        raise ManifestError(f"{where} : '{text}' doit commencer par {{config}} ou être un chemin absolu")
     return path
 
 
 def _check_keys(where: str, entry: dict, allowed: set[str], required: set[str]) -> None:
     if unknown := sorted(set(entry) - allowed):
-        raise ManifestError(f"{where}: unknown key(s) {', '.join(unknown)}")
+        raise ManifestError(f"{where} : clé(s) inconnue(s) {', '.join(unknown)}")
     if missing := sorted(required - set(entry)):
-        raise ManifestError(f"{where}: missing key(s) {', '.join(missing)}")
+        raise ManifestError(f"{where} : clé(s) manquante(s) {', '.join(missing)}")

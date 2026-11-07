@@ -63,8 +63,8 @@ def find_theme(name: str, paths: Paths) -> Path:
         path = paths.state_dir / WALLPAPER_PALETTE
         if not path.exists():
             raise PaletteError(
-                "palette.source is 'wallpaper' but no palette was extracted from a "
-                "wallpaper yet; pick a wallpaper first or choose a theme"
+                "palette.source vaut 'wallpaper' mais aucune palette n'a encore été "
+                "extraite d'un wallpaper ; choisis d'abord un wallpaper, ou un thème"
             )
         return path
     for folder in theme_dirs(paths):
@@ -72,8 +72,8 @@ def find_theme(name: str, paths: Paths) -> Path:
             return candidate
     available = sorted({p.stem for d in theme_dirs(paths) if d.is_dir() for p in d.glob("*.toml")})
     close = difflib.get_close_matches(name, available, n=1)
-    hint = f" (did you mean '{close[0]}'?)" if close else ""
-    raise PaletteError(f"theme '{name}' not found{hint}")
+    hint = f" (tu voulais dire '{close[0]}' ?)" if close else ""
+    raise PaletteError(f"thème '{name}' introuvable{hint}")
 
 
 def load_palette(path: Path) -> Palette:
@@ -81,10 +81,10 @@ def load_palette(path: Path) -> Palette:
         with path.open("rb") as handle:
             data = tomllib.load(handle)
     except (OSError, tomllib.TOMLDecodeError) as error:
-        raise PaletteError(f"cannot read theme {path}: {error}") from None
+        raise PaletteError(f"impossible de lire le thème {path} : {error}") from None
     problems = _check_theme(data)
     if problems:
-        raise PaletteError(f"invalid theme {path}: " + "; ".join(problems))
+        raise PaletteError(f"thème invalide {path} : " + " ; ".join(problems))
     return Palette(
         name=data["name"],
         family=data.get("family", data["name"]),
@@ -106,14 +106,14 @@ def resolve_palette(theme: Mapping[str, object], paths: Paths) -> Palette:
 def _check_theme(data: dict) -> list[str]:
     problems = []
     if not isinstance(data.get("name"), str) or not data["name"].strip():
-        problems.append("'name' is required")
+        problems.append("'name' est obligatoire")
     if data.get("variant") not in ("dark", "light"):
-        problems.append("'variant' must be 'dark' or 'light'")
+        problems.append("'variant' doit valoir 'dark' ou 'light'")
     colors = data.get("colors")
     if not isinstance(colors, dict):
-        return problems + ["a [colors] table is required"]
-    problems += [f"colors.{key} is missing" for key in BASE16_KEYS if key not in colors]
-    problems += [f"colors.{key} is not a base16 slot" for key in colors if key not in BASE16_KEYS]
+        return problems + ["une table [colors] est obligatoire"]
+    problems += [f"colors.{key} manquante" for key in BASE16_KEYS if key not in colors]
+    problems += [f"colors.{key} n'est pas un slot base16" for key in colors if key not in BASE16_KEYS]
     for key in BASE16_KEYS:
         try:
             if key in colors:

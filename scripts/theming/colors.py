@@ -19,7 +19,7 @@ class Color:
         """Lit "#rrggbb" ou "#rrggbbaa" ; lève ValueError sinon."""
         match = _HEX.fullmatch(text.strip()) if isinstance(text, str) else None
         if not match:
-            raise ValueError(f"invalid color {text!r} (expected #rrggbb or #rrggbbaa)")
+            raise ValueError(f"couleur invalide {text!r} (attendu : #rrggbb ou #rrggbbaa)")
         rgb, alpha = match.groups()
         return cls(
             int(rgb[0:2], 16),
@@ -30,7 +30,7 @@ class Color:
 
     def with_alpha(self, alpha: float) -> Color:
         if not 0.0 <= alpha <= 1.0:
-            raise ValueError(f"alpha must be between 0 and 1, got {alpha}")
+            raise ValueError(f"alpha doit être entre 0 et 1 (reçu : {alpha})")
         return Color(self.r, self.g, self.b, alpha)
 
     @property

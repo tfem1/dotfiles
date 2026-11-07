@@ -59,25 +59,25 @@ class ErrorTest(unittest.TestCase):
         self.assert_error("ok\n{{ shape.radus }}", "demo.tpl:2", "shape.radus", "shape.radius")
 
     def test_unknown_filter(self):
-        self.assert_error("{{ accent | shiny }}", "unknown filter 'shiny'")
+        self.assert_error("{{ accent | shiny }}", "filtre inconnu 'shiny'")
 
     def test_color_filter_on_number(self):
-        self.assert_error("{{ shape.radius | hypr }}", "expects a color")
+        self.assert_error("{{ shape.radius | hypr }}", "attend une couleur")
 
     def test_filter_missing_argument(self):
         self.assert_error("{{ accent | alpha }}", "alpha")
 
     def test_filter_bad_argument(self):
-        self.assert_error("{{ accent | alpha:lots }}", "not a number")
+        self.assert_error("{{ accent | alpha:lots }}", "n'est pas un nombre")
 
     def test_filter_unexpected_argument(self):
-        self.assert_error("{{ accent | hypr:2 }}", "takes no argument")
+        self.assert_error("{{ accent | hypr:2 }}", "ne prend pas d'argument")
 
     def test_invalid_expression(self):
-        self.assert_error("{{ 1 + 1 }}", "invalid expression")
+        self.assert_error("{{ 1 + 1 }}", "expression invalide")
 
     def test_unclosed_tag(self):
-        self.assert_error("a {{ accent", "unclosed")
+        self.assert_error("a {{ accent", "non fermé")
 
 
 if __name__ == "__main__":
