@@ -22,7 +22,8 @@ ICONS = {
     "skip_next": True, "skip_previous": True, "music_note": True, "notifications": False,
     "notifications_off": False, "close": False, "search": False, "apps": False, "keyboard": False,
     "power_settings_new": False, "settings": False, "mic": True, "mic_off": True, "error": True,
-    "content_paste": False, "image": False,
+    "content_paste": False, "image": False, "grid_view": False, "view_carousel": False, "history": False,
+    "shuffle": False, "wallpaper": False,
 }
 
 

@@ -1,12 +1,17 @@
-"""Download the wallpaper collection (wallpapers/collection.toml) from wallhaven.cc.
+"""Wallpapers: download the collection (wallpapers/collection.toml) from
+wallhaven.cc, list the images, and set the wallpaper.
 
 Usage: wallpapers.py fetch [--category NAME] [--dest DIR] [--dry-run]
+       wallpapers.py list [--json]
+       wallpapers.py set IMAGE
 Files land in ~/Pictures/Wallpapers/<category>/wallhaven-<id>.<ext>; files
-already there are kept, so the command can be run again safely.
+already there are kept, so the command can be run again safely. `set` writes
+the wallpaper in your theme.toml and regenerates the files that use it.
 """
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import sys
@@ -15,8 +20,15 @@ import tomllib
 import urllib.error
 import urllib.request
 from pathlib import Path
+from typing import Mapping
+
+from theming.edit import set_value  # noqa: E402  (scripts/ is on sys.path)
+from theming.generate import main as generate  # noqa: E402
+from theming.paths import Paths  # noqa: E402
+from theming.writer import write_atomic  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
+IMAGES = {".jpg", ".jpeg", ".png", ".webp"}
 BASE_URL = os.environ.get("TFEM_WALLPAPER_BASE", "https://w.wallhaven.cc")
 USER_AGENT = "dotfiles-wallpaper-fetch/1.0"
 _ID = re.compile(r"[a-z0-9]{6}")
@@ -96,7 +108,47 @@ def fetch(args: argparse.Namespace) -> int:
     return 2 if failed else 0
 
 
-def main(argv: list[str] | None = None) -> int:
+def images(folder: Path) -> list[dict[str, str]]:
+    """Every image under `folder`, by category (first sub-folder) then name."""
+    found = [path for path in folder.rglob("*") if path.suffix.lower() in IMAGES and path.is_file()]
+    result = []
+    for path in sorted(found, key=lambda p: (p.relative_to(folder).parts[:-1], p.name.lower())):
+        parts = path.relative_to(folder).parts
+        result.append({"path": str(path), "name": path.stem, "category": parts[0] if len(parts) > 1 else ""})
+    return result
+
+
+def list_images(args: argparse.Namespace, paths: Paths) -> int:
+    found = images(paths.wallpapers)
+    if args.json:
+        print(json.dumps(found, ensure_ascii=False))
+    else:
+        for image in found:
+            print(paths.pretty(Path(image["path"])))
+    return 0
+
+
+def set_wallpaper(args: argparse.Namespace, paths: Paths, env: Mapping[str, str]) -> int:
+    image = Path(args.image.replace("~", str(paths.home), 1) if args.image.startswith("~") else args.image)
+    if not image.is_absolute():
+        image = (paths.wallpapers / image) if (paths.wallpapers / image).exists() else image.resolve()
+    if not image.is_file() or image.suffix.lower() not in IMAGES:
+        print(f"error: {args.image}: not an image (jpg, png or webp)", file=sys.stderr)
+        return 1
+    # Inside the wallpaper folder the path is kept relative, as in the defaults.
+    try:
+        value = str(image.relative_to(paths.wallpapers))
+    except ValueError:
+        value = str(image)
+    settings = paths.user_dir / "theme.toml"
+    text = settings.read_text() if settings.exists() else "# Your settings: only the keys written here replace the defaults.\n"
+    write_atomic(settings, set_value(text, "wallpaper", "path", value))
+    print(f"wallpaper: {paths.pretty(image)}")
+    # Only the files that show the wallpaper: no compositor reload needed.
+    return generate(["--root", str(ROOT), "--only", "quickshell,hyprlock"], env=env)
+
+
+def main(argv: list[str] | None = None, env: Mapping[str, str] = os.environ) -> int:
     parser = argparse.ArgumentParser(prog="wallpapers", description="Download the wallpaper collection.")
     commands = parser.add_subparsers(dest="command", required=True)
     fetch_cmd = commands.add_parser("fetch", help="download the wallpapers that are missing")
@@ -105,8 +157,17 @@ def main(argv: list[str] | None = None) -> int:
     fetch_cmd.add_argument("--dry-run", action="store_true", help="list what would be downloaded")
     fetch_cmd.add_argument("--collection", type=Path, default=ROOT / "wallpapers/collection.toml",
                            help=argparse.SUPPRESS)
+    list_cmd = commands.add_parser("list", help="list the images of the wallpaper folder")
+    list_cmd.add_argument("--json", action="store_true", help="as JSON (used by the shell)")
+    set_cmd = commands.add_parser("set", help="use an image as wallpaper")
+    set_cmd.add_argument("image", help="image path, absolute or inside the wallpaper folder")
     args = parser.parse_args(argv)
+    paths = Paths.from_env(ROOT, env)
     try:
+        if args.command == "list":
+            return list_images(args, paths)
+        if args.command == "set":
+            return set_wallpaper(args, paths, env)
         return fetch(args)
     except (OSError, ValueError, tomllib.TOMLDecodeError) as error:
         print(f"error: {error}", file=sys.stderr)

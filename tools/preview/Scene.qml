@@ -6,6 +6,7 @@ import "../../quickshell/notifications"
 import "../../quickshell/launcher"
 import "../../quickshell/clipboard"
 import "../../quickshell/cheatsheet"
+import "../../quickshell/wallpaper"
 
 // A 1920x1080 desktop with the shell's components and sample data.
 Rectangle {
@@ -13,6 +14,7 @@ Rectangle {
 
     required property string themeJson
     property string bindsJson: "[]"
+    property string wallpapersJson: "[]"
     property url wallpaper
     property string mode: "desktop"
 
@@ -118,6 +120,14 @@ Rectangle {
                 { text: "#d19fe4" },
                 { text: "Dear Princess Celestia, today I learned that…" }
             ]
+        }
+
+        SelectorContent {
+            readonly property var samples: JSON.parse(scene.wallpapersJson)
+            visible: scene.mode === "wallpaper"
+            anchors.fill: parent
+            images: samples
+            current: samples.length > 3 ? samples[3].path : ""
         }
 
         CheatsheetContent {

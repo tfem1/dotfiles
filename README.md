@@ -65,6 +65,11 @@ at most 10 MB each, picked by hand. They are downloaded to
 of their authors. Download or complete them at any time with
 `tfem wallpapers fetch`.
 
+Pick one with `SUPER + W` (see [Shell](#shell)) or `tfem wallpapers set
+IMAGE`: the choice is saved in your `theme.toml`, and the desktop and the
+lock screen follow. `tfem wallpapers list` shows what is in the folder; any
+image you add there (jpg, png, webp) shows up in the selector.
+
 ## Themes
 
 Ten themes in the colors of My Little Pony characters, mostly pink, purple
@@ -172,8 +177,7 @@ The installer copies it to `~/.config/hypr`. `SUPER + /` shows every
 shortcut on screen. The tests load the config in a fake Hyprland API and check
 every key: the dispatcher exists, the program it runs is installed by the
 installer, and the shell panel it opens exists. The keys of the panels still to
-build (system, music, wallpaper, calendar, network, volume, settings) do
-nothing yet.
+build (system, music, calendar, network, volume, settings) do nothing yet.
 
 - **Lock screen** (`SUPER + L`): hyprlock, with a config generated from
   `theme.toml` (`~/.config/hypr/hyprlock.conf`): hyprlock does not lock without
@@ -193,7 +197,16 @@ folder name is `shell.name` in your `config.json`). Its colors follow
 - **OSD** under the bar for the volume and the brightness.
 - **Notifications**: the shell is the notification daemon; popups in the
   top-right corner, urgent ones stay until closed.
-- **Launcher** (`SUPER + D`): type to search, arrows to move, Enter to launch.
+- **Wallpaper**: drawn by the shell itself, under the windows (no other
+  program needed); a new one fades in.
+- **Launcher** (`SUPER + D`): search and open apps. Every word typed is
+  looked for in the name, description, keywords and command, so `nautilus`
+  finds Files. Terminal apps (btop, nvim…) open in your terminal
+  (`terminal` in `hypr/config/variables.lua`).
+- **Wallpaper selector** (`SUPER + W`): slanted cards in a carousel, or a
+  grid; filters by color (each image's main color is found once, in the
+  background, then remembered), recent picks, random pick and search. Arrows
+  browse, Enter applies, typing searches.
 - **Clipboard history** (`SUPER + C`): what you copied (kept by cliphist),
   searchable; Enter copies it again.
 - **Keybind cheatsheet** (`SUPER + /`): read from Hyprland itself, so your own
@@ -221,7 +234,7 @@ theme.toml            default look of the desktop (the single source of truth)
 config.json           default shell behaviour (shell name, and more later)
 tfem                  CLI
 hypr/                 Hyprland config in Lua (copied to ~/.config/hypr/)
-quickshell/           the shell: bar, OSD, notifications, launcher
+quickshell/           the shell: wallpaper, bar, OSD, notifications, panels
 install.sh, install/   one-command installer and its package table
 wallpapers/           wallpaper collection (list only, images are downloaded)
 themes/               base16 palettes, one file per theme

@@ -71,9 +71,9 @@ Themes come before the shell, so the shell is built with the final palettes.
 ## 3. Quickshell shell: bar, OSD, launcher, notifications
 
 - **Done:** bar (Material style) with autohide, OSD, notifications, launcher,
-  clipboard history, keybind cheatsheet, IPC for the keybinds, deployed by the
-  installer. **Next:** the panels of `SUPER + B/M/W/S/N/V/H`, sidebars, dock,
-  Mono style, do not disturb.
+  clipboard history, keybind cheatsheet, wallpaper selector, IPC for the
+  keybinds, deployed by the installer. **Next:** the panels of
+  `SUPER + B/M/S/N/V/H`, sidebars, dock, Mono style, do not disturb.
 
 - A single `shell.qml` that only composes; every hidden part in a `Loader`.
 - Colors read live from the generated `theme.json` (`FileView` + `JsonAdapter`).
@@ -169,16 +169,19 @@ Themes come before the shell, so the shell is built with the final palettes.
 Palette extracted from the wallpaper (matugen base16), animated wallpapers if
 supported.
 
-**Selector**, look of Serpantinum's selector (original code):
+**Selector**, look of Serpantinum's selector (original code). **Done:** the
+carousel, the grid, color filters, recent picks, random pick, search, the
+wallpaper drawn by the shell. **Next:** favorites, wallpaper = character,
+palette from the wallpaper.
 
 - A carousel of slanted (parallelogram) cards over the current wallpaper;
   the selected card is large in the center, the others get smaller towards
   the edges. Arrow keys to browse, Enter to apply, animated transitions.
 - A toolbar above it: name of the active filter, switch between carousel and
-  grid, recent wallpapers, play (slideshow), **color filters** (red, orange,
+  grid, recent wallpapers, random pick, **color filters** (red, orange,
   yellow, green, blue, purple, pink, grey) and search. Favorites as planned.
 - Color filters use the dominant color of each wallpaper, computed once with
-  Quickshell's `ColorQuantizer` and cached.
+  Quickshell's `ColorQuantizer` and kept in the shell's state folder.
 - Applying a wallpaper also regenerates the palette.
 - **Wallpaper = character:** each pony wallpaper of the collection names the
   character it shows (`character = "luna"`); picking it switches to that

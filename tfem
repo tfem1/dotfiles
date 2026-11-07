@@ -16,7 +16,8 @@ Commands:
                   --only NAME[,NAME]  render only these targets
                   --all               render even if the app is not installed
   screenshot    Take a screenshot: region|full [--edit]
-  wallpapers    Download the wallpaper collection: fetch [--category NAME]
+  wallpapers    fetch [--category NAME]: download the collection
+                list [--json]: list your wallpapers; set IMAGE: use one
   help          Show this help
 
 Your settings: \${XDG_CONFIG_HOME:-~/.config}/tfem/theme.toml and config.json

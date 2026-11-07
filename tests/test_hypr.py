@@ -40,7 +40,7 @@ DISPATCHERS = {
 
 # Panels whose key is bound before the panel is built: the list must shrink
 # as they arrive (a test fails when one of them gets a handler).
-PENDING_PANELS = {"system", "music", "wallpaper", "calendar", "network", "volume", "settings"}
+PENDING_PANELS = {"system", "music", "calendar", "network", "volume", "settings"}
 
 
 def programs(command):
@@ -144,6 +144,10 @@ class HyprConfigTest(unittest.TestCase):
     def test_pending_panels_are_really_missing(self):
         self.assertEqual(sorted(PENDING_PANELS & ipc_handlers().keys()), [])
         self.assertLessEqual(PENDING_PANELS, {target for _, target, _ in self.ipc_calls})
+
+    def test_programs_started_by_hyprland_know_the_terminal(self):
+        # The launcher runs terminal apps in $TERMINAL.
+        self.assertIn(["TERMINAL", "kitty"], self.calls_named("env"))
 
     def test_every_screen_gets_its_highest_refresh_rate(self):
         self.assertIn({"output": "", "mode": "highrr", "position": "auto", "scale": 1},

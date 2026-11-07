@@ -1,45 +1,37 @@
 import QtQuick
 import Quickshell
 import "../overlay"
+import "search.js" as Search
 
-// The app launcher (SUPER + D): desktop apps matching the search, best
-// matches first. Only loaded while open.
+// The app launcher (SUPER + D): search and open apps, best matches first
+// (ranking in search.js). Only loaded while open.
 Scope {
     id: root
 
     property bool open: false
     property string query: ""
 
+    // Terminal apps (btop, nvim…) need a terminal: DesktopEntry.execute()
+    // does not open one. Hyprland sets $TERMINAL (hypr/config/variables.lua).
+    readonly property string terminal: Quickshell.env("TERMINAL") || "kitty"
+
     function toggle() {
         open = !open;
         query = "";
     }
 
-    // 3: name starts with the query, 2: name contains it, 1: other fields do.
-    function score(app, text) {
-        if (!text)
-            return 1;
-        const name = app.name.toLowerCase();
-        if (name.startsWith(text))
-            return 3;
-        if (name.includes(text))
-            return 2;
-        const extra = [app.genericName, app.comment].concat(app.keywords).join(" ").toLowerCase();
-        return extra.includes(text) ? 1 : 0;
+    function launch(app) {
+        if (app.runInTerminal)
+            Quickshell.execDetached({
+                command: [terminal].concat(Array.from(app.command)),
+                workingDirectory: app.workingDirectory
+            });
+        else
+            app.execute();
+        open = false;
     }
 
-    readonly property var matches: {
-        if (!open)
-            return [];
-        const text = query.trim().toLowerCase();
-        return DesktopEntries.applications.values
-            .filter(app => !app.noDisplay)
-            .map(app => ({ app: app, score: score(app, text) }))
-            .filter(match => match.score > 0)
-            .sort((a, b) => b.score - a.score || a.app.name.localeCompare(b.app.name))
-            .slice(0, 50)
-            .map(match => match.app);
-    }
+    readonly property var matches: open ? Search.rank(DesktopEntries.applications.values, query, 50) : []
 
     LazyLoader {
         active: root.open
@@ -59,10 +51,7 @@ Scope {
                     iconSource: Quickshell.iconPath(app.icon, true)
                 }))
                 onQueryChanged: root.query = query
-                onLaunched: index => {
-                    root.matches[index].execute();
-                    root.open = false;
-                }
+                onLaunched: index => root.launch(root.matches[index])
                 onClosed: root.open = false
                 Component.onCompleted: focusSearch()
             }

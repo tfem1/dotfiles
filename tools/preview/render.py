@@ -1,6 +1,7 @@
 """Renders the shell with sample data, for screenshots and visual checks.
 
-Usage: python tools/preview/render.py [--theme pony-twilight ...] [--wallpaper IMAGE] [--out DIR]
+Usage: python tools/preview/render.py [--theme pony-twilight ...] [--wallpaper IMAGE]
+                                     [--wallpapers DIR] [--out DIR]
 Needs PySide6 (pip install PySide6-Essentials), no Quickshell or Wayland:
 the components drawn here are the shell's own QML files, the theme comes from
 the same generator as `tfem generate`, only the data is made up.
@@ -13,6 +14,7 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 from pathlib import Path
 
@@ -25,7 +27,9 @@ from theming.paths import Paths  # noqa: E402
 from theming.settings import load_theme  # noqa: E402
 from theming.template import render as render_template  # noqa: E402
 
-MODES = ("desktop", "launcher", "clipboard", "cheatsheet")
+MODES = ("desktop", "launcher", "clipboard", "cheatsheet", "wallpaper")
+# Hues of the sample landscapes drawn for the wallpaper selector (degrees).
+SAMPLE_HUES = (215, 280, 330, 140, 25, 195, 255, 0, 50, 100, 300, 230, 160, 10)
 MODIFIERS = {"SHIFT": 1, "CTRL": 4, "ALT": 8, "SUPER": 64}
 SAMPLE_BINDS = [("SUPER + RETURN", "Open the terminal"), ("SUPER + D", "Open the launcher"),
                 ("SUPER + C", "Open the clipboard history"), ("SUPER + slash", "Show the keybind cheatsheet")]
@@ -59,10 +63,45 @@ def binds_json() -> str:
     return json.dumps(result)
 
 
+def sample_wallpapers(folder: Path) -> list[dict[str, str]]:
+    """Flat landscapes (sky, sun, two rows of hills), one per hue: stand-ins
+    for real wallpapers, so the preview needs no download."""
+    from PySide6.QtCore import QPointF
+    from PySide6.QtGui import QColor, QImage, QPainter, QPolygonF
+
+    images = []
+    for number, hue in enumerate(SAMPLE_HUES, start=1):
+        image = QImage(960, 540, QImage.Format.Format_RGB32)
+        image.fill(QColor.fromHsl(hue, 120, 170))
+        painter = QPainter(image)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        painter.setPen(QColor(0, 0, 0, 0))
+        painter.setBrush(QColor.fromHsl(hue, 90, 235))
+        painter.drawEllipse(QPointF(620 + number * 9, 150), 60, 60)
+        for depth, lightness in ((0, 110), (1, 70)):
+            painter.setBrush(QColor.fromHsl(hue, 110, lightness))
+            base = 330 + depth * 90
+            peaks = [QPointF(x, base - ((x * (number + 3) + depth * 170) % 180)) for x in range(0, 1001, 125)]
+            painter.drawPolygon(QPolygonF([QPointF(0, 540), *peaks, QPointF(960, 540)]))
+        painter.end()
+        target = folder / f"sample-{number:02}.png"
+        image.save(str(target))
+        images.append({"path": str(target), "name": target.stem, "category": "samples"})
+    return images
+
+
+def wallpaper_list(folder: Path | None, scratch: Path) -> list[dict[str, str]]:
+    if folder is None:
+        return sample_wallpapers(scratch)
+    found = sorted(p for p in folder.rglob("*") if p.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp"))
+    return [{"path": str(p), "name": p.stem, "category": p.parent.name} for p in found]
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--theme", action="append", default=[], help="theme name (repeatable)")
     parser.add_argument("--wallpaper", type=Path, help="background image")
+    parser.add_argument("--wallpapers", type=Path, help="folder shown in the wallpaper selector")
     parser.add_argument("--out", type=Path, default=Path("preview"), help="output folder")
     args = parser.parse_args(argv)
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
@@ -76,11 +115,13 @@ def main(argv: list[str] | None = None) -> int:
     args.out.mkdir(parents=True, exist_ok=True)
     wallpaper = QUrl.fromLocalFile(str(args.wallpaper.resolve())) if args.wallpaper else QUrl()
     binds = binds_json()
+    scratch = tempfile.TemporaryDirectory()
+    wallpapers = json.dumps(wallpaper_list(args.wallpapers, Path(scratch.name)))
     for name in args.theme or ["pony-twilight"]:
         for mode in MODES:
             view = QQuickView()
             view.setInitialProperties({"themeJson": theme_json(name), "bindsJson": binds, "wallpaper": wallpaper,
-                                       "mode": mode})
+                                       "wallpapersJson": wallpapers, "mode": mode})
             view.setSource(QUrl.fromLocalFile(str(Path(__file__).with_name("Scene.qml"))))
             if view.errors():
                 for error in view.errors():

@@ -1,5 +1,8 @@
-"""Tests of the wallpaper collection and of scripts/wallpapers.py, against a local server."""
+"""Tests of the wallpaper collection and of scripts/wallpapers.py (downloads against a local server)."""
+import contextlib
 import functools
+import io
+import json
 import http.server
 import os
 import subprocess
@@ -10,10 +13,10 @@ import tomllib
 import unittest
 from pathlib import Path
 
-from helpers import REPO
+from helpers import REPO, SandboxTest
 
 sys.path.insert(0, str(REPO / "scripts"))
-from wallpapers import load_collection  # noqa: E402
+from wallpapers import load_collection, main as wallpapers_main  # noqa: E402
 
 FIXTURE = """
 [forest]
@@ -101,6 +104,59 @@ class FetchTest(unittest.TestCase):
         code, output = self.fetch()
         self.assertEqual(code, 1)
         self.assertIn("invalid wallpaper", output)
+
+
+class ListAndSetTest(SandboxTest):
+    def setUp(self):
+        super().setUp()
+        self.folder = self.home / "Pictures/Wallpapers"
+        for name in ("pony/b.jpg", "pony/A.png", "forest/c.webp", "loose.jpeg", "pony/notes.txt"):
+            (self.folder / name).parent.mkdir(parents=True, exist_ok=True)
+            (self.folder / name).write_bytes(b"not really an image")
+        # A stand-in `qs`: the shell's theme.json is only written when Quickshell is there.
+        bin_dir = self.home / "bin"
+        bin_dir.mkdir()
+        (bin_dir / "qs").write_text("#!/bin/sh\n")
+        (bin_dir / "qs").chmod(0o755)
+        self.env["PATH"] = str(bin_dir)
+
+    def run_main(self, *args):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
+            code = wallpapers_main(list(args), env=self.env)
+        return code, out.getvalue()
+
+    def test_list_gives_every_image_by_category_then_name(self):
+        code, output = self.run_main("list", "--json")
+        self.assertEqual(code, 0)
+        found = [(image["category"], image["name"]) for image in json.loads(output)]
+        self.assertEqual(found, [("", "loose"), ("forest", "c"), ("pony", "A"), ("pony", "b")])
+
+    def test_set_saves_a_relative_path_and_updates_the_shell(self):
+        settings = self.home / ".config/tfem/theme.toml"
+        settings.parent.mkdir(parents=True)
+        settings.write_text('# mine\n[font]\nsize = 12\n')
+        code, output = self.run_main("set", str(self.folder / "pony/b.jpg"))
+        self.assertEqual(code, 0, output)
+        self.assertEqual(tomllib.loads(settings.read_text()),
+                         {"font": {"size": 12}, "wallpaper": {"path": "pony/b.jpg"}})
+        self.assertTrue(settings.read_text().startswith("# mine\n"))
+        shell = json.loads((self.home / ".config/quickshell/desktop/theme.json").read_text())
+        self.assertEqual(shell["wallpaper"], str(self.folder / "pony/b.jpg"))
+
+    def test_set_accepts_a_path_inside_the_wallpaper_folder(self):
+        code, _ = self.run_main("set", "forest/c.webp")
+        self.assertEqual(code, 0)
+        settings = tomllib.loads((self.home / ".config/tfem/theme.toml").read_text())
+        self.assertEqual(settings["wallpaper"]["path"], "forest/c.webp")
+
+    def test_set_refuses_what_is_not_an_image(self):
+        for target in ("pony/notes.txt", "pony/missing.jpg"):
+            with self.subTest(target=target):
+                code, output = self.run_main("set", target)
+                self.assertEqual(code, 1)
+                self.assertIn("not an image", output)
+        self.assertFalse((self.home / ".config/tfem/theme.toml").exists())
 
 
 if __name__ == "__main__":

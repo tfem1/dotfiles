@@ -67,6 +67,16 @@ All notable changes to this project are documented here. The format follows
   search field and overlay window.
 - Screenshot keys call `~/.local/bin/tfem`: Hyprland started from a login
   manager often has no `~/.local/bin` in its PATH.
+- Wallpaper selector (`SUPER + W`): carousel of slanted cards or grid,
+  color filters (main color of each image found once with Quickshell's
+  ColorQuantizer, then kept), recent picks, random pick, search. The shell
+  now draws the wallpaper itself, with a fade.
+- `tfem wallpapers list [--json]` and `tfem wallpapers set IMAGE`: the
+  choice is written in your `theme.toml` (one key changed, comments kept)
+  and the shell and lock screen files are regenerated.
+- Launcher: every word is looked for in the name, description, keywords, id
+  and command; names sort without regard to case; terminal apps open in
+  `$TERMINAL`, which Hyprland now sets from `variables.lua`.
 - Roadmap: themes before the shell, two styles (Material and Mono), look
   profiles, first-launch wizard, optional dock, game mode, do not disturb,
   stay awake, Polkit agent, two SDDM themes, wallhaven wallpaper collection.

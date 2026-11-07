@@ -61,7 +61,7 @@ for i = 1, 10 do
 end
 
 -- Shell panels --------------------------------------------------------------
-panel("launcher", "Open the launcher")(mod .. " + D")
+panel("launcher", "Search and open apps")(mod .. " + D")
 panel("system", "Open the system panel")(mod .. " + B")
 panel("music", "Open the music panel")(mod .. " + M")
 panel("wallpaper", "Open the wallpaper selector")(mod .. " + W")
