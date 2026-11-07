@@ -7,6 +7,7 @@ Scope {
 
     property bool autohide: false
     signal statusClicked   // the status icons of a bar were clicked
+    signal clockClicked
 
     function toggleAutohide() {
         autohide = !autohide;
@@ -18,6 +19,7 @@ Scope {
         Bar {
             autohide: root.autohide
             onStatusClicked: root.statusClicked()
+            onClockClicked: root.clockClicked()
         }
     }
 }

@@ -214,7 +214,7 @@ The installer copies it to `~/.config/hypr`. `SUPER + /` shows every
 shortcut on screen. The tests load the config in a fake Hyprland API and check
 every key: the dispatcher exists, the program it runs is installed by the
 installer, and the shell panel it opens exists. The keys of the panels still to
-build (system, music, calendar, volume, settings) do nothing yet.
+build (system, music, settings) do nothing yet.
 
 - **Lock screen** (`SUPER + L`): hyprlock, with a config generated from
   `theme.toml` (`~/.config/hypr/hyprlock.conf`): hyprlock does not lock without
@@ -250,6 +250,13 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   are then trusted and connected); "visible to other devices". Colors are
   the Wi-Fi and Bluetooth module colors of the theme. Devices that ask for
   a pairing code are not supported yet (pair them once with `bluetoothctl`).
+- **Volume panel** (`SUPER + V`): output volume and mute, choice of output
+  (speakers, headphones, HDMI), microphone and its choice, then one slider
+  per app playing sound, with its icon and what it plays. Click, drag or
+  scroll; click an icon to mute. On PipeWire through Quickshell.
+- **Calendar** (`SUPER + S`, or a click on the clock): time and date, the
+  month in your language with week numbers, today circled; arrows or the
+  wheel change month, "Today" comes back.
 - **Wallpaper selector** (`SUPER + W`): slanted cards in a carousel, or a
   grid; filters by color (each image's main color is found once, in the
   background, then remembered), recent picks, random pick and search. Left

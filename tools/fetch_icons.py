@@ -27,7 +27,8 @@ ICONS = {
     "sports_esports": True, "smartphone": True, "computer": False, "speaker": True, "watch": True,
     "lock": True, "refresh": False, "delete": False, "link_off": False, "airplanemode_active": True,
     "visibility": False, "visibility_off": False, "check": False, "bluetooth_searching": False,
-    "cable": False, "devices": False,
+    "cable": False, "devices": False, "tv": False, "chevron_left": False, "chevron_right": False,
+    "calendar_month": False, "today": False,
 }
 
 

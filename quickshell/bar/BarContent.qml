@@ -19,6 +19,7 @@ Rectangle {
     signal workspaceClicked(int id)
     signal mediaToggled
     signal rightClicked
+    signal clockClicked
 
     implicitHeight: 44
     color: Theme.panel
@@ -64,6 +65,7 @@ Rectangle {
         ClockChip {
             anchors.verticalCenter: parent.verticalCenter
             now: bar.now
+            onClicked: bar.clockClicked()
         }
     }
 

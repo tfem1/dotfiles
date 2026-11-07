@@ -36,6 +36,8 @@ VISUAL = [
     "wallpaper/SlantedCard.qml", "wallpaper/Backdrop.qml",
     "components/IconButton.qml", "components/Switch.qml", "network/NetworkContent.qml", "network/QuickTile.qml",
     "network/WifiPage.qml", "network/WifiItem.qml", "network/BluetoothPage.qml", "network/DeviceItem.qml",
+    "components/Slider.qml", "volume/VolumeContent.qml", "volume/LevelRow.qml", "volume/ChoiceRow.qml",
+    "calendar/CalendarContent.qml",
 ]
 
 
@@ -59,7 +61,8 @@ class VisualComponentsTest(unittest.TestCase):
             done = subprocess.run([sys.executable, str(REPO / "tools/preview/render.py"), "--out", out],
                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(done.returncode, 0, done.stderr)
-            modes = ["bar", "bluetooth", "cheatsheet", "clipboard", "desktop", "launcher", "wallpaper", "wifi"]
+            modes = ["bar", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "volume",
+                     "wallpaper", "wifi"]
             self.assertEqual(sorted(p.name for p in Path(out).iterdir()), [f"pony-twilight-{m}.png" for m in modes])
 
     def probe(self, script, expression, value):
@@ -190,6 +193,35 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual(self.probe(kinds, "Lib.deviceStatus({ paired: true, connected: true, battery: 0.8 })", None),
                          "Connected · battery 80%")
         self.assertEqual(self.probe(kinds, "Lib.deviceStatus({ paired: false, busy: true })", None), "Pairing…")
+
+    def test_volume_icons_and_labels(self):
+        sound = SHELL / "volume/sound.js"
+        self.assertEqual(self.probe(sound, "[[0.8, false], [0.3, false], [0, false], [0.8, true]]"
+                                           ".map(v => Lib.volumeIcon(v[0], v[1]))", None),
+                         ["volume_up", "volume_down", "volume_off", "volume_off"])
+        names = '["HDMI / DisplayPort", "Pinkie\'s Headphones", "bluez_output.AA_BB", "Speakers", "Mic"]'
+        self.assertEqual(self.probe(sound, f"{names}.map(n => Lib.deviceIcon(n, n === 'Mic'))", None),
+                         ["tv", "headphones", "headphones", "speaker", "mic"])
+        self.assertEqual(self.probe(sound, "Lib.percent(0.644)", None), "64%")
+
+    def test_calendar_grid_and_week_numbers(self):
+        cal = SHELL / "calendar/calendar.js"
+        today = "new Date(2026, 10, 7, 17, 49)"
+        # November 2026 starts on a Sunday: Monday-first grids open on October 26.
+        monday = self.probe(cal, f"Lib.monthGrid(2026, 10, 1, {today})", None)
+        self.assertEqual(len(monday), 42)
+        self.assertEqual([c["day"] for c in monday[:8]], [26, 27, 28, 29, 30, 31, 1, 2])
+        self.assertEqual([c["inMonth"] for c in monday[5:7]], [False, True])
+        self.assertEqual([i for i, c in enumerate(monday) if c["today"]], [12])
+        self.assertEqual([c["weekend"] for c in monday[:7]], [False] * 5 + [True, True])
+        sunday = self.probe(cal, f"Lib.monthGrid(2026, 10, 0, {today})", None)
+        self.assertEqual(sunday[0]["day"], 1)
+        self.assertEqual(self.probe(cal, f"Lib.rowWeeks(Lib.monthGrid(2026, 10, 1, {today}))", None),
+                         [44, 45, 46, 47, 48, 49])
+        for date, week in (("2026, 10, 7", 45), ("2021, 0, 1", 53), ("2026, 11, 31", 53), ("2027, 0, 4", 1)):
+            with self.subTest(date=date):
+                self.assertEqual(self.probe(cal, f"Lib.isoWeek(new Date({date}))", None), week)
+        self.assertEqual(self.probe(cal, 'Lib.title("novembre", 2026)', None), "Novembre 2026")
 
     def test_cheatsheet_rows_merge_and_fold_binds(self):
         # Shaped like `hyprctl binds -j`; key names as written in the config.

@@ -4,7 +4,7 @@ import Quickshell.Io
 
 // Commands sent by the Hyprland keybinds:
 //   qs ipc -c <shell> call <target> <function>
-// Targets without a handler yet (system, music, calendar, volume, settings) arrive with their panels; tests/test_hypr.py lists them.
+// Targets without a handler yet (system, music, settings) arrive with their panels; tests/test_hypr.py lists them.
 Scope {
     id: root
 
@@ -15,6 +15,8 @@ Scope {
     required property var cheatsheet
     required property var wallpaper
     required property var network
+    required property var volume
+    required property var calendar
 
     IpcHandler {
         target: "bar"
@@ -49,5 +51,15 @@ Scope {
     IpcHandler {
         target: "network"
         function toggle(): void { root.network.toggle(); }
+    }
+
+    IpcHandler {
+        target: "volume"
+        function toggle(): void { root.volume.toggle(); }
+    }
+
+    IpcHandler {
+        target: "calendar"
+        function toggle(): void { root.calendar.toggle(); }
     }
 }

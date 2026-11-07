@@ -27,7 +27,7 @@ from theming.paths import Paths  # noqa: E402
 from theming.settings import load_theme  # noqa: E402
 from theming.template import render as render_template  # noqa: E402
 
-MODES = ("desktop", "launcher", "clipboard", "cheatsheet", "wallpaper", "wifi", "bluetooth")
+MODES = ("desktop", "launcher", "clipboard", "cheatsheet", "wallpaper", "wifi", "bluetooth", "volume", "calendar")
 # Hues of the sample landscapes drawn for the wallpaper selector (degrees).
 SAMPLE_HUES = (215, 280, 330, 140, 25, 195, 255, 0, 50, 100, 300, 230, 160, 10)
 MODIFIERS = {"SHIFT": 1, "CTRL": 4, "ALT": 8, "SUPER": 64}
@@ -102,6 +102,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--theme", action="append", default=[], help="theme name (repeatable)")
     parser.add_argument("--wallpaper", type=Path, help="background image")
     parser.add_argument("--wallpapers", type=Path, help="folder shown in the wallpaper selector")
+    parser.add_argument("--locale", default="", help="language of the calendar, e.g. fr_FR")
     parser.add_argument("--out", type=Path, default=Path("preview"), help="output folder")
     args = parser.parse_args(argv)
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
@@ -121,7 +122,7 @@ def main(argv: list[str] | None = None) -> int:
         for mode in MODES:
             view = QQuickView()
             view.setInitialProperties({"themeJson": theme_json(name), "bindsJson": binds, "wallpaper": wallpaper,
-                                       "wallpapersJson": wallpapers, "mode": mode})
+                                       "wallpapersJson": wallpapers, "localeName": args.locale, "mode": mode})
             view.setSource(QUrl.fromLocalFile(str(Path(__file__).with_name("Scene.qml"))))
             if view.errors():
                 for error in view.errors():

@@ -8,6 +8,8 @@ import "../../quickshell/clipboard"
 import "../../quickshell/cheatsheet"
 import "../../quickshell/wallpaper"
 import "../../quickshell/network"
+import "../../quickshell/volume"
+import "../../quickshell/calendar"
 
 // A 1920x1080 desktop with the shell's components and sample data.
 Rectangle {
@@ -16,6 +18,7 @@ Rectangle {
     required property string themeJson
     property string bindsJson: "[]"
     property string wallpapersJson: "[]"
+    property string localeName: ""
     property url wallpaper
     property string mode: "desktop"
 
@@ -89,7 +92,41 @@ Rectangle {
         visible: scene.mode !== "desktop"
         anchors.fill: parent
         anchors.topMargin: 44
-        color: Qt.alpha(Theme.bgAlt, scene.mode === "wifi" || scene.mode === "bluetooth" ? 0.2 : 0.45)
+        color: Qt.alpha(Theme.bgAlt, ["wifi", "bluetooth", "volume", "calendar"].includes(scene.mode) ? 0.2 : 0.45)
+
+        VolumeContent {
+            visible: scene.mode === "volume"
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.margins: 10
+            width: implicitWidth
+            height: implicitHeight
+            output: ({ name: "Speakers", volume: 0.64, muted: false, devices: [
+                { name: "Speakers", current: true },
+                { name: "Pinkie's Headphones", current: false },
+                { name: "HDMI / DisplayPort", current: false }
+            ] })
+            input: ({ name: "Built-in microphone", volume: 0.8, muted: false, devices: [
+                { name: "Built-in microphone", current: true },
+                { name: "Webcam microphone", current: false }
+            ] })
+            apps: [
+                { name: "Spotify", detail: "Winter Wrap Up · Ponyville Chorus", volume: 0.8, muted: false },
+                { name: "Firefox", detail: "Friendship is Magic, season 1", volume: 0.5, muted: true },
+                { name: "Discord", detail: "", volume: 0.7, muted: false }
+            ]
+        }
+
+        CalendarContent {
+            visible: scene.mode === "calendar"
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 10
+            width: implicitWidth
+            height: implicitHeight
+            now: new Date(2026, 10, 7, 17, 49)
+            locale: scene.localeName ? Qt.locale(scene.localeName) : Qt.locale()
+        }
 
         NetworkContent {
             visible: scene.mode === "wifi" || scene.mode === "bluetooth"

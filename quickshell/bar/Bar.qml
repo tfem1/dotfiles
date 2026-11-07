@@ -13,6 +13,7 @@ PanelWindow {
     required property var modelData
     property bool autohide: false
     signal statusClicked
+    signal clockClicked
     readonly property bool pointerIn: barHover.hovered || edgeHover.hovered
     readonly property bool revealed: !autohide || pointerIn || hideDelay.running
 
@@ -77,6 +78,7 @@ PanelWindow {
         onWorkspaceClicked: id => Desktop.focus(id)
         onMediaToggled: Player.toggle()
         onRightClicked: window.statusClicked()
+        onClockClicked: window.clockClicked()
 
         HoverHandler { id: barHover }
     }

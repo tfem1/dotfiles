@@ -99,6 +99,12 @@ All notable changes to this project are documented here. The format follows
 - Targets: `reload` commands are rendered with the theme values, `quote`
   filter for shell quoting, `comment_end` for include markers in CSS.
 - Installer: adw-gtk3, qt5ct, qt6ct, xdg-desktop-portal-gtk, gsettings.
+- Volume panel (`SUPER + V`): output and microphone with mute and device
+  choice, per-app volume with icon and media name (PipeWire nodes bound
+  only while the panel is open); new Slider component.
+- Calendar (`SUPER + S`, or a click on the bar's clock): locale-aware month
+  grid (first day of the week, day and month names), ISO week numbers,
+  today, month navigation by arrows, keys or wheel. Grid logic tested.
 - Roadmap: the next ten steps, in the order chosen.
 - Six green themes with a green accent: Kanagawa, Kanagawa Dragon and
   Everforest Dark Hard (official palettes from tinted-theming, unchanged),
