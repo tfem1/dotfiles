@@ -41,7 +41,7 @@
   },
   "shape": {
     "radius": 12,
-    "border": 2
+    "border": 0
   },
   "effects": {
     "opacity": 0.9,

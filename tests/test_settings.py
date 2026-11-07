@@ -21,10 +21,11 @@ class DefaultsTest(SandboxTest):
 
 class UserFileTest(SandboxTest):
     def test_user_values_replace_defaults_key_by_key(self):
+        defaults = load_theme(self.paths)
         self.write_user_file("theme.toml", "[shape]\nradius = 4\n")
         theme = load_theme(self.paths)
         self.assertEqual(theme["shape.radius"], 4)
-        self.assertEqual(theme["shape.border"], 2)
+        self.assertEqual(theme["shape.border"], defaults["shape.border"])
 
     def test_overrides_are_accepted(self):
         self.write_user_file("theme.toml", '[palette.overrides]\nbase00 = "#000000"\n')

@@ -29,16 +29,16 @@ mono_size = 11                  # pt, terminals
 
 [shape]
 radius   = 12                   # px, corners of windows and shell surfaces
-border   = 2                    # px, window border
-gaps_in  = 5                    # px, between windows
-gaps_out = 12                   # px, between windows and screen edges
+border   = 0                    # px, window border (0 = none)
+gaps_in  = 4                    # px, between windows
+gaps_out = 6                    # px, between windows and screen edges
 
 [effects]
 opacity     = 0.9               # opacity of shell surfaces (0.5 to 1.0)
 blur        = true
-blur_size   = 6
+blur_size   = 8
 blur_passes = 2
-shadow      = true
+shadow      = false
 animations  = true
 
 [cursor]

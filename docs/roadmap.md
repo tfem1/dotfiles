@@ -102,7 +102,20 @@ Themes come before the shell, so the shell is built with the final palettes.
   running app.
 - **Do not disturb**: notifications are kept but not shown.
 - **Hyprland base config** in Lua, split into small modules (variables, env,
-  autostart, rules, keybinds), never overwriting an existing user config.
+  monitors, autostart, settings, animations, keybinds), never overwriting an
+  existing user config. Same behaviour as the user's reference config
+  (Serpantinum's), written from scratch:
+  - general: floating windows keep 6 px gaps, resize by dragging borders with
+    a 30 px grab area; colors, gaps (4 / 6 px), no border, 12 px corners and
+    blur (size 8, 2 passes, no shadow) come from `theme.toml`;
+  - input: keyboard layout and layout switch (`alt + shift`) configurable,
+    flat mouse acceleration, natural scrolling on the touchpad, typing does
+    not disable it; 3-finger horizontal swipe to change workspace;
+  - misc: no Hyprland logo or splash, apps cannot steal focus;
+  - animations: one snappy curve (bezier 0.05, 0.9, 0.1, 1.05), windows pop
+    in at 80 %, layers fade, workspaces slide;
+  - autostart: clipboard history (text and images) and the shell;
+  - monitors: one rule for every screen, see step 8 for the refresh rate.
 - **Keybinds: the same layout as
   [Serpantinum](https://github.com/ilyamiro/serpantinum)** (key choices only;
   the Lua file is written from scratch), plus `SUPER + /` for the cheatsheet:
@@ -248,6 +261,12 @@ Look of Serpantinum's settings window (original code):
 `max-hz.sh` (best mode per monitor, hot-plug), Display tab, keybind
 cheatsheet (`super + /`). Runtime monitor changes with the Lua config are to be
 verified.
+
+Checked in the Hyprland wiki: `hl.monitor({ output = "", mode = "highrr" })`
+picks the highest refresh rate on every screen, hot-plugged ones included,
+but may lower the resolution to get it. Two choices for the Display tab:
+`highrr` (simplest, no script) or `max-hz.sh`, which keeps the native
+resolution and picks its highest refresh rate.
 
 ## 9. Installer and CI
 

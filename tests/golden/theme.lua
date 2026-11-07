@@ -7,9 +7,9 @@ hl.env("HYPRCURSOR_SIZE", "24")
 
 hl.config({
     general = {
-        gaps_in     = 5,
-        gaps_out    = 12,
-        border_size = 2,
+        gaps_in     = 4,
+        gaps_out    = 6,
+        border_size = 0,
         col = {
             active_border   = "rgba(cba6f7ff)",
             inactive_border = "rgba(313244ff)",
@@ -18,10 +18,10 @@ hl.config({
 
     decoration = {
         rounding = 12,
-        shadow   = { enabled = true },
+        shadow   = { enabled = false },
         blur     = {
             enabled = true,
-            size    = 6,
+            size    = 8,
             passes  = 2,
         },
     },
