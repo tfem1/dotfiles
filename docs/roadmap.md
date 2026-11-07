@@ -57,8 +57,26 @@ Each step is planned, approved, implemented, then reviewed before the next one.
 ## 4. Wallpapers
 
 Selector (grid, preview, transitions, keyboard, search, favorites), palette
-extracted from the wallpaper (matugen base16), bundled wallpapers with their
-license recorded, animated wallpapers if supported.
+extracted from the wallpaper (matugen base16), animated wallpapers if
+supported.
+
+**Collection: at least 50 wallpapers from [wallhaven.cc](https://wallhaven.cc),
+mostly forests, plus My Little Pony.** Real images taken from the site, none
+generated.
+
+- wallhaven states that "all images remain property of their original
+  owners", and My Little Pony belongs to Hasbro, so the images are **not
+  committed** to this public repository. The repository holds the curated list
+  (`wallpapers/collection.toml`: wallhaven id, category, resolution, page
+  link) and `tfem wallpapers fetch` downloads them on your machine through the
+  official API.
+- SFW only (`purity=100`), at least 1920×1080, each pick reviewed by hand.
+- Available on wallhaven (checked through its API): 268 forest wallpapers
+  (16:9, top of the last year) and 125 My Little Pony wallpapers.
+- Categories: `forest` (majority), `pony`, then the original ones (abstract,
+  minimal, dark) if wanted.
+- Forest wallpapers pair naturally with the green palettes (Kanagawa,
+  Everforest) when the palette is extracted from the wallpaper.
 
 ## 5. Control panel and widgets
 
