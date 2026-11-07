@@ -12,7 +12,8 @@ AVAILABLE = 'for p in $MISSING; do [ "$p" = "${!#}" ] && exit 1; done; exit 0'
 FAKES = {
     "sudo": 'exec "$@"',
     "pacman": f'echo "pacman $*" >> "$LOG"; [ "$1" = -Si ] && {{ {AVAILABLE}; }}; exit 0',
-    "apt-cache": f'{AVAILABLE}',
+    # Mimics `apt-cache policy`: a missing package has the candidate "(none)".
+    "apt-cache": f'if ( {AVAILABLE} ); then echo "  Candidate: 1.0"; else echo "  Candidate: (none)"; fi',
     "apt-get": 'echo "apt-get $*" >> "$LOG"',
     "apt": 'echo "apt $*" >> "$LOG"',
     "dnf": f'echo "dnf $*" >> "$LOG"; [ "$1" = info ] && {{ {AVAILABLE}; }}; exit 0',

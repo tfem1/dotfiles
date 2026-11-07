@@ -16,7 +16,8 @@ package_cells() {
 package_available() {
   case "$FAMILY" in
     arch) pacman -Si "$1" >/dev/null 2>&1 ;;
-    debian) apt-cache show "$1" >/dev/null 2>&1 ;;
+    # "show" also succeeds for packages with no installable version: ask for the candidate.
+    debian) [[ "$(apt-cache policy "$1" 2>/dev/null | awk '/Candidate:/ { print $2 }')" =~ ^[^\(] ]] ;;
     fedora) dnf info "$1" >/dev/null 2>&1 ;;
   esac
 }
