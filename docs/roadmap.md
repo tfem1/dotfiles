@@ -97,7 +97,9 @@ Themes come before the shell, so the shell is built with the final palettes.
     on-screen keyboard.
   - Colors from the wallpaper by default (Material You), curated themes still
     available.
-- **Optional dock**: `dock.enabled` in `config.json`, styled to match.
+- **Optional dock**: `dock.enabled` in `config.json`, styled to match: a
+  rounded dark bar of app icons (pinned and running), a small dot under each
+  running app.
 - **Do not disturb**: notifications are kept but not shown.
 - **Hyprland base config** in Lua, split into small modules (variables, env,
   autostart, rules, keybinds), never overwriting an existing user config.
@@ -137,9 +139,20 @@ Themes come before the shell, so the shell is built with the final palettes.
 
 ## 4. Wallpapers
 
-Selector (grid, preview, transitions, keyboard, search, favorites), palette
-extracted from the wallpaper (matugen base16), animated wallpapers if
+Palette extracted from the wallpaper (matugen base16), animated wallpapers if
 supported.
+
+**Selector**, look of Serpantinum's selector (original code):
+
+- A carousel of slanted (parallelogram) cards over the current wallpaper;
+  the selected card is large in the center, the others get smaller towards
+  the edges. Arrow keys to browse, Enter to apply, animated transitions.
+- A toolbar above it: name of the active filter, switch between carousel and
+  grid, recent wallpapers, play (slideshow), **color filters** (red, orange,
+  yellow, green, blue, purple, pink, grey) and search. Favorites as planned.
+- Color filters use the dominant color of each wallpaper, computed once with
+  Quickshell's `ColorQuantizer` and cached.
+- Applying a wallpaper also regenerates the palette.
 
 **Collection: at least 50 wallpapers from [wallhaven.cc](https://wallhaven.cc),
 mostly forests, plus My Little Pony.** Real images taken from the site, none
@@ -173,11 +186,35 @@ generated.
     restores your settings (changing Hyprland options at runtime with the Lua
     config is to be verified).
 - Widgets (clock, battery, now playing, CPU/RAM, calendar), each optional.
+- **Music widget**, look of Serpantinum's player (original code):
+  - the cover in a round "vinyl" that spins while playing, with a ring of bars
+    around it that reacts to the sound;
+  - title, artist, chips for the output device and the source app;
+  - a wavy progress slider, previous / play-pause / next;
+  - tabs: **Lyrics** (synced lyrics, current line highlighted, or a local
+    `.lrc` file; online source to choose and verify) and **Equalizer**.
+  - Lightweight check: Quickshell gives sound levels, which is enough for a
+    ring that pulses; a real spectrum and the equalizer need extra audio
+    tools, so they stay optional and are only enabled when installed.
 
 ## 6. Settings window
 
 Tabs: **Profiles**, **Display**, **Themes**, **Wallpaper**, Bar, Dock,
 Widgets (with module colors), System, Keybinds, Identity.
+
+Look of Serpantinum's settings window (original code):
+
+- A sidebar with an icon per section and collapsible groups (Welcome,
+  General, Display ▸ Theme, Bar ▸ Launcher, Dock, On-Screen Display,
+  Notifications, Idle, About, plus the tabs above), and a search across all
+  settings.
+- Each setting is a row: icon, title, one-line description, control on the
+  right (switch, slider, folder picker, drop-down…).
+- Theme page: a header showing the current wallpaper with a "Select
+  wallpaper" button and its file name; rows for the wallpaper folder, the
+  font (list of installed fonts) and the corner radius; then the color
+  themes: a "wallpaper colors" card first, then a grid of cards, each with
+  the theme name written in its own colors and a row of palette dots.
 
 - **Look profiles**: save the whole look (theme, accent, wallpaper or
   wallpaper category, style, module colors, dock) under a name and switch in
