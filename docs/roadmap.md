@@ -8,6 +8,17 @@ Themes come before the shell, so the shell is built with the final palettes.
 - **No gradients, anywhere.** Window borders, buttons, sliders, panels,
   backgrounds and login screens use solid colors only.
 - Colors always come from the active palette: a hue name, never a fixed hex.
+- **Lightweight:**
+  - one Quickshell process hosts the whole shell; nothing else stays
+    resident (no Waybar, no separate notification daemon, no applets, no
+    polling scripts);
+  - Python only runs while generating files, never in the background;
+  - hidden parts are not loaded (`Loader` with `active: false`), no
+    QtWebEngine;
+  - system data comes from Quickshell's services and events, not from
+    polling commands;
+  - wallpaper thumbnails are cached at a small size;
+  - the `minimal` install profile only installs the core.
 
 ## 1. Theme pipeline — done
 
@@ -24,6 +35,16 @@ Themes come before the shell, so the shell is built with the final palettes.
   the "red" slot and a cyan (`#0DB9D7`) in the "yellow" slot. The importer
   measures the hue of each slot and fixes or flags such themes, so `red`
   always looks red in the UI (urgent notifications, low battery).
+  - Rule, measured on the 361 schemes: each slot's hue is classified on the
+    color wheel (red, orange, yellow, green, cyan, blue, purple) and must land
+    on its own hue or a neighbouring one. Fixed hue ranges were too strict
+    (251 failures, e.g. Gruvbox's teal-ish "blue" is a deliberate choice);
+    the neighbour rule flags 98, all genuine mismatches (Tokyo Night, Rosé
+    Pine, Tokyo City, Gruvbox Dark Medium Forest…).
+  - Flagged themes are remapped when another slot has the right hue (19
+    cases), otherwise hidden from the default list and marked with a warning.
+  - *Tokyo Night* and *Rosé Pine* (one of the five palettes of the original
+    plan) are rebuilt from their official palettes.
 - **Featured themes**, shown first in the theme picker:
   - *Kanagawa* (and Kanagawa Dragon): dark night background, **green** accent
     and green-leaning module colors.
@@ -78,6 +99,41 @@ Themes come before the shell, so the shell is built with the final palettes.
     available.
 - **Optional dock**: `dock.enabled` in `config.json`, styled to match.
 - **Do not disturb**: notifications are kept but not shown.
+- **Hyprland base config** in Lua, split into small modules (variables, env,
+  autostart, rules, keybinds), never overwriting an existing user config.
+- **Keybinds: the same layout as
+  [Serpantinum](https://github.com/ilyamiro/serpantinum)** (key choices only;
+  the Lua file is written from scratch), plus `SUPER + /` for the cheatsheet:
+
+  | Keys | Action |
+  |---|---|
+  | `SUPER + Return` / `F` / `E` | terminal / browser / file manager |
+  | `SUPER + Q` | close window |
+  | `SUPER + ALT + F` / `SUPER + SHIFT + F` | maximize / float |
+  | `SUPER + arrows` | move focus |
+  | `SUPER + CTRL + arrows` | move window |
+  | `SUPER + SHIFT + arrows` | resize window |
+  | `SUPER + left / right mouse` | drag / resize window |
+  | `SUPER + 1…0` / `SUPER + SHIFT + 1…0` | go to / send to workspace 1–10 |
+  | `SUPER + D` | launcher (overview) |
+  | `SUPER + B` | system panel (right sidebar) |
+  | `SUPER + M` | music (left sidebar) |
+  | `SUPER + W` | wallpaper selector |
+  | `SUPER + S` | calendar |
+  | `SUPER + N` | network |
+  | `SUPER + V` | volume |
+  | `SUPER + C` | clipboard history |
+  | `SUPER + H` (and `SUPER + /`) | settings, keybind cheatsheet |
+  | `SUPER + A` | bar autohide |
+  | `SUPER + R` | reload the shell |
+  | `SUPER + L`, power key | lock |
+  | `SUPER + Space`, media keys | play / pause, previous, next |
+  | volume, mute, mic, brightness keys | change the value, with OSD |
+  | `Print` / `SHIFT + Print` | screenshot of a region / region then edit |
+  | `SUPER + Print` / `SUPER + SHIFT + Print` | full screenshot / full then edit |
+
+  These keys bring two more features: clipboard history and screenshots with
+  an editor.
 
 ## 4. Wallpapers
 
