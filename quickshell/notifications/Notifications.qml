@@ -2,17 +2,39 @@ import QtQuick
 import Quickshell
 import Quickshell.Services.Notifications
 import Quickshell.Wayland
+import "../services"
 
-// Notification daemon: keeps every notification (for the future notification
-// center) and shows new ones as popups in the top-right corner, for their own
-// timeout or 5 s. Urgent ones stay until closed.
+// Notification daemon: shows new notifications as popups in the top-right
+// corner, for their own timeout or 5 s (urgent ones stay until closed), and
+// keeps the last 50 for the system panel. Do not disturb hides the popups,
+// except urgent ones; the history still gets everything.
 Scope {
     id: root
 
     property var popups: []
+    property var history: []   // [{ ref, appName, summary, body, iconSource, time, urgent }], newest first
 
     function remove(notification) {
         popups = popups.filter(n => n !== notification);
+    }
+
+    function forget(entry) {
+        history = history.filter(other => other !== entry);
+        remove(entry.ref);
+        if (entry.ref)
+            entry.ref.dismiss();
+    }
+
+    function clear() {
+        for (const entry of history)
+            if (entry.ref)
+                entry.ref.dismiss();
+        history = [];
+        popups = [];
+    }
+
+    function iconOf(notification) {
+        return notification.image || (notification.appIcon ? Quickshell.iconPath(notification.appIcon, true) : "");
     }
 
     NotificationServer {
@@ -22,7 +44,18 @@ Scope {
         keepOnReload: true
         onNotification: notification => {
             notification.tracked = true;
-            root.popups = [notification].concat(root.popups).slice(0, 4);
+            const urgent = notification.urgency === NotificationUrgency.Critical;
+            root.history = [{
+                ref: notification,
+                appName: notification.appName,
+                summary: notification.summary,
+                body: notification.body,
+                iconSource: root.iconOf(notification),
+                time: new Date(),
+                urgent: urgent
+            }].concat(root.history).slice(0, 50);
+            if (!Session.doNotDisturb || urgent)
+                root.popups = [notification].concat(root.popups).slice(0, 4);
         }
     }
 
@@ -61,7 +94,7 @@ Scope {
                         appName: modelData.appName
                         summary: modelData.summary
                         body: modelData.body
-                        iconSource: modelData.image || (modelData.appIcon ? Quickshell.iconPath(modelData.appIcon, true) : "")
+                        iconSource: root.iconOf(modelData)
                         urgent: modelData.urgency === NotificationUrgency.Critical
                         time: Qt.formatTime(new Date(), "HH:mm")
                         onClosed: {

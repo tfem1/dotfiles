@@ -29,7 +29,7 @@ Scope {
 
     function run(action) {
         open = false;
-        Quickshell.execDetached(["sh", "-c", commands[action]]);
+        Quickshell.execDetached(["sh", "-c", root.commands[action]]);
     }
 
     // "12345.67 ..." seconds since the computer started.
@@ -37,7 +37,7 @@ Scope {
         id: uptimeFile
         path: "/proc/uptime"
         onLoaded: {
-            const seconds = Math.floor(parseFloat(text()));
+            const seconds = Math.floor(parseFloat(uptimeFile.text()));
             const days = Math.floor(seconds / 86400);
             const hours = Math.floor(seconds % 86400 / 3600);
             const minutes = Math.floor(seconds % 3600 / 60);

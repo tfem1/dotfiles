@@ -34,11 +34,11 @@ VISUAL = [
     "cheatsheet/CheatsheetContent.qml", "cheatsheet/KeyRow.qml",
     "wallpaper/SelectorContent.qml", "wallpaper/SelectorToolbar.qml", "wallpaper/Carousel.qml",
     "wallpaper/SlantedCard.qml", "wallpaper/Backdrop.qml",
-    "components/IconButton.qml", "components/Switch.qml", "network/NetworkContent.qml", "network/QuickTile.qml",
+    "components/IconButton.qml", "components/Switch.qml", "network/NetworkContent.qml", "components/QuickTile.qml",
     "network/WifiPage.qml", "network/WifiItem.qml", "network/BluetoothPage.qml", "network/DeviceItem.qml",
     "components/Slider.qml", "volume/VolumeContent.qml", "volume/LevelRow.qml", "volume/ChoiceRow.qml",
     "calendar/CalendarContent.qml", "music/MusicContent.qml", "music/Vinyl.qml", "music/LyricsView.qml",
-    "power/PowerContent.qml",
+    "power/PowerContent.qml", "system/SystemContent.qml",
 ]
 
 
@@ -63,7 +63,7 @@ class VisualComponentsTest(unittest.TestCase):
                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(done.returncode, 0, done.stderr)
             modes = ["bar", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "music",
-                     "power", "volume", "wallpaper", "wifi"]
+                     "power", "system", "volume", "wallpaper", "wifi"]
             self.assertEqual(sorted(p.name for p in Path(out).iterdir()), [f"pony-twilight-{m}.png" for m in modes])
 
     def probe(self, script, expression, value):

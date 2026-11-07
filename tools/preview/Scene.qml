@@ -12,6 +12,7 @@ import "../../quickshell/volume"
 import "../../quickshell/calendar"
 import "../../quickshell/music"
 import "../../quickshell/power"
+import "../../quickshell/system"
 
 // A 1920x1080 desktop with the shell's components and sample data.
 Rectangle {
@@ -94,7 +95,27 @@ Rectangle {
         visible: scene.mode !== "desktop"
         anchors.fill: parent
         anchors.topMargin: 44
-        color: Qt.alpha(Theme.bgAlt, ["wifi", "bluetooth", "volume", "calendar", "music"].includes(scene.mode) ? 0.2 : 0.45)
+        color: Qt.alpha(Theme.bgAlt, ["wifi", "bluetooth", "volume", "calendar", "music", "system"].includes(scene.mode) ? 0.2 : 0.45)
+
+        SystemContent {
+            visible: scene.mode === "system"
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.margins: 10
+            width: implicitWidth
+            wifi: ({ on: true, name: "Ponyville Library" })
+            bluetooth: ({ on: true, connected: 2 })
+            doNotDisturb: true
+            volume: ({ value: 0.64, muted: false })
+            brightness: 0.8
+            notifications: [
+                { appName: "Spotify", summary: "Winter Wrap Up", body: "Ponyville Chorus", time: new Date(2026, 10, 7, 17, 49) },
+                { appName: "Battery", summary: "Battery low", body: "15% left. Plug in the charger.", urgent: true,
+                  time: new Date(2026, 10, 7, 17, 31) },
+                { appName: "Discord", summary: "Rarity", body: "Darling, the dresses are ready!", time: new Date(2026, 10, 7, 16, 58) }
+            ]
+        }
 
         PowerContent {
             visible: scene.mode === "power"

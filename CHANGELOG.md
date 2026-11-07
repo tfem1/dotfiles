@@ -105,6 +105,14 @@ All notable changes to this project are documented here. The format follows
 - Calendar (`SUPER + S`, or a click on the bar's clock): locale-aware month
   grid (first day of the week, day and month names), ISO week numbers,
   today, month navigation by arrows, keys or wheel. Grid logic tested.
+- System panel (`SUPER + B`): Wi-Fi, Bluetooth, airplane, quiet mode, stay
+  awake, volume and brightness, and the notification history (last 50,
+  dismiss one or all). The daemon keeps the history and hides popups in
+  quiet mode except urgent ones; quiet and stay-awake states are saved in
+  the shell's state folder and shown in the bar. Stay awake is an idle
+  inhibitor on the bar's window.
+- hypridle with `hypr/hypridle.conf` (from the Hyprland wiki example):
+  dim, lock, screen off, suspend; started with Hyprland, installed.
 - Power menu (`SUPER + Escape`, power button in the bar): lock, log out
   (Hyprland's own command), suspend after locking, restart, shut down;
   destructive actions ask for a second click within 4 seconds; keyboard

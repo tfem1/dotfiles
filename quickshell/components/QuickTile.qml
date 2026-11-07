@@ -1,9 +1,8 @@
 import QtQuick
 import "../theme"
-import "../components"
 
-// A quick toggle at the top of the network panel: icon, name and a short
-// state line, filled with its module color while on.
+// A quick toggle (network and system panels): icon, name and a short
+// state line, filled with its color while on.
 Rectangle {
     id: tile
 

@@ -6,6 +6,7 @@
 # The installer checks every name before installing and skips missing ones.
 hyprland	core	hyprland	hyprland	-
 hyprlock	core	hyprlock	hyprlock	-
+hypridle	core	hypridle	hypridle	-
 quickshell	core	quickshell	quickshell	quickshell
 python	core	python	python3	python3
 git	core	git	git	git

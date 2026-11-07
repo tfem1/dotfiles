@@ -29,7 +29,7 @@ ICONS = {
     "visibility": False, "visibility_off": False, "check": False, "bluetooth_searching": False,
     "cable": False, "devices": False, "tv": False, "chevron_left": False, "chevron_right": False,
     "calendar_month": False, "today": False, "repeat": False, "repeat_one": False, "lyrics": False,
-    "logout": False, "bedtime": True, "restart_alt": False,
+    "logout": False, "bedtime": True, "restart_alt": False, "coffee": True, "clear_all": False,
 }
 
 

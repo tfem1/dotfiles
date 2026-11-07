@@ -33,6 +33,12 @@ PanelWindow {
     mask: Region { item: window.revealed ? area : edge }
     WlrLayershell.namespace: "shell-bar"
 
+    // Stay awake: hypridle respects this inhibitor while the bar is shown.
+    IdleInhibitor {
+        window: window
+        enabled: Session.stayAwake
+    }
+
     SystemClock {
         id: clock
         precision: SystemClock.Minutes
@@ -75,6 +81,8 @@ PanelWindow {
         status.hasBattery: Power.present
         status.battery: Power.level
         status.charging: Power.charging
+        status.quiet: Session.doNotDisturb
+        status.awake: Session.stayAwake
 
         onWorkspaceClicked: id => Desktop.focus(id)
         onMediaToggled: Player.toggle()

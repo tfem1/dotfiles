@@ -17,9 +17,24 @@ Pill {
     property bool hasBattery: false
     property real battery: 0
     property bool charging: false
+    property bool quiet: false      // do not disturb
+    property bool awake: false      // stay awake
 
     spacing: 10
 
+    // Shown only while on: quiet mode and stay awake.
+    Icon {
+        anchors.verticalCenter: parent.verticalCenter
+        visible: area.quiet
+        name: "notifications_off"
+        color: Theme.accent
+    }
+    Icon {
+        anchors.verticalCenter: parent.verticalCenter
+        visible: area.awake
+        name: "coffee"
+        color: Theme.accent
+    }
     Label {
         anchors.verticalCenter: parent.verticalCenter
         visible: area.keyboard !== ""

@@ -27,7 +27,7 @@ EXPECTED_KEYS = {
 # (None: always there).
 PROGRAMS = {
     "kitty": "kitty", "firefox": "firefox", "nautilus": "nautilus", "qs": "quickshell",
-    "hyprlock": "hyprlock", "playerctl": "playerctl", "wpctl": "wireplumber",
+    "hyprlock": "hyprlock", "hypridle": "hypridle", "playerctl": "playerctl", "wpctl": "wireplumber",
     "brightnessctl": "brightnessctl", "wl-paste": "wl-clipboard", "cliphist": "cliphist",
     "pidof": None,  # procps, in every base system
     "~/.local/bin/tfem": None,  # linked by the installer
@@ -41,7 +41,7 @@ DISPATCHERS = {
 
 # Panels whose key is bound before the panel is built: the list must shrink
 # as they arrive (a test fails when one of them gets a handler).
-PENDING_PANELS = {"system", "settings"}
+PENDING_PANELS = {"settings"}
 
 
 def programs(command):
@@ -158,6 +158,7 @@ class HyprConfigTest(unittest.TestCase):
         started = [args[0] for args in self.calls_named("exec_cmd")]
         self.assertIn("wl-paste --type image --watch cliphist store", started)
         self.assertIn("qs -c desktop -n -d", started)
+        self.assertIn("hypridle", started)
 
     def test_three_finger_swipe_changes_workspace(self):
         self.assertIn({"fingers": 3, "direction": "horizontal", "action": "workspace"},
