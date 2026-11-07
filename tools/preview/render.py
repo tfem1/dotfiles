@@ -27,7 +27,7 @@ from theming.paths import Paths  # noqa: E402
 from theming.settings import load_theme  # noqa: E402
 from theming.template import render as render_template  # noqa: E402
 
-MODES = ("desktop", "launcher", "clipboard", "cheatsheet", "wallpaper", "wifi", "bluetooth", "volume", "calendar", "music")
+MODES = ("desktop", "launcher", "clipboard", "cheatsheet", "wallpaper", "wifi", "bluetooth", "volume", "calendar", "music", "power")
 # Hues of the sample landscapes drawn for the wallpaper selector (degrees).
 SAMPLE_HUES = (215, 280, 330, 140, 25, 195, 255, 0, 50, 100, 300, 230, 160, 10)
 MODIFIERS = {"SHIFT": 1, "CTRL": 4, "ALT": 8, "SUPER": 64}

@@ -20,6 +20,7 @@ Rectangle {
     signal mediaToggled
     signal rightClicked
     signal clockClicked
+    signal powerClicked
 
     implicitHeight: 44
     color: Theme.panel
@@ -71,9 +72,26 @@ Rectangle {
 
     StatusArea {
         id: statusArea
+        anchors.right: power.left
+        anchors.rightMargin: 6
+        anchors.verticalCenter: parent.verticalCenter
+        onClicked: bar.rightClicked()
+    }
+
+    // Opens the power menu.
+    Pill {
+        id: power
         anchors.right: parent.right
         anchors.rightMargin: 10
         anchors.verticalCenter: parent.verticalCenter
-        onClicked: bar.rightClicked()
+        padding: 9
+        onClicked: bar.powerClicked()
+
+        Icon {
+            anchors.verticalCenter: parent.verticalCenter
+            name: "power_settings_new"
+            color: Theme.accent2
+            size: 17
+        }
     }
 }

@@ -14,6 +14,7 @@ PanelWindow {
     property bool autohide: false
     signal statusClicked
     signal clockClicked
+    signal powerClicked
     readonly property bool pointerIn: barHover.hovered || edgeHover.hovered
     readonly property bool revealed: !autohide || pointerIn || hideDelay.running
 
@@ -79,6 +80,7 @@ PanelWindow {
         onMediaToggled: Player.toggle()
         onRightClicked: window.statusClicked()
         onClockClicked: window.clockClicked()
+        onPowerClicked: window.powerClicked()
 
         HoverHandler { id: barHover }
     }

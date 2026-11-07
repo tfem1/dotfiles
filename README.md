@@ -258,6 +258,10 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   are then trusted and connected); "visible to other devices". Colors are
   the Wi-Fi and Bluetooth module colors of the theme. Devices that ask for
   a pairing code are not supported yet (pair them once with `bluetoothctl`).
+- **Power menu** (`SUPER + Escape`, or the power button at the right end
+  of the bar): lock, log out, suspend (locks first), restart, shut down,
+  with the time since start-up. Log out, restart and shut down ask for a
+  second click; arrows and Enter or one letter (L, E, S, R, P) work too.
 - **Music** (`SUPER + M`): the album sleeve with its record sliding out,
   turning while the music plays; title, artist, album; progress you can
   click to move in the song; previous, play/pause, next, shuffle, repeat;

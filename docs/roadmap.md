@@ -26,7 +26,7 @@ Themes come before the shell, so the shell is built with the final palettes.
    included), GTK 3, GTK 4 / libadwaita and Qt 5 / Qt 6.
 2. **Done:** volume panel (`SUPER + V`) and calendar (`SUPER + S`).
 3. **Done:** music panel (`SUPER + M`) with turning record and lyrics.
-4. Power menu (lock, log out, suspend, reboot, shut down).
+4. **Done:** power menu (lock, log out, suspend, reboot, shut down).
 5. Notification center: history, do not disturb, stay awake.
 6. Wallpaper = character (pony wallpapers), forest wallpapers = green theme.
 7. Settings window (`SUPER + H`).

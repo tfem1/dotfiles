@@ -105,6 +105,10 @@ All notable changes to this project are documented here. The format follows
 - Calendar (`SUPER + S`, or a click on the bar's clock): locale-aware month
   grid (first day of the week, day and month names), ISO week numbers,
   today, month navigation by arrows, keys or wheel. Grid logic tested.
+- Power menu (`SUPER + Escape`, power button in the bar): lock, log out
+  (Hyprland's own command), suspend after locking, restart, shut down;
+  destructive actions ask for a second click within 4 seconds; keyboard
+  letters; uptime from /proc/uptime. "Esc" in the cheatsheet.
 - Music panel (`SUPER + M`) on MPRIS: sleeve and turning record (label in
   the theme's third color), progress with seeking, previous/play/next,
   shuffle and repeat when the player supports them, player choice, and

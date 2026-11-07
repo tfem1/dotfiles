@@ -12,6 +12,7 @@ import "network"
 import "volume"
 import "calendar"
 import "music"
+import "power"
 import "ipc"
 
 // Entry point: only composes the parts, each one lives in its own folder.
@@ -23,6 +24,7 @@ ShellRoot {
         id: barLayer
         onStatusClicked: networkLayer.toggle()
         onClockClicked: calendarLayer.toggle()
+        onPowerClicked: powerLayer.toggle()
     }
     Osd { id: osdLayer }
     Notifications {}
@@ -34,6 +36,7 @@ ShellRoot {
     VolumePanel { id: volumeLayer }
     Calendar { id: calendarLayer }
     MusicPanel { id: musicLayer }
+    PowerMenu { id: powerLayer }
 
     Shortcuts {
         bars: barLayer
@@ -46,5 +49,6 @@ ShellRoot {
         volume: volumeLayer
         calendar: calendarLayer
         music: musicLayer
+        power: powerLayer
     }
 }

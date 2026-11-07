@@ -77,6 +77,7 @@ run("qs kill -c " .. shell .. "; qs -c " .. shell .. " -n -d", "Restart the shel
 -- Session -------------------------------------------------------------------
 run("pidof hyprlock || hyprlock", "Lock the screen", { locked = true, repeating = true })(mod .. " + L")
 run("pidof hyprlock || hyprlock", "Lock the screen", locked)("XF86PowerOff")
+panel("power", "Power menu: lock, log out, suspend, restart, shut down")(mod .. " + Escape")
 
 -- Media ---------------------------------------------------------------------
 run("playerctl play-pause", "Play or pause", locked)(mod .. " + SPACE")

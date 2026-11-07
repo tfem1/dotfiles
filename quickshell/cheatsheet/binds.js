@@ -9,7 +9,7 @@ const MODIFIERS = [[64, "SUPER"], [4, "CTRL"], [8, "ALT"], [1, "SHIFT"]];
 
 // Key names are written in any case in the config: looked up in lower case.
 const NAMES = {
-    "return": "Enter", "space": "Space", "slash": "/", "print": "Print",
+    "return": "Enter", "space": "Space", "escape": "Esc", "slash": "/", "print": "Print",
     "left": "←", "right": "→", "up": "↑", "down": "↓",
     "mouse:272": "Left drag", "mouse:273": "Right drag",
     "xf86audioraisevolume": "Volume up", "xf86audiolowervolume": "Volume down",

@@ -18,6 +18,7 @@ Scope {
     required property var volume
     required property var calendar
     required property var music
+    required property var power
 
     IpcHandler {
         target: "bar"
@@ -67,5 +68,10 @@ Scope {
     IpcHandler {
         target: "music"
         function toggle(): void { root.music.toggle(); }
+    }
+
+    IpcHandler {
+        target: "power"
+        function toggle(): void { root.power.toggle(); }
     }
 }

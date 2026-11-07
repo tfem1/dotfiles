@@ -11,6 +11,7 @@ import "../../quickshell/network"
 import "../../quickshell/volume"
 import "../../quickshell/calendar"
 import "../../quickshell/music"
+import "../../quickshell/power"
 
 // A 1920x1080 desktop with the shell's components and sample data.
 Rectangle {
@@ -94,6 +95,16 @@ Rectangle {
         anchors.fill: parent
         anchors.topMargin: 44
         color: Qt.alpha(Theme.bgAlt, ["wifi", "bluetooth", "volume", "calendar", "music"].includes(scene.mode) ? 0.2 : 0.45)
+
+        PowerContent {
+            visible: scene.mode === "power"
+            anchors.centerIn: parent
+            width: implicitWidth
+            height: implicitHeight
+            uptime: "3 h 12 min"
+            current: 3
+            armed: "reboot"
+        }
 
         MusicContent {
             visible: scene.mode === "music"

@@ -17,6 +17,7 @@ EXPECTED_KEYS = {
     "SUPER + 1", "SUPER + 0", "SUPER + SHIFT + 1", "SUPER + SHIFT + 0",
     "SUPER + D", "SUPER + B", "SUPER + M", "SUPER + W", "SUPER + S", "SUPER + N", "SUPER + V",
     "SUPER + C", "SUPER + H", "SUPER + slash", "SUPER + A", "SUPER + R", "SUPER + L", "XF86PowerOff",
+    "SUPER + Escape",
     "SUPER + SPACE", "XF86AudioPlay", "XF86AudioNext", "XF86AudioRaiseVolume", "XF86AudioMute",
     "XF86AudioMicMute", "XF86MonBrightnessUp", "Print", "SHIFT + Print", "SUPER + Print",
     "SUPER + SHIFT + Print",
