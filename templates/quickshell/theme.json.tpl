@@ -12,6 +12,8 @@
     "fg": {{ fg | json }},
     "fgBright": {{ fg_bright | json }},
     "accent": {{ accent | json }},
+    "accent2": {{ accent2 | json }},
+    "accent3": {{ accent3 | json }},
     "red": {{ red | json }},
     "orange": {{ orange | json }},
     "yellow": {{ yellow | json }},

@@ -25,6 +25,19 @@ def from_hls(hue: float, lightness: float, saturation: float) -> Color:
     return Color(round(r * 255), round(g * 255), round(b * 255))
 
 
+def readable(color: Color, background: Color, variant: str, minimum: float) -> Color:
+    """Keeps hue and saturation, moves lightness away from the background until
+    the contrast reaches `minimum`. ValueError if it never does."""
+    hue, lightness, saturation = hls(color)
+    step = 0.01 if variant == "dark" else -0.01
+    while contrast(color, background) < minimum:
+        lightness += step
+        if not 0.0 <= lightness <= 1.0:
+            raise ValueError(f"cannot make {color.hex()} readable on {background.hex()}")
+        color = from_hls(hue, lightness, saturation)
+    return color
+
+
 def hue_class(color: Color) -> str | None:
     hue, _, saturation = hls(color)
     if saturation < MIN_SATURATION:

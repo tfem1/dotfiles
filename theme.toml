@@ -49,16 +49,18 @@ size  = 24
 [icons]
 theme = "Papirus-Dark"
 
-[modules]                       # color of each shell module:
-                                # accent or a hue (red, orange, yellow, green, cyan, blue, purple, brown)
+[modules]                       # color of each shell module: the theme's own three
+                                # colors (accent, accent2, accent3), so it stays
+                                # minimal, or any hue (red, orange, yellow, green,
+                                # cyan, blue, purple, brown) for more color
 workspaces    = "accent"
 clock         = "accent"        # clock and calendar
-media         = "cyan"          # now playing
-resources     = "orange"        # CPU and RAM
-battery       = "yellow"
-wifi          = "blue"
-network       = "cyan"
-bluetooth     = "purple"
-audio         = "green"         # bar module, panel tab and volume OSD
-brightness    = "yellow"        # brightness OSD
 notifications = "accent"        # urgent notifications always stay red
+battery       = "accent2"       # the status icons share one color
+wifi          = "accent2"
+network       = "accent2"
+bluetooth     = "accent2"
+audio         = "accent2"       # bar module, volume panel and OSD
+brightness    = "accent2"       # brightness OSD
+media         = "accent3"       # now playing: the one touch of the third color
+resources     = "accent3"       # CPU and RAM

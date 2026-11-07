@@ -10,7 +10,7 @@ selection_background {{ accent }}
 
 cursor {{ accent }}
 cursor_text_color {{ bg }}
-url_color {{ blue }}
+url_color {{ accent2 }}
 
 active_border_color {{ accent }}
 inactive_border_color {{ surface }}
@@ -25,9 +25,9 @@ tab_bar_background {{ bg_alt }}
 mark1_foreground {{ bg }}
 mark1_background {{ accent }}
 mark2_foreground {{ bg }}
-mark2_background {{ yellow }}
+mark2_background {{ accent2 }}
 mark3_foreground {{ bg }}
-mark3_background {{ cyan }}
+mark3_background {{ accent3 }}
 
 color0 {{ ansi0 }}
 color1 {{ ansi1 }}

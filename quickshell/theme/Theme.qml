@@ -18,6 +18,8 @@ QtObject {
     property color fg: "#e1cfe7"
     property color fgBright: "#ece0f0"
     property color accent: "#d19fe4"
+    property color accent2: "#c084d6"    // the theme's two other colors
+    property color accent3: "#ed438d"
     property color red: "#e694a1"
     property color orange: "#e6b694"
     property color yellow: "#e6d594"
@@ -31,14 +33,14 @@ QtObject {
     component ModuleColors: QtObject {
         property color workspaces: "#d19fe4"
         property color clock: "#d19fe4"
-        property color media: "#94e6e6"
-        property color resources: "#e6b694"
-        property color battery: "#e6d594"
-        property color wifi: "#779bcb"
-        property color network: "#94e6e6"
-        property color bluetooth: "#d19fe4"
-        property color audio: "#94e69a"
-        property color brightness: "#e6d594"
+        property color media: "#ed438d"
+        property color resources: "#ed438d"
+        property color battery: "#c084d6"
+        property color wifi: "#c084d6"
+        property color network: "#c084d6"
+        property color bluetooth: "#c084d6"
+        property color audio: "#c084d6"
+        property color brightness: "#c084d6"
         property color notifications: "#d19fe4"
     }
     property ModuleColors modules: ModuleColors {}

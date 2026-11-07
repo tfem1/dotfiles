@@ -3,7 +3,7 @@ import "../theme"
 import "../components"
 
 // Numbered workspace circles: focused one filled with the module color,
-// occupied ones on a surface, empty ones only show their number.
+// occupied ones lightly tinted with it, empty ones only show their number.
 Row {
     id: workspaces
 
@@ -22,7 +22,7 @@ Row {
             width: 24
             height: 24
             radius: 12
-            color: modelData.focused ? tone : modelData.occupied ? Theme.surface : "transparent"
+            color: modelData.focused ? tone : modelData.occupied ? Qt.alpha(tone, 0.22) : "transparent"
             Behavior on color { ColorAnimation { duration: Theme.duration } }
 
             Label {

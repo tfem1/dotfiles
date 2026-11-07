@@ -75,7 +75,8 @@ does not exist is left alone and you are told which line to add). The
 `reload` is rendered like a template before it runs, so it can use theme
 values; pass them through `quote` (shell quoting), e.g.
 `gsettings set org.gnome.desktop.interface color-scheme {{ gtk.color_scheme | quote }}`.
-Extra values for this: `gtk.theme` (`adw-gtk3-dark` or `adw-gtk3`),
+Colors of the theme's family: `accent`, `accent2`, `accent3` (see
+`scripts/theming/accents.py`). Extra values for reload commands: `gtk.theme` (`adw-gtk3-dark` or `adw-gtk3`),
 `gtk.color_scheme` (`prefer-dark` or `default`) and `dirs.config` (the
 config folder).
 

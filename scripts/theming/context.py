@@ -4,6 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Mapping
 
+from .accents import companions
 from .palette import Palette
 from .paths import Paths
 from .schema import THEME_SCHEMA
@@ -24,9 +25,14 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths,
     choice = str(theme["palette.accent"])
     if choice == "theme":
         context["accent"] = palette.accent or palette.colors["base0E"]
+        own = (palette.accent2, palette.accent3)
     else:
         context["accent"] = context[choice]
+        own = (None, None)  # the theme's companions go with its own accent only
     context["palette.accent"] = context["accent"]
+    second, third = companions(context["accent"], palette.colors["base00"], palette.variant)
+    context["accent2"] = own[0] or second
+    context["accent3"] = own[1] or third
     for key, field in THEME_SCHEMA.items():
         if field.kind == "hue":
             context[key] = context[str(theme[key])]

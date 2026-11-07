@@ -59,7 +59,8 @@ class OutputTest(GenerateTest):
         self.run_generate("--all")
         data = json.loads(self.shell_theme.read_text())
         self.assertEqual(data["palette"]["name"], "Twilight")
-        self.assertEqual(data["modules"]["wifi"], data["colors"]["blue"])
+        self.assertEqual(data["modules"]["wifi"], data["colors"]["accent2"])
+        self.assertEqual(data["modules"]["media"], data["colors"]["accent3"])
         self.assertEqual(data["modules"]["workspaces"], data["colors"]["accent"])
 
     @unittest.skipUnless(shutil.which("luac"), "luac not installed")

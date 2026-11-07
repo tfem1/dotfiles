@@ -11,6 +11,7 @@ from .colors import Color
 from .paths import Paths
 from .schema import BASE16_KEYS
 
+ACCENTS = ("accent", "accent2", "accent3")  # optional signature colors of a theme
 WALLPAPER_SOURCE = "wallpaper"
 WALLPAPER_PALETTE = "wallpaper-palette.toml"
 
@@ -40,7 +41,9 @@ class Palette:
     variant: str
     author: str
     colors: dict[str, Color]
-    accent: Color | None = None  # the theme's signature color, if it has one
+    accent: Color | None = None   # the theme's signature color, if it has one
+    accent2: Color | None = None  # its companions (derived when absent, see accents.py)
+    accent3: Color | None = None
 
     def variables(self) -> dict[str, object]:
         """Raw colors, roles and ANSI colors, ready for the template context."""
@@ -92,7 +95,7 @@ def load_palette(path: Path) -> Palette:
         variant=data["variant"],
         author=data.get("author", ""),
         colors={key: Color.parse(data["colors"][key]) for key in BASE16_KEYS},
-        accent=Color.parse(data["accent"]) if "accent" in data else None,
+        **{key: Color.parse(data[key]) for key in ACCENTS if key in data},
     )
 
 
@@ -102,7 +105,7 @@ def resolve_palette(theme: Mapping[str, object], paths: Paths) -> Palette:
     prefix = "palette.overrides."
     overrides = {k[len(prefix):]: Color.parse(v) for k, v in theme.items() if k.startswith(prefix)}
     return Palette(palette.name, palette.family, palette.variant, palette.author,
-                   {**palette.colors, **overrides}, palette.accent)
+                   {**palette.colors, **overrides}, palette.accent, palette.accent2, palette.accent3)
 
 
 def _check_theme(data: dict) -> list[str]:
@@ -111,11 +114,12 @@ def _check_theme(data: dict) -> list[str]:
         problems.append("'name' is required")
     if data.get("variant") not in ("dark", "light"):
         problems.append("'variant' must be 'dark' or 'light'")
-    if "accent" in data:
-        try:
-            Color.parse(data["accent"])
-        except ValueError as error:
-            problems.append(f"accent: {error}")
+    for key in ACCENTS:
+        if key in data:
+            try:
+                Color.parse(data[key])
+            except ValueError as error:
+                problems.append(f"{key}: {error}")
     colors = data.get("colors")
     if not isinstance(colors, dict):
         return problems + ["a [colors] table is required"]

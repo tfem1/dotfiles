@@ -42,7 +42,12 @@ class BuilderTest(unittest.TestCase):
 
     def test_dark_accent_is_lightened_until_readable(self):
         theme = build_theme(self.SEED)
-        self.assertGreaterEqual(contrast(theme["accent"], theme["colors"]["base00"]), 4.5)
+        self.assertGreaterEqual(contrast(theme["accents"]["accent"], theme["colors"]["base00"]), 4.5)
+
+    def test_second_canon_color_is_kept_readable(self):
+        theme = build_theme({**self.SEED, "accent3": "#1a1a40"})
+        self.assertGreaterEqual(contrast(theme["accents"]["accent3"], theme["colors"]["base00"]), 4.5)
+        self.assertNotIn("accent2", theme["accents"])  # derived at generation
 
     def test_light_variant_has_dark_text(self):
         colors = build_theme({**self.SEED, "variant": "light"})["colors"]

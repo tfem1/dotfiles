@@ -12,7 +12,7 @@ import tomllib
 from pathlib import Path
 
 from .colors import Color
-from .hues import contrast, from_hls, hls, hue_problems
+from .hues import from_hls, hls, hue_problems, readable
 
 SLOTS = {"red": "base08", "orange": "base09", "yellow": "base0A", "green": "base0B",
          "cyan": "base0C", "blue": "base0D", "purple": "base0E", "pink": "base0F"}
@@ -52,8 +52,11 @@ def build_theme(seed: dict) -> dict:
         colors[slot] = _readable(start, colors["base00"], variant, ACCENT_CONTRAST)
     if problems := hue_problems(colors):
         raise BuildError(f"{seed['name']}: " + "; ".join(problems))
-    accent = _readable(Color.parse(seed["accent"]), colors["base00"], variant, ACCENT_CONTRAST)
-    return {"name": seed["name"], "variant": variant, "accent": accent, "colors": colors}
+    # The signature color, and optionally a second canon color used sparingly
+    # (accent3); the lighter companion (accent2) is derived at generation.
+    accents = {key: _readable(Color.parse(seed[key]), colors["base00"], variant, ACCENT_CONTRAST)
+               for key in ("accent", "accent2", "accent3") if key in seed}
+    return {"name": seed["name"], "variant": variant, "accents": accents, "colors": colors}
 
 
 def _clamp(value: float, low: float, high: float) -> float:
@@ -61,15 +64,10 @@ def _clamp(value: float, low: float, high: float) -> float:
 
 
 def _readable(color: Color, background: Color, variant: str, minimum: float) -> Color:
-    """Keeps hue and saturation, moves lightness away from the background until readable."""
-    hue, lightness, saturation = hls(color)
-    step = 0.01 if variant == "dark" else -0.01
-    while contrast(color, background) < minimum:
-        lightness += step
-        if not 0.0 <= lightness <= 1.0:
-            raise BuildError(f"cannot make {color.hex()} readable on {background.hex()}")
-        color = from_hls(hue, lightness, saturation)
-    return color
+    try:
+        return readable(color, background, variant, minimum)
+    except ValueError as error:
+        raise BuildError(str(error)) from None
 
 
 def render(theme: dict, family: str, credit: str, source: str) -> str:
@@ -80,7 +78,7 @@ def render(theme: dict, family: str, credit: str, source: str) -> str:
         f'family  = "{family}"',
         f'variant = "{theme["variant"]}"',
         f'author  = "{credit}"',
-        f'accent  = "{theme["accent"].hex()}"',
+        *(f'{key:<7} = "{color.hex()}"' for key, color in theme["accents"].items()),
         "",
         "[colors]",
     ]

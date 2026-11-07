@@ -13,7 +13,8 @@ from typing import Mapping
 from .colors import Color
 
 HUES = ("red", "orange", "yellow", "green", "cyan", "blue", "purple", "brown")
-MODULE_COLORS = ("accent", *HUES)
+# The theme's three colors first: modules set to them keep a theme minimal.
+MODULE_COLORS = ("accent", "accent2", "accent3", *HUES)
 MODULES = (
     "workspaces", "clock", "media", "resources", "battery", "wifi",
     "network", "bluetooth", "audio", "brightness", "notifications",

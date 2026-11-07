@@ -4,6 +4,7 @@ import unittest
 from helpers import SandboxTest
 from theming.colors import Color
 from theming.context import build_context
+from theming.hues import contrast, hue_class
 from theming.palette import PaletteError, resolve_palette
 from theming.settings import load_theme
 
@@ -89,9 +90,37 @@ class ContextTest(SandboxTest):
         self.assertEqual(ctx["modules.clock"], ctx["accent"])
 
     def test_module_colors_follow_theme_changes(self):
+        default = self.context()
         self.write_user_file("themes/other.toml", ResolveTest.theme_text("Other"))
         ctx = self.context('[palette]\nsource = "other"\n')
-        self.assertEqual(ctx["modules.wifi"], Color(0x11, 0x11, 0x11))
+        self.assertEqual(ctx["modules.wifi"], ctx["accent2"])
+        self.assertNotEqual(ctx["modules.wifi"], default["modules.wifi"])
+
+    def test_modules_use_only_the_three_theme_colors_by_default(self):
+        ctx = self.context()
+        used = {ctx[key] for key in ctx if key.startswith("modules.")}
+        self.assertLessEqual(used, {ctx["accent"], ctx["accent2"], ctx["accent3"]})
+
+    def test_a_green_theme_gets_three_readable_greens(self):
+        for theme in ("forest-pine", "forest-moss", "kanagawa", "everforest-dark-hard"):
+            with self.subTest(theme=theme):
+                ctx = self.context(f'[palette]\nsource = "{theme}"\n')
+                for key in ("accent", "accent2", "accent3"):
+                    self.assertEqual(hue_class(ctx[key]), "green", key)
+                    self.assertGreaterEqual(contrast(ctx[key], ctx["base00"]), 4.5, key)
+                self.assertEqual(len({ctx["accent"], ctx["accent2"], ctx["accent3"]}), 3)
+
+    def test_a_theme_can_set_its_own_companions(self):
+        text = ResolveTest.theme_text("Own").replace('[colors]', 'accent = "#f7438c"\naccent3 = "#76d2fb"\n[colors]')
+        self.write_user_file("themes/own.toml", text)
+        ctx = self.context('[palette]\nsource = "own"\n')
+        self.assertEqual(ctx["accent3"], Color.parse("#76d2fb"))
+        self.assertEqual(hue_class(ctx["accent2"]), hue_class(ctx["accent"]))  # derived
+
+    def test_a_chosen_accent_gets_companions_of_its_own(self):
+        ctx = self.context('[palette]\nsource = "pony-pinkie"\naccent = "blue"\n')
+        self.assertEqual(hue_class(ctx["accent2"]), "blue")
+        self.assertIn(hue_class(ctx["accent3"]), ("blue", "purple"))
 
     def test_relative_wallpaper_is_made_absolute(self):
         ctx = self.context('[wallpaper]\npath = "forest/lake.jpg"\n')

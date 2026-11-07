@@ -106,6 +106,14 @@ readable (WCAG contrast 7:1 for text, 4.5:1 for colors) and checking that
 each hue stays in its place. My Little Pony is a trademark of Hasbro; these
 are fan color schemes, with no artwork.
 
+**Minimal colors:** a theme shows at most three colors, all its own. The
+accent (workspaces, clock), a second color of the same family (every status
+icon and the panels) and a third one used sparingly (the now-playing ring):
+greens only for the forest themes, the character's colors for a pony theme
+(Pinkie: her pink, a softer pink, the blue of her eyes). Red is kept for
+alerts only. Change it per module in `[modules]` of `theme.toml` if you want
+more color (`wifi = "blue"`, for instance).
+
 Six **green** themes, with a green accent, to go with the forest wallpapers:
 
 | Theme | Look |

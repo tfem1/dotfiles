@@ -5,6 +5,7 @@ family  = "Pony"
 variant = "dark"
 author  = "Colors of My Little Pony: Friendship is Magic characters (Hasbro), from the MLP wiki"
 accent  = "#d4569b"
+accent3 = "#fff1b4"
 
 [colors]
 base00 = "#22172c"

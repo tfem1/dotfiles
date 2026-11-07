@@ -105,6 +105,13 @@ All notable changes to this project are documented here. The format follows
 - Calendar (`SUPER + S`, or a click on the bar's clock): locale-aware month
   grid (first day of the week, day and month names), ISO week numbers,
   today, month navigation by arrows, keys or wheel. Grid logic tested.
+- Minimal themes: every shell module now uses the theme's own three colors
+  (`accent`, `accent2`, `accent3`) instead of eight hues. Themes may set
+  `accent2` / `accent3`; otherwise they are derived from the accent (same
+  hue a step lighter or deeper, and a neighbouring hue), always readable.
+  Pony themes use a second canon color of the character as `accent3`
+  (Pinkie's blue eyes, Twilight's magenta stripe…). Occupied workspaces are
+  tinted with the accent; kitty and Qt links follow the same colors.
 - Roadmap: the next ten steps, in the order chosen.
 - Six green themes with a green accent: Kanagawa, Kanagawa Dragon and
   Everforest Dark Hard (official palettes from tinted-theming, unchanged),
