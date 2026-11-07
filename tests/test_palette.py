@@ -8,10 +8,16 @@ from theming.palette import PaletteError, resolve_palette
 from theming.settings import load_theme
 
 MAUVE = Color.parse("#cba6f7")
+CATPPUCCIN = '[palette]\nsource = "catppuccin-mocha"\n'
 
 
 class ResolveTest(SandboxTest):
     def test_loads_default_theme(self):
+        palette = resolve_palette(load_theme(self.paths), self.paths)
+        self.assertEqual(palette.family, "Pony")
+
+    def test_loads_catppuccin(self):
+        self.write_user_file("theme.toml", CATPPUCCIN)
         palette = resolve_palette(load_theme(self.paths), self.paths)
         self.assertEqual(palette.name, "Catppuccin Mocha")
         self.assertEqual(palette.variant, "dark")
@@ -19,10 +25,11 @@ class ResolveTest(SandboxTest):
 
     def test_user_theme_dir_wins_over_repo(self):
         self.write_user_file("themes/catppuccin-mocha.toml", self.theme_text("Mine"))
+        self.write_user_file("theme.toml", CATPPUCCIN)
         self.assertEqual(resolve_palette(load_theme(self.paths), self.paths).name, "Mine")
 
     def test_overrides_replace_one_slot(self):
-        self.write_user_file("theme.toml", '[palette.overrides]\nbase00 = "#000000"\n')
+        self.write_user_file("theme.toml", CATPPUCCIN + '[palette.overrides]\nbase00 = "#000000"\n')
         palette = resolve_palette(load_theme(self.paths), self.paths)
         self.assertEqual(palette.colors["base00"], Color(0, 0, 0))
         self.assertEqual(palette.colors["base0E"], MAUVE)
@@ -94,8 +101,18 @@ class ContextTest(SandboxTest):
         ctx = self.context('[wallpaper]\npath = "~/Pictures/a.png"\n')
         self.assertEqual(ctx["wallpaper.path"], str(self.home / "Pictures/a.png"))
 
+    def test_theme_accent_is_the_signature_color(self):
+        ctx = self.context('[palette]\nsource = "pony-pinkie"\n')
+        signature = resolve_palette(load_theme(self.paths), self.paths).accent
+        self.assertEqual(ctx["accent"], signature)
+        self.assertNotEqual(ctx["accent"], ctx["purple"])  # pink, not her purple slot
+
+    def test_theme_without_signature_uses_its_purple(self):
+        ctx = self.context(CATPPUCCIN)
+        self.assertEqual(ctx["accent"], MAUVE)
+
     def test_palette_metadata_is_exposed(self):
-        ctx = self.context()
+        ctx = self.context(CATPPUCCIN)
         self.assertEqual(ctx["palette.name"], "Catppuccin Mocha")
         self.assertEqual(ctx["palette.variant"], "dark")
 

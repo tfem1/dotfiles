@@ -4,7 +4,10 @@
 # The images are not stored in this repository: they remain the property of
 # their authors (wallhaven.cc), and My Little Pony belongs to Hasbro.
 # Picked on 2026-11-07: SFW only, at most 10 MB each, every image checked by
-# eye. Page of each wallpaper: https://wallhaven.cc/w/<id>
+# eye; mostly My Little Pony, then forests. Page of each wallpaper:
+# https://wallhaven.cc/w/<id>
+# Left out on purpose: humanized characters, square or very narrow images,
+# parodies about drugs, shipping drawings, photos without ponies.
 
 [forest]
 wallpapers = [
@@ -62,4 +65,38 @@ wallpapers = [
   { id = "4yjked", ext = "jpg", size = "1920x1080" },
   { id = "1kjwx1", ext = "png", size = "2560x1440" },
   { id = "49owo8", ext = "png", size = "1920x1080" },
+  { id = "01p231", ext = "png", size = "2560x1600" },
+  { id = "nz7p8g", ext = "png", size = "3840x2160" },
+  { id = "nz9rmo", ext = "png", size = "1920x1080" },
+  { id = "nm5p39", ext = "jpg", size = "1920x1200" },
+  { id = "4vqp5m", ext = "jpg", size = "1920x1080" },
+  { id = "kxowv6", ext = "png", size = "1920x1080" },
+  { id = "48edzo", ext = "jpg", size = "4800x2700" },
+  { id = "qdgp87", ext = "png", size = "3840x2160" },
+  { id = "01jxqg", ext = "png", size = "3000x1687" },
+  { id = "42lzrg", ext = "jpg", size = "4167x2293" },
+  { id = "nmr721", ext = "png", size = "1920x1080" },
+  { id = "yqxpz7", ext = "png", size = "1920x1080" },
+  { id = "rdrdlj", ext = "jpg", size = "1970x1080" },
+  { id = "nee31o", ext = "jpg", size = "1920x1080" },
+  { id = "4g8qw7", ext = "jpg", size = "1920x1080" },
+  { id = "o5gjdp", ext = "jpg", size = "3200x2000" },
+  { id = "0jv63q", ext = "png", size = "1920x1080" },
+  { id = "48p9dy", ext = "png", size = "1920x1080" },
+  { id = "4lxzr4", ext = "jpg", size = "1920x1080" },
+  { id = "nkw1xd", ext = "jpg", size = "1920x1080" },
+  { id = "57oe95", ext = "png", size = "1920x1080" },
+  { id = "0j51xm", ext = "jpg", size = "1920x1080" },
+  { id = "488x6j", ext = "jpg", size = "2880x1800" },
+  { id = "nm59jm", ext = "jpg", size = "1920x1200" },
+  { id = "0qrerr", ext = "jpg", size = "1920x1080" },
+  { id = "6oo13l", ext = "jpg", size = "1944x1111" },
+  { id = "ne1v9l", ext = "png", size = "2844x1600" },
+  { id = "q2dvgr", ext = "jpg", size = "1920x1080" },
+  { id = "0p1oy9", ext = "png", size = "2560x1600" },
+  { id = "y8r7r7", ext = "png", size = "1920x1080" },
+  { id = "0qdkel", ext = "jpg", size = "1920x1200" },
+  { id = "6qpv5x", ext = "png", size = "1920x1080" },
+  { id = "8xl25j", ext = "png", size = "3840x2160" },
+  { id = "4ymeq7", ext = "png", size = "1920x1200" },
 ]

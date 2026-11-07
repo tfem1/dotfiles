@@ -7,7 +7,7 @@ STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/tfem"
 INSTALL_LOG="$STATE_DIR/install.log"
 BIN_DIR="$HOME/.local/bin"
 CLI_NAMES=(tfem dots wm)
-DEFAULT_WALLPAPER="forest/wallhaven-oggp1m.jpg"
+DEFAULT_WALLPAPER="pony/wallhaven-wymvyx.jpg"
 
 # Appends a line to the install log, read back by --uninstall.
 record() {
@@ -61,7 +61,7 @@ link_cli() {
   esac
 }
 
-# First install with wallpapers: start from a forest wallpaper.
+# First install with wallpapers: start from a pony wallpaper.
 seed_settings() {
   local file="$CONFIG_HOME/tfem/theme.toml"
   [[ -e $file ]] && return 0

@@ -35,6 +35,14 @@ All notable changes to this project are documented here. The format follows
   Pony), downloaded by `tfem wallpapers fetch` into `~/Pictures/Wallpapers`;
   relative wallpaper paths in `theme.toml` now point there.
 - Screenshot editing falls back to a plain capture when satty is missing.
+- Ten themes in the colors of My Little Pony characters (Twilight, the new
+  default, Pinkie, Rarity, Cadance, Starlight, Luna, Trixie, Rainbow,
+  Fluttershy and Celestia), built from canon colors by `theming.builder`,
+  which keeps every color readable (WCAG) and every hue in its slot.
+- Themes can carry a signature color; `palette.accent = "theme"` (the new
+  default) uses it.
+- Color checks (`theming.hues`): hue classes, neighbour rule, WCAG contrast.
+- 34 more My Little Pony wallpapers: 84 in total, 53 of them pony.
 - Roadmap: themes before the shell, two styles (Material and Mono), look
   profiles, first-launch wizard, optional dock, game mode, do not disturb,
   stay awake, Polkit agent, two SDDM themes, wallhaven wallpaper collection.

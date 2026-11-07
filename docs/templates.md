@@ -23,7 +23,7 @@ a suggestion when a close name exists. A literal `{{` is not allowed; write
 | Raw palette | `base00` … `base0F` (with overrides applied) | `#1e1e2e` |
 | Roles | `bg` `bg_alt` `surface` `muted` `subtle` `fg` `fg_bright` | |
 | Hues | `red` `orange` `yellow` `green` `cyan` `blue` `purple` `brown` | |
-| Accent | `accent` (the hue chosen in `palette.accent`) | |
+| Accent | `accent` (the theme's signature color with `palette.accent = "theme"`, or the hue chosen there) | |
 | Terminal | `ansi0` … `ansi15` | |
 | Module colors | `modules.wifi`, `modules.audio`, … | |
 | Palette info | `palette.name` `palette.family` `palette.variant` `palette.author` | `"dark"` |

@@ -19,8 +19,14 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths,
     )
     context.update(palette.variables())
 
-    # A hue ("blue", "accent") becomes the matching color of the palette.
-    context["accent"] = context[str(theme["palette.accent"])]
+    # "theme" takes the theme's signature color (or its purple slot);
+    # a hue ("blue", "accent") becomes the matching color of the palette.
+    choice = str(theme["palette.accent"])
+    if choice == "theme":
+        context["accent"] = palette.accent or palette.colors["base0E"]
+    else:
+        context["accent"] = context[choice]
+    context["palette.accent"] = context["accent"]
     for key, field in THEME_SCHEMA.items():
         if field.kind == "hue":
             context[key] = context[str(theme[key])]

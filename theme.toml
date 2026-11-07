@@ -11,8 +11,9 @@
 schema = 1                      # format version, for clean migrations
 
 [palette]
-source = "catppuccin-mocha"     # a theme from themes/ or ~/.config/tfem/themes/, or "wallpaper"
-accent = "purple"               # red | orange | yellow | green | cyan | blue | purple | brown
+source = "pony-twilight"        # a theme from themes/ or ~/.config/tfem/themes/, or "wallpaper"
+accent = "theme"                # theme (its own signature color) | red | orange | yellow | green
+                                # | cyan | blue | purple | brown
 mode   = "dark"                 # dark | light: used when the palette comes from the wallpaper
 
 [palette.overrides]             # replace one base16 slot of the chosen theme, e.g.:

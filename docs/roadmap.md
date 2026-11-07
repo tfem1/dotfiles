@@ -27,6 +27,11 @@ Themes come before the shell, so the shell is built with the final palettes.
 
 ## 2. Palettes and app themes — next
 
+- **Done: pony themes.** Ten themes in the colors of My Little Pony
+  characters, mostly pink, purple and blue, built from canon colors by
+  `theming.builder` (readable by construction, hue-checked). Twilight is the
+  default theme and each theme brings its signature color as accent.
+
 - Import the base16 collection of
   [tinted-theming/schemes](https://github.com/tinted-theming/schemes) (MIT,
   362 themes) with a reproducible script, one file per theme, author kept.

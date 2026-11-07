@@ -73,7 +73,7 @@ BOOL, TEXT, PATH, NAME, COLOR = (Field(kind) for kind in ("bool", "text", "path"
 
 THEME_SCHEMA: dict[str, Field] = {
     "palette.source": NAME,
-    "palette.accent": Field("hue", choices=HUES),
+    "palette.accent": Field("choice", choices=("theme", *HUES)),
     "palette.mode": Field("choice", choices=("dark", "light")),
     "wallpaper.path": PATH,
     "font.sans": TEXT,

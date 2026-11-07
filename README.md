@@ -7,8 +7,8 @@ single settings file.
 > desktop.** Nothing on screen carries the TFEM name: no branding in the bar,
 > lock screen, launcher or notifications. See [Make it yours](#make-it-yours).
 
-**Status:** early work. Done: theme pipeline, Hyprland config, installer and
-wallpaper collection. Next: palettes and app themes, then the Quickshell
+**Status:** early work. Done: theme pipeline, Hyprland config, installer,
+wallpaper collection and pony themes. Next: more palettes and app themes, then the Quickshell
 shell. The full plan is in [docs/roadmap.md](docs/roadmap.md).
 
 ## Install
@@ -57,13 +57,48 @@ and run it again. Versions checked on Repology on 2026-11-07.
 
 ### Wallpapers
 
-`wallpapers/collection.toml` lists 50 wallpapers from
-[wallhaven.cc](https://wallhaven.cc): 31 forests and 19 My Little Pony, SFW,
+`wallpapers/collection.toml` lists 84 wallpapers from
+[wallhaven.cc](https://wallhaven.cc): 53 My Little Pony and 31 forests, SFW,
 at most 10 MB each, picked by hand. They are downloaded to
-`~/Pictures/Wallpapers/forest/` and `~/Pictures/Wallpapers/pony/` (about
-190 MB) and never stored in this repository: the images remain the property
+`~/Pictures/Wallpapers/pony/` and `~/Pictures/Wallpapers/forest/` (about
+230 MB) and never stored in this repository: the images remain the property
 of their authors. Download or complete them at any time with
 `tfem wallpapers fetch`.
+
+## Themes
+
+Ten themes in the colors of My Little Pony characters, mostly pink, purple
+and blue. **Twilight** is the default.
+
+| Theme | Look |
+|---|---|
+| `pony-twilight` | navy night, lavender text, magenta touches |
+| `pony-pinkie` | dark raspberry, hot pink accent |
+| `pony-rarity` | deep purple, white text |
+| `pony-cadance` | plum, magenta accent, gold |
+| `pony-starlight` | violet, teal touches |
+| `pony-luna` | indigo night, royal blue accent |
+| `pony-trixie` | midnight blue, silver text, sky blue accent |
+| `pony-rainbow` | dark sky, the full rainbow |
+| `pony-fluttershy` | light: cream and pink |
+| `pony-celestia` | light: white and pastel pink |
+
+Pick one in `~/.config/tfem/theme.toml`:
+
+```toml
+[palette]
+source = "pony-pinkie"
+```
+
+Each theme comes with its signature color, used as the accent
+(`accent = "theme"`, the default). The themes are not written by hand:
+`themes/seeds/pony.toml` holds the canon colors of each character (from the
+My Little Pony Friendship is Magic Wiki), and
+`PYTHONPATH=scripts python3 -m theming.builder themes/seeds/pony.toml` turns
+them into full base16 themes, adjusting lightness until every color is
+readable (WCAG contrast 7:1 for text, 4.5:1 for colors) and checking that
+each hue stays in its place. My Little Pony is a trademark of Hasbro; these
+are fan color schemes, with no artwork.
 
 ## How theming works
 
@@ -160,7 +195,8 @@ docs/                 architecture, template format, roadmap
   `~/.config/quickshell/<name>/`. Set `shell.name` in your `config.json`
   (default `desktop`).
 - **Colors:** pick any theme with `palette.source`, an accent with
-  `palette.accent`, and change single colors with `[palette.overrides]`.
+  `palette.accent` (`theme` keeps the theme's signature color), and change
+  single colors with `[palette.overrides]`.
 - **Your own themes:** drop a base16 theme file in `~/.config/tfem/themes/`. It
   takes precedence over the bundled one with the same name.
 - **CLI name:** prefer `dots` or `wm`? Link to the same script; its help uses

@@ -40,6 +40,7 @@ class Palette:
     variant: str
     author: str
     colors: dict[str, Color]
+    accent: Color | None = None  # the theme's signature color, if it has one
 
     def variables(self) -> dict[str, object]:
         """Raw colors, roles and ANSI colors, ready for the template context."""
@@ -91,6 +92,7 @@ def load_palette(path: Path) -> Palette:
         variant=data["variant"],
         author=data.get("author", ""),
         colors={key: Color.parse(data["colors"][key]) for key in BASE16_KEYS},
+        accent=Color.parse(data["accent"]) if "accent" in data else None,
     )
 
 
@@ -100,7 +102,7 @@ def resolve_palette(theme: Mapping[str, object], paths: Paths) -> Palette:
     prefix = "palette.overrides."
     overrides = {k[len(prefix):]: Color.parse(v) for k, v in theme.items() if k.startswith(prefix)}
     return Palette(palette.name, palette.family, palette.variant, palette.author,
-                   {**palette.colors, **overrides})
+                   {**palette.colors, **overrides}, palette.accent)
 
 
 def _check_theme(data: dict) -> list[str]:
@@ -109,6 +111,11 @@ def _check_theme(data: dict) -> list[str]:
         problems.append("'name' is required")
     if data.get("variant") not in ("dark", "light"):
         problems.append("'variant' must be 'dark' or 'light'")
+    if "accent" in data:
+        try:
+            Color.parse(data["accent"])
+        except ValueError as error:
+            problems.append(f"accent: {error}")
     colors = data.get("colors")
     if not isinstance(colors, dict):
         return problems + ["a [colors] table is required"]

@@ -24,11 +24,11 @@ wallpapers = [ { id = "xyz789", ext = "png", size = "1920x1080" } ]
 
 
 class CollectionTest(unittest.TestCase):
-    def test_at_least_fifty_wallpapers_mostly_forests(self):
+    def test_at_least_fifty_wallpapers_mostly_pony(self):
         entries = load_collection(REPO / "wallpapers/collection.toml")
         categories = [category for category, _, _ in entries]
         self.assertGreaterEqual(len(entries), 50)
-        self.assertGreater(categories.count("forest"), len(entries) / 2)
+        self.assertGreater(categories.count("pony"), len(entries) / 2)
 
     def test_every_wallpaper_is_listed_once(self):
         ids = [wallpaper_id for _, wallpaper_id, _ in load_collection(REPO / "wallpapers/collection.toml")]
@@ -37,8 +37,8 @@ class CollectionTest(unittest.TestCase):
     def test_installer_default_wallpaper_is_in_the_collection(self):
         deploy = (REPO / "install/deploy.sh").read_text()
         with (REPO / "wallpapers/collection.toml").open("rb") as handle:
-            forest = {f"forest/wallhaven-{w['id']}.{w['ext']}" for w in tomllib.load(handle)["forest"]["wallpapers"]}
-        self.assertTrue(any(f'DEFAULT_WALLPAPER="{name}"' in deploy for name in forest))
+            pony = {f"pony/wallhaven-{w['id']}.{w['ext']}" for w in tomllib.load(handle)["pony"]["wallpapers"]}
+        self.assertTrue(any(f'DEFAULT_WALLPAPER="{name}"' in deploy for name in pony))
 
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):

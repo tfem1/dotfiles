@@ -79,7 +79,7 @@ FAMILY="$(detect_family)"
 info "distro family: $FAMILY, profile: $PROFILE$( ((DRY_RUN)) && echo ', dry run: nothing changes')"
 info "project: $ROOT"
 info "will write: $CONFIG_HOME/hypr, $CONFIG_HOME/tfem, links in $BIN_DIR (existing files are backed up first)"
-((WITH_WALLPAPERS)) && info "will download about 50 wallpapers (~190 MB) to ${XDG_PICTURES_DIR:-$HOME/Pictures}/Wallpapers"
+((WITH_WALLPAPERS)) && info "will download about 85 wallpapers (~230 MB) to ${XDG_PICTURES_DIR:-$HOME/Pictures}/Wallpapers"
 confirm "Continue?" || die "cancelled"
 
 [[ ${TFEM_CLONED:-0} == 1 ]] && record "cloned $ROOT"

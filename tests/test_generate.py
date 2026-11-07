@@ -50,8 +50,9 @@ class OutputTest(GenerateTest):
     def test_shell_theme_is_valid_json(self):
         self.run_generate("--all")
         data = json.loads(self.shell_theme.read_text())
-        self.assertEqual(data["colors"]["accent"], "#cba6f7")
-        self.assertEqual(data["modules"]["wifi"], "#89b4fa")
+        self.assertEqual(data["palette"]["name"], "Twilight")
+        self.assertEqual(data["modules"]["wifi"], data["colors"]["blue"])
+        self.assertEqual(data["modules"]["workspaces"], data["colors"]["accent"])
 
     @unittest.skipUnless(shutil.which("luac"), "luac not installed")
     def test_hyprland_theme_is_valid_lua(self):
@@ -172,6 +173,7 @@ class ManifestTest(GenerateTest):
             '[good]\ntemplate = "good.tpl"\noutput = "{config}/good.txt"\n',
             {"bad.tpl": "{{ nope }}\n", "good.tpl": "{{ fg }}\n"},
         )
+        self.write_user_file("theme.toml", '[palette]\nsource = "catppuccin-mocha"\n')
         code, output = self.run_generate()
         self.assertEqual(code, 2)
         self.assertIn("unknown variable 'nope'", output)
