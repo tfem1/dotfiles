@@ -2,6 +2,12 @@
 
 Each step is planned, approved, implemented, then reviewed before the next one.
 
+## Design rules
+
+- **No gradients, anywhere.** Window borders, buttons, sliders, panels,
+  backgrounds and login screens use solid colors only.
+- Colors always come from the active palette: a hue name, never a fixed hex.
+
 ## 1. Theme pipeline — done
 
 `theme.toml`, `config.json`, base16 theme format, template engine, Hyprland
@@ -21,13 +27,29 @@ Each step is planned, approved, implemented, then reviewed before the next one.
   - *Mono*: top bar with grouped pills, monospace font, large pixel clock on
     the desktop, compact control panel with avatar, uptime, 2×2 tiles and wide
     sliders. Reference: [aelyx-shell](https://github.com/xZepyx/aelyx-shell).
-  - Both are original implementations; only the look is reproduced.
+  - Both are original implementations; only the look is reproduced, without
+    the gradients some references use.
 
 ## 3. Palettes and app themes
 
 - Import the base16 collection of
   [tinted-theming/schemes](https://github.com/tinted-theming/schemes) (MIT,
   362 themes) with a reproducible script, one file per theme, author kept.
+- **Hue check in the importer.** base16 slots are syntax-highlighting roles,
+  not guaranteed hues: tinted's Tokyo Night puts a pale blue (`#C0CAF5`) in
+  the "red" slot and a cyan (`#0DB9D7`) in the "yellow" slot. The importer
+  measures the hue of each slot and fixes or flags such themes, so `red`
+  always looks red in the UI (urgent notifications, low battery).
+- **Featured themes**, shown first in the theme picker:
+  - *Kanagawa* (and Kanagawa Dragon): dark night background, **green** accent
+    and green-leaning module colors.
+  - Many more green themes: Everforest, Gruvbox Material, and others found by
+    the hue check.
+  - *Tokyo Night* (Night, Storm, Moon): **night blue** accent with some
+    **purple** modules, built from the official Tokyo Night palette so its
+    blue and purple are the real ones.
+- Each theme can suggest an accent and module colors, applied when you pick
+  it in Settings; you can still change them afterwards.
 - Terminal themes (foot, kitty, alacritty, ghostty, wezterm), GTK and Qt,
   never overwriting existing configs.
 - `tfem theme <name>`.
