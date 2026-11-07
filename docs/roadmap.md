@@ -1,6 +1,7 @@
 # Roadmap
 
 Each step is planned, approved, implemented, then reviewed before the next one.
+Themes come before the shell, so the shell is built with the final palettes.
 
 ## Design rules
 
@@ -13,24 +14,7 @@ Each step is planned, approved, implemented, then reviewed before the next one.
 `theme.toml`, `config.json`, base16 theme format, template engine, Hyprland
 (Lua) and Quickshell templates, safe writer, `tfem generate`, tests.
 
-## 2. Quickshell shell: bar, OSD, launcher
-
-- A single `shell.qml` that only composes; every hidden part in a `Loader`.
-- Colors read live from the generated `theme.json` (`FileView` + `JsonAdapter`).
-- **Optional dock**: `dock.enabled` in `config.json`, toggled from Settings.
-- **Two visual styles to choose from** (decision pending: two switchable
-  styles, or one style mixing both):
-  - *Material*: thin vertical bar, rounded pill buttons, side panel with quick
-    toggles, notifications and calendar, media card. Reference:
-    [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland)
-    (illogical-impulse).
-  - *Mono*: top bar with grouped pills, monospace font, large pixel clock on
-    the desktop, compact control panel with avatar, uptime, 2×2 tiles and wide
-    sliders. Reference: [aelyx-shell](https://github.com/xZepyx/aelyx-shell).
-  - Both are original implementations; only the look is reproduced, without
-    the gradients some references use.
-
-## 3. Palettes and app themes
+## 2. Palettes and app themes — next
 
 - Import the base16 collection of
   [tinted-theming/schemes](https://github.com/tinted-theming/schemes) (MIT,
@@ -49,10 +33,28 @@ Each step is planned, approved, implemented, then reviewed before the next one.
     **purple** modules, built from the official Tokyo Night palette so its
     blue and purple are the real ones.
 - Each theme can suggest an accent and module colors, applied when you pick
-  it in Settings; you can still change them afterwards.
+  it; you can still change them afterwards.
 - Terminal themes (foot, kitty, alacritty, ghostty, wezterm), GTK and Qt,
   never overwriting existing configs.
 - `tfem theme <name>`.
+
+## 3. Quickshell shell: bar, OSD, launcher, notifications
+
+- A single `shell.qml` that only composes; every hidden part in a `Loader`.
+- Colors read live from the generated `theme.json` (`FileView` + `JsonAdapter`).
+- **Two visual styles, switchable in Settings** (`shell.style` in
+  `config.json`), sharing the same components where possible:
+  - *Material*: thin vertical bar, rounded pill buttons, side panel with quick
+    toggles, notifications and calendar, media card. Reference:
+    [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland)
+    (illogical-impulse).
+  - *Mono*: top bar with grouped pills, monospace font, large pixel clock on
+    the desktop, compact control panel with avatar, uptime, 2×2 tiles and wide
+    sliders. Reference: [aelyx-shell](https://github.com/xZepyx/aelyx-shell).
+  - Both are original implementations; only the look is reproduced, without
+    the gradients some references use.
+- **Optional dock**: `dock.enabled` in `config.json`, styled to match.
+- **Do not disturb**: notifications are kept but not shown.
 
 ## 4. Wallpapers
 
@@ -85,21 +87,36 @@ generated.
   networks with signal and security, password prompt, failure reason,
   Bluetooth devices with type icon and battery, pair, connect, forget, rename.
 - Each tab uses its module color from `[modules]`.
+- Quick tiles:
+  - **Do not disturb**;
+  - **Stay awake**: blocks idle sleep (Quickshell idle inhibitor);
+  - **Game mode**: turns off blur, animations and gaps in one click, then
+    restores your settings (changing Hyprland options at runtime with the Lua
+    config is to be verified).
 - Widgets (clock, battery, now playing, CPU/RAM, calendar), each optional.
 
 ## 6. Settings window
 
-Tabs: **Display**, **Themes**, **Wallpaper**, Bar, Dock, Widgets (with module
-colors), System, Keybinds, Identity.
+Tabs: **Profiles**, **Display**, **Themes**, **Wallpaper**, Bar, Dock,
+Widgets (with module colors), System, Keybinds, Identity.
 
+- **Look profiles**: save the whole look (theme, accent, wallpaper or
+  wallpaper category, style, module colors, dock) under a name and switch in
+  one click. Shipped examples: *Forest* (Kanagawa, forest wallpapers),
+  *Pony* (palette from the wallpaper, pony wallpapers), *Tokyo Night*. Stored
+  in `~/.config/tfem/profiles/`.
+- **First-launch wizard**: displayed name, style, theme, wallpaper
+  categories, dock or not. Everything stays editable afterwards.
 - Themes: browse every theme by family, search, dark/light filter, accent,
   edit single colors and save the result as a personal theme in
   `~/.config/tfem/themes/`.
 - Every change validated, applied live, with "reset to defaults".
 
-## 7. Lock screen and login screens
+## 7. Lock screen, login screens, authentication
 
 - `hyprlock` theme from `theme.toml`.
+- **Built-in Polkit agent**: administrator password prompts drawn by the
+  shell in the current theme (Quickshell 0.3 supports Polkit agents).
 - Two SDDM themes in `extras/sddm/`, installed separately, colors from the
   palette:
   - *Stacked clock*: full wallpaper, date top-left, large stacked hours over

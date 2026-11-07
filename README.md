@@ -7,7 +7,7 @@ single settings file.
 > desktop.** Nothing on screen carries the TFEM name: no branding in the bar,
 > lock screen, launcher or notifications. See [Make it yours](#make-it-yours).
 
-**Status:** early work. Step 1 of 10 is done (theme pipeline). The full plan,
+**Status:** early work. Step 1 of 10 is done (theme pipeline); palettes and app themes come next. The full plan,
 including what is coming next, is in [docs/roadmap.md](docs/roadmap.md).
 
 ## How theming works
