@@ -25,7 +25,7 @@ Themes come before the shell, so the shell is built with the final palettes.
 1. **Terminal and apps follow the theme:** done for kitty (open windows
    included), GTK 3, GTK 4 / libadwaita and Qt 5 / Qt 6.
 2. **Done:** volume panel (`SUPER + V`) and calendar (`SUPER + S`).
-3. Music panel (`SUPER + M`).
+3. **Done:** music panel (`SUPER + M`) with turning record and lyrics.
 4. Power menu (lock, log out, suspend, reboot, shut down).
 5. Notification center: history, do not disturb, stay awake.
 6. Wallpaper = character (pony wallpapers), forest wallpapers = green theme.
@@ -90,8 +90,8 @@ Themes come before the shell, so the shell is built with the final palettes.
 
 - **Done:** bar (Material style) with autohide, OSD, notifications, launcher,
   clipboard history, keybind cheatsheet, wallpaper selector, network panel
-  (Wi-Fi and Bluetooth), volume panel, calendar, IPC for the keybinds,
-  deployed by the installer. **Next:** the panels of `SUPER + B/M/H`,
+  (Wi-Fi and Bluetooth), volume panel, calendar, music panel, IPC for the
+  keybinds, deployed by the installer. **Next:** the panels of `SUPER + B/H`,
   sidebars, dock, Mono style, do not disturb.
 
 - A single `shell.qml` that only composes; every hidden part in a `Loader`.

@@ -37,7 +37,7 @@ VISUAL = [
     "components/IconButton.qml", "components/Switch.qml", "network/NetworkContent.qml", "network/QuickTile.qml",
     "network/WifiPage.qml", "network/WifiItem.qml", "network/BluetoothPage.qml", "network/DeviceItem.qml",
     "components/Slider.qml", "volume/VolumeContent.qml", "volume/LevelRow.qml", "volume/ChoiceRow.qml",
-    "calendar/CalendarContent.qml",
+    "calendar/CalendarContent.qml", "music/MusicContent.qml", "music/Vinyl.qml", "music/LyricsView.qml",
 ]
 
 
@@ -61,8 +61,8 @@ class VisualComponentsTest(unittest.TestCase):
             done = subprocess.run([sys.executable, str(REPO / "tools/preview/render.py"), "--out", out],
                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(done.returncode, 0, done.stderr)
-            modes = ["bar", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "volume",
-                     "wallpaper", "wifi"]
+            modes = ["bar", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "music",
+                     "volume", "wallpaper", "wifi"]
             self.assertEqual(sorted(p.name for p in Path(out).iterdir()), [f"pony-twilight-{m}.png" for m in modes])
 
     def probe(self, script, expression, value):
@@ -203,6 +203,25 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual(self.probe(sound, f"{names}.map(n => Lib.deviceIcon(n, n === 'Mic'))", None),
                          ["tv", "headphones", "headphones", "speaker", "mic"])
         self.assertEqual(self.probe(sound, "Lib.percent(0.644)", None), "64%")
+
+    def test_lyrics_times_and_lines(self):
+        lyrics = SHELL / "music/lyrics.js"
+        self.assertEqual(self.probe(lyrics, "[0, 9.9, 65, 185.4, 3600].map(Lib.clock)", None),
+                         ["0:00", "0:09", "1:05", "3:05", "60:00"])
+        self.assertEqual(self.probe(lyrics, 'Lib.url("Winter Wrap Up", "Ponyville Chorus", "", 158.6)', None),
+                         "https://lrclib.net/api/get?track_name=Winter%20Wrap%20Up"
+                         "&artist_name=Ponyville%20Chorus&duration=159")
+        answer = {"syncedLyrics": "[00:17.12] Winter wrap up\n[00:05.00] Intro\n[01:02.5] Spring is here\n[01:10.00] ",
+                  "plainLyrics": "x"}
+        lines = self.probe(lyrics, "Lib.fromAnswer(input)", answer)
+        self.assertEqual(lines["kind"], "synced")
+        self.assertEqual([(round(l["time"], 2), l["text"]) for l in lines["lines"]],
+                         [(5.0, "Intro"), (17.12, "Winter wrap up"), (62.5, "Spring is here"), (70.0, "")])
+        self.assertEqual(self.probe(lyrics, "[2, 5, 20, 63, 999].map(p => Lib.current(input.lines, p))", lines),
+                         [-1, 0, 1, 2, 3])
+        self.assertEqual(self.probe(lyrics, "Lib.fromAnswer(input).kind", {"instrumental": True}), "instrumental")
+        self.assertEqual(self.probe(lyrics, "Lib.fromAnswer(input).kind", {"plainLyrics": "a\nb"}), "plain")
+        self.assertEqual(self.probe(lyrics, "Lib.fromAnswer(null).kind", None), "none")
 
     def test_calendar_grid_and_week_numbers(self):
         cal = SHELL / "calendar/calendar.js"

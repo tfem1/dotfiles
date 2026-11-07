@@ -105,6 +105,11 @@ All notable changes to this project are documented here. The format follows
 - Calendar (`SUPER + S`, or a click on the bar's clock): locale-aware month
   grid (first day of the week, day and month names), ISO week numbers,
   today, month navigation by arrows, keys or wheel. Grid logic tested.
+- Music panel (`SUPER + M`) on MPRIS: sleeve and turning record (label in
+  the theme's third color), progress with seeking, previous/play/next,
+  shuffle and repeat when the player supports them, player choice, and
+  synced lyrics from lrclib.net fetched only when the lyrics view is open.
+  Position asked twice a second only while the panel shows a playing song.
 - Minimal themes: every shell module now uses the theme's own three colors
   (`accent`, `accent2`, `accent3`) instead of eight hues. Themes may set
   `accent2` / `accent3`; otherwise they are derived from the accent (same

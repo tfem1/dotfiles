@@ -11,6 +11,7 @@ import "wallpaper"
 import "network"
 import "volume"
 import "calendar"
+import "music"
 import "ipc"
 
 // Entry point: only composes the parts, each one lives in its own folder.
@@ -32,6 +33,7 @@ ShellRoot {
     NetworkPanel { id: networkLayer }
     VolumePanel { id: volumeLayer }
     Calendar { id: calendarLayer }
+    MusicPanel { id: musicLayer }
 
     Shortcuts {
         bars: barLayer
@@ -43,5 +45,6 @@ ShellRoot {
         network: networkLayer
         volume: volumeLayer
         calendar: calendarLayer
+        music: musicLayer
     }
 }

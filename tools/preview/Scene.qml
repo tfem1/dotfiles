@@ -10,6 +10,7 @@ import "../../quickshell/wallpaper"
 import "../../quickshell/network"
 import "../../quickshell/volume"
 import "../../quickshell/calendar"
+import "../../quickshell/music"
 
 // A 1920x1080 desktop with the shell's components and sample data.
 Rectangle {
@@ -92,7 +93,27 @@ Rectangle {
         visible: scene.mode !== "desktop"
         anchors.fill: parent
         anchors.topMargin: 44
-        color: Qt.alpha(Theme.bgAlt, ["wifi", "bluetooth", "volume", "calendar"].includes(scene.mode) ? 0.2 : 0.45)
+        color: Qt.alpha(Theme.bgAlt, ["wifi", "bluetooth", "volume", "calendar", "music"].includes(scene.mode) ? 0.2 : 0.45)
+
+        MusicContent {
+            visible: scene.mode === "music"
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 10
+            width: implicitWidth
+            height: implicitHeight
+            track: ({ title: "Winter Wrap Up", artist: "Ponyville Chorus", album: "Friendship is Magic, season 1",
+                      playing: true, position: 47, length: 158, canSeek: true, shuffle: false, loop: "playlist" })
+            players: [{ name: "Spotify", current: true }, { name: "Firefox", current: false }]
+            lyrics: ({ kind: "synced", lines: [
+                { time: 30, text: "Winter wrap up, winter wrap up" },
+                { time: 36, text: "Let's finish our holiday cheer" },
+                { time: 42, text: "Winter wrap up, winter wrap up" },
+                { time: 46, text: "'Cause tomorrow spring is here" },
+                { time: 52, text: "'Cause tomorrow spring is here" },
+                { time: 58, text: "'Cause tomorrow spring is here" }
+            ] })
+        }
 
         VolumeContent {
             visible: scene.mode === "volume"

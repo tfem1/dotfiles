@@ -222,7 +222,7 @@ The installer copies it to `~/.config/hypr`. `SUPER + /` shows every
 shortcut on screen. The tests load the config in a fake Hyprland API and check
 every key: the dispatcher exists, the program it runs is installed by the
 installer, and the shell panel it opens exists. The keys of the panels still to
-build (system, music, settings) do nothing yet.
+build (system, settings) do nothing yet.
 
 - **Lock screen** (`SUPER + L`): hyprlock, with a config generated from
   `theme.toml` (`~/.config/hypr/hyprlock.conf`): hyprlock does not lock without
@@ -258,6 +258,12 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   are then trusted and connected); "visible to other devices". Colors are
   the Wi-Fi and Bluetooth module colors of the theme. Devices that ask for
   a pairing code are not supported yet (pair them once with `bluetoothctl`).
+- **Music** (`SUPER + M`): the album sleeve with its record sliding out,
+  turning while the music plays; title, artist, album; progress you can
+  click to move in the song; previous, play/pause, next, shuffle, repeat;
+  the choice of player when several are open (Spotify, Firefox…); and the
+  lyrics on request, synced with the song (from lrclib.net, asked only when
+  you open the lyrics: title, artist, album and length are sent).
 - **Volume panel** (`SUPER + V`): output volume and mute, choice of output
   (speakers, headphones, HDMI), microphone and its choice, then one slider
   per app playing sound, with its icon and what it plays. Click, drag or

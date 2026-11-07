@@ -40,7 +40,7 @@ DISPATCHERS = {
 
 # Panels whose key is bound before the panel is built: the list must shrink
 # as they arrive (a test fails when one of them gets a handler).
-PENDING_PANELS = {"system", "music", "settings"}
+PENDING_PANELS = {"system", "settings"}
 
 
 def programs(command):
