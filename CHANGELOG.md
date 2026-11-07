@@ -69,8 +69,9 @@ All notable changes to this project are documented here. The format follows
   manager often has no `~/.local/bin` in its PATH.
 - Wallpaper selector (`SUPER + W`): carousel of slanted cards or grid,
   color filters (main color of each image found once with Quickshell's
-  ColorQuantizer, then kept), recent picks, random pick, search. The shell
-  now draws the wallpaper itself, with a fade.
+  ColorQuantizer, then kept), recent picks, random pick, search. Left and
+  right arrows browse, also while searching and in the grid; it opens on the
+  wallpaper in use. The shell now draws the wallpaper itself, with a fade.
 - `tfem wallpapers list [--json]` and `tfem wallpapers set IMAGE`: the
   choice is written in your `theme.toml` (one key changed, comments kept)
   and the shell and lock screen files are regenerated.

@@ -17,6 +17,7 @@ Rectangle {
     property alias query: field.text
     signal randomPicked
     signal searchDone
+    signal browse(int step)
 
     function focusSearch() {
         searching = true;
@@ -110,6 +111,9 @@ Rectangle {
                 }
                 Keys.onReturnPressed: bar.closeSearch()
                 Keys.onDownPressed: bar.closeSearch()
+                // Left and right browse the wallpapers, even while searching.
+                Keys.onLeftPressed: bar.browse(-1)
+                Keys.onRightPressed: bar.browse(1)
             }
         }
 

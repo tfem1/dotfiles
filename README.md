@@ -205,8 +205,9 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   (`terminal` in `hypr/config/variables.lua`).
 - **Wallpaper selector** (`SUPER + W`): slanted cards in a carousel, or a
   grid; filters by color (each image's main color is found once, in the
-  background, then remembered), recent picks, random pick and search. Arrows
-  browse, Enter applies, typing searches.
+  background, then remembered), recent picks, random pick and search. Left
+  and right arrows browse (also while searching), Enter applies, typing
+  searches. It never changes the wallpaper on its own.
 - **Clipboard history** (`SUPER + C`): what you copied (kept by cliphist),
   searchable; Enter copies it again.
 - **Keybind cheatsheet** (`SUPER + /`): read from Hyprland itself, so your own

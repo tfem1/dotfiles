@@ -127,6 +127,43 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual(self.probe(SHELL / "wallpaper/colors.js", "Lib.dominantColors(input)", colors), "blue")
         self.assertEqual(self.probe(SHELL / "wallpaper/colors.js", "Lib.dominantColors(input)", []), "gray")
 
+    def test_selector_left_and_right_arrows_browse(self):
+        from PySide6.QtCore import Qt
+        from PySide6.QtQuick import QQuickView
+        from PySide6.QtTest import QTest
+        view = QQuickView()
+        view.resize(1920, 1080)
+        view.setSource(QUrl.fromLocalFile(str(SHELL / "wallpaper/SelectorContent.qml")))
+        self.assertEqual([e.toString() for e in view.errors()], [])
+        root = view.rootObject()
+        root.setProperty("images", [{"path": f"/none/w{i}.jpg", "name": f"w{i}", "category": ""} for i in range(5)])
+        root.setProperty("current", "/none/w2.jpg")
+        view.show()
+        self.app.processEvents()
+
+        def press(*keys):
+            for key in keys:
+                QTest.keyClick(view, key)
+                self.app.processEvents()
+            selected = root.property("selected")
+            return (selected.toVariant() if hasattr(selected, "toVariant") else selected)["name"]
+
+        self.assertEqual(press(), "w2")  # opens on the wallpaper in use
+        self.assertEqual(press(Qt.Key.Key_Right), "w3")
+        self.assertEqual(press(Qt.Key.Key_Left, Qt.Key.Key_Left), "w1")
+        # Typing starts a search; the arrows still browse, they do not move the text cursor.
+        self.assertEqual(press(Qt.Key.Key_W), "w2")
+        self.assertEqual(press(Qt.Key.Key_Right, Qt.Key.Key_Right), "w4")
+        self.assertEqual(press(Qt.Key.Key_Left), "w3")
+        # Escape leaves the search (back on the wallpaper in use); same keys in the grid.
+        self.assertEqual(press(Qt.Key.Key_Escape), "w2")
+        self.assertEqual(press(Qt.Key.Key_Right), "w3")
+        root.setProperty("grid", True)
+        self.app.processEvents()
+        self.assertEqual(press(Qt.Key.Key_Right), "w4")
+        self.assertEqual(press(Qt.Key.Key_Left, Qt.Key.Key_Left), "w2")
+        view.close()
+
     def test_cheatsheet_rows_merge_and_fold_binds(self):
         # Shaped like `hyprctl binds -j`; key names as written in the config.
         binds = [

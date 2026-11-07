@@ -33,11 +33,14 @@ Item {
         view.forceActiveFocus();
     }
 
-    // A new list starts on the wallpaper in use when it is part of it.
-    onShownChanged: {
+    // A new list starts on the wallpaper in use when it is part of it (the
+    // list and the wallpaper in use can arrive in either order).
+    function showCurrent() {
         carousel.currentIndex = Library.indexOf(shown, current);
         gridView.currentIndex = carousel.currentIndex;
     }
+    onShownChanged: showCurrent()
+    onCurrentChanged: showCurrent()
     Component.onCompleted: focusView()
 
     SelectorToolbar {
@@ -46,10 +49,18 @@ Item {
         y: Math.round(parent.height * 0.1)
         label: Library.label(selector.shown.length, hue, recent, query)
         onSearchDone: selector.focusView()
-        // The other view takes over on the same wallpaper.
+        onBrowse: step => {
+            const index = selector.view.currentIndex + step;
+            selector.view.currentIndex = Math.max(0, Math.min(selector.shown.length - 1, index));
+        }
+        // The other view takes over on the same wallpaper. Both are named:
+        // `view` may not have followed yet when this runs.
         onGridChanged: {
-            selector.view.currentIndex = (toolbar.grid ? carousel : gridView).currentIndex;
-            selector.focusView();
+            if (grid)
+                gridView.currentIndex = carousel.currentIndex;
+            else
+                carousel.currentIndex = gridView.currentIndex;
+            Qt.callLater(selector.focusView);
         }
         onRandomPicked: {
             const index = Math.floor(Math.random() * selector.shown.length);
