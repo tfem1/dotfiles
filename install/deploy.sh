@@ -38,12 +38,12 @@ managed_paths() {
 
 backup_existing() {
   local backup path
-  # Nanoseconds in the name: two runs never share (and mix) a backup.
-  backup="$STATE_DIR/backups/install-$(date +%Y%m%d-%H%M%S-%N)"
+  # The process id in the name: two runs never share (and mix) a backup.
+  backup="$STATE_DIR/backups/install-$(date +%Y%m%d-%H%M%S)-$$"
   while read -r path; do
     [[ -e $path || -L $path ]] || continue
     run mkdir -p "$backup$(dirname "$path")"
-    run cp -a "$path" "$backup$path"
+    run cp -RPp "$path" "$backup$path"
   done < <(managed_paths)
   record "backup $backup"
   info "backup of your current files: $backup"
@@ -68,7 +68,7 @@ restore_dir() {
   local backup="$1" dir="$2"
   if [[ -n $backup && -e $backup$dir ]]; then
     run rm -rf "$dir"
-    run cp -a "$backup$dir" "$dir"
+    run cp -RPp "$backup$dir" "$dir"
     info "restored $dir"
   elif grep -qx "created $dir" "$INSTALL_LOG"; then
     run rm -rf "$dir"

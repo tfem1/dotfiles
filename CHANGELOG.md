@@ -61,6 +61,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **OpenBSD, in part**: the installer recognises OpenBSD (by `uname`, it has
+  no os-release), installs what OpenBSD 7.8 packages with `doas pkg_add`
+  (names checked against the 7.8 amd64 package list), and themes the apps;
+  the desktop (Hyprland, Quickshell) and the login screen are left out,
+  since neither exists on OpenBSD yet. The installer's backups use portable
+  `cp -RPp` and no GNU-only `date +%N`.
 - **Modes menu** (`SUPER + K`): Gaming, Coffee (never sleeps), Night
   (warmer screen with hyprsunset, dimmer, quiet), Do not disturb, Power
   saver (power-saver profile through powerprofilesctl, effects off, dimmer;

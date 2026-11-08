@@ -19,6 +19,10 @@ FAKES = {
     "dnf": f'echo "dnf $*" >> "$LOG"; [ "$1" = info ] && {{ {AVAILABLE}; }}; exit 0',
     "hyprctl": 'echo "hyprctl $*" >> "$LOG"',
     "systemctl": 'echo "systemctl $*" >> "$LOG"',
+    # OpenBSD: `pkg_info -Q NAME` lists NAME-version unless it is missing.
+    "pkg_info": f'[ "$1" = -Q ] && {{ ( {AVAILABLE} ) && echo "$2-1.0"; }}; exit 0',
+    "pkg_add": 'echo "pkg_add $*" >> "$LOG"',
+    "doas": 'exec "$@"',
 }
 # Where `tfem sddm install` writes, as TFEM_<name> paths under self.system.
 SYSTEM = {
@@ -31,6 +35,7 @@ OS_RELEASE = {
     "mint": 'ID=linuxmint\nID_LIKE="ubuntu debian"\n',
     "nobara": 'ID=nobara\nID_LIKE="rhel fedora"\n',
     "gentoo": 'ID=gentoo\n',
+    "openbsd": "",   # no os-release: told apart by uname
 }
 
 
@@ -75,6 +80,7 @@ class InstallTest(unittest.TestCase):
         path = [str(self.fake_bin)] + ([str(self.hypr_bin)] if hyprland else []) + ["/usr/bin", "/bin"]
         env = {
             "HOME": str(self.home), "PATH": ":".join(path), "LOG": str(self.log), "MISSING": missing,
+            "TFEM_UNAME": "OpenBSD" if distro == "openbsd" else "Linux",
             "TFEM_OS_RELEASE": str(release), "XDG_CONFIG_HOME": str(self.home / ".config"),
             "XDG_STATE_HOME": str(self.home / ".local/state"), "XDG_DATA_HOME": str(self.home / ".local/share"),
             # Icons from a local stand-in: the tests never download the real ones.
@@ -136,6 +142,23 @@ class PackagesTest(InstallTest):
         self.set_hyprland("0.53.3")
         _, output = self.install("arch", "--yes", "--no-wallpapers", "--no-packages")
         self.assertIn("Hyprland 0.53.3 is too old", output)
+
+    def test_openbsd_gets_the_apps_and_their_themes_not_the_desktop(self):
+        # pkg_info is asked for python-3.13: not in this repository.
+        code, output = self.install("openbsd", "--yes", "--no-wallpapers", missing="python-3.13", hyprland=False)
+        self.assertEqual(code, 0, output)
+        command = self.installed("pkg_add -I")
+        for name in (" python%3.12", " kitty", " qt6ct", " papirus-icon-theme", " glib2"):
+            self.assertIn(name, command)
+        self.assertNotIn("python%3.13", command)            # the first available python branch
+        self.assertIn("not in the official openbsd repositories: hyprland hyprlock hypridle quickshell", output)
+        self.assertIn("OpenBSD has no Hyprland nor Quickshell yet", output)
+        self.assertFalse((self.home / ".config/hypr").exists())             # no desktop to set up
+        self.assertFalse((self.home / ".config/quickshell").exists())
+        self.assertNotIn("sddm", self.calls())
+        self.assertIn("generating the theme files", output)                 # the themes, for the apps
+        self.assertIn("your apps follow the theme", output)
+        self.assertEqual(Path(os.readlink(self.home / ".local/bin/tfem")), REPO / "tfem")
 
     def test_unknown_distro_is_refused(self):
         code, output = self.install("gentoo", "--yes")

@@ -337,7 +337,7 @@ resolution and picks its highest refresh rate.
 
 ## 9. Installer and CI
 
-Installer done (`install.sh`, installs the login screen too: `--sddm NAME`, `--no-sddm`); still to do: CI.
+Installer done (`install.sh`, installs the login screen too: `--sddm NAME`, `--no-sddm`; OpenBSD in part: apps and themes only, until Hyprland and Quickshell exist there); still to do: CI.
 
 One `install.sh` for Arch, Debian and Fedora, `--profile`, `--dry-run`,
 `--uninstall`, mandatory backup, aliases `dots` and `wm`, CI with shellcheck,

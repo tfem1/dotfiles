@@ -7,10 +7,10 @@
 # SDDM is left out with --no-sddm.
 package_cells() {
   local column skip=""
-  case "$FAMILY" in arch) column=3 ;; debian) column=4 ;; fedora) column=5 ;; esac
+  case "$FAMILY" in arch) column=3 ;; debian) column=4 ;; fedora) column=5 ;; openbsd) column=6 ;; esac
   [[ -n ${SDDM_THEME:-} ]] || skip=sddm
   awk -F'\t' -v col="$column" -v profile="$PROFILE" -v skip="$skip" '
-    /^#/ || NF < 5 || $1 == skip { next }
+    /^#/ || NF < 6 || $1 == skip { next }
     $2 == "core" || profile == "full" { print $1 "\t" $col }
   ' "$ROOT/install/packages.tsv"
 }
@@ -21,6 +21,8 @@ package_available() {
     # "show" also succeeds for packages with no installable version: ask for the candidate.
     debian) [[ "$(apt-cache policy "$1" 2>/dev/null | awk '/Candidate:/ { print $2 }')" =~ ^[^\(] ]] ;;
     fedora) dnf info "$1" >/dev/null 2>&1 ;;
+    # "python%3.12" is the branch of python-3.12.x; a stem must match a whole name.
+    openbsd) pkg_info -Q "$(printf '%s' "$1" | tr '%' '-')" 2>/dev/null | grep -q "^$(printf '%s' "$1" | tr '%' '-')[-.0-9]" ;;
   esac
 }
 
@@ -58,11 +60,17 @@ install_packages() {
       ;;
     debian) run sudo apt install -y "${CHOSEN[@]}" ;;
     fedora) run sudo dnf install -y "${CHOSEN[@]}" ;;
+    openbsd) run doas pkg_add -I "${CHOSEN[@]}" ;;
   esac
 }
 
 # The Hyprland config is written in Lua, read by Hyprland 0.55 and newer.
 check_hyprland() {
+  if [[ $FAMILY == openbsd ]]; then
+    warn "OpenBSD has no Hyprland nor Quickshell yet (Hyprland's OpenBSD port is in progress):"
+    warn "the desktop is not installed; your apps (kitty, GTK, Qt) get the themes."
+    return 0
+  fi
   if ! command -v Hyprland >/dev/null 2>&1; then
     warn "Hyprland is not installed: the desktop needs Hyprland 0.55 or newer."
     hyprland_hint

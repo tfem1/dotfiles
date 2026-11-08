@@ -27,8 +27,13 @@ confirm() {
   [[ $answer == [yY]* ]]
 }
 
-# Prints arch, debian or fedora from /etc/os-release (ID, then ID_LIKE).
+# Prints arch, debian or fedora from /etc/os-release (ID, then ID_LIKE), or
+# openbsd (which has no os-release).
 detect_family() {
+  if [[ "${TFEM_UNAME:-$(uname -s)}" == OpenBSD ]]; then
+    echo openbsd
+    return
+  fi
   local file="${TFEM_OS_RELEASE:-/etc/os-release}" id="" like=""
   [[ -r $file ]] || die "cannot read $file"
   # shellcheck source=/dev/null
@@ -43,5 +48,5 @@ detect_family() {
       fedora) echo fedora && return ;;
     esac
   done
-  die "unsupported distribution '$id' (supported: Arch, Debian, Fedora and their derivatives)"
+  die "unsupported distribution '$id' (supported: Arch, Debian, Fedora and their derivatives; OpenBSD in part)"
 }

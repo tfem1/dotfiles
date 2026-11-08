@@ -87,9 +87,16 @@ if ((UNINSTALL)); then
 fi
 
 FAMILY="$(detect_family)"
+# OpenBSD: no Hyprland, Quickshell nor SDDM there yet; the apps get the themes.
+DESKTOP=1
+[[ $FAMILY == openbsd ]] && DESKTOP=0 SDDM_THEME=""
 info "distro family: $FAMILY, profile: $PROFILE$( ((DRY_RUN)) && echo ', dry run: nothing changes')"
 info "project: $ROOT"
-info "will write: $CONFIG_HOME/hypr, $SHELL_DIR, $CONFIG_HOME/tfem, links in $BIN_DIR (existing files are backed up first)"
+if ((DESKTOP)); then
+  info "will write: $CONFIG_HOME/hypr, $SHELL_DIR, $CONFIG_HOME/tfem, links in $BIN_DIR (existing files are backed up first)"
+else
+  info "will write: $CONFIG_HOME/tfem, your apps' theme files, links in $BIN_DIR (existing files are backed up first)"
+fi
 ((WITH_WALLPAPERS)) && info "will download the 51 wallpapers of the collection to ${XDG_PICTURES_DIR:-$HOME/Pictures}/Wallpapers"
 [[ -n $SDDM_THEME ]] && info "will install SDDM and the '$SDDM_THEME' login screen (--no-sddm to skip)"
 confirm "Continue?" || die "cancelled"
@@ -98,8 +105,10 @@ confirm "Continue?" || die "cancelled"
 ((WITH_PACKAGES)) && install_packages
 check_hyprland
 backup_existing
-deploy_hypr
-deploy_shell
+if ((DESKTOP)); then
+  deploy_hypr
+  deploy_shell
+fi
 link_cli
 
 if ((WITH_WALLPAPERS)); then
@@ -123,5 +132,9 @@ if [[ -n $SDDM_THEME ]]; then
     warn "the login screen was not installed; run 'tfem sddm install $SDDM_THEME --enable' later"
 fi
 
-info "done. Restart, then choose Hyprland at the login screen (or run 'start-hyprland' from a TTY)."
+if ((DESKTOP)); then
+  info "done. Restart, then choose Hyprland at the login screen (or run 'start-hyprland' from a TTY)."
+else
+  info "done: your apps follow the theme. The desktop needs Hyprland and Quickshell, not on $FAMILY yet."
+fi
 info "change the look in ~/.config/tfem/theme.toml, then run 'tfem generate'"

@@ -14,7 +14,8 @@ the login screen, desktop widgets. The full plan is in
 
 ## Install
 
-One command, on Arch, Debian or Fedora and their derivatives:
+One command, on Arch, Debian or Fedora and their derivatives (OpenBSD in
+part, see below):
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/tfem1/dotfiles/main/install.sh)
@@ -81,6 +82,25 @@ missing ones instead of failing.
 On Fedora, the installer does not add third-party repositories by itself:
 enable a COPR you trust (for example `sudo dnf copr enable sdegler/hyprland`)
 and run it again. Versions checked on Repology on 2026-11-07.
+
+### OpenBSD (in part)
+
+OpenBSD has no Hyprland nor Quickshell yet (Hyprland's OpenBSD port is in
+progress upstream), so the desktop itself cannot run there. The installer
+still recognises OpenBSD and does the rest: it installs what OpenBSD 7.8
+packages (Python, kitty, glib2, qt5ct and qt6ct, the Papirus and Adwaita
+icons, the Inter and JetBrains Mono fonts, Firefox, Nautilus...) with
+`doas pkg_add`, links the `tfem` command, downloads the wallpapers and the
+icons, and themes your apps (kitty, GTK, Qt) with any of the 49 themes.
+The Hyprland config, the shell and the login screen are left out, and it
+says so. OpenBSD ships neither bash nor curl, so first:
+
+```bash
+doas pkg_add bash curl git
+```
+
+then the usual one-line command. Tested with stand-ins for `uname`,
+`pkg_info`, `pkg_add` and `doas`, not on a real OpenBSD machine.
 
 ### Icons
 
