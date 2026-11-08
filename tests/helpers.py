@@ -22,6 +22,8 @@ class SandboxTest(unittest.TestCase):
             "HOME": str(self.home),
             "XDG_CONFIG_HOME": str(self.home / ".config"),
             "XDG_STATE_HOME": str(self.home / ".local/state"),
+            # The login screen's folder (/var/lib/tfem/sddm), not created here.
+            "TFEM_SDDM_DIR": str(self.home / "var/lib/tfem/sddm"),
         }
         self.paths = Paths.from_env(REPO, self.env)
 

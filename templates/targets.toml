@@ -8,7 +8,10 @@
 #   include = line added (between markers) to the app's own config so that
 #             it loads the generated file: { into, line, comment = "#",
 #             position = "end" | "start", create = false }
+#   needs_dir = folder set up by another command; skipped until it exists
 # Placeholders: {config} = $XDG_CONFIG_HOME (or ~/.config),
+#               {data}   = $XDG_DATA_HOME (or ~/.local/share),
+#               {sddm}   = the login screen's folder (/var/lib/tfem/sddm),
 #               {shell}  = shell name, set in config.json (shell.name).
 
 [hyprland]
@@ -39,6 +42,16 @@ template = "hypr/hypridle.conf.tpl"
 output   = "{config}/hypr/hypridle.conf"
 needs    = "hypridle"
 reload   = "pkill -x hypridle; setsid -f hypridle >/dev/null 2>&1; true"
+
+# The login screen (SDDM, set up by `tfem sddm install`): its colors and a
+# copy of the wallpaper, in a folder SDDM can read. The installed theme reads
+# this file as its theme.conf.user: the login screen follows the theme, no
+# sudo needed after the install.
+[sddm]
+template  = "sddm/theme.conf.tpl"
+output    = "{sddm}/theme.conf"
+needs_dir = "{sddm}"
+reload    = "{{ sddm.copy }}"
 
 [hyprlock]
 template = "hypr/hyprlock.conf.tpl"

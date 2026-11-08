@@ -1,6 +1,7 @@
 """Template context: settings, palette and derived values, all flat."""
 from __future__ import annotations
 
+import shlex
 from pathlib import Path
 from typing import Mapping
 
@@ -44,6 +45,7 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths,
         context.update({"effects.animations": False, "effects.blur": False, "effects.shadow": False})
     context["idle.listeners"] = listeners(context)
     context["wallpaper.path"] = _wallpaper_path(str(theme["wallpaper.path"]), paths)
+    context.update(_login_screen(str(context["wallpaper.path"]), paths))
     # GTK theme and color scheme that match the palette (adw-gtk3, gsettings values).
     dark = palette.variant == "dark"
     context["gtk.theme"] = "adw-gtk3-dark" if dark else "adw-gtk3"
@@ -56,6 +58,15 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths,
     context["dirs.data"] = str(paths.data_home)
     context["dirs.root"] = str(paths.root)
     return context
+
+
+def _login_screen(wallpaper: str, paths: Paths) -> dict[str, str]:
+    """Where the login screen (SDDM) finds its copy of the wallpaper, and the
+    command that copies it there (SDDM cannot read your home folder)."""
+    if not wallpaper:
+        return {"sddm.background": "", "sddm.copy": "true"}
+    target = str(paths.sddm_dir / f"background{Path(wallpaper).suffix.lower()}")
+    return {"sddm.background": target, "sddm.copy": shlex.join(["cp", "-f", wallpaper, target])}
 
 
 def _wallpaper_path(value: str, paths: Paths) -> str:

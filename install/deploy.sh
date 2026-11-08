@@ -90,7 +90,8 @@ link_cli() {
   done
   case ":$PATH:" in
     *":$BIN_DIR:"*) ;;
-    *) warn "add $BIN_DIR to your PATH to type the tfem command (the keybinds do not need it)" ;;
+    # Hyprland puts it on the PATH of the terminals it opens (variables.lua).
+    *) warn "$BIN_DIR is not on the PATH of this terminal: type $BIN_DIR/tfem here; in Hyprland, tfem works" ;;
   esac
 }
 
@@ -121,6 +122,10 @@ uninstall() {
   restore_dir "$backup" "$SHELL_DIR"
   run mv "$INSTALL_LOG" "$INSTALL_LOG.uninstalled-$(date +%Y%m%d-%H%M%S)"
   info "kept: your settings ($CONFIG_HOME/tfem), wallpapers, icons, backups and installed packages"
+  local login="${TFEM_SDDM_CONF:-/etc/sddm.conf.d/zz-login-theme.conf}"
+  if [[ -e $login ]]; then
+    info "kept: the login screen; remove it with: sudo rm -rf $login ${TFEM_SDDM_THEMES:-/usr/share/sddm/themes}/{stacked-clock,welcome-panel}"
+  fi
   if grep -qx "cloned $ROOT" "$INSTALL_LOG"* 2>/dev/null; then
     info "remove the downloaded project with: rm -rf $ROOT"
   fi

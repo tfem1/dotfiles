@@ -9,7 +9,7 @@ set -euo pipefail
 REPO_URL="${TFEM_REPO_URL:-https://github.com/tfem1/dotfiles.git}"
 BRANCH="${TFEM_BRANCH:-main}"
 DEST="${TFEM_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/tfem}"
-PROFILE=full DRY_RUN=0 ASSUME_YES=0 UNINSTALL=0 WITH_PACKAGES=1 WITH_WALLPAPERS=1 WITH_ICONS=1 SDDM_THEME=""
+PROFILE=full DRY_RUN=0 ASSUME_YES=0 UNINSTALL=0 WITH_PACKAGES=1 WITH_WALLPAPERS=1 WITH_ICONS=1 SDDM_THEME=stacked-clock
 
 usage() {
   cat <<'EOF'
@@ -23,8 +23,9 @@ Usage: install.sh [options]
   --no-packages           skip package installation
   --no-wallpapers         skip the wallpaper download
   --no-icons              skip the FairyWren icons download
-  --sddm [NAME]           also install a login screen for SDDM (welcome-panel or
-                          stacked-clock, default welcome-panel; asks for sudo)
+  --sddm NAME             the login screen to install: stacked-clock (default)
+                          or welcome-panel (SDDM, asks for sudo)
+  --no-sddm               do not install SDDM nor its login screen
   --branch NAME           install another branch of the project
   -h, --help              show this help
 EOF
@@ -44,9 +45,10 @@ while (($#)); do
     --no-wallpapers) WITH_WALLPAPERS=0 ;;
     --no-icons) WITH_ICONS=0 ;;
     --sddm)
-      SDDM_THEME=welcome-panel
-      if [[ ${2:-} == welcome-panel || ${2:-} == stacked-clock ]]; then SDDM_THEME="$2" && shift; fi
+      [[ ${2:-} == stacked-clock || ${2:-} == welcome-panel ]] || { usage >&2; exit 64; }
+      SDDM_THEME="$2" && shift
       ;;
+    --no-sddm) SDDM_THEME="" ;;
     --branch) BRANCH="${2:?--branch needs a name}" && shift ;;
     -h | --help) usage && exit 0 ;;
     *) usage >&2 && exit 64 ;;
@@ -88,7 +90,8 @@ FAMILY="$(detect_family)"
 info "distro family: $FAMILY, profile: $PROFILE$( ((DRY_RUN)) && echo ', dry run: nothing changes')"
 info "project: $ROOT"
 info "will write: $CONFIG_HOME/hypr, $SHELL_DIR, $CONFIG_HOME/tfem, links in $BIN_DIR (existing files are backed up first)"
-((WITH_WALLPAPERS)) && info "will download about 85 wallpapers (~230 MB) to ${XDG_PICTURES_DIR:-$HOME/Pictures}/Wallpapers"
+((WITH_WALLPAPERS)) && info "will download the 51 wallpapers of the collection to ${XDG_PICTURES_DIR:-$HOME/Pictures}/Wallpapers"
+[[ -n $SDDM_THEME ]] && info "will install SDDM and the '$SDDM_THEME' login screen (--no-sddm to skip)"
 confirm "Continue?" || die "cancelled"
 
 [[ ${TFEM_CLONED:-0} == 1 ]] && record "cloned $ROOT"
@@ -112,10 +115,13 @@ seed_settings
 info "generating the theme files"
 run "$ROOT/tfem" generate
 
+# The login screen, in the theme's colors; SDDM is turned on unless another
+# login manager is in use (that one is left as is).
 if [[ -n $SDDM_THEME ]]; then
   info "installing the '$SDDM_THEME' login screen"
-  run "$ROOT/tfem" sddm install "$SDDM_THEME" || warn "the login screen was not installed; run 'tfem sddm install' later"
+  run "$ROOT/tfem" sddm install "$SDDM_THEME" --enable ||
+    warn "the login screen was not installed; run 'tfem sddm install $SDDM_THEME --enable' later"
 fi
 
-info "done. Log out and choose Hyprland at the login screen (or run 'start-hyprland' from a TTY)."
+info "done. Restart, then choose Hyprland at the login screen (or run 'start-hyprland' from a TTY)."
 info "change the look in ~/.config/tfem/theme.toml, then run 'tfem generate'"

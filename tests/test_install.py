@@ -18,6 +18,13 @@ FAKES = {
     "apt": 'echo "apt $*" >> "$LOG"',
     "dnf": f'echo "dnf $*" >> "$LOG"; [ "$1" = info ] && {{ {AVAILABLE}; }}; exit 0',
     "hyprctl": 'echo "hyprctl $*" >> "$LOG"',
+    "systemctl": 'echo "systemctl $*" >> "$LOG"',
+}
+# Where `tfem sddm install` writes, as TFEM_<name> paths under self.system.
+SYSTEM = {
+    "SDDM_THEMES": "usr/share/sddm/themes", "SDDM_CONF": "etc/sddm.conf.d/zz-login-theme.conf",
+    "SDDM_MAIN_CONF": "etc/sddm.conf", "SDDM_DIR": "var/lib/tfem/sddm",
+    "DM_LINK": "etc/systemd/system/display-manager.service",
 }
 OS_RELEASE = {
     "arch": 'ID=arch\n',
@@ -49,6 +56,7 @@ class InstallTest(unittest.TestCase):
         self.set_hyprland("0.57.1")
         self.write_tool(self.hypr_bin / "qs", 'echo "qs $*" >> "$LOG"')  # Quickshell is installed
         self.log = self.home / "calls.log"
+        self.system = self.home / "system"
 
     def tearDown(self):
         self._tmp.cleanup()
@@ -71,6 +79,8 @@ class InstallTest(unittest.TestCase):
             "XDG_STATE_HOME": str(self.home / ".local/state"), "XDG_DATA_HOME": str(self.home / ".local/share"),
             # Icons from a local stand-in: the tests never download the real ones.
             "TFEM_FAIRYWREN_URL": self.fairywren,
+            # The login screen goes to a fake system under the sandbox.
+            **{f"TFEM_{name}": str(self.system / path) for name, path in SYSTEM.items()},
         }
         done = subprocess.run(["bash", str(REPO / "install.sh"), *args], env=env,
                               capture_output=True, text=True, timeout=120)
@@ -88,8 +98,12 @@ class PackagesTest(InstallTest):
         code, _ = self.install("arch", "--yes", "--no-wallpapers")
         self.assertEqual(code, 0)
         command = self.installed("pacman -S --needed --noconfirm")
-        for name in ("hyprland", "quickshell", "satty", "bluez-utils", "ttf-jetbrains-mono-nerd"):
+        for name in ("hyprland", "quickshell", "satty", "bluez-utils", "ttf-jetbrains-mono-nerd", "sddm"):
             self.assertIn(f" {name}", command)
+
+    def test_no_sddm_leaves_the_package_out(self):
+        self.install("arch", "--yes", "--no-wallpapers", "--no-sddm")
+        self.assertNotIn(" sddm", self.installed("pacman -S --needed"))
 
     def test_minimal_profile_leaves_out_apps_and_wallpapers(self):
         code, output = self.install("arch", "--yes", "--profile", "minimal")
@@ -102,6 +116,7 @@ class PackagesTest(InstallTest):
         command = self.installed("apt install -y")
         self.assertIn(" firefox", command)
         self.assertNotIn("firefox-esr", command)
+        self.assertIn(" sddm qml6-module-qtquick-effects", command)  # the theme's effects, apart on Debian
         self.assertIn("apt-get update", self.calls())
 
     def test_missing_packages_are_skipped_not_fatal(self):
@@ -149,12 +164,22 @@ class DeployTest(InstallTest):
             self.assertEqual(os.readlink(icons / theme / "places/colours/default"), "./violet")
         self.assertFalse((icons / "README.md").exists())
 
-    def test_sddm_option_installs_the_chosen_login_screen(self):
-        code, output = self.install("arch", "--dry-run", "--sddm", "stacked-clock")
+    def test_the_stacked_clock_login_screen_is_installed_and_turned_on(self):
+        code, output = self.install("arch", "--yes", "--no-wallpapers", "--no-packages")
         self.assertEqual(code, 0, output)
-        self.assertIn("sddm install stacked-clock", output)
-        _, output = self.install("arch", "--dry-run")
+        self.assertTrue((self.system / "usr/share/sddm/themes/stacked-clock/Main.qml").is_file())
+        self.assertIn("Current=stacked-clock", (self.system / "etc/sddm.conf.d/zz-login-theme.conf").read_text())
+        self.assertTrue((self.system / "var/lib/tfem/sddm/theme.conf").is_file())  # kept by generate
+        self.assertIn("systemctl enable sddm.service", self.calls())
+
+    def test_sddm_options_pick_or_skip_the_login_screen(self):
+        code, output = self.install("arch", "--dry-run", "--sddm", "welcome-panel")
+        self.assertEqual(code, 0, output)
+        self.assertIn("sddm install welcome-panel --enable", output)
+        _, output = self.install("arch", "--dry-run", "--no-sddm")
         self.assertNotIn("sddm install", output)
+        code, _ = self.install("arch", "--dry-run", "--sddm", "nope")
+        self.assertEqual(code, 64)
 
     def test_no_icons_skips_the_download(self):
         code, _ = self.install("arch", "--yes", "--no-wallpapers", "--no-packages", "--no-icons")
@@ -187,9 +212,10 @@ class DeployTest(InstallTest):
         self.config("hypr/hyprland.lua").write_text("-- mine\n")
         self.install("arch", "--yes", "--no-wallpapers", "--no-packages")
         self.install("arch", "--yes", "--no-wallpapers", "--no-packages")  # an update in between
-        code, _ = self.install("arch", "--uninstall")
+        code, output = self.install("arch", "--uninstall")
         self.assertEqual(code, 0)
         self.assertEqual(self.config("hypr/hyprland.lua").read_text(), "-- mine\n")
+        self.assertIn("kept: the login screen", output)  # system files: removed by hand, with sudo
         self.assertFalse((self.home / ".local/bin/tfem").exists())
         self.assertFalse(self.config("quickshell/desktop").exists())  # created by the install
 

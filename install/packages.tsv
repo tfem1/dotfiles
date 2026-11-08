@@ -26,6 +26,8 @@ qt5ct	core	qt5ct	qt5ct	qt5ct
 qt6ct	core	qt6ct	qt6ct	qt6ct
 adw-gtk3	core	adw-gtk-theme	-	adw-gtk3-theme
 bluez	core	bluez bluez-utils	bluez	bluez
+# The login screen (Qt 6 greeter); Debian ships the QtQuick.Effects module apart.
+sddm	core	sddm	sddm qml6-module-qtquick-effects	sddm
 firefox	full	firefox	firefox-esr|firefox	firefox
 nautilus	full	nautilus	nautilus	nautilus
 satty	full	satty	-	-

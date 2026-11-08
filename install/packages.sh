@@ -1,14 +1,16 @@
 # shellcheck shell=bash
 # Package selection and installation for the detected distro family.
-# Sourced by install.sh; uses FAMILY, PROFILE, ROOT, DRY_RUN, ASSUME_YES.
+# Sourced by install.sh; uses FAMILY, PROFILE, ROOT, DRY_RUN, ASSUME_YES, SDDM_THEME.
 
 # Prints the cells of packages.tsv for this family and profile, one per line.
 # A cell may hold several packages (spaces) and alternatives ("a|b").
+# SDDM is left out with --no-sddm.
 package_cells() {
-  local column
+  local column skip=""
   case "$FAMILY" in arch) column=3 ;; debian) column=4 ;; fedora) column=5 ;; esac
-  awk -F'\t' -v col="$column" -v profile="$PROFILE" '
-    /^#/ || NF < 5 { next }
+  [[ -n ${SDDM_THEME:-} ]] || skip=sddm
+  awk -F'\t' -v col="$column" -v profile="$PROFILE" -v skip="$skip" '
+    /^#/ || NF < 5 || $1 == skip { next }
     $2 == "core" || profile == "full" { print $1 "\t" $col }
   ' "$ROOT/install/packages.tsv"
 }

@@ -70,15 +70,19 @@ include  = { into = "{config}/kitty/kitty.conf", line = "include palette.conf", 
 default `#`), `comment_end` (closes the marker comment, e.g. `*/` for CSS),
 `position` (`end` or `start`), `create` (default `false`: an app config that
 does not exist is left alone and you are told which line to add). The
-`{shell}` placeholder is the shell name from `config.json`.
+`{shell}` placeholder is the shell name from `config.json`, `{data}` is
+`$XDG_DATA_HOME` and `{sddm}` the login screen's folder (`/var/lib/tfem/sddm`,
+made by `tfem sddm install`). `needs_dir` skips a target while that folder
+does not exist (even with `--all`).
 
 `reload` is rendered like a template before it runs, so it can use theme
 values; pass them through `quote` (shell quoting), e.g.
 `gsettings set org.gnome.desktop.interface color-scheme {{ gtk.color_scheme | quote }}`.
 Colors of the theme's family: `accent`, `accent2`, `accent3` (see
 `scripts/theming/accents.py`). Extra values for reload commands: `gtk.theme` (`adw-gtk3-dark` or `adw-gtk3`),
-`gtk.color_scheme` (`prefer-dark` or `default`) and `dirs.config` (the
-config folder).
+`gtk.color_scheme` (`prefer-dark` or `default`), `dirs.config` (the
+config folder), `sddm.background` (where the login screen's copy of the
+wallpaper goes) and `sddm.copy` (the command that copies it).
 
 ## Adding an app
 

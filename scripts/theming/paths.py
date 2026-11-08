@@ -19,6 +19,7 @@ class Paths:
     user_dir: Path     # personal settings: theme.toml, config.json, themes/
     state_dir: Path    # backups and state files, never edited by hand
     wallpapers: Path   # downloaded wallpapers, in the user's pictures folder
+    sddm_dir: Path     # the login screen's colors and wallpaper, readable by SDDM
 
     @classmethod
     def from_env(cls, root: Path, env: Mapping[str, str] = os.environ) -> Paths:
@@ -35,6 +36,9 @@ class Paths:
             user_dir=config_home / PROJECT_DIR,
             state_dir=state_home / PROJECT_DIR,
             wallpapers=pictures / "Wallpapers",
+            # Outside the home folder: SDDM runs as its own user. `tfem sddm
+            # install` creates it (with sudo) and gives it to you.
+            sddm_dir=Path(env.get("TFEM_SDDM_DIR") or "/var/lib/tfem/sddm"),
         )
 
     def pretty(self, path: Path) -> str:

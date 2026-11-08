@@ -1,12 +1,15 @@
 """SDDM login screens: two themes (extras/sddm) in the colors of the desktop.
 
-Usage: sddm.py install [NAME]   build the theme, install it and select it (sudo)
-       sddm.py test [NAME]      show it in a window, nothing installed
-       sddm.py build NAME DIR   only build it into DIR
-NAME: welcome-panel (default) or stacked-clock.
+Usage: sddm.py install [NAME] [--enable]   install and select it (sudo)
+       sddm.py test [NAME]                  show it in a window, nothing installed
+       sddm.py build NAME DIR               only build it into DIR
+NAME: stacked-clock (default) or welcome-panel. --enable also turns SDDM on
+at the next start, when no other login manager is on.
 A built theme holds its QML, a theme.conf with the colors and font of the
 current theme.toml, and a copy of the wallpaper: SDDM runs as its own user
-and cannot read your home. Run `install` again after changing either.
+and cannot read your home. The installed theme also reads theme.conf.user,
+a link to a folder you own (/var/lib/tfem/sddm): `tfem generate` keeps it
+up to date, so the login screen follows the theme with no sudo.
 """
 from __future__ import annotations
 
@@ -22,6 +25,7 @@ from pathlib import Path
 from typing import Mapping
 
 from theming.context import build_context  # noqa: E402  (scripts/ is on sys.path)
+from theming.generate import main as generate  # noqa: E402
 from theming.palette import PaletteError, resolve_palette  # noqa: E402
 from theming.paths import Paths  # noqa: E402
 from theming.settings import SettingsError, load_config, load_theme  # noqa: E402
@@ -29,13 +33,15 @@ from theming.template import TemplateError, render  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "extras/sddm"
-THEMES = ("welcome-panel", "stacked-clock")
+THEMES = ("stacked-clock", "welcome-panel")
 # Where SDDM looks; tests point these elsewhere and run without sudo.
 THEMES_DIR = Path(os.environ.get("TFEM_SDDM_THEMES", "/usr/share/sddm/themes"))
 # Read after the other /etc/sddm.conf.d files (alphabetical order): it wins.
 CONF = Path(os.environ.get("TFEM_SDDM_CONF", "/etc/sddm.conf.d/zz-login-theme.conf"))
 MAIN_CONF = Path(os.environ.get("TFEM_SDDM_MAIN_CONF", "/etc/sddm.conf"))
 SUDO = os.environ.get("TFEM_SUDO", "sudo")
+# The login manager systemd starts; another one than SDDM is never replaced.
+DM_LINK = Path(os.environ.get("TFEM_DM_LINK", "/etc/systemd/system/display-manager.service"))
 
 
 def build(name: str, dest: Path, paths: Paths) -> Path:
@@ -80,27 +86,50 @@ def overridden(name: str) -> str | None:
     return None
 
 
-def install(name: str, paths: Paths) -> int:
+def other_manager() -> str | None:
+    """The login manager systemd starts, when it is not SDDM."""
+    if not DM_LINK.exists() and not DM_LINK.is_symlink():
+        return None
+    name = Path(os.readlink(DM_LINK)).name if DM_LINK.is_symlink() else DM_LINK.name
+    return None if name == "sddm.service" else name.removesuffix(".service")
+
+
+def install(name: str, paths: Paths, enable: bool, env: Mapping[str, str]) -> int:
     with tempfile.TemporaryDirectory() as temp:
         staged = build(name, Path(temp) / name, paths)
-        target = THEMES_DIR / name
+        target, folder = THEMES_DIR / name, paths.sddm_dir
         conf = f"# Written by `tfem sddm install`: the login screen theme.\n[Theme]\nCurrent={name}\n"
-        q = shlex.quote
-        script = (f"set -e; rm -rf {q(str(target))}; mkdir -p {q(str(THEMES_DIR))}; "
-                  f"cp -r {q(str(staged))} {q(str(target))}; chmod -R a+rX {q(str(target))}; "
-                  f"mkdir -p {q(str(CONF.parent))}; printf '%s' {q(conf)} > {q(str(CONF))}")
-        command = ([SUDO] if SUDO else []) + ["sh", "-c", script]
+        q = lambda value: shlex.quote(str(value))  # noqa: E731
+        steps = [
+            f"rm -rf {q(target)}", f"mkdir -p {q(THEMES_DIR)}", f"cp -r {q(staged)} {q(target)}",
+            # Colors and wallpaper from a folder you own, kept by `tfem generate`.
+            f"ln -sfn {q(folder / 'theme.conf')} {q(target / 'theme.conf.user')}",
+            f"chmod -R a+rX {q(target)}",
+            f"mkdir -p {q(folder)}", f"chown {os.getuid()}:{os.getgid()} {q(folder)}",
+            f"chmod 755 {q(folder)} {q(folder.parent)}",
+            f"mkdir -p {q(CONF.parent)}", f"printf '%s' {q(conf)} > {q(CONF)}",
+        ]
+        other = other_manager()
+        if enable and not other:
+            steps.append("systemctl enable sddm.service")
+        command = ([SUDO] if SUDO else []) + ["sh", "-c", "set -e; " + "; ".join(steps)]
         print(f"installing the '{name}' login screen in {target} (needs administrator rights)")
         if subprocess.run(command).returncode != 0:
             print("error: the login screen was not installed", file=sys.stderr)
             return 1
     print(f"login screen: {name} (selected in {CONF})")
-    if other := overridden(name):
-        print(f"warning: {MAIN_CONF} selects '{other}' and is read last: "
+    # The colors and the wallpaper, written as you, in the folder SDDM reads.
+    generate(["--root", str(ROOT), "--only", "sddm"], env=env)
+    if other_theme := overridden(name):
+        print(f"warning: {MAIN_CONF} selects '{other_theme}' and is read last: "
               f"remove its [Theme] Current line to use '{name}'", file=sys.stderr)
-    if not shutil.which("sddm"):
-        print("note: SDDM is not installed; install it (e.g. sudo pacman -S sddm) "
-              "and enable it: sudo systemctl enable sddm", file=sys.stderr)
+    if enable and other:
+        print(f"note: {other} is the login manager in use, left as is. To use SDDM instead:\n"
+              f"  sudo systemctl disable {other}.service && sudo systemctl enable sddm.service", file=sys.stderr)
+    elif enable:
+        print("SDDM shows at the next start of the computer")
+    if not shutil.which("sddm", path=env.get("PATH")):
+        print("note: SDDM is not installed; install it (e.g. sudo pacman -S sddm)", file=sys.stderr)
     return 0
 
 
@@ -122,6 +151,8 @@ def main(argv: list[str] | None = None, env: Mapping[str, str] = os.environ) -> 
                           ("test", "show a login screen in a window")):
         sub = commands.add_parser(command, help=text)
         sub.add_argument("name", nargs="?", default=THEMES[0], choices=THEMES)
+        if command == "install":
+            sub.add_argument("--enable", action="store_true", help="turn SDDM on at the next start")
     build_cmd = commands.add_parser("build", help="build a login screen into a folder")
     build_cmd.add_argument("name", choices=THEMES)
     build_cmd.add_argument("dest", type=Path)
@@ -129,7 +160,7 @@ def main(argv: list[str] | None = None, env: Mapping[str, str] = os.environ) -> 
     paths = Paths.from_env(ROOT, env)
     try:
         if args.command == "install":
-            return install(args.name, paths)
+            return install(args.name, paths, args.enable, env)
         if args.command == "test":
             return test(args.name, paths)
         print(build(args.name, args.dest, paths))

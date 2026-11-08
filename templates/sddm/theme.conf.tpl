@@ -1,6 +1,7 @@
 # Login screen colors and font, from {{ palette.name }} ({{ palette.variant }}).
-# Written by `tfem sddm install` next to the theme in /usr/share/sddm/themes:
-# run it again after changing the theme or the wallpaper.
+# Written by `tfem sddm install` next to the theme in /usr/share/sddm/themes,
+# then kept up to date by `tfem generate` in the folder of theme.conf.user.
+# Wallpaper: {{ wallpaper.path }}
 [General]
 background={{ sddm.background }}
 variant={{ palette.variant }}

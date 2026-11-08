@@ -84,6 +84,8 @@ def _run(target: Target, context: dict, writer: Writer, paths: Paths,
     installed = not target.needs or shutil.which(target.needs, path=env.get("PATH")) is not None
     if not installed and not args.all:
         return Result(target, "skipped", f"{target.needs} not installed")
+    if target.needs_dir and not target.needs_dir.is_dir():
+        return Result(target, "skipped", f"{paths.pretty(target.needs_dir)} not set up")
     try:
         text = render(target.template.read_text(), context, source=paths.pretty(target.template))
         if args.dry_run:

@@ -65,15 +65,18 @@ def ipc_handlers():
     return handlers
 
 
+def run_config(env=None):
+    """Every `hl` call of the config, as {call, args}, run with this environment."""
+    done = subprocess.run([LUA, str(REPO / "tests/lua/check_hypr.lua"), str(REPO / "hypr")],
+                          capture_output=True, text=True, check=True, env=env)
+    return [json.loads(line) for line in done.stdout.splitlines()]
+
+
 @unittest.skipUnless(LUA, "lua not installed")
 class HyprConfigTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        done = subprocess.run(
-            [LUA, str(REPO / "tests/lua/check_hypr.lua"), str(REPO / "hypr")],
-            capture_output=True, text=True, check=True,
-        )
-        cls.calls = [json.loads(line) for line in done.stdout.splitlines()]
+        cls.calls = run_config()
         cls.binds = [c["args"] for c in cls.calls if c["call"] == "bind"]
 
     def calls_named(self, name):
@@ -149,6 +152,14 @@ class HyprConfigTest(unittest.TestCase):
     def test_programs_started_by_hyprland_know_the_terminal(self):
         # The launcher runs terminal apps in $TERMINAL.
         self.assertIn(["TERMINAL", "kitty"], self.calls_named("env"))
+
+    def test_the_tfem_command_is_on_the_path_of_the_terminal(self):
+        # ~/.local/bin holds tfem: Hyprland puts it in front of the PATH, once.
+        def path_set(path):
+            calls = run_config({"HOME": "/home/pony", "PATH": path})
+            return [c["args"][1] for c in calls if c["call"] == "env" and c["args"][0] == "PATH"]
+        self.assertEqual(path_set("/usr/bin:/bin"), ["/home/pony/.local/bin:/usr/bin:/bin"])
+        self.assertEqual(path_set("/home/pony/.local/bin:/usr/bin"), [])  # a reload: already there
 
     def test_every_screen_gets_its_highest_refresh_rate(self):
         self.assertIn({"output": "", "mode": "highrr", "position": "auto", "scale": 1},

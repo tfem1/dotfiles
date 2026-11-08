@@ -173,7 +173,7 @@ def set_wallpaper(args: argparse.Namespace, paths: Paths, env: Mapping[str, str]
     write_atomic(settings, text)
     print(f"wallpaper: {paths.pretty(image)}" + (f"\ntheme: {switch}" if switch else ""))
     # Same theme: only the files that show the wallpaper, no compositor reload.
-    only = [] if switch else ["--only", "quickshell,hyprlock"]
+    only = [] if switch else ["--only", "quickshell,hyprlock,sddm"]
     return generate(["--root", str(ROOT), *only], env=env)
 
 

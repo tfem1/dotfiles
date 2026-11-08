@@ -8,8 +8,9 @@ single settings file.
 > lock screen, launcher or notifications. See [Make it yours](#make-it-yours).
 
 **Status:** early work. Done: theme pipeline, Hyprland config, installer,
-wallpaper collection and pony themes. Next: more palettes and app themes, then the Quickshell
-shell. The full plan is in [docs/roadmap.md](docs/roadmap.md).
+wallpaper collection, 48 themes, the Quickshell shell, a Settings window and
+the login screen. Next: desktop widgets and a Display page. The full plan is
+in [docs/roadmap.md](docs/roadmap.md).
 
 ## Install
 
@@ -23,8 +24,9 @@ It downloads the project to `~/.local/share/tfem`, installs the packages,
 backs up every file it is about to replace (in
 `~/.local/state/tfem/backups/`), copies the Hyprland config to
 `~/.config/hypr`, puts the `tfem` command (and the `dots` and `wm` aliases) in
-`~/.local/bin`, downloads the wallpapers and the FairyWren icons, and
-generates the theme. It asks before changing anything.
+`~/.local/bin`, downloads the wallpapers and the FairyWren icons,
+generates the theme, and installs the **login screen** (SDDM, below). It asks
+before changing anything. Restart: the login screen shows, choose Hyprland.
 
 | Option | Effect |
 |---|---|
@@ -32,7 +34,32 @@ generates the theme. It asks before changing anything.
 | `--dry-run` | show every step, change nothing |
 | `--uninstall` | put your previous config back and remove the links |
 | `--yes` | do not ask for confirmation |
-| `--no-packages`, `--no-wallpapers`, `--no-icons` | skip that step |
+| `--sddm welcome-panel` | the other login screen (default: `stacked-clock`) |
+| `--no-packages`, `--no-wallpapers`, `--no-icons`, `--no-sddm` | skip that step |
+
+The `tfem` command is in `~/.local/bin`: Hyprland adds that folder to the
+`PATH` of the terminals it opens, so `tfem` works there even on distros that
+leave it out (Arch does).
+
+### Login screen
+
+![Stacked clock login screen, in the Pinkie theme](docs/images/sddm-stacked-clock.png)
+
+The **stacked clock**, installed by default: the date, a big clock in the
+accent color, and the sign-in card as soon as you type. It follows the
+theme: change it (or the wallpaper) and the login screen changes too, no
+sudo needed. To look at it or reinstall it:
+
+```bash
+tfem sddm test stacked-clock
+```
+
+```bash
+tfem sddm install stacked-clock --enable
+```
+
+`test` shows it in a window and installs nothing; `install` asks for sudo.
+More in [Login screen (SDDM)](#login-screen-sddm).
 
 Run the same command again to update. Installed packages are never removed.
 
@@ -303,28 +330,36 @@ build (settings) does nothing yet.
 Two login screens for SDDM (Qt 6), in the colors, font and wallpaper of
 your desktop theme:
 
-- **Welcome panel** (default): your wallpaper, and on its left a frosted
-  panel with a greeting, the time and date, who signs in (arrows when there
-  are several users), the password with a show button and a Caps Lock
-  warning, the session (Hyprland, or any other installed), and round
-  suspend, restart and shut down buttons.
+| Stacked clock (default) | Welcome panel |
+|---|---|
+| ![Stacked clock](docs/images/sddm-stacked-clock.png) | ![Welcome panel](docs/images/sddm-welcome-panel.png) |
+
 - **Stacked clock**: the whole wallpaper, the date at the top left and a
   large clock, hours stacked over minutes in the accent color. Any key or a
   click brings the sign-in card (what you type already goes into the
   password); Escape, or 30 seconds without typing, goes back to the clock.
+- **Welcome panel**: your wallpaper, and on its left a frosted panel with a
+  greeting, the time and date, who signs in (arrows when there are several
+  users), the password with a show button and a Caps Lock warning, the
+  session (Hyprland, or any other installed), and round suspend, restart and
+  shut down buttons.
+
+The installer installs SDDM and the stacked clock (`--sddm welcome-panel`
+for the other one, `--no-sddm` to skip). By hand:
 
 ```bash
-tfem sddm test stacked-clock      # look at it in a window, nothing installed
-tfem sddm install stacked-clock   # install and select it (asks for sudo)
+tfem sddm test stacked-clock               # look at it in a window, nothing installed
+tfem sddm install stacked-clock --enable   # install, select, turn SDDM on (sudo)
 ```
 
-`install` copies the theme to `/usr/share/sddm/themes/`, with a copy of your
-wallpaper (SDDM runs as its own user and cannot read your home), and selects
-it in `/etc/sddm.conf.d/zz-login-theme.conf`, read after the other files of
-that folder. Run it again after changing the theme or the wallpaper. The
-installer does it with `--sddm [welcome-panel|stacked-clock]`. SDDM itself
-must be installed and enabled (`sudo pacman -S sddm`,
-`sudo systemctl enable sddm`).
+`install` copies the theme to `/usr/share/sddm/themes/` and selects it in
+`/etc/sddm.conf.d/zz-login-theme.conf`, read after the other files of that
+folder. SDDM runs as its own user and cannot read your home, so the colors
+and a copy of the wallpaper live in `/var/lib/tfem/sddm/`, a folder you own:
+`tfem generate` (and so the Settings window and `tfem wallpapers set`) keeps
+it up to date, without sudo. `--enable` turns SDDM on at the next start,
+unless another login manager (GDM, LightDM…) is on: that one is left as is,
+and the command tells you how to switch.
 
 ## Shell
 

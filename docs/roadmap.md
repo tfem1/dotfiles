@@ -38,7 +38,8 @@ Themes come before the shell, so the shell is built with the final palettes.
 9. Fastfetch in the theme colors, matching cursor and icons. **Icons
    done:** FairyWren, dark or light, folders in the accent's color.
 10. Custom lock screen and the two SDDM themes. **SDDM themes done**
-    (`tfem sddm install`).
+    (`tfem sddm install`), installed by the installer and kept in the
+    theme's colors by `tfem generate`.
 
 ## 1. Theme pipeline — done
 
@@ -303,7 +304,7 @@ Look of Serpantinum's settings window (original code):
   lock without one). **Next:** a custom lock screen in the chosen style.
 - **Built-in Polkit agent**: administrator password prompts drawn by the
   shell in the current theme (Quickshell 0.3 supports Polkit agents).
-- **Done:** two SDDM themes in `extras/sddm/`, installed separately, colors from the
+- **Done:** two SDDM themes in `extras/sddm/`, installed by the installer, colors from the
   palette:
   - *Stacked clock*: full wallpaper, date top-left, large stacked hours over
     minutes in the accent color, "press any key" then the login form.
@@ -327,7 +328,7 @@ resolution and picks its highest refresh rate.
 
 ## 9. Installer and CI
 
-Installer done (`install.sh`, `--sddm` for the login screen); still to do: CI.
+Installer done (`install.sh`, installs the login screen too: `--sddm NAME`, `--no-sddm`); still to do: CI.
 
 One `install.sh` for Arch, Debian and Fedora, `--profile`, `--dry-run`,
 `--uninstall`, mandatory backup, aliases `dots` and `wm`, CI with shellcheck,

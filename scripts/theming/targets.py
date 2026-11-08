@@ -8,7 +8,7 @@ from pathlib import Path
 
 from .paths import Paths
 
-_TARGET_KEYS = {"template", "output", "needs", "reload", "include"}
+_TARGET_KEYS = {"template", "output", "needs", "needs_dir", "reload", "include"}
 _INCLUDE_KEYS = {"into", "line", "comment", "comment_end", "position", "create"}
 _PLACEHOLDER = re.compile(r"\{[a-z_]+\}")
 
@@ -33,6 +33,7 @@ class Target:
     template: Path
     output: Path
     needs: str | None = None
+    needs_dir: Path | None = None   # set up by another command; skipped until then
     reload: str | None = None
     include: Include | None = None
 
@@ -61,6 +62,7 @@ def _target(name: str, entry: object, paths: Paths, shell: str) -> Target:
         template=template,
         output=_expand(where, entry["output"], paths, shell),
         needs=entry.get("needs"),
+        needs_dir=_expand(where, entry["needs_dir"], paths, shell) if "needs_dir" in entry else None,
         reload=entry.get("reload"),
         include=_include(where, include, paths, shell) if include is not None else None,
     )
@@ -85,7 +87,7 @@ def _include(where: str, entry: object, paths: Paths, shell: str) -> Include:
 
 def _expand(where: str, text: str, paths: Paths, shell: str) -> Path:
     value = (text.replace("{config}", str(paths.config_home)).replace("{data}", str(paths.data_home))
-             .replace("{shell}", shell))
+             .replace("{sddm}", str(paths.sddm_dir)).replace("{shell}", shell))
     if leftover := _PLACEHOLDER.search(value):
         raise ManifestError(f"{where}: unknown placeholder {leftover.group()}")
     path = Path(value)

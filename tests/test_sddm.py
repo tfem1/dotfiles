@@ -60,24 +60,67 @@ class BuildTest(SandboxTest):
 
 
 class InstallTest(SandboxTest):
-    def install(self, *args, main_conf=""):
+    def install(self, *args, main_conf="", manager=""):
+        """Runs `sddm.py install` without sudo, in a fake system under the
+        sandbox; `manager`: the login manager systemd starts (none if "")."""
         system = self.home / "system"
         (system / "etc").mkdir(parents=True)
         if main_conf:
             (system / "etc/sddm.conf").write_text(main_conf)
+        link = system / "etc/display-manager.service"
+        if manager:
+            link.symlink_to(f"/usr/lib/systemd/system/{manager}.service")
+        fake = self.home / "fake-bin"
+        fake.mkdir()
+        (fake / "systemctl").write_text(f'#!/bin/sh\necho "systemctl $*" >> {system}/systemctl.log\n')
+        (fake / "systemctl").chmod(0o755)
         env = {**os.environ, **self.env, "TFEM_SUDO": "", "TFEM_SDDM_THEMES": str(system / "themes"),
                "TFEM_SDDM_CONF": str(system / "etc/sddm.conf.d/zz-login-theme.conf"),
-               "TFEM_SDDM_MAIN_CONF": str(system / "etc/sddm.conf"), "PATH": "/usr/bin:/bin"}
+               "TFEM_SDDM_MAIN_CONF": str(system / "etc/sddm.conf"), "TFEM_DM_LINK": str(link),
+               "PATH": f"{fake}:/usr/bin:/bin"}
         done = subprocess.run([sys.executable, str(REPO / "scripts/sddm.py"), "install", *args], env=env,
                               capture_output=True, text=True, timeout=60)
         return done.returncode, done.stdout + done.stderr, system
 
     def test_install_copies_the_theme_and_selects_it(self):
-        code, output, system = self.install("stacked-clock")
+        code, output, system = self.install("welcome-panel")
         self.assertEqual(code, 0, output)
-        self.assertTrue((system / "themes/stacked-clock/Main.qml").is_file())
-        self.assertIn("Current=stacked-clock", (system / "etc/sddm.conf.d/zz-login-theme.conf").read_text())
+        self.assertTrue((system / "themes/welcome-panel/Main.qml").is_file())
+        self.assertIn("Current=welcome-panel", (system / "etc/sddm.conf.d/zz-login-theme.conf").read_text())
         self.assertIn("SDDM is not installed", output)
+        self.assertFalse((system / "systemctl.log").exists())  # no --enable: SDDM left off
+
+    def test_the_stacked_clock_is_the_default(self):
+        code, output, system = self.install()
+        self.assertEqual(code, 0, output)
+        self.assertIn("Current=stacked-clock", (system / "etc/sddm.conf.d/zz-login-theme.conf").read_text())
+
+    def test_the_theme_reads_its_colors_from_a_folder_you_own(self):
+        # theme.conf.user links to the folder `tfem generate` keeps up to date.
+        image = self.home / "Pictures/Wallpapers/pony/luna.png"
+        image.parent.mkdir(parents=True)
+        image.write_bytes(PNG)
+        self.write_user_file("theme.toml", '[wallpaper]\npath = "pony/luna.png"\n[palette]\nsource = "pony-luna"\n')
+        code, output, system = self.install()
+        self.assertEqual(code, 0, output)
+        user_conf = system / "themes/stacked-clock/theme.conf.user"
+        self.assertEqual(Path(os.readlink(user_conf)), self.paths.sddm_dir / "theme.conf")
+        self.assertIn("from Luna", user_conf.read_text())
+        # An absolute path: Qt.resolvedUrl keeps it as is.
+        self.assertEqual(conf(user_conf)["background"], str(self.paths.sddm_dir / "background.png"))
+        self.assertEqual((self.paths.sddm_dir / "background.png").read_bytes(), PNG)
+
+    def test_enable_turns_sddm_on_when_no_other_manager_is(self):
+        code, output, system = self.install("--enable")
+        self.assertEqual(code, 0, output)
+        self.assertEqual((system / "systemctl.log").read_text(), "systemctl enable sddm.service\n")
+        self.assertIn("next start", output)
+
+    def test_enable_leaves_another_login_manager_as_is(self):
+        code, output, system = self.install("--enable", manager="gdm")
+        self.assertEqual(code, 0, output)
+        self.assertFalse((system / "systemctl.log").exists())
+        self.assertIn("gdm is the login manager in use", output)
 
     def test_a_theme_forced_by_sddm_conf_is_reported(self):
         code, output, _ = self.install(main_conf="[Theme]\nCurrent=breeze\n")

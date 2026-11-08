@@ -70,6 +70,7 @@ class OutputTest(GenerateTest):
         subprocess.run(["luac", "-p", str(self.hypr_theme)], check=True)
 
     def test_second_run_changes_nothing(self):
+        self.paths.sddm_dir.mkdir(parents=True)  # every target, the login screen's too
         self.run_generate("--all")
         _, output = self.run_generate("--all")
         targets = tomllib.loads((REPO / "templates/targets.toml").read_text())
@@ -80,6 +81,27 @@ class OutputTest(GenerateTest):
         self.assertEqual(code, 0)
         self.assertIn("Hyprland not installed", output)
         self.assertFalse(self.hypr_theme.exists())
+
+    def test_the_login_screen_waits_for_its_folder(self):
+        # /var/lib/tfem/sddm is made by `tfem sddm install`, with sudo.
+        code, output = self.run_generate("--all")
+        self.assertEqual(code, 0)
+        self.assertIn("var/lib/tfem/sddm not set up", output)
+        self.assertFalse(self.paths.sddm_dir.exists())
+
+    def test_the_login_screen_gets_the_colors_and_a_copy_of_the_wallpaper(self):
+        image = self.home / "Pictures/Wallpapers/pony/luna.jpg"
+        image.parent.mkdir(parents=True)
+        image.write_bytes(b"jpeg")
+        self.write_user_file("theme.toml", '[wallpaper]\npath = "pony/luna.jpg"\n[palette]\nsource = "pony-luna"\n')
+        self.paths.sddm_dir.mkdir(parents=True)
+        self.env["PATH"] = "/usr/bin:/bin"  # the copy runs `cp`
+        code, output = self.run_generate("--only", "sddm")
+        self.assertEqual(code, 0, output)
+        text = (self.paths.sddm_dir / "theme.conf").read_text()
+        self.assertIn(f"background={self.paths.sddm_dir / 'background.jpg'}\n", text)
+        self.assertIn("from Luna", text)
+        self.assertEqual((self.paths.sddm_dir / "background.jpg").read_bytes(), b"jpeg")
 
     def test_only_limits_the_targets(self):
         self.run_generate("--all", "--only", "quickshell")

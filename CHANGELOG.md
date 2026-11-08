@@ -5,6 +5,21 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- The installer installs SDDM and the **stacked clock** login screen by
+  default and turns SDDM on, unless another login manager is in use (left
+  as is). `--sddm welcome-panel` picks the other one, `--no-sddm` skips both.
+  On Debian it also installs `qml6-module-qtquick-effects`, which the theme
+  needs and the `sddm` package does not pull in.
+- The login screen follows the theme with no sudo: the installed theme reads
+  `theme.conf.user`, a link to `/var/lib/tfem/sddm/theme.conf`, in a folder
+  you own, with a copy of the wallpaper. `tfem generate` keeps it up to date
+  (new `sddm` target), so the Settings window and `tfem wallpapers set`
+  change the login screen too. Checked with the real SDDM greeter.
+- `tfem sddm install` installs the stacked clock when no name is given;
+  `--enable` turns SDDM on at the next start.
+
 ### Removed
 
 - The 50 forest wallpapers: the collection is My Little Pony only (51).
@@ -14,6 +29,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- `tfem` was "command not found" in the terminal on Arch: `~/.local/bin` is
+  not on its default PATH. Hyprland now adds it (once, even on reload) for
+  every program it starts. Checked with `Hyprland --verify-config` 0.57.1.
 - The shell did not start at all since the system panel was added: one line
   of `shell.qml` set a property that `SystemPanel` does not have, and
   Quickshell refuses the whole config then, so there was no bar and no
