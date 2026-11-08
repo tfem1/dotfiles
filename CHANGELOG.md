@@ -50,6 +50,17 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Desktop widgets**, under the windows, in the theme's colors: a clock
+  pill, CPU, GPU (AMD and NVIDIA), RAM and disk rings, an audio spectrum
+  drawn by cava (new package, 24 bars, stopped in game mode) and a
+  minimal now playing card (song, artist, the lyrics line being sung).
+  Settings → **Widgets** turns each one on or off and picks the side
+  (`widgets.*` in `config.json`, passed to the shell through theme.json).
+  Readings come from `/proc`, `df`, the amdgpu files or `nvidia-smi`, only
+  while their widget shows; checked in the real Quickshell (CPU follows
+  the load) and with the real cava 1.0 (the shipped config).
+- The lyrics fetcher is shared by the music panel and the media widget
+  (`music/LyricsSource.qml`).
 - **Display** page in the Settings window: each screen's refresh rate and
   resolution in one click, applied at once (Hyprland reloads), with
   "Keep this display mode?" and a return to the previous mode after

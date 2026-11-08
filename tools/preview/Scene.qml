@@ -14,6 +14,7 @@ import "../../quickshell/music"
 import "../../quickshell/power"
 import "../../quickshell/system"
 import "../../quickshell/settings"
+import "../../quickshell/widgets"
 
 // A 1920x1080 desktop with the shell's components and sample data.
 Rectangle {
@@ -93,9 +94,27 @@ Rectangle {
         }
     }
 
+    // The desktop widgets, with sample readings and a song with lyrics.
+    WidgetsContent {
+        visible: scene.mode === "widgets"
+        x: 24
+        y: 60
+        now: new Date(2026, 10, 7, 17, 49)
+        cpu: ({ usage: 0.44, cores: 8 })
+        gpu: ({ usage: 0.31, used: 2.1e9, total: 8.6e9, name: "AMD" })
+        ram: ({ used: 6.2e9, total: 16.4e9 })
+        disk: ({ used: 212e9, total: 494e9 })
+        levels: [0.18, 0.42, 0.66, 0.92, 0.78, 0.6, 0.47, 0.58, 0.36, 0.28, 0.33, 0.45, 0.31, 0.24, 0.19, 0.14,
+                 0.17, 0.11, 0.09, 0.13, 0.07, 0.05, 0.04, 0.03]
+        device: "Speakers (Realtek Audio)"
+        hasMedia: true
+        media: ({ song: "Winter Wrap Up", artist: "Ponyville Chorus",
+                  line: "Winter wrap up, winter wrap up!", next: "Let's finish our holiday cheer" })
+    }
+
     // Launcher, clipboard, cheatsheet, selector, network: the screen dims behind them.
     Rectangle {
-        visible: scene.mode !== "desktop"
+        visible: scene.mode !== "desktop" && scene.mode !== "widgets"
         anchors.fill: parent
         anchors.topMargin: 44
         color: Qt.alpha(Theme.bgAlt, ["wifi", "bluetooth", "volume", "calendar", "music", "system"].includes(scene.mode) ? 0.2 : 0.45)

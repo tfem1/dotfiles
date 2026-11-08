@@ -9,8 +9,8 @@ single settings file.
 
 **Status:** early work. Done: theme pipeline, Hyprland config, installer,
 wallpaper collection, 48 themes, the Quickshell shell, a Settings window and
-the login screen. Next: desktop widgets and a Display page. The full plan is
-in [docs/roadmap.md](docs/roadmap.md).
+the login screen, desktop widgets. The full plan is in
+[docs/roadmap.md](docs/roadmap.md).
 
 ## Install
 
@@ -378,6 +378,25 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   own proportions, as the [Arch trademark
   policy](https://terms.archlinux.org/docs/trademark-policy/) asks; other
   systems get the Settings gear.
+- **Desktop widgets**, on the left of the screen (or the right), under the
+  windows, in the colors of the theme (violet with Twilight, green with
+  Chrysalis):
+
+  ![Desktop widgets in two themes](docs/images/widgets.png)
+
+  - **Clock**: the date and the time in a pill of the accent color.
+  - **CPU**, **GPU**, **RAM**, **Disk**: a ring with the percentage, then
+    the cores, or what is used out of the total. GPU: AMD (driver files)
+    and NVIDIA (`nvidia-smi`); without a reading the card hides.
+  - **Audio spectrum**: 24 bars drawn by [cava](https://github.com/karlstav/cava)
+    (installed with the rest), with the device the sound plays on; cava
+    stops in game mode and sleeps when nothing plays.
+  - **Now playing**, kept minimal: the song, its artist and the line of the
+    lyrics being sung (from lrclib.net), the next one under it.
+
+  Each one is turned on or off in Settings → **Widgets** (`widgets.*` in
+  `config.json`). Only what shows runs: CPU and memory are read from
+  `/proc` every 2 seconds, the disk every minute.
 - **OSD** under the bar for the volume and the brightness.
 - **Notifications**: the shell is the notification daemon; popups in the
   top-right corner, urgent ones stay until closed.
@@ -482,10 +501,10 @@ python3 tools/preview/render.py --theme pony-pinkie --wallpaper your-image.png -
 
 ```
 theme.toml            default look of the desktop (the single source of truth)
-config.json           default shell behaviour (shell name, and more later)
+config.json           default shell behaviour (shell name, sleep, widgets, screens)
 tfem                  CLI
 hypr/                 Hyprland config in Lua (copied to ~/.config/hypr/)
-quickshell/           the shell: wallpaper, bar, OSD, notifications, panels
+quickshell/           the shell: wallpaper, bar, widgets, OSD, notifications, panels
 install.sh, install/   one-command installer and its package table
 wallpapers/           wallpaper collection (list only, images are downloaded)
 themes/               base16 palettes, one file per theme
@@ -494,6 +513,7 @@ scripts/generate.sh   entry point of the generator
 scripts/screenshot.sh screenshots (region or full screen, optional editing)
 scripts/wallpapers.py wallpapers: download, list, set (with the theme they bring)
 scripts/wallpaper_collection.py  the collection and the theme of each wallpaper
+scripts/settings.py, display.py  `tfem settings` and `tfem display` (the Settings window)
 scripts/theming/      generator: settings, palette, template engine, safe writer
 extras/sddm/           the two login screens (tfem sddm install)
 tools/                icon generator, preview renderer

@@ -53,7 +53,7 @@ Scope {
     function act(name, value) {
         if (name === "gamemode")
             set(["effects.game_mode=" + value]);
-        else if (name.startsWith("idle."))
+        else if (name.startsWith("idle.") || name.startsWith("widgets."))
             set([name + "=" + value]);
         else if (name === "volume" && Audio.sink)
             Audio.sink.audio.volume = value;

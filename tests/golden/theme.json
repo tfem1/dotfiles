@@ -51,5 +51,15 @@
     "animations": true,
     "gameMode": false
   },
+  "widgets": {
+    "side": "left",
+    "clock": true,
+    "audio": true,
+    "media": true,
+    "cpu": true,
+    "gpu": true,
+    "ram": true,
+    "disk": true
+  },
   "wallpaper": ""
 }

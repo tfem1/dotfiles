@@ -51,5 +51,15 @@
     "animations": {{ effects.animations }},
     "gameMode": {{ effects.game_mode }}
   },
+  "widgets": {
+    "side": {{ widgets.side | json }},
+    "clock": {{ widgets.clock }},
+    "audio": {{ widgets.audio }},
+    "media": {{ widgets.media }},
+    "cpu": {{ widgets.cpu }},
+    "gpu": {{ widgets.gpu }},
+    "ram": {{ widgets.ram }},
+    "disk": {{ widgets.disk }}
+  },
   "wallpaper": {{ wallpaper.path | json }}
 }

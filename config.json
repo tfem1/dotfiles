@@ -8,5 +8,15 @@
     "lock": 10,
     "screen_off": 11,
     "suspend": 30
+  },
+  "widgets": {
+    "side": "left",
+    "clock": true,
+    "audio": true,
+    "media": true,
+    "cpu": true,
+    "gpu": true,
+    "ram": true,
+    "disk": true
   }
 }

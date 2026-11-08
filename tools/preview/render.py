@@ -24,12 +24,13 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from theming.context import build_context  # noqa: E402
 from theming.palette import find_theme, load_palette, resolve_palette  # noqa: E402
 from theming.paths import Paths  # noqa: E402
-from theming.settings import load_theme  # noqa: E402
+from theming.settings import load_config, load_theme  # noqa: E402
 from theming.template import render as render_template  # noqa: E402
 from wallpaper_collection import find, load_collection, theme_for  # noqa: E402
 
-MODES = ("desktop", "launcher", "clipboard", "cheatsheet", "wallpaper", "wifi", "bluetooth", "volume",
-         "calendar", "music", "power", "system", "settings", "settings-system", "settings-display")
+MODES = ("desktop", "widgets", "launcher", "clipboard", "cheatsheet", "wallpaper", "wifi", "bluetooth", "volume",
+         "calendar", "music", "power", "system", "settings", "settings-system", "settings-display",
+         "settings-widgets")
 # Hues of the sample landscapes drawn for the wallpaper selector (degrees).
 SAMPLE_HUES = (215, 280, 330, 140, 25, 195, 255, 0, 50, 100, 300, 230, 160, 10)
 # The theme some samples bring, as a pony wallpaper would.
@@ -44,7 +45,7 @@ def theme_json(name: str) -> str:
     paths = Paths.from_env(ROOT, {"HOME": "/nonexistent"})
     theme = load_theme(paths)
     theme["palette.source"] = name
-    context = build_context(theme, resolve_palette(theme, paths), paths, {"shell.name": "desktop"})
+    context = build_context(theme, resolve_palette(theme, paths), paths, load_config(paths))
     return render_template((ROOT / "templates/quickshell/theme.json.tpl").read_text(), context)
 
 

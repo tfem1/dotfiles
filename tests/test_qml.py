@@ -42,6 +42,9 @@ VISUAL = [
     "settings/SettingsContent.qml", "settings/SettingsNav.qml", "settings/AppearancePage.qml",
     "settings/SystemPage.qml", "settings/LivePreview.qml", "settings/ThemeGrid.qml", "settings/Chips.qml",
     "settings/SettingRow.qml", "settings/TextButton.qml", "settings/DisplayPage.qml",
+    "settings/WidgetsPage.qml", "settings/ApplyBar.qml",
+    "widgets/WidgetsContent.qml", "widgets/WidgetCard.qml", "widgets/ClockPill.qml", "widgets/ResourceCard.qml",
+    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml",
 ]
 
 
@@ -66,7 +69,8 @@ class VisualComponentsTest(unittest.TestCase):
                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(done.returncode, 0, done.stderr)
             modes = ["bar", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "music",
-                     "power", "settings", "settings-display", "settings-system", "system", "volume", "wallpaper", "wifi"]
+                     "power", "settings", "settings-display", "settings-system", "settings-widgets", "system", "volume",
+                     "wallpaper", "widgets", "wifi"]
             self.assertEqual(sorted(p.name for p in Path(out).iterdir()), sorted(f"pony-twilight-{m}.png" for m in modes))
 
     def probe(self, script, expression, value):
@@ -259,6 +263,27 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual(self.probe(lib, '[Lib.accentColor(input, "theme"), Lib.accentColor(input, "blue")]', entry),
                          ["#111111", "#2222ff"])
 
+    def test_widget_readings(self):
+        lib = SHELL / "widgets/resources.js"
+        stat = "cpu  100 0 50 800 50 0 0 0 0 0\ncpu0 1 1 1 1\ncpu1 1 1 1 1\nintr 5\n"
+        later = "cpu  160 0 70 860 60 0 0 0 0 0\n"
+        self.assertEqual(self.probe(lib, "Lib.cpuSample(input)", stat), {"busy": 150, "total": 1000, "cores": 2})
+        # 80 busy jiffies out of 150: idle counts iowait too.
+        self.assertAlmostEqual(self.probe(lib, f"Lib.cpuUsage(Lib.cpuSample(input), Lib.cpuSample({later!r}))",
+                                          stat), 80 / 150)
+        meminfo = "MemTotal:       16000000 kB\nMemFree:  100 kB\nMemAvailable:    9800000 kB\n"
+        self.assertEqual(self.probe(lib, "Lib.memory(input)", meminfo), {"used": 6348800000, "total": 16384000000})
+        df = "Filesystem 1-blocks Used Available Capacity Mounted on\n/dev/x 500 120 360 25% /\n"
+        self.assertEqual(self.probe(lib, "Lib.disk(input)", df), {"used": 120, "total": 480})
+        self.assertEqual(self.probe(lib, "Lib.disk(input)", "df: nope"), {"used": 0, "total": 0})
+        self.assertEqual(self.probe(lib, "Lib.nvidia(input)", "45, 2048, 8192\n"),
+                         {"usage": 0.45, "used": 2048 * 1048576, "total": 8192 * 1048576})
+        self.assertEqual(self.probe(lib, "[6.2e9, 8e9, 512e9, 2.1e12].map(Lib.size)", None),
+                         ["6.2 GB", "8 GB", "512 GB", "2.1 TB"])
+        self.assertEqual(self.probe(lib, "[Lib.usage(6.2e9, 16.4e9), Lib.usage(8e8, 16e9)]", None),
+                         ["6.2 / 16 GB", "800 MB / 16 GB"])
+        self.assertEqual(self.probe(lib, 'Lib.spectrum("0;50;100;", 4)', None), [0, 0.5, 1, 0])
+
     def test_display_choices(self):
         lib = SHELL / "settings/settings.js"
         screen = {"resolutions": [
@@ -273,7 +298,8 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual([c["label"] for c in self.probe(lib, 'Lib.sizeChoices(input, "1920x1080", 1)', screen)],
                          ["2560 × 1440", "1920 × 1080"])
         self.assertEqual(self.probe(lib, 'Lib.fastest(input, "2560x1440")', screen), "2560x1440@165.08")
-        self.assertEqual(self.probe(lib, 'Lib.PAGES.map(p => p.id)', None), ["appearance", "system", "display"])
+        self.assertEqual(self.probe(lib, 'Lib.PAGES.map(p => p.id)', None),
+                         ["appearance", "system", "display", "widgets"])
 
     def test_every_search_result_leads_to_a_row(self):
         # Rows made by a Repeater are visual children only: they are walked

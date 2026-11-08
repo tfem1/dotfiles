@@ -18,6 +18,8 @@ grim	core	grim	grim	grim
 slurp	core	slurp	slurp	slurp
 brightnessctl	core	brightnessctl	brightnessctl	brightnessctl
 playerctl	core	playerctl	playerctl	playerctl
+# The audio spectrum widget.
+cava	core	cava	cava	cava
 wireplumber	core	wireplumber	wireplumber	wireplumber
 networkmanager	core	networkmanager	network-manager	NetworkManager
 gsettings	core	glib2	libglib2.0-bin	glib2

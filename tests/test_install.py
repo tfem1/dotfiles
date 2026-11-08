@@ -98,7 +98,7 @@ class PackagesTest(InstallTest):
         code, _ = self.install("arch", "--yes", "--no-wallpapers")
         self.assertEqual(code, 0)
         command = self.installed("pacman -S --needed --noconfirm")
-        for name in ("hyprland", "quickshell", "satty", "bluez-utils", "ttf-jetbrains-mono-nerd", "sddm"):
+        for name in ("hyprland", "quickshell", "satty", "bluez-utils", "ttf-jetbrains-mono-nerd", "sddm", "cava"):
             self.assertIn(f" {name}", command)
 
     def test_no_sddm_leaves_the_package_out(self):

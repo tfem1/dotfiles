@@ -28,7 +28,15 @@ const INDEX = [
     { page: "system", id: "awake", title: "Stay awake", words: "caffeine idle sleep" },
     { page: "system", id: "sleep", title: "Sleep", words: "idle dim lock screen off suspend energy power" },
     { page: "display", id: "screens", title: "Refresh rate and resolution",
-      words: "display screen monitor hz hertz fps refresh rate resolution 144 165 240" }
+      words: "display screen monitor hz hertz fps refresh rate resolution 144 165 240" },
+    { page: "widgets", id: "widget-side", title: "Widgets side", words: "desktop widgets left right place" },
+    { page: "widgets", id: "widget-clock", title: "Clock widget", words: "desktop time date" },
+    { page: "widgets", id: "widget-audio", title: "Audio spectrum widget", words: "desktop cava visualizer music sound bars" },
+    { page: "widgets", id: "widget-media", title: "Now playing widget", words: "desktop music song lyrics media player" },
+    { page: "widgets", id: "widget-cpu", title: "CPU widget", words: "desktop processor usage load" },
+    { page: "widgets", id: "widget-gpu", title: "GPU widget", words: "desktop graphics card usage vram nvidia amd" },
+    { page: "widgets", id: "widget-ram", title: "RAM widget", words: "desktop memory usage" },
+    { page: "widgets", id: "widget-disk", title: "Disk widget", words: "desktop storage space ssd usage" }
 ];
 
 // The pages of the window, in the order of the menu.
@@ -38,7 +46,9 @@ const PAGES = [
     { id: "system", title: "System", icon: "settings", text: "Sound, brightness, connections, sleep",
       note: "These settings act at once." },
     { id: "display", title: "Display", icon: "computer", text: "Resolution and refresh rate",
-      note: "A new mode acts at once and asks to be kept: without an answer it goes back after 15 seconds." }
+      note: "A new mode acts at once and asks to be kept: without an answer it goes back after 15 seconds." },
+    { id: "widgets", title: "Widgets", icon: "grid_view", text: "Clock, music, CPU, GPU, RAM, disk",
+      note: "On the desktop, under the windows, in the colors of the theme. These settings act at once." }
 ];
 
 function pageOf(id) {

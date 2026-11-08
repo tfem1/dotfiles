@@ -34,7 +34,9 @@ Themes come before the shell, so the shell is built with the final palettes.
 7. **Done:** Settings window (`SUPER + H`): Appearance (with a live
    preview, applied on Apply), System (game mode, sound, screen,
    connections, keyboard, sleep), Display (refresh rate and resolution in
-   one click, kept or reverted after 15 s), search.
+   one click, kept or reverted after 15 s), Widgets, search.
+   **Done:** desktop widgets: clock, CPU, GPU, RAM, disk, audio spectrum
+   (cava), now playing with lyrics.
 8. Optional dock.
 9. Fastfetch in the theme colors, matching cursor and icons. **Icons
    done:** FairyWren, dark or light, folders in the accent's color.

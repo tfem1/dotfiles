@@ -15,6 +15,7 @@ import "music"
 import "power"
 import "system"
 import "settings"
+import "widgets"
 import "ipc"
 
 // Entry point: only composes the parts, each one lives in its own folder.
@@ -22,6 +23,7 @@ ShellRoot {
     ThemeFile {}
 
     WallpaperLayer {}
+    Widgets {}
     Bars {
         id: barLayer
         onStatusClicked: networkLayer.toggle()

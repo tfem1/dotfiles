@@ -6,7 +6,7 @@ import "settings.js" as Settings
 
 // The Settings window (SUPER + H): a centered card, the pages and search on
 // the left, the settings of the page on the right. Appearance changes wait
-// in a bar at the bottom (Apply, Cancel); System and Display act at once.
+// in a bar at the bottom (Apply, Cancel); the other pages act at once.
 Item {
     id: window
 
@@ -25,8 +25,6 @@ Item {
     signal chooseWallpaper
     signal closed
 
-    readonly property int changeCount: Object.keys(pending).length
-
     // Search result: its page, then the row, scrolled into view and lit up.
     function show(page, id) {
         window.page = page;
@@ -34,7 +32,7 @@ Item {
     }
 
     function pageItem() {
-        return page === "system" ? systemPage : page === "display" ? displayPage : appearancePage;
+        return ({ system: systemPage, display: displayPage, widgets: widgetsPage })[page] || appearancePage;
     }
 
     function scrollTo(id) {
@@ -161,39 +159,25 @@ Item {
                     confirm: window.confirm
                     onAction: (name, value) => window.action(name, value)
                 }
+                WidgetsPage {
+                    id: widgetsPage
+                    visible: window.page === "widgets"
+                    x: 28
+                    width: flick.width - 56
+                    values: window.settings.values
+                    onAction: (name, value) => window.action(name, value)
+                }
             }
 
             // Changes waiting for Apply.
-            Rectangle {
+            ApplyBar {
                 id: applyBar
                 anchors.bottom: parent.bottom
                 width: parent.width
-                height: window.changeCount > 0 ? 68 : 0
-                visible: height > 0
-                color: Theme.bgAlt
-
-                Label {
-                    x: 28
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: window.busy ? "Applying…" : Settings.changes(window.pending) + ", not applied yet"
-                }
-                Row {
-                    anchors.right: parent.right
-                    anchors.rightMargin: 22
-                    anchors.verticalCenter: parent.verticalCenter
-                    spacing: 10
-                    TextButton {
-                        text: "Cancel"
-                        onClicked: window.cancel()
-                    }
-                    TextButton {
-                        text: "Apply"
-                        icon: "check"
-                        strong: true
-                        opacity: window.busy ? 0.6 : 1
-                        onClicked: if (!window.busy) window.apply()
-                    }
-                }
+                pending: window.pending
+                busy: window.busy
+                onApply: window.apply()
+                onCancel: window.cancel()
             }
         }
     }
