@@ -58,6 +58,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- `.claude/settings.json`: the Ponytail plugin (DietrichGebert/ponytail,
+  MIT) for Claude Code sessions in this repository.
 - Screens can be turned **off** (and on again) in Settings → Display, with
   a switch per screen, and with `tfem display off NAME` / `on NAME`. The
   page lists the screens already off too (`hyprctl monitors all`); the
