@@ -15,7 +15,8 @@ Column {
 
     readonly property var shown: themes.filter(entry =>
         filter === "all" || (filter === "pony" ? entry.family === "Pony"
-            : filter === "light" ? entry.variant === "light" : entry.family !== "Pony"))
+            : filter === "mono" ? entry.family === "Mono"
+            : filter === "light" ? entry.variant === "light" : !["Pony", "Mono"].includes(entry.family)))
     readonly property int columns: Math.max(2, Math.floor(width / 190))
 
     spacing: 12
@@ -27,6 +28,7 @@ Column {
             { value: "all", label: "All · " + grid.themes.length },
             { value: "pony", label: "My Little Pony" },
             { value: "known", label: "Well known" },
+            { value: "mono", label: "Black & white" },
             { value: "light", label: "Light" }
         ]
         onPicked: value => grid.filter = value

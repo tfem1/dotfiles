@@ -74,6 +74,24 @@ class PonyThemesTest(unittest.TestCase):
                 self.assertIsNotNone(palette.accent)
 
 
+class NoirThemeTest(unittest.TestCase):
+    """Black and white, for black wallpapers: greys only, red kept for alerts."""
+
+    def test_noir_is_black_and_white_and_readable(self):
+        from theming.hues import hls
+        palette = load_palette(REPO / "themes/noir.toml")
+        self.assertEqual((palette.family, palette.variant), ("Mono", "dark"))
+        self.assertEqual(palette.colors["base00"].hex(), "#000000")
+        self.assertEqual(hue_problems(palette.colors), [])
+        greys = {slot: color for slot, color in palette.colors.items() if slot != "base08"}
+        greys.update(accent=palette.accent, accent2=palette.accent2, accent3=palette.accent3)
+        for slot, color in greys.items():
+            with self.subTest(slot=slot):
+                self.assertLess(hls(color)[2], 0.01)   # no saturation: a grey
+        for color in (palette.accent, palette.accent2, palette.accent3, palette.colors["base04"]):
+            self.assertGreaterEqual(contrast(color, palette.colors["base00"]), 4.5)
+
+
 class KnownThemesTest(unittest.TestCase):
     """Well-known palettes imported from tinted-theming (tools/import_tinted.py)."""
 

@@ -1,0 +1,29 @@
+# Noir: black and white, for black wallpapers. Pure black panels, white text
+# and accent, greys for the rest; only red keeps a little color so alerts
+# (low battery, errors in the terminal) still stand out. Written for this
+# project.
+name    = "Noir"
+family  = "Mono"
+variant = "dark"
+author  = "TFEM"
+accent  = "#ffffff"
+accent2 = "#bdbdbd"
+accent3 = "#8f8f8f"
+
+[colors]
+base00 = "#000000"
+base01 = "#111111"
+base02 = "#1d1d1d"
+base03 = "#3b3b3b"
+base04 = "#8a8a8a"
+base05 = "#e6e6e6"
+base06 = "#f5f5f5"
+base07 = "#ffffff"
+base08 = "#e08a8a"
+base09 = "#c2c2c2"
+base0A = "#dadada"
+base0B = "#a8a8a8"
+base0C = "#cdcdcd"
+base0D = "#f0f0f0"
+base0E = "#b4b4b4"
+base0F = "#9b9b9b"

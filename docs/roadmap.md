@@ -53,7 +53,7 @@ Themes come before the shell, so the shell is built with the final palettes.
 
 - **Done: pony themes.** 22 themes in the colors of My Little Pony
   characters (12 added on 2026-11-08, with 19 well-known palettes from
-  tinted-theming: 48 themes in all), built from canon colors by
+  tinted-theming, plus Noir in black and white: 49 themes in all), built from canon colors by
   `theming.builder` (readable by construction, hue-checked). Twilight is the
   default theme and each theme brings its signature color as accent.
 

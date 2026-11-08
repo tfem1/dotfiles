@@ -8,7 +8,7 @@ single settings file.
 > lock screen, launcher or notifications. See [Make it yours](#make-it-yours).
 
 **Status:** early work. Done: theme pipeline, Hyprland config, installer,
-wallpaper collection, 48 themes, the Quickshell shell, a Settings window and
+wallpaper collection, 49 themes, the Quickshell shell, a Settings window and
 the login screen, desktop widgets. The full plan is in
 [docs/roadmap.md](docs/roadmap.md).
 
@@ -135,8 +135,9 @@ follow = true                   # false: a wallpaper never changes the theme
 
 ## Themes
 
-48 themes: 22 in the colors of My Little Pony characters, 19 well-known
-palettes and 7 green ones. **Twilight** is the default.
+49 themes: 22 in the colors of My Little Pony characters, 19 well-known
+palettes, 7 green ones and **Noir**, black and white. **Twilight** is the
+default.
 
 | Theme | Look |
 |---|---|
@@ -162,6 +163,13 @@ palettes and 7 green ones. **Twilight** is the default.
 | `pony-celestia` | light: white and pastel pink |
 | `pony-sweetie-belle` | light: soft grey, mulberry accent, green touches |
 | `pony-apple-bloom` | light: pale yellow, red and pink |
+
+**Noir** (`noir`) is for black wallpapers: a pure black bar and panels,
+white text and accent (the clock pill turns white), greys for everything
+else; only red keeps a little color, so alerts still stand out. The
+Settings window lists it under **Black & white**.
+
+![Noir on a black wallpaper](docs/images/theme-noir.png)
 
 **Well-known palettes**, colors unchanged from
 [tinted-theming/schemes](https://github.com/tinted-theming/schemes) (MIT, see
@@ -420,7 +428,7 @@ folder name is `shell.name` in your `config.json`). Its colors follow
 - **Settings** (`SUPER + H`, or the gear of the system panel): a window
   in quiet colors, the pages on the left, each setting with one sentence
   saying what it does.
-  - **Appearance**: theme (the 48 as cards in their own colors, with
+  - **Appearance**: theme (the 49 as cards in their own colors, with
     filters), accent color, wallpaper, folder color, rounded corners, space
     between windows, transparency, blur, shadows, animations, text size.
     Nothing changes until **Apply**: a small desktop at the top shows the

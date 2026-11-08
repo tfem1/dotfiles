@@ -50,6 +50,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Noir**, a black and white theme for black wallpapers: pure black bar
+  and panels, white text and accent, greys elsewhere (red kept for
+  alerts). Listed under the new **Black & white** filter of the theme
+  grid; `palette.source = "noir"`.
 - Widgets in any corner of the screen: Settings → Widgets shows a small
   screen, a click on a corner moves them there (`widgets.corner`). In the
   right corners the clock and the cards hug the right edge. A
