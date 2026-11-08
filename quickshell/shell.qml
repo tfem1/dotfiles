@@ -42,7 +42,6 @@ ShellRoot {
         id: systemLayer
         notifications: notificationLayer
         power: powerLayer
-        system: systemLayer
     }
 
     Shortcuts {

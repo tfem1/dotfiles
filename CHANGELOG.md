@@ -5,6 +5,17 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- The shell did not start at all since the system panel was added: one line
+  of `shell.qml` set a property that `SystemPanel` does not have, and
+  Quickshell refuses the whole config then, so there was no bar and no
+  wallpaper. Found by running the real Quickshell 0.3.2.
+- New test `tests/test_shell_runtime.py`: runs the real shell in a headless
+  sway session, opens every panel through IPC and fails on any error from
+  the shell's code. The previous QML tests only loaded the visual parts with
+  plain Qt, which is why this slipped through.
+
 ### Added
 
 - `theme.toml`: single source of truth for the look of the desktop (palette,

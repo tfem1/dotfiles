@@ -216,6 +216,11 @@ Run the tests with:
 PYTHONPATH=scripts:tests python3 -m unittest discover -s tests
 ```
 
+With Quickshell (`qs`) and sway installed, `tests/test_shell_runtime.py` also
+runs the real shell in a headless sway session (software rendering, no GPU):
+it fails if the shell does not load or if opening any panel logs an error in
+its code. Without them it is skipped.
+
 ## Hyprland config
 
 `hypr/` is a complete Hyprland configuration in Lua (Hyprland 0.55 or newer),
