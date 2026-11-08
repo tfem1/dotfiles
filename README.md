@@ -21,6 +21,16 @@ part, see below):
 bash <(curl -fsSL https://raw.githubusercontent.com/tfem1/dotfiles/main/install.sh)
 ```
 
+That line is for bash and zsh. In **fish**, `<(…)` does not exist; use
+`psub`:
+
+```fish
+bash (curl -fsSL https://raw.githubusercontent.com/tfem1/dotfiles/main/install.sh | psub)
+```
+
+or, in any shell, `curl -fsSL https://raw.githubusercontent.com/tfem1/dotfiles/main/install.sh | bash`
+(the questions, pacman's too, then read your terminal).
+
 It downloads the project to `~/.local/share/tfem`, installs the packages,
 backs up every file it is about to replace (in
 `~/.local/state/tfem/backups/`), copies the Hyprland config to

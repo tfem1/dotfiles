@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # One-command installer for the Arch, Debian and Fedora families:
 #   bash <(curl -fsSL https://raw.githubusercontent.com/tfem1/dotfiles/main/install.sh)
+# fish: bash (curl -fsSL .../install.sh | psub); any shell: curl -fsSL .../install.sh | bash
 # Downloads the project, installs the packages, backs up then deploys the
 # configs, downloads the wallpapers and the icons and generates the theme.
 # See --help.
@@ -70,6 +71,11 @@ if [[ ! -f $ROOT/install/common.sh ]]; then
   else
     git clone --depth 1 --branch "$BRANCH" "$REPO_URL" "$DEST"
     export TFEM_CLONED=1
+  fi
+  # Piped (curl | bash): the rest of this script is on stdin, so the questions
+  # (pacman's too) read the terminal instead.
+  if [[ ! -t 0 ]] && { : </dev/tty; } 2>/dev/null; then
+    exec bash "$DEST/install.sh" "${ARGS[@]}" </dev/tty
   fi
   exec bash "$DEST/install.sh" "${ARGS[@]}"
 fi

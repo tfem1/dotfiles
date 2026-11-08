@@ -31,6 +31,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- The one-line install command did not work in fish (`<(…)` is bash only):
+  the README gives the fish form (`… | psub`). Run as `curl … | bash`, the
+  installer now reads its questions (and pacman's) from the terminal,
+  not from the rest of the piped script.
 - The Settings window kept "changes, not applied yet" after Apply: the
   shell's JavaScript has no `Object.fromEntries`, so clearing the applied
   changes failed. Found while testing the modes menu in the real Quickshell.
