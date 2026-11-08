@@ -5,11 +5,6 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
-### Added
-
-- `CTRL + SHIFT + S`: screenshot of a region, for keyboards without a Print
-  key (saved and copied, like `Print`).
-
 ### Changed
 
 - The installer installs SDDM and the **stacked clock** login screen by
@@ -27,6 +22,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Removed
 
+- The running apps at the top left of the bar (icons, right-click menu with
+  Quit): not wanted after all. The distro logo takes their place.
 - The 50 forest wallpapers: the collection is My Little Pony only (51).
   `wallpapers/collection.toml` lists the ids taken out (`removed`) and
   `tfem wallpapers fetch` deletes their old downloads, only those files and
@@ -51,6 +48,13 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- The distro's logo at the top left of the bar, in the accent color of the
+  theme (violet with Twilight, green with Chrysalis…); a click opens the
+  Settings window. Read from `/etc/os-release`: the Arch Linux logo (Simple
+  Icons, CC0) shows on Arch only, as its trademark policy asks; other
+  systems get the Settings gear.
+- `CTRL + SHIFT + S`: screenshot of a region, for keyboards without a Print
+  key (saved and copied, like `Print`).
 - Settings window (`SUPER + H`, or the gear of the system panel), in quiet
   colors, pages on the left. Appearance: theme cards in their own colors
   with filters, accent, wallpaper, folder color, corners, gaps,

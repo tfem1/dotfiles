@@ -105,7 +105,7 @@ folders = "theme"       # or "pink", "pine", ...
 ```
 
 `tfem generate` applies it: GTK (gsettings), Qt (qt5ct, qt6ct) and the shell
-(launcher, running apps).
+(launcher).
 
 ### Wallpapers
 
@@ -372,14 +372,12 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   workspaces 1 to 10 in a notch (click to switch), the clock and date; on the
   right the keyboard layout, sound, network, Bluetooth and battery, each in
   its module color.
-- **Running apps** (top left of the bar): one icon per running app, the
-  ones with a window (Discord, OBS, Roblox, your terminal…) and the ones
-  closed to the tray. A mark under an app with a window, longer for the
-  focused one. Click: bring it forward (again: its next window). Right
-  click: a menu in the theme colors with the app's own tray entries (Mute,
-  Deafen…) and **Quit**. Quit uses the app's own quit entry when it has
-  one, else asks its process to stop (SIGTERM, the same polite request as
-  its own Quit), so it can save first. The shell itself is never listed.
+- **Distro logo** (top left of the bar), in the theme's accent color: violet
+  with a violet theme, green with a green one. A click opens the Settings
+  window. The Arch Linux logo shows only on Arch itself, in one color and its
+  own proportions, as the [Arch trademark
+  policy](https://terms.archlinux.org/docs/trademark-policy/) asks; other
+  systems get the Settings gear.
 - **OSD** under the bar for the volume and the brightness.
 - **Notifications**: the shell is the notification daemon; popups in the
   top-right corner, urgent ones stay until closed.
@@ -524,6 +522,10 @@ Settings window.
   GPL-3.0 and LGPL-2.1): the icon theme, downloaded on your machine, never
   copied into this repository; the folder color is set through its own
   `places/colours/default` link, as its `colours.sh` does.
+- **[Simple Icons](https://github.com/simple-icons/simple-icons)** (CC0-1.0):
+  the Arch Linux logo of the bar (`quickshell/components/logos.js`). The
+  logo itself is a trademark of Arch Linux; this project is not affiliated
+  with it.
 - **[Material Symbols](https://github.com/google/material-design-icons)**
   (Google, Apache-2.0, see `licenses/Apache-2.0.txt`): the shell's icons,
   extracted by `tools/fetch_icons.py`.

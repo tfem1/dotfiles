@@ -27,6 +27,7 @@ ShellRoot {
         onStatusClicked: networkLayer.toggle()
         onClockClicked: calendarLayer.toggle()
         onPowerClicked: powerLayer.toggle()
+        onLogoClicked: settingsLayer.toggle()
     }
     Osd { id: osdLayer }
     Notifications { id: notificationLayer }

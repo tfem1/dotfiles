@@ -7,7 +7,6 @@ import "../components"
 Rectangle {
     id: bar
 
-    property var apps: []           // running apps, see AppsArea
     property var workspaces: []
     property bool hasMedia: false
     property string mediaTitle: ""
@@ -15,27 +14,26 @@ Rectangle {
     property real mediaProgress: 0
     property bool mediaPlaying: false
     property date now: new Date()
+    property string distro: ""      // os-release ID, for the logo at the left
     property alias status: statusArea
 
-    signal appActivated(var app)
-    signal appMenuRequested(var app, real x, real y)
     signal workspaceClicked(int id)
     signal mediaToggled
     signal rightClicked
     signal clockClicked
     signal powerClicked
+    signal logoClicked
 
     implicitHeight: 44
     color: Theme.panel
 
-    AppsArea {
+    DistroButton {
+        id: logo
         anchors.left: parent.left
         anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
-        apps: bar.apps
-        maxWidth: center.x - 30
-        onActivated: app => bar.appActivated(app)
-        onMenuRequested: (app, x, y) => bar.appMenuRequested(app, x, y)
+        distro: bar.distro
+        onClicked: bar.logoClicked()
     }
 
     Row {

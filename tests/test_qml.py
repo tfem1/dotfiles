@@ -27,7 +27,7 @@ SHELL = REPO / "quickshell"
 VISUAL = [
     "components/Icon.qml", "components/Label.qml", "components/Pill.qml",
     "components/RingProgress.qml", "components/NotchCorner.qml",
-    "bar/BarContent.qml", "bar/Workspaces.qml", "bar/MediaChip.qml", "bar/ClockChip.qml",
+    "bar/BarContent.qml", "bar/DistroButton.qml", "bar/Workspaces.qml", "bar/MediaChip.qml", "bar/ClockChip.qml",
     "bar/StatusArea.qml", "osd/OsdContent.qml",
     "notifications/NotificationCard.qml", "launcher/LauncherContent.qml", "launcher/LauncherItem.qml",
     "components/SearchField.qml", "clipboard/ClipboardContent.qml",
@@ -39,7 +39,6 @@ VISUAL = [
     "components/Slider.qml", "volume/VolumeContent.qml", "volume/LevelRow.qml", "volume/ChoiceRow.qml",
     "calendar/CalendarContent.qml", "music/MusicContent.qml", "music/Vinyl.qml", "music/LyricsView.qml",
     "power/PowerContent.qml", "system/SystemContent.qml",
-    "components/AppIcon.qml", "bar/AppsArea.qml", "bar/AppMenuContent.qml",
     "settings/SettingsContent.qml", "settings/SettingsNav.qml", "settings/AppearancePage.qml",
     "settings/SystemPage.qml", "settings/LivePreview.qml", "settings/ThemeGrid.qml", "settings/Chips.qml",
     "settings/SettingRow.qml", "settings/TextButton.qml",
@@ -66,7 +65,7 @@ class VisualComponentsTest(unittest.TestCase):
             done = subprocess.run([sys.executable, str(REPO / "tools/preview/render.py"), "--out", out],
                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(done.returncode, 0, done.stderr)
-            modes = ["apps", "bar", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "music",
+            modes = ["bar", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "music",
                      "power", "settings", "settings-system", "system", "volume", "wallpaper", "wifi"]
             self.assertEqual(sorted(p.name for p in Path(out).iterdir()), sorted(f"pony-twilight-{m}.png" for m in modes))
 
@@ -229,46 +228,16 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual(self.probe(lyrics, "Lib.fromAnswer(input).kind", {"plainLyrics": "a\nb"}), "plain")
         self.assertEqual(self.probe(lyrics, "Lib.fromAnswer(null).kind", None), "none")
 
-    def test_running_apps_group_windows_and_tray_icons(self):
-        apps = SHELL / "bar/apps.js"
-        data = {
-            "windows": [
-                {"appId": "kitty", "name": "kitty", "icon": "k.svg", "activated": False},
-                {"appId": "discord", "name": "Discord", "icon": "", "activated": False},
-                {"appId": "kitty", "name": "kitty", "icon": "k.svg", "activated": True},
-                {"appId": "com.obsproject.Studio", "name": "OBS Studio", "icon": "obs.svg", "activated": False},
-                {"appId": "obsidian", "name": "Obsidian", "icon": "", "activated": False},
-                {"appId": "org.quickshell", "name": "Quickshell", "icon": "", "activated": False},
-            ],
-            "trays": [
-                {"id": "chrome_status_icon_1", "title": "Discord", "tooltip": "", "icon": "tray-d.png", "applet": False},
-                {"id": "obs", "title": "", "tooltip": "", "icon": "", "applet": False},
-                {"id": "steam", "title": "Steam", "tooltip": "", "icon": "steam.png", "applet": False},
-                {"id": "nm-applet", "title": "Network", "tooltip": "", "icon": "", "applet": True},
-            ],
-        }
-        result = self.probe(apps, "Lib.group(input.windows, input.trays)", data)
-        self.assertEqual([(a["name"], a["windows"], a["focused"], a["tray"]) for a in result], [
-            ("kitty", 2, True, -1),
-            ("Discord", 1, False, 0),          # tray matched by its title
-            ("OBS Studio", 1, False, 1),       # "obs" starts "obsstudio", tried after exact names
-            ("Obsidian", 1, False, -1),
-            ("Steam", 0, False, 2),            # only in the tray
-        ])                                     # the shell and the network applet are left out
-        self.assertEqual(result[1]["icon"], "tray-d.png")
-
-    def test_running_apps_menu_rows_and_quit_entry(self):
-        apps = SHELL / "bar/apps.js"
-        self.assertEqual(self.probe(apps, "Lib.quitIndex(input)", ["Open", "", "Mute", "Quit Discord"]), 3)
-        self.assertEqual(self.probe(apps, "Lib.quitIndex(input)", ["Afficher", "Quitter"]), 1)
-        self.assertEqual(self.probe(apps, "Lib.quitIndex(input)", ["Show", "Hide"]), -1)
-        entries = [{"text": "Open"}, {"separator": True}, {"separator": True}, {"text": "Mute", "enabled": False},
-                   {"separator": True}, {"text": "Quit"}]
-        rows = self.probe(apps, "Lib.rows(input, 5)", entries)
-        self.assertEqual([(r["text"], r["separator"], r["enabled"], r["index"]) for r in rows],
-                         [("Open", False, True, 0), ("", True, True, 1), ("Mute", False, False, 3)])
-        self.assertEqual(self.probe(apps, 'Lib.detail(2, false) + "|" + Lib.detail(1, true) + "|" + Lib.detail(0, true)',
-                                    None), "2 windows|1 window|In the tray")
+    def test_the_distro_logo_comes_from_os_release(self):
+        logos = SHELL / "components/logos.js"
+        release = 'NAME="Arch Linux"\nPRETTY_NAME="Arch Linux"\nID=arch\nBUILD_ID=rolling\n'
+        self.assertEqual(self.probe(logos, "Lib.distroId(input)", release), "arch")
+        self.assertEqual(self.probe(logos, "Lib.distroId(input)", 'ID="fedora"\nVERSION_ID=43\n'), "fedora")
+        # A derivative is not Arch: ID_LIKE alone gives no logo (Arch's trademark policy).
+        self.assertEqual(self.probe(logos, "Lib.distroId(input)", "ID=cachyos\nID_LIKE=arch\n"), "cachyos")
+        self.assertEqual(self.probe(logos, '[Lib.has("arch"), Lib.has("cachyos"), Lib.has("")]', None),
+                         [True, False, False])
+        self.assertIn("fill%3D'%23d19fe4'", self.probe(logos, 'Lib.source("arch", "#d19fe4")', None))
 
     def test_settings_search_and_pending_changes(self):
         lib = SHELL / "settings/settings.js"

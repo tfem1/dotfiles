@@ -9,6 +9,7 @@ Scope {
     signal statusClicked   // the status icons of a bar were clicked
     signal clockClicked
     signal powerClicked
+    signal logoClicked     // the distro logo: opens the Settings window
 
     function toggleAutohide() {
         autohide = !autohide;
@@ -22,6 +23,7 @@ Scope {
             onStatusClicked: root.statusClicked()
             onClockClicked: root.clockClicked()
             onPowerClicked: root.powerClicked()
+            onLogoClicked: root.logoClicked()
         }
     }
 }

@@ -22,7 +22,6 @@ Rectangle {
     required property string themeJson
     property string bindsJson: "[]"
     property string wallpapersJson: "[]"
-    property string appsJson: "[]"
     property string settingsJson: "{}"
     property string localeName: ""
     property url wallpaper
@@ -43,7 +42,6 @@ Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        apps: JSON.parse(scene.appsJson)
         workspaces: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(id => ({
             id: id, focused: id === 2, occupied: [1, 2, 4, 7].includes(id), urgent: false
         }))
@@ -52,6 +50,7 @@ Rectangle {
         mediaArtist: "Ponyville Chorus"
         mediaProgress: 0.42
         mediaPlaying: true
+        distro: "arch"
         now: new Date(2026, 10, 7, 17, 49)
         status.keyboard: "US"
         status.volume: 0.64
@@ -94,31 +93,9 @@ Rectangle {
         }
     }
 
-    // Right click on Discord in the bar: its tray entries, then Quit. Placed
-    // under the third icon (bar margin 10, pill padding 6, 32 per icon).
-    AppMenuContent {
-        visible: scene.mode === "apps"
-        x: 10 + 6 + 2 * 32
-        y: 44
-        width: implicitWidth
-        height: implicitHeight
-        name: "Discord"
-        icon: JSON.parse(scene.appsJson).length > 2 ? JSON.parse(scene.appsJson)[2].icon : ""
-        detail: "1 window"
-        rows: [
-            { text: "Open Discord", enabled: true, separator: false, submenu: false, index: 0 },
-            { text: "", enabled: true, separator: true, submenu: false, index: 1 },
-            { text: "Mute", enabled: true, separator: false, submenu: false, index: 2 },
-            { text: "Deafen", enabled: true, separator: false, submenu: false, index: 3 },
-            { text: "", enabled: true, separator: true, submenu: false, index: 4 },
-            { text: "Check for Updates…", enabled: true, separator: false, submenu: false, index: 5 },
-            { text: "Acknowledgements", enabled: true, separator: false, submenu: false, index: 6 }
-        ]
-    }
-
     // Launcher, clipboard, cheatsheet, selector, network: the screen dims behind them.
     Rectangle {
-        visible: scene.mode !== "desktop" && scene.mode !== "apps"
+        visible: scene.mode !== "desktop"
         anchors.fill: parent
         anchors.topMargin: 44
         color: Qt.alpha(Theme.bgAlt, ["wifi", "bluetooth", "volume", "calendar", "music", "system"].includes(scene.mode) ? 0.2 : 0.45)
