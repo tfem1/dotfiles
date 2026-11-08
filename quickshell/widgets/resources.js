@@ -62,11 +62,13 @@ function size(bytes) {
     return shown + " " + units[unit];
 }
 
-// "6.2 / 16 GB": the unit once when both share it.
+// "6.2 / 16 GB", "0.8 / 16 GB": both in the unit of the total, written once.
 function usage(used, total) {
-    const a = size(used), b = size(total);
-    const unitA = a.split(" ")[1], unitB = b.split(" ")[1];
-    return (unitA === unitB ? a.split(" ")[0] : a) + " / " + b;
+    const whole = size(total);
+    const unit = ["B", "KB", "MB", "GB", "TB"].indexOf(whole.split(" ")[1]);
+    const value = Math.max(0, used || 0) / Math.pow(1000, unit);
+    const shown = value < 10 && unit > 0 ? value.toFixed(1).replace(/\.0$/, "") : Math.round(value);
+    return shown + " / " + whole;
 }
 
 // A cava frame ("0;12;100;...;") -> heights 0 to 1, always `count` of them.

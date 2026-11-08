@@ -294,7 +294,7 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual(self.probe(lib, "[6.2e9, 8e9, 512e9, 2.1e12].map(Lib.size)", None),
                          ["6.2 GB", "8 GB", "512 GB", "2.1 TB"])
         self.assertEqual(self.probe(lib, "[Lib.usage(6.2e9, 16.4e9), Lib.usage(8e8, 16e9)]", None),
-                         ["6.2 / 16 GB", "800 MB / 16 GB"])
+                         ["6.2 / 16 GB", "0.8 / 16 GB"])   # one unit: the card stays short
         self.assertEqual(self.probe(lib, 'Lib.spectrum("0;50;100;", 4)', None), [0, 0.5, 1, 0])
 
     def test_display_choices(self):
