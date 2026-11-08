@@ -101,3 +101,5 @@ run(cli .. " screenshot region", "Screenshot of a region", locked)("Print")
 run(cli .. " screenshot region --edit", "Edit a screenshot of a region", locked)("SHIFT + Print")
 run(cli .. " screenshot full", "Screenshot of the screen", locked)(mod .. " + Print")
 run(cli .. " screenshot full --edit", "Edit a screenshot of the screen", locked)(mod .. " + SHIFT + Print")
+-- For keyboards without Print (it takes the key from apps that use it for "Save as").
+run(cli .. " screenshot region", "Screenshot of a region")("CTRL + SHIFT + S")

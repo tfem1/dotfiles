@@ -5,6 +5,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- `CTRL + SHIFT + S`: screenshot of a region, for keyboards without a Print
+  key (saved and copied, like `Print`).
+
 ### Changed
 
 - The installer installs SDDM and the **stacked clock** login screen by
