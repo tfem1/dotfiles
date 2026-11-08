@@ -17,7 +17,7 @@ import "system"
 import "settings"
 import "widgets"
 import "lock"
-import "game"
+import "modes"
 import "ipc"
 
 // Entry point: only composes the parts, each one lives in its own folder.
@@ -44,7 +44,7 @@ ShellRoot {
     Calendar { id: calendarLayer }
     MusicPanel { id: musicLayer }
     Lock { id: lockLayer }
-    GameMode {}
+    Modes { locker: lockLayer }
     PowerMenu {
         id: powerLayer
         locker: lockLayer

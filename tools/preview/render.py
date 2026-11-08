@@ -28,7 +28,7 @@ from theming.settings import load_config, load_theme  # noqa: E402
 from theming.template import render as render_template  # noqa: E402
 from wallpaper_collection import find, load_collection, theme_for  # noqa: E402
 
-MODES = ("desktop", "widgets", "lock", "launcher", "clipboard", "cheatsheet", "wallpaper", "wifi", "bluetooth", "volume",
+MODES = ("desktop", "widgets", "lock", "modes", "launcher", "clipboard", "cheatsheet", "wallpaper", "wifi", "bluetooth", "volume",
          "calendar", "music", "power", "system", "settings", "settings-system", "settings-display",
          "settings-widgets")
 # Hues of the sample landscapes drawn for the wallpaper selector (degrees).

@@ -53,6 +53,7 @@ QtObject {
     property real opacity: 0.9
     property bool animations: true
     property bool gameMode: false      // no animations, no notification popups
+    property bool powerSaver: false    // no animations, a dimmer screen
     property string wallpaper: ""
     // Desktop widgets shown (config.json widgets.*).
     property var widgets: ({ corner: "top-left", clock: true, audio: true, media: true, cpu: true, gpu: true, ram: true,
@@ -89,6 +90,7 @@ QtObject {
             theme.opacity = data.effects.opacity;
             theme.animations = data.effects.animations;
             theme.gameMode = !!data.effects.gameMode;
+            theme.powerSaver = !!data.effects.powerSaver;
         }
         theme.wallpaper = data.wallpaper || "";
         if (data.widgets)

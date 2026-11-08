@@ -99,8 +99,7 @@ Scope {
         id: store
         cli: root.cli
         // Written: those Appearance changes no longer wait.
-        onWritten: keys => root.pending = Object.fromEntries(Object.entries(root.pending)
-            .filter(([key]) => !keys.includes(key)))
+        onWritten: keys => root.pending = Settings.drop(root.pending, keys)
         onFailed: keys => keys.forEach(key => root.follow(key, store.settings.values[key]))
     }
 

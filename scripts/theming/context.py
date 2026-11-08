@@ -41,10 +41,11 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths,
         if field.kind == "hue":
             context[key] = context[str(theme[key])]
 
-    # Game mode: everything that costs frames is off, whatever the settings;
-    # a fullscreen game may tear (less input lag) and is scanned out directly.
+    # Game mode and power saver: everything that costs frames is off, whatever
+    # the settings; in game mode a fullscreen game may tear (less input lag)
+    # and is scanned out directly.
     game = bool(theme.get("effects.game_mode"))
-    if game:
+    if game or theme.get("effects.power_saver"):
         context.update({"effects.animations": False, "effects.blur": False, "effects.shadow": False})
     context["game.tearing"] = game
     context["game.direct_scanout"] = 1 if game else 0

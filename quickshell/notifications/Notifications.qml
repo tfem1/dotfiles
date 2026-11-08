@@ -55,8 +55,10 @@ Scope {
                 time: new Date(),
                 urgent: urgent
             }].concat(root.history).slice(0, 50);
-            // Quiet mode and game mode keep the popups away, not the urgent ones.
-            if (!(Session.doNotDisturb || Theme.gameMode) || urgent)
+            // Do not disturb, game, night and focus keep the popups away, not the
+            // urgent ones; presentation keeps them all away (all go to history).
+            const quiet = Session.doNotDisturb || Theme.gameMode || Session.night || Session.focus;
+            if ((!quiet || urgent) && !Session.presentation)
                 root.popups = [notification].concat(root.popups).slice(0, 4);
         }
     }

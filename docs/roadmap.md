@@ -179,6 +179,7 @@ Themes come before the shell, so the shell is built with the final palettes.
   | `SUPER + D` | launcher (overview) |
   | `SUPER + B` | system panel (right sidebar) |
   | `SUPER + G` | game mode on or off |
+  | `SUPER + K` | modes: gaming, coffee, night, sleep, do not disturb, power saver, presentation, focus |
   | `SUPER + M` | music (left sidebar) |
   | `SUPER + W` | wallpaper selector |
   | `SUPER + S` | calendar |

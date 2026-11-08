@@ -97,6 +97,7 @@ THEME_SCHEMA: dict[str, Field] = {
     "effects.shadow": BOOL,
     "effects.animations": BOOL,
     "effects.game_mode": BOOL,
+    "effects.power_saver": BOOL,
     "cursor.theme": TEXT,
     "cursor.size": _int(8, 96),
     "icons.theme": TEXT,

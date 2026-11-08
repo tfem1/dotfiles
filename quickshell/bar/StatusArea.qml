@@ -20,15 +20,28 @@ Pill {
     property bool quiet: false      // do not disturb
     property bool awake: false      // stay awake
     property bool game: false       // game mode
+    property var modes: ({})        // saver, night, presentation, focus: on or not
 
     spacing: 10
 
-    // Shown only while on: game mode, quiet mode and stay awake.
+    // Shown only while on: the modes of SUPER + K.
     Icon {
         anchors.verticalCenter: parent.verticalCenter
         visible: area.game
         name: "sports_esports"
         color: Theme.accent
+    }
+    Repeater {
+        model: [["saver", "eco"], ["night", "dark_mode"], ["presentation", "co_present"],
+                ["focus", "center_focus_strong"]]
+
+        Icon {
+            required property var modelData
+            anchors.verticalCenter: parent.verticalCenter
+            visible: !!area.modes[modelData[0]]
+            name: modelData[1]
+            color: Theme.accent
+        }
     }
     Icon {
         anchors.verticalCenter: parent.verticalCenter

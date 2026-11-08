@@ -16,6 +16,7 @@ import "../../quickshell/system"
 import "../../quickshell/settings"
 import "../../quickshell/widgets"
 import "../../quickshell/lock"
+import "../../quickshell/modes"
 
 // A 1920x1080 desktop with the shell's components and sample data.
 Rectangle {
@@ -119,6 +120,16 @@ Rectangle {
         x: parent.width - width - 24
         y: parent.height - height - 24
         show: ({ corner: "bottom-right", clock: true, cpu: true, gpu: false, ram: true, disk: false })
+    }
+
+    // The modes menu (SUPER + K), game mode and night on.
+    ModesContent {
+        visible: scene.mode === "modes"
+        anchors.centerIn: parent
+        width: implicitWidth
+        height: implicitHeight
+        z: 10
+        on: ({ game: true, night: true })
     }
 
     // The lock screen, a password being typed (the card shows).

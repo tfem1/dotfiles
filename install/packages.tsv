@@ -22,6 +22,10 @@ playerctl	core	playerctl	playerctl	playerctl
 cava	core	cava	cava	cava
 # Game mode asks Feral GameMode for its optimisations (CPU in performance).
 gamemode	core	gamemode	gamemode	gamemode
+# Power saver mode (powerprofilesctl); recent Fedora ships tuned-ppd for it.
+power-profiles	core	power-profiles-daemon	power-profiles-daemon	tuned-ppd|power-profiles-daemon
+# Night mode's warmer screen; not packaged on Fedora (night mode only dims).
+hyprsunset	core	hyprsunset	hyprsunset	-
 wireplumber	core	wireplumber	wireplumber	wireplumber
 networkmanager	core	networkmanager	network-manager	NetworkManager
 gsettings	core	glib2	libglib2.0-bin	glib2

@@ -3,21 +3,32 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// Do not disturb and stay awake, kept in the shell's state folder so a
-// shell restart keeps them.
+// The modes kept by the shell (SUPER + K): do not disturb, stay awake
+// (coffee), night, focus and presentation, in the shell's state folder so a
+// shell restart keeps them. Game mode and power saver live in theme.toml
+// (Hyprland follows them too): see Theme.
 Singleton {
     id: root
 
     property bool doNotDisturb: false
     property bool stayAwake: false
+    property bool night: false        // warmer, dimmer screen; notifications wait
+    property bool focus: false        // notifications wait, widgets hidden
+    property bool presentation: false // no notification at all, never sleeps, widgets hidden
     property bool ready: false    // saved state read (or missing): changes may be written
 
     function save() {
-        file.setText(JSON.stringify({ doNotDisturb: root.doNotDisturb, stayAwake: root.stayAwake }));
+        file.setText(JSON.stringify({
+            doNotDisturb: root.doNotDisturb, stayAwake: root.stayAwake, night: root.night,
+            focus: root.focus, presentation: root.presentation
+        }));
     }
 
     onDoNotDisturbChanged: if (ready) save()
     onStayAwakeChanged: if (ready) save()
+    onNightChanged: if (ready) save()
+    onFocusChanged: if (ready) save()
+    onPresentationChanged: if (ready) save()
 
     FileView {
         id: file
@@ -27,6 +38,9 @@ Singleton {
                 const data = JSON.parse(file.text());
                 root.doNotDisturb = !!data.doNotDisturb;
                 root.stayAwake = !!data.stayAwake;
+                root.night = !!data.night;
+                root.focus = !!data.focus;
+                root.presentation = !!data.presentation;
             } catch (error) {
                 console.warn("session: cannot read the saved state:", error);
             }

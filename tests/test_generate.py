@@ -94,6 +94,14 @@ class OutputTest(GenerateTest):
         self.assertIn("allow_tearing = false", self.hypr_theme.read_text())
         self.assertIn("direct_scanout = 0", self.hypr_theme.read_text())
 
+    def test_power_saver_drops_the_effects_but_does_not_tear(self):
+        self.write_user_file("theme.toml", "[effects]\npower_saver = true\nblur = true\nanimations = true\n")
+        self.run_generate("--all", "--only", "hyprland,quickshell")
+        text = self.hypr_theme.read_text()
+        self.assertIn("animations = { enabled = false }", text)
+        self.assertIn("allow_tearing = false", text)
+        self.assertTrue(json.loads(self.shell_theme.read_text())["effects"]["powerSaver"])
+
     def test_the_login_screen_waits_for_its_folder(self):
         # /var/lib/tfem/sddm is made by `tfem sddm install`, with sudo.
         code, output = self.run_generate("--all")

@@ -49,7 +49,8 @@
     "opacity": {{ effects.opacity }},
     "blur": {{ effects.blur }},
     "animations": {{ effects.animations }},
-    "gameMode": {{ effects.game_mode }}
+    "gameMode": {{ effects.game_mode }},
+    "powerSaver": {{ effects.power_saver }}
   },
   "widgets": {
     "corner": {{ widgets.corner | json }},

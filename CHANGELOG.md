@@ -31,6 +31,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- The Settings window kept "changes, not applied yet" after Apply: the
+  shell's JavaScript has no `Object.fromEntries`, so clearing the applied
+  changes failed. Found while testing the modes menu in the real Quickshell.
 - The Settings window felt slow: a switch or a choice only moved once
   `tfem settings set` had regenerated every file and the settings were read
   again (up to a second or more). Now it moves on the click; the change is
@@ -58,6 +61,16 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Modes menu** (`SUPER + K`): Gaming, Coffee (never sleeps), Night
+  (warmer screen with hyprsunset, dimmer, quiet), Do not disturb, Power
+  saver (power-saver profile through powerprofilesctl, effects off, dimmer;
+  never with Gaming), Presentation (no notification at all, never sleeps),
+  Focus (quiet, no widgets) and Sleep (lock, then suspend). An icon in the
+  bar for each mode on; the shell's modes survive a restart. New packages:
+  power-profiles-daemon (tuned-ppd on recent Fedora) and hyprsunset (not
+  packaged on Fedora: night mode only dims there). Checked in the real
+  Quickshell with stand-in tools that log their calls, and with
+  `Hyprland --verify-config` 0.57.1.
 - **Game mode** does more for performance, and `SUPER + G` switches it:
   fullscreen games may tear (less input lag) and are scanned out directly
   (`allow_tearing`, an `immediate` rule for fullscreen windows,

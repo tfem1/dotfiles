@@ -8,8 +8,8 @@ import "../music/lyrics.js" as Lyrics
 import "resources.js" as Resources
 
 // The desktop widgets, on the first screen, in the corner picked in the
-// Settings (Widgets), under the windows: they take no clicks. In game mode
-// they hide and stop, so the game gets that time. What feeds them runs only while they show: the resource readings
+// Settings (Widgets), under the windows: they take no clicks. In game mode,
+// power saver, focus and presentation they hide and stop. What feeds them runs only while they show: the resource readings
 // for the rings, cava for the spectrum (stopped in game mode), lrclib for
 // the lyrics of the song playing.
 Scope {
@@ -19,11 +19,12 @@ Scope {
     readonly property string corner: show.corner || "top-left"
     readonly property bool resources: !!(show.cpu || show.gpu || show.ram || show.disk)
     readonly property bool any: resources || !!(show.clock || show.audio || show.media)
+    readonly property bool paused: Theme.gameMode || Theme.powerSaver || Session.focus || Session.presentation
     property var levels: Resources.spectrum("", 24)
 
     ResourceMonitor {
         id: monitor
-        running: root.resources && !Theme.gameMode
+        running: root.resources && !root.paused
         wantGpu: !!root.show.gpu
         wantDisk: !!root.show.disk
     }
@@ -31,11 +32,11 @@ Scope {
     LyricsSource {
         id: lyrics
         player: Player.player
-        active: !!root.show.media && Player.active && !Theme.gameMode
+        active: !!root.show.media && Player.active && !root.paused
     }
 
     Process {
-        running: !!root.show.audio && !Theme.gameMode
+        running: !!root.show.audio && !root.paused
         command: ["cava", "-p", Quickshell.shellDir + "/widgets/cava.conf"]
         stdout: SplitParser {
             onRead: data => root.levels = Resources.spectrum(data, 24)
@@ -49,7 +50,7 @@ Scope {
     }
 
     LazyLoader {
-        active: root.any && !Theme.gameMode
+        active: root.any && !root.paused
 
         PanelWindow {
             screen: Quickshell.screens[0] || null

@@ -20,7 +20,7 @@ EXPECTED_KEYS = {
     "SUPER + Escape",
     "SUPER + SPACE", "XF86AudioPlay", "XF86AudioNext", "XF86AudioRaiseVolume", "XF86AudioMute",
     "XF86AudioMicMute", "XF86MonBrightnessUp", "Print", "SHIFT + Print", "SUPER + Print",
-    "SUPER + SHIFT + Print", "CTRL + SHIFT + S", "SUPER + G",
+    "SUPER + SHIFT + Print", "CTRL + SHIFT + S", "SUPER + G", "SUPER + K",
 }
 
 # Program of every command run by Hyprland -> its key in install/packages.tsv
