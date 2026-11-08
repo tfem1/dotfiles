@@ -14,6 +14,7 @@ Scope {
 
     required property var notifications   // the Notifications daemon
     required property var power           // the power menu
+    required property var settings        // the Settings window
     property bool open: false
     property real brightness: -1
 
@@ -85,6 +86,10 @@ Scope {
                 onPowerRequested: {
                     root.open = false;
                     root.power.toggle();
+                }
+                onSettingsRequested: {
+                    root.open = false;
+                    root.settings.toggle();
                 }
                 onClosed: root.open = false
                 Component.onCompleted: forceActiveFocus()

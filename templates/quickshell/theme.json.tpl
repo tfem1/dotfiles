@@ -48,7 +48,8 @@
   "effects": {
     "opacity": {{ effects.opacity }},
     "blur": {{ effects.blur }},
-    "animations": {{ effects.animations }}
+    "animations": {{ effects.animations }},
+    "gameMode": {{ effects.game_mode }}
   },
   "wallpaper": {{ wallpaper.path | json }}
 }

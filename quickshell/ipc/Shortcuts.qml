@@ -4,7 +4,7 @@ import Quickshell.Io
 
 // Commands sent by the Hyprland keybinds:
 //   qs ipc -c <shell> call <target> <function>
-// Targets without a handler yet (settings) arrive with their panels; tests/test_hypr.py lists them.
+// tests/test_hypr.py checks that every keybind has its handler here.
 Scope {
     id: root
 
@@ -20,6 +20,7 @@ Scope {
     required property var music
     required property var power
     required property var system
+    required property var settings
 
     IpcHandler {
         target: "bar"
@@ -79,5 +80,10 @@ Scope {
     IpcHandler {
         target: "system"
         function toggle(): void { root.system.toggle(); }
+    }
+
+    IpcHandler {
+        target: "settings"
+        function toggle(): void { root.settings.toggle(); }
     }
 }

@@ -31,7 +31,9 @@ Themes come before the shell, so the shell is built with the final palettes.
    in the system panel (`SUPER + B`), with hypridle.
 6. **Done:** wallpaper = character (pony wallpapers). The collection is
    My Little Pony only since 2026-11-08 (the forests were removed).
-7. Settings window (`SUPER + H`).
+7. **Done:** Settings window (`SUPER + H`): Appearance (with a live
+   preview, applied on Apply) and System (game mode, sound, screen,
+   connections, keyboard, sleep), search.
 8. Optional dock.
 9. Fastfetch in the theme colors, matching cursor and icons. **Icons
    done:** FairyWren, dark or light, folders in the accent's color.
@@ -261,6 +263,10 @@ generated. `tfem wallpapers fetch` deletes the downloads of removed ones.
     tools, so they stay optional and are only enabled when installed.
 
 ## 6. Settings window
+
+**Done (first version, chosen by the user):** a centered window with the
+pages on the left, quiet colors; Appearance and System; live preview;
+game mode; search. The plan below stays the long-term direction.
 
 Tabs: **Profiles**, **Display**, **Themes**, **Wallpaper**, Bar, Dock,
 Widgets (with module colors), System, Keybinds, Identity.

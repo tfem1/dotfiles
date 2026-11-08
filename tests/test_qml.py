@@ -17,7 +17,7 @@ from helpers import REPO
 try:
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     os.environ.setdefault("QT_QUICK_BACKEND", "software")
-    from PySide6.QtCore import QUrl
+    from PySide6.QtCore import QObject, QUrl
     from PySide6.QtGui import QGuiApplication
     from PySide6.QtQml import QQmlComponent, QQmlEngine
 except ImportError:
@@ -40,6 +40,9 @@ VISUAL = [
     "calendar/CalendarContent.qml", "music/MusicContent.qml", "music/Vinyl.qml", "music/LyricsView.qml",
     "power/PowerContent.qml", "system/SystemContent.qml",
     "components/AppIcon.qml", "bar/AppsArea.qml", "bar/AppMenuContent.qml",
+    "settings/SettingsContent.qml", "settings/SettingsNav.qml", "settings/AppearancePage.qml",
+    "settings/SystemPage.qml", "settings/LivePreview.qml", "settings/ThemeGrid.qml", "settings/Chips.qml",
+    "settings/SettingRow.qml", "settings/TextButton.qml",
 ]
 
 
@@ -64,8 +67,8 @@ class VisualComponentsTest(unittest.TestCase):
                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(done.returncode, 0, done.stderr)
             modes = ["apps", "bar", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "music",
-                     "power", "system", "volume", "wallpaper", "wifi"]
-            self.assertEqual(sorted(p.name for p in Path(out).iterdir()), [f"pony-twilight-{m}.png" for m in modes])
+                     "power", "settings", "settings-system", "system", "volume", "wallpaper", "wifi"]
+            self.assertEqual(sorted(p.name for p in Path(out).iterdir()), sorted(f"pony-twilight-{m}.png" for m in modes))
 
     def probe(self, script, expression, value):
         """Evaluates `expression` (with `input` = value) against a JS file of the shell."""
@@ -266,6 +269,47 @@ class VisualComponentsTest(unittest.TestCase):
                          [("Open", False, True, 0), ("", True, True, 1), ("Mute", False, False, 3)])
         self.assertEqual(self.probe(apps, 'Lib.detail(2, false) + "|" + Lib.detail(1, true) + "|" + Lib.detail(0, true)',
                                     None), "2 windows|1 window|In the tray")
+
+    def test_settings_search_and_pending_changes(self):
+        lib = SHELL / "settings/settings.js"
+        self.assertEqual(self.probe(lib, 'Lib.search("sleep").map(e => e.id)', None), ["awake", "sleep"])
+        self.assertEqual(self.probe(lib, 'Lib.search("WIFI net").map(e => e.id)', None), ["wifi"])
+        self.assertEqual(self.probe(lib, 'Lib.search("  ").length', None), 0)
+        values = {"shape.radius": 12, "palette.source": "pony-twilight"}
+        self.assertEqual(self.probe(lib, 'Lib.change(input, {}, "shape.radius", 8)', values), {"shape.radius": 8})
+        self.assertEqual(self.probe(lib, 'Lib.change(input, {"shape.radius": 8}, "shape.radius", 12)', values), {})
+        self.assertEqual(self.probe(lib, 'Lib.value(input, {"shape.radius": 4}, "shape.radius")', values), 4)
+        self.assertEqual(self.probe(lib, 'Lib.pairs({"b.x": true, "a.y": "pony-luna"})', None),
+                         ["a.y=pony-luna", "b.x=true"])
+        self.assertEqual(self.probe(lib, '[0, 5, 60, 120].map(Lib.minutes)', None), ["Never", "5 min", "1 h", "2 h"])
+        self.assertEqual(self.probe(lib, 'Lib.steps([0, 10, 15], 11)', None), [0, 10, 11, 15])
+        self.assertEqual(self.probe(lib, 'Lib.steps([0, 10], 10)', None), [0, 10])
+        self.assertEqual(self.probe(lib, 'Lib.changes({"a": 1}) + "|" + Lib.changes({"a": 1, "b": 2})', None),
+                         "1 change|2 changes")
+        entry = {"colors": {"accent": "#111111", "blue": "#2222ff"}}
+        self.assertEqual(self.probe(lib, '[Lib.accentColor(input, "theme"), Lib.accentColor(input, "blue")]', entry),
+                         ["#111111", "#2222ff"])
+
+    def test_every_search_result_leads_to_a_row(self):
+        # Rows made by a Repeater are visual children only: they are walked
+        # in QML, as SettingsContent.scrollTo does.
+        component = QQmlComponent(self.engine)
+        component.setData(b'import QtQuick\nSettingsContent {\n'
+                          b'    function names(item) {\n'
+                          b'        let found = [item.objectName];\n'
+                          b'        for (const child of item.children) found = found.concat(names(child));\n'
+                          b'        return found;\n'
+                          b'    }\n'
+                          b'    readonly property var shown: names(this)\n}\n',
+                          QUrl.fromLocalFile(str(SHELL / "settings/Probe.qml")))
+        window = component.create()
+        self.assertEqual([e.toString() for e in component.errors()], [])
+        shown = window.property("shown")
+        shown = shown.toVariant() if hasattr(shown, "toVariant") else shown
+        index = self.probe(SHELL / "settings/settings.js", "Lib.INDEX", None)
+        for entry in index:
+            with self.subTest(row=entry["id"]):
+                self.assertIn(entry["id"], shown)
 
     def test_calendar_grid_and_week_numbers(self):
         cal = SHELL / "calendar/calendar.js"

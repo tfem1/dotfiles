@@ -3,6 +3,7 @@ import Quickshell
 import Quickshell.Services.Notifications
 import Quickshell.Wayland
 import "../services"
+import "../theme"
 
 // Notification daemon: shows new notifications as popups in the top-right
 // corner, for their own timeout or 5 s (urgent ones stay until closed), and
@@ -54,7 +55,8 @@ Scope {
                 time: new Date(),
                 urgent: urgent
             }].concat(root.history).slice(0, 50);
-            if (!Session.doNotDisturb || urgent)
+            // Quiet mode and game mode keep the popups away, not the urgent ones.
+            if (!(Session.doNotDisturb || Theme.gameMode) || urgent)
                 root.popups = [notification].concat(root.popups).slice(0, 4);
         }
     }

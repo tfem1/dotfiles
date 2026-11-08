@@ -62,6 +62,10 @@ class ShellRuntimeTest(SandboxTest):
             self.assertEqual(generate(["--root", str(REPO), "--only", "quickshell", "--all"], env=self.env), 0)
         self.shell = self.home / ".config/quickshell/desktop"
         shutil.copytree(REPO / "quickshell", self.shell, dirs_exist_ok=True)
+        # The CLI where the installer links it: the panels that read data with
+        # it (settings, wallpapers) open with real data.
+        (self.home / ".local/bin").mkdir(parents=True)
+        (self.home / ".local/bin/tfem").symlink_to(REPO / "tfem")
         (self.home / "sway.conf").write_text("output HEADLESS-1 mode 1920x1080\n")
         env = {**os.environ, **self.env, "WLR_BACKENDS": "headless", "WLR_LIBINPUT_NO_DEVICES": "1",
                "WLR_RENDERER": "pixman"}
@@ -112,7 +116,7 @@ class ShellRuntimeTest(SandboxTest):
         for panel in PANELS:
             with self.subTest(panel=panel):
                 self.ipc(panel, "toggle")   # open
-                time.sleep(0.6)
+                time.sleep(1.5 if panel in ("settings", "wallpaper") else 0.6)
                 self.ipc(panel, "toggle")   # close
                 time.sleep(0.2)
         self.ipc("bar", "toggleAutohide")

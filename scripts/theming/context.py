@@ -6,6 +6,7 @@ from typing import Mapping
 
 from .accents import companions
 from .icons import folder_color, theme_name
+from .idle import listeners
 from .palette import Palette
 from .paths import Paths
 from .schema import THEME_SCHEMA
@@ -38,6 +39,10 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths,
         if field.kind == "hue":
             context[key] = context[str(theme[key])]
 
+    # Game mode: everything that costs frames is off, whatever the settings.
+    if theme.get("effects.game_mode"):
+        context.update({"effects.animations": False, "effects.blur": False, "effects.shadow": False})
+    context["idle.listeners"] = listeners(context)
     context["wallpaper.path"] = _wallpaper_path(str(theme["wallpaper.path"]), paths)
     # GTK theme and color scheme that match the palette (adw-gtk3, gsettings values).
     dark = palette.variant == "dark"

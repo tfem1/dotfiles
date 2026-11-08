@@ -32,6 +32,14 @@ output   = "{config}/quickshell/{shell}/theme.json"
 needs    = "qs"
 # No reload: the shell watches this file and updates itself.
 
+# Idle steps from config.json (idle.*). hypridle reads its config when it
+# starts: it is started again (detached, so the generator does not wait).
+[hypridle]
+template = "hypr/hypridle.conf.tpl"
+output   = "{config}/hypr/hypridle.conf"
+needs    = "hypridle"
+reload   = "pkill -x hypridle; setsid -f hypridle >/dev/null 2>&1; true"
+
 [hyprlock]
 template = "hypr/hyprlock.conf.tpl"
 output   = "{config}/hypr/hyprlock.conf"

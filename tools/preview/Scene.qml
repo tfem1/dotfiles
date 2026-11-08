@@ -13,6 +13,7 @@ import "../../quickshell/calendar"
 import "../../quickshell/music"
 import "../../quickshell/power"
 import "../../quickshell/system"
+import "../../quickshell/settings"
 
 // A 1920x1080 desktop with the shell's components and sample data.
 Rectangle {
@@ -22,6 +23,7 @@ Rectangle {
     property string bindsJson: "[]"
     property string wallpapersJson: "[]"
     property string appsJson: "[]"
+    property string settingsJson: "{}"
     property string localeName: ""
     property url wallpaper
     property string mode: "desktop"
@@ -274,6 +276,20 @@ Rectangle {
             anchors.fill: parent
             images: samples
             current: samples.length > 3 ? samples[3].path : ""
+        }
+
+        // Settings: Luna picked but not applied yet, so the preview, the
+        // theme grid and the Apply bar show it.
+        SettingsContent {
+            readonly property var sample: JSON.parse(scene.settingsJson)
+            visible: scene.mode === "settings" || scene.mode === "settings-system"
+            anchors.fill: parent
+            settings: sample.values ? sample : ({ values: {}, themes: [], folders: {} })
+            pending: scene.mode === "settings" ? { "palette.source": "pony-luna", "shape.radius": 18 } : {}
+            page: scene.mode === "settings-system" ? "system" : "appearance"
+            wallpaper: scene.wallpaper
+            live: ({ gameMode: false, volume: 0.64, muted: false, micMuted: false, brightness: 0.8, wifi: true,
+                     bluetooth: true, layout: "French", quiet: false, awake: false, idle: sample.values || {} })
         }
 
         CheatsheetContent {

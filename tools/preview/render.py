@@ -29,7 +29,7 @@ from theming.template import render as render_template  # noqa: E402
 from wallpaper_collection import find, load_collection, theme_for  # noqa: E402
 
 MODES = ("desktop", "apps", "launcher", "clipboard", "cheatsheet", "wallpaper", "wifi", "bluetooth", "volume",
-         "calendar", "music", "power", "system")
+         "calendar", "music", "power", "system", "settings", "settings-system")
 # Hues of the sample landscapes drawn for the wallpaper selector (degrees).
 SAMPLE_HUES = (215, 280, 330, 140, 25, 195, 255, 0, 50, 100, 300, 230, 160, 10)
 # The theme some samples bring, as a pony wallpaper would.
@@ -83,6 +83,12 @@ def icon_file(name: str) -> str:
                     if (path := theme / kind / size / f"{name}.{ext}").exists():
                         return path.resolve().as_uri()
     return ""
+
+
+def settings_json() -> str:
+    """What `tfem settings get` gives with the repository defaults."""
+    from settings import get
+    return json.dumps(get(Paths.from_env(ROOT, {"HOME": "/nonexistent"})), default=str)
 
 
 def sample_apps() -> str:
@@ -158,12 +164,13 @@ def main(argv: list[str] | None = None) -> int:
     scratch = tempfile.TemporaryDirectory()
     wallpapers = json.dumps(wallpaper_list(args.wallpapers, Path(scratch.name)))
     apps = sample_apps()
+    settings = settings_json()
     for name in args.theme or ["pony-twilight"]:
         for mode in MODES:
             view = QQuickView()
             view.setInitialProperties({"themeJson": theme_json(name), "bindsJson": binds, "wallpaper": wallpaper,
                                        "wallpapersJson": wallpapers, "appsJson": apps, "localeName": args.locale,
-                                       "mode": mode})
+                                       "settingsJson": settings, "mode": mode})
             view.setSource(QUrl.fromLocalFile(str(Path(__file__).with_name("Scene.qml"))))
             if view.errors():
                 for error in view.errors():

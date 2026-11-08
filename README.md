@@ -364,14 +364,35 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   are then trusted and connected); "visible to other devices". Colors are
   the Wi-Fi and Bluetooth module colors of the theme. Devices that ask for
   a pairing code are not supported yet (pair them once with `bluetoothctl`).
+- **Settings** (`SUPER + H`, or the gear of the system panel): a window
+  in quiet colors, the pages on the left, each setting with one sentence
+  saying what it does.
+  - **Appearance**: theme (the 48 as cards in their own colors, with
+    filters), accent color, wallpaper, folder color, rounded corners, space
+    between windows, transparency, blur, shadows, animations, text size.
+    Nothing changes until **Apply**: a small desktop at the top shows the
+    result first (bar, window, panel), and a bar at the bottom counts the
+    changes waiting, with Cancel.
+  - **System**, acting at once: **game mode** (no animations, blur or
+    shadows, notifications wait; urgent ones still show), sound and
+    microphone, brightness, Wi-Fi and Bluetooth (with their panel), keyboard
+    layout, quiet mode, stay awake, and **sleep**: after how long the
+    screen dims, locks, turns off and the computer suspends (or never).
+  - **Search** at the top: "blur", "wifi" or "sleep" lists the matching
+    settings; Enter goes to the first one and lights it up.
+  - Everything goes through `tfem settings get` and `tfem settings set
+    KEY=VALUE`, checked like the files and written to your `theme.toml` or
+    `config.json` (comments kept), then the theme is regenerated.
 - **System panel** (`SUPER + B`), on the right: Wi-Fi, Bluetooth,
   airplane, **Quiet** (do not disturb: no popups except urgent ones, a bell
   shows in the bar) and **Stay awake** (no dimming, lock or sleep, a cup
   shows in the bar); volume and brightness; the last 50 notifications, to
   dismiss one by one or all at once. Quiet and stay awake survive a
   restart of the shell.
-- **Idle** (hypridle, `hypr/hypridle.conf`): dim after 5 min, lock after
-  10, screen off after 11, suspend after 30; locked before any suspend.
+- **Idle** (hypridle, `~/.config/hypr/hypridle.conf`, generated from the
+  `idle` section of `config.json`): dim after 5 min, lock after 10, screen
+  off after 11, suspend after 30 (0 = never; change them in Settings);
+  locked before any suspend.
 - **Power menu** (`SUPER + Escape`, or the power button at the right end
   of the bar): lock, log out, suspend (locks first), restart, shut down,
   with the time since start-up. Log out, restart and shut down ask for a

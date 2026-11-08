@@ -52,6 +52,7 @@ QtObject {
     property int border: 0
     property real opacity: 0.9
     property bool animations: true
+    property bool gameMode: false      // no animations, no notification popups
     property string wallpaper: ""
 
     // Derived values used everywhere.
@@ -84,6 +85,7 @@ QtObject {
         if (data.effects) {
             theme.opacity = data.effects.opacity;
             theme.animations = data.effects.animations;
+            theme.gameMode = !!data.effects.gameMode;
         }
         theme.wallpaper = data.wallpaper || "";
     }

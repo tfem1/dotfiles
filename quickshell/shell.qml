@@ -14,6 +14,7 @@ import "calendar"
 import "music"
 import "power"
 import "system"
+import "settings"
 import "ipc"
 
 // Entry point: only composes the parts, each one lives in its own folder.
@@ -42,6 +43,12 @@ ShellRoot {
         id: systemLayer
         notifications: notificationLayer
         power: powerLayer
+        settings: settingsLayer
+    }
+    Settings {
+        id: settingsLayer
+        wallpapers: wallpaperLayer
+        network: networkLayer
     }
 
     Shortcuts {
@@ -57,5 +64,6 @@ ShellRoot {
         music: musicLayer
         power: powerLayer
         system: systemLayer
+        settings: settingsLayer
     }
 }

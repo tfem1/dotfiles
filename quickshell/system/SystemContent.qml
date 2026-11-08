@@ -29,6 +29,7 @@ Rectangle {
     signal notificationDismissed(int index)
     signal clearAll
     signal powerRequested
+    signal settingsRequested
     signal closed
 
     readonly property real tileWidth: (column.width - 16) / 3
@@ -61,6 +62,14 @@ Rectangle {
                 font.weight: Font.DemiBold
             }
             IconButton {
+                anchors.right: powerButton.left
+                anchors.rightMargin: 4
+                anchors.verticalCenter: parent.verticalCenter
+                icon: "settings"
+                onClicked: panel.settingsRequested()
+            }
+            IconButton {
+                id: powerButton
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 icon: "power_settings_new"

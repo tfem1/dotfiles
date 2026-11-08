@@ -20,7 +20,7 @@ FOLDER_COLORS = (
 # Color of the front of each folder.svg, measured on FairyWren_Dark
 # (2026-11-08). Left out: multi and xpress (same as blue and yellow), and the
 # distribution ones (adwaita, yaru): they can still be chosen in icons.folders.
-_MEASURED = {
+MEASURED = {
     "black": "#383838", "blue": "#088cfd", "bluegrey": "#4a606b", "breeze": "#3c9ccf",
     "brown": "#8e6b43", "carmine": "#a43132", "cyan": "#39adbf", "darkcyan": "#2d6a73",
     "deeporange": "#e75d3b", "green": "#679944", "grey": "#757474", "indigo": "#5061c5",
@@ -45,10 +45,10 @@ def folder_color(accent: Color) -> str:
     lightness, a, b = oklab(accent)
 
     def distance(name: str) -> float:
-        other = oklab(Color.parse(_MEASURED[name]))
+        other = oklab(Color.parse(MEASURED[name]))
         return (_LIGHTNESS_WEIGHT * (other[0] - lightness)) ** 2 + (other[1] - a) ** 2 + (other[2] - b) ** 2
 
-    return min(_MEASURED, key=distance)
+    return min(MEASURED, key=distance)
 
 
 def oklab(color: Color) -> tuple[float, float, float]:

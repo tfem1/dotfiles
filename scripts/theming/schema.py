@@ -93,6 +93,7 @@ THEME_SCHEMA: dict[str, Field] = {
     "effects.blur_passes": _int(1, 4),
     "effects.shadow": BOOL,
     "effects.animations": BOOL,
+    "effects.game_mode": BOOL,
     "cursor.theme": TEXT,
     "cursor.size": _int(8, 96),
     "icons.theme": TEXT,
@@ -107,6 +108,11 @@ THEME_OPEN_TABLES: dict[str, tuple[tuple[str, ...], Field]] = {
 
 CONFIG_SCHEMA: dict[str, Field] = {
     "shell.name": NAME,
+    # Idle steps, in minutes; 0 = never.
+    "idle.dim": _int(0, 240),
+    "idle.lock": _int(0, 240),
+    "idle.screen_off": _int(0, 240),
+    "idle.suspend": _int(0, 240),
 }
 
 

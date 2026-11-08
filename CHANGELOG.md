@@ -28,6 +28,23 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Settings window (`SUPER + H`, or the gear of the system panel), in quiet
+  colors, pages on the left. Appearance: theme cards in their own colors
+  with filters, accent, wallpaper, folder color, corners, gaps,
+  transparency, blur, shadows, animations, text size; a live preview shows
+  the result before Apply (Cancel drops the changes). System, acting at
+  once: game mode, sound, microphone, brightness, Wi-Fi, Bluetooth,
+  keyboard layout, quiet mode, stay awake, sleep steps. Search finds a
+  setting and lights it up. Tests check every search entry leads to a row.
+- `tfem settings get | set KEY=VALUE...`: every setting with its bounds and
+  the preview colors of every theme, as JSON; typed, checked writes to
+  theme.toml or config.json (comments kept), then regeneration.
+- Game mode (`effects.game_mode`): no animations, blur or shadows in
+  Hyprland and the shell, notification popups held back (urgent ones
+  still show).
+- Sleep steps in `config.json` (`idle.dim`, `idle.lock`, `idle.screen_off`,
+  `idle.suspend`, minutes, 0 = never): `hypridle.conf` is now generated
+  (new `hypridle` target, restarts hypridle when it changes).
 - 31 more themes, 48 in all. Twelve more My Little Pony characters, from
   their canon colors on the MLP wiki: Applejack, Sweetie Belle, Vinyl
   Scratch, Derpy, Discord, Scootaloo, Apple Bloom, Sunset Shimmer,

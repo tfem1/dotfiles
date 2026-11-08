@@ -46,8 +46,8 @@ class ChoiceTest(unittest.TestCase):
                 self.assertEqual(folder_color(Color.parse(accent)), expected)
 
     def test_every_measured_color_is_a_fairywren_one(self):
-        from theming.icons import _MEASURED, FOLDER_COLORS
-        self.assertLessEqual(set(_MEASURED), set(FOLDER_COLORS))
+        from theming.icons import MEASURED, FOLDER_COLORS
+        self.assertLessEqual(set(MEASURED), set(FOLDER_COLORS))
 
 
 class ContextTest(SandboxTest):

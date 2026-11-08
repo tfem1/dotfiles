@@ -48,7 +48,8 @@
   "effects": {
     "opacity": 0.9,
     "blur": true,
-    "animations": true
+    "animations": true,
+    "gameMode": false
   },
   "wallpaper": ""
 }

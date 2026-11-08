@@ -26,6 +26,17 @@ class SetValueTest(unittest.TestCase):
         result = set_value("", "wallpaper", "path", 'my "best" \\ pick.png')
         self.assertEqual(tomllib.loads(result)["wallpaper"]["path"], 'my "best" \\ pick.png')
 
+    def test_numbers_booleans_and_dotted_tables(self):
+        text = set_value("[shape]\nradius = 12\n", "shape", "radius", 8)
+        text = set_value(text, "effects", "blur", False)
+        text = set_value(text, "effects", "opacity", 0.85)
+        text = set_value(text, "palette.overrides", "base00", "#11111b")
+        data = tomllib.loads(text)
+        self.assertEqual(data["shape"]["radius"], 8)
+        self.assertIs(data["effects"]["blur"], False)
+        self.assertEqual(data["effects"]["opacity"], 0.85)
+        self.assertEqual(data["palette"]["overrides"]["base00"], "#11111b")
+
     def test_refuses_a_file_it_cannot_change_safely(self):
         # A dotted key already defines the table: adding [wallpaper] would break the file.
         with self.assertRaises(ValueError):

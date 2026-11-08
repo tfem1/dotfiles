@@ -29,7 +29,7 @@ Singleton {
         command: ["hyprctl", "-j", "devices"]
         stdout: StdioCollector {
             onStreamFinished: {
-                if (!text.trim())
+                if (!text.trim().startsWith("{"))
                     return;  // hyprctl missing or not answering: no layout to show
                 try {
                     const keyboards = JSON.parse(text).keyboards || [];

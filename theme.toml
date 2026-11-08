@@ -44,6 +44,8 @@ blur_size   = 8
 blur_passes = 2
 shadow      = false
 animations  = true
+game_mode   = false             # for games: no animations, blur or shadows, no
+                                # notification popups (urgent ones still show)
 
 [cursor]
 theme = "Adwaita"

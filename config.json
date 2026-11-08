@@ -2,5 +2,11 @@
   "schema": 1,
   "shell": {
     "name": "desktop"
+  },
+  "idle": {
+    "dim": 5,
+    "lock": 10,
+    "screen_off": 11,
+    "suspend": 30
   }
 }

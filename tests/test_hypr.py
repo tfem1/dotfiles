@@ -41,7 +41,7 @@ DISPATCHERS = {
 
 # Panels whose key is bound before the panel is built: the list must shrink
 # as they arrive (a test fails when one of them gets a handler).
-PENDING_PANELS = {"settings"}
+PENDING_PANELS: set[str] = set()   # keybinds whose panel does not exist yet
 
 
 def programs(command):
