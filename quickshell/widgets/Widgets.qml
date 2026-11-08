@@ -7,14 +7,15 @@ import "../music"
 import "../music/lyrics.js" as Lyrics
 import "resources.js" as Resources
 
-// The desktop widgets, on the first screen, under the windows: they take no
-// clicks. What feeds them runs only while they show: the resource readings
+// The desktop widgets, on the first screen, in the corner picked in the
+// Settings (Widgets), under the windows: they take no clicks. What feeds them runs only while they show: the resource readings
 // for the rings, cava for the spectrum (stopped in game mode), lrclib for
 // the lyrics of the song playing.
 Scope {
     id: root
 
     readonly property var show: Theme.widgets
+    readonly property string corner: show.corner || "top-left"
     readonly property bool resources: !!(show.cpu || show.gpu || show.ram || show.disk)
     readonly property bool any: resources || !!(show.clock || show.audio || show.media)
     property var levels: Resources.spectrum("", 24)
@@ -54,12 +55,16 @@ Scope {
             aboveWindows: false
             exclusionMode: ExclusionMode.Normal
             anchors {
-                top: true
-                left: root.show.side !== "right"
-                right: root.show.side === "right"
+                top: root.corner.startsWith("top")
+                bottom: root.corner.startsWith("bottom")
+                left: root.corner.endsWith("left")
+                right: root.corner.endsWith("right")
             }
+            // The bar's space is kept free (ExclusionMode.Normal): these
+            // margins count from it at the top.
             margins {
                 top: 16
+                bottom: 24
                 left: 24
                 right: 24
             }

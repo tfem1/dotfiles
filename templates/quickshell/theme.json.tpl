@@ -52,7 +52,7 @@
     "gameMode": {{ effects.game_mode }}
   },
   "widgets": {
-    "side": {{ widgets.side | json }},
+    "corner": {{ widgets.corner | json }},
     "clock": {{ widgets.clock }},
     "audio": {{ widgets.audio }},
     "media": {{ widgets.media }},

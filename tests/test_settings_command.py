@@ -47,6 +47,13 @@ class SettingsCommandTest(SandboxTest):
         self.assertEqual(theme["palette"]["source"], "dracula")
         self.assertEqual(json.loads((self.paths.user_dir / "config.json").read_text()), {"idle": {"suspend": 0}})
 
+    def test_a_new_corner_replaces_the_old_side_in_the_file(self):
+        self.write_user_file("config.json", '{"widgets": {"side": "right", "cpu": false}}')
+        code, output = self.run_main("set", "widgets.corner=bottom-right", "--no-generate")
+        self.assertEqual(code, 0, output)
+        self.assertEqual(json.loads((self.paths.user_dir / "config.json").read_text()),
+                         {"widgets": {"corner": "bottom-right", "cpu": False}})
+
     def test_bad_values_change_nothing(self):
         for pair, message in (("shape.radius=99", "between 0 and 32"), ("effects.blur=maybe", "true or false"),
                               ("nope.key=1", "unknown setting"), ("palette.accent=pink", "must be one of")):

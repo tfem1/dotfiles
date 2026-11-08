@@ -10,7 +10,7 @@
     "suspend": 30
   },
   "widgets": {
-    "side": "left",
+    "corner": "top-left",
     "clock": true,
     "audio": true,
     "media": true,

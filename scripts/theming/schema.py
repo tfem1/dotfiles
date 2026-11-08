@@ -118,9 +118,15 @@ CONFIG_SCHEMA: dict[str, Field] = {
     "idle.lock": _int(0, 240),
     "idle.screen_off": _int(0, 240),
     "idle.suspend": _int(0, 240),
-    # Desktop widgets: which ones show, and on which side of the screen.
-    "widgets.side": Field("choice", choices=("left", "right")),
+    # Desktop widgets: which ones show, and in which corner of the screen.
+    "widgets.corner": Field("choice", choices=("top-left", "top-right", "bottom-left", "bottom-right")),
     **{f"widgets.{name}": BOOL for name in ("clock", "audio", "media", "cpu", "gpu", "ram", "disk")},
+}
+
+# Keys that were renamed: old key -> (new key, old value -> new value). A
+# file that still has the old key keeps working.
+CONFIG_RENAMED: dict[str, tuple[str, dict[object, object]]] = {
+    "widgets.side": ("widgets.corner", {"left": "top-left", "right": "top-right"}),
 }
 
 # Settings → Display: the mode picked for a screen, by port name.

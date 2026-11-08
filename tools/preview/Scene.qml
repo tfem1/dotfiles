@@ -94,11 +94,10 @@ Rectangle {
         }
     }
 
-    // The desktop widgets, with sample readings and a song with lyrics.
-    WidgetsContent {
+    // The desktop widgets, with sample readings and a song with lyrics: in
+    // the top left corner, and only the clock and the rings bottom right.
+    component SampleWidgets: WidgetsContent {
         visible: scene.mode === "widgets"
-        x: 24
-        y: 60
         now: new Date(2026, 10, 7, 17, 49)
         cpu: ({ usage: 0.44, cores: 8 })
         gpu: ({ usage: 0.31, used: 2.1e9, total: 8.6e9, name: "AMD" })
@@ -110,6 +109,15 @@ Rectangle {
         hasMedia: true
         media: ({ song: "Winter Wrap Up", artist: "Ponyville Chorus",
                   line: "Winter wrap up, winter wrap up!", next: "Let's finish our holiday cheer" })
+    }
+    SampleWidgets {
+        x: 24
+        y: 60
+    }
+    SampleWidgets {
+        x: parent.width - width - 24
+        y: parent.height - height - 24
+        show: ({ corner: "bottom-right", clock: true, cpu: true, gpu: false, ram: true, disk: false })
     }
 
     // Launcher, clipboard, cheatsheet, selector, network: the screen dims behind them.

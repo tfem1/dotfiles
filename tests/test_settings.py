@@ -44,6 +44,14 @@ class ValidationTest(SandboxTest):
             loader(self.paths)
         return "\n".join(caught.exception.problems)
 
+    def test_an_old_widgets_side_becomes_a_corner(self):
+        self.write_user_file("config.json", '{"widgets": {"side": "right"}}')
+        self.assertEqual(load_config(self.paths)["widgets.corner"], "top-right")
+        self.assertNotIn("widgets.side", load_config(self.paths))
+        # Both in the file (an old key left behind): the new one wins.
+        self.write_user_file("config.json", '{"widgets": {"side": "right", "corner": "bottom-left"}}')
+        self.assertEqual(load_config(self.paths)["widgets.corner"], "bottom-left")
+
     def test_reports_out_of_range_with_dotted_key(self):
         self.assertIn("shape.radius: must be between 0 and 32", self.problems_for("[shape]\nradius = 99\n"))
 

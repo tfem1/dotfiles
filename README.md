@@ -378,8 +378,8 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   own proportions, as the [Arch trademark
   policy](https://terms.archlinux.org/docs/trademark-policy/) asks; other
   systems get the Settings gear.
-- **Desktop widgets**, on the left of the screen (or the right), under the
-  windows, in the colors of the theme (violet with Twilight, green with
+- **Desktop widgets**, in the corner of the screen you pick (top left by
+  default, or any of the other three), under the windows, in the colors of the theme (violet with Twilight, green with
   Chrysalis):
 
   ![Desktop widgets in two themes](docs/images/widgets.png)
@@ -394,8 +394,9 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   - **Now playing**, kept minimal: the song, its artist and the line of the
     lyrics being sung (from lrclib.net), the next one under it.
 
-  Each one is turned on or off in Settings → **Widgets** (`widgets.*` in
-  `config.json`). Only what shows runs: CPU and memory are read from
+  Each one is turned on or off in Settings → **Widgets**, where a small
+  screen picks the corner with a click (`widgets.*` in `config.json`,
+  `widgets.corner`: `top-left`, `top-right`, `bottom-left`, `bottom-right`). Only what shows runs: CPU and memory are read from
   `/proc` every 2 seconds, the disk every minute.
 - **OSD** under the bar for the volume and the brightness.
 - **Notifications**: the shell is the notification daemon; popups in the

@@ -3,7 +3,7 @@ import QtQuick
 import "../theme"
 import "../components"
 
-// Widgets: which desktop widgets show, and on which side. They act at once
+// Widgets: which desktop widgets show, and in which corner. They act at once
 // (`tfem settings set widgets.cpu=false`...): the shell reads them from its
 // theme.json.
 Column {
@@ -25,13 +25,16 @@ Column {
     spacing: 12
 
     SettingRow {
-        objectName: "widget-side"
-        title: "Side"
-        description: "Where the widgets stand on the screen."
-        Chips {
-            current: page.values["widgets.side"] || "left"
-            model: [{ value: "left", label: "Left" }, { value: "right", label: "Right" }]
-            onPicked: value => page.action("widgets.side", value)
+        id: cornerRow
+        readonly property string corner: page.values["widgets.corner"] || "top-left"
+        objectName: "widget-corner"
+        title: "Corner"
+        description: "Where the widgets stand on the screen: click a corner. In use: "
+            + ({ "top-left": "top left", "top-right": "top right", "bottom-left": "bottom left",
+                 "bottom-right": "bottom right" })[corner] + "."
+        CornerPicker {
+            current: cornerRow.corner
+            onPicked: corner => page.action("widgets.corner", corner)
         }
     }
 

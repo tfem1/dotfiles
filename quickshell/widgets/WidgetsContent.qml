@@ -20,6 +20,7 @@ Column {
     property var media: ({ song: "", artist: "", line: "", next: "" })
 
     readonly property real half: (width - spacing) / 2
+    readonly property bool rightSide: (show.corner || "").endsWith("right")   // the clock goes to that edge
     readonly property var resources: [
         { key: "cpu", name: "CPU", value: cpu.usage, detail: cpu.cores + (cpu.cores === 1 ? " core" : " cores"),
           tint: Theme.accent, shown: !!show.cpu },
@@ -36,8 +37,8 @@ Column {
 
     ClockPill {
         visible: !!column.show.clock
-        anchors.left: column.show.side === "right" ? undefined : parent.left
-        anchors.right: column.show.side === "right" ? parent.right : undefined
+        anchors.left: column.rightSide ? undefined : parent.left
+        anchors.right: column.rightSide ? parent.right : undefined
         now: column.now
     }
 
@@ -45,6 +46,8 @@ Column {
         visible: column.resources.length > 0
         width: parent.width
         spacing: column.spacing
+        // In a right corner the cards fill from the right edge.
+        layoutDirection: column.rightSide ? Qt.RightToLeft : Qt.LeftToRight
 
         Repeater {
             model: column.resources

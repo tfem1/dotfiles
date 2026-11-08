@@ -55,7 +55,7 @@ QtObject {
     property bool gameMode: false      // no animations, no notification popups
     property string wallpaper: ""
     // Desktop widgets shown (config.json widgets.*).
-    property var widgets: ({ side: "left", clock: true, audio: true, media: true, cpu: true, gpu: true, ram: true,
+    property var widgets: ({ corner: "top-left", clock: true, audio: true, media: true, cpu: true, gpu: true, ram: true,
                              disk: true })
 
     // Derived values used everywhere.

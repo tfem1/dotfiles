@@ -20,7 +20,7 @@ from theming.generate import main as generate  # noqa: E402
 from theming.palette import PaletteError, load_palette, resolve_palette, theme_dirs  # noqa: E402
 from theming.paths import Paths  # noqa: E402
 from theming.icons import MEASURED  # noqa: E402
-from theming.schema import CONFIG_SCHEMA, HUES, THEME_OPEN_TABLES, THEME_SCHEMA, Field  # noqa: E402
+from theming.schema import CONFIG_RENAMED, CONFIG_SCHEMA, HUES, THEME_OPEN_TABLES, THEME_SCHEMA, Field  # noqa: E402
 from theming.settings import SettingsError, load_config, load_theme  # noqa: E402
 from theming.writer import write_atomic  # noqa: E402
 
@@ -109,6 +109,10 @@ def set_values(pairs: list[str], paths: Paths) -> list[str]:
             text = set_value(text, table, name, value)
         else:
             config.setdefault(table, {})[name] = value
+    for old, (new, _) in CONFIG_RENAMED.items():   # the old name of a key just written goes
+        old_table, old_name = old.rsplit(".", 1)
+        if any(key == new for key, _ in changes):
+            config.get(old_table, {}).pop(old_name, None)
     if any(field_of(key)[1] == "theme" for key, _ in changes):
         write_atomic(theme_file, text)
     if any(field_of(key)[1] == "config" for key, _ in changes):

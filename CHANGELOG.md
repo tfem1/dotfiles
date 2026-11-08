@@ -50,11 +50,16 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Widgets in any corner of the screen: Settings → Widgets shows a small
+  screen, a click on a corner moves them there (`widgets.corner`). In the
+  right corners the clock and the cards hug the right edge. A
+  `widgets.side` left in a config.json still works (left = top left,
+  right = top right) and goes away the next time the corner is set.
 - **Desktop widgets**, under the windows, in the theme's colors: a clock
   pill, CPU, GPU (AMD and NVIDIA), RAM and disk rings, an audio spectrum
   drawn by cava (new package, 24 bars, stopped in game mode) and a
   minimal now playing card (song, artist, the lyrics line being sung).
-  Settings → **Widgets** turns each one on or off and picks the side
+  Settings → **Widgets** turns each one on or off and picks the corner
   (`widgets.*` in `config.json`, passed to the shell through theme.json).
   Readings come from `/proc`, `df`, the amdgpu files or `nvidia-smi`, only
   while their widget shows; checked in the real Quickshell (CPU follows
