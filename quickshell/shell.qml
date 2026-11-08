@@ -16,6 +16,7 @@ import "power"
 import "system"
 import "settings"
 import "widgets"
+import "lock"
 import "ipc"
 
 // Entry point: only composes the parts, each one lives in its own folder.
@@ -41,7 +42,11 @@ ShellRoot {
     VolumePanel { id: volumeLayer }
     Calendar { id: calendarLayer }
     MusicPanel { id: musicLayer }
-    PowerMenu { id: powerLayer }
+    Lock { id: lockLayer }
+    PowerMenu {
+        id: powerLayer
+        locker: lockLayer
+    }
     SystemPanel {
         id: systemLayer
         notifications: notificationLayer

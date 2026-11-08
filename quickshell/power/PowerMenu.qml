@@ -8,15 +8,15 @@ import "../overlay"
 Scope {
     id: root
 
+    required property var locker        // the lock screen
     property bool open: false
     property string uptime: ""
 
     // Same commands as the keybinds and Hyprland's own example config.
+    // Suspend locks first, so the session is safe when the computer wakes up.
     readonly property var commands: ({
-        lock: "pidof hyprlock || hyprlock",
         logout: "command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'",
-        // Locked first, so the session is safe when the computer wakes up.
-        suspend: "pidof hyprlock >/dev/null || hyprlock & sleep 1 && systemctl suspend",
+        suspend: "sleep 1 && systemctl suspend",
         reboot: "systemctl reboot",
         poweroff: "systemctl poweroff"
     })
@@ -29,7 +29,10 @@ Scope {
 
     function run(action) {
         open = false;
-        Quickshell.execDetached(["sh", "-c", root.commands[action]]);
+        if (action === "lock" || action === "suspend")
+            locker.lock();
+        if (action in root.commands)
+            Quickshell.execDetached(["sh", "-c", root.commands[action]]);
     }
 
     // "12345.67 ..." seconds since the computer started.

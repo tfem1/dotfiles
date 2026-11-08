@@ -15,6 +15,7 @@ import "../../quickshell/power"
 import "../../quickshell/system"
 import "../../quickshell/settings"
 import "../../quickshell/widgets"
+import "../../quickshell/lock"
 
 // A 1920x1080 desktop with the shell's components and sample data.
 Rectangle {
@@ -120,9 +121,22 @@ Rectangle {
         show: ({ corner: "bottom-right", clock: true, cpu: true, gpu: false, ram: true, disk: false })
     }
 
+    // The lock screen, a password being typed (the card shows).
+    LockContent {
+        visible: scene.mode === "lock"
+        anchors.fill: parent
+        z: 10
+        live: false
+        now: new Date(2026, 10, 7, 17, 49)
+        background: scene.wallpaper
+        user: "twilight"
+        password: "friendship"
+        layout: "US"
+    }
+
     // Launcher, clipboard, cheatsheet, selector, network: the screen dims behind them.
     Rectangle {
-        visible: scene.mode !== "desktop" && scene.mode !== "widgets"
+        visible: !["desktop", "widgets", "lock"].includes(scene.mode)
         anchors.fill: parent
         anchors.topMargin: 44
         color: Qt.alpha(Theme.bgAlt, ["wifi", "bluetooth", "volume", "calendar", "music", "system"].includes(scene.mode) ? 0.2 : 0.45)

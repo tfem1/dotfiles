@@ -58,6 +58,14 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Lock screen** of the shell, in the stacked clock style of the login
+  screen: wallpaper, date, hours over minutes in the accent color, and a
+  card with the password as soon as you type (a wrong password shakes it).
+  Wayland session lock; the password is checked by PAM with the shell's own
+  rule (`quickshell/lock/pam/password.conf`). `SUPER + L`, the power key,
+  the power menu (lock, and suspend) and hypridle all use it, and fall back
+  to hyprlock when the shell is not running. Checked in the real Quickshell:
+  lock, a refused password, an unlock.
 - **Noir**, a black and white theme for black wallpapers: pure black bar
   and panels, white text and accent, greys elsewhere (red kept for
   alerts). Listed under the new **Black & white** filter of the theme

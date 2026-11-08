@@ -44,7 +44,7 @@ VISUAL = [
     "settings/SettingRow.qml", "settings/TextButton.qml", "settings/DisplayPage.qml",
     "settings/WidgetsPage.qml", "settings/ApplyBar.qml",
     "widgets/WidgetsContent.qml", "widgets/WidgetCard.qml", "widgets/ClockPill.qml", "widgets/ResourceCard.qml",
-    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml",
+    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml",
 ]
 
 
@@ -68,7 +68,7 @@ class VisualComponentsTest(unittest.TestCase):
             done = subprocess.run([sys.executable, str(REPO / "tools/preview/render.py"), "--out", out],
                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(done.returncode, 0, done.stderr)
-            modes = ["bar", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "music",
+            modes = ["bar", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "lock", "music",
                      "power", "settings", "settings-display", "settings-system", "settings-widgets", "system", "volume",
                      "wallpaper", "widgets", "wifi"]
             self.assertEqual(sorted(p.name for p in Path(out).iterdir()), sorted(f"pony-twilight-{m}.png" for m in modes))

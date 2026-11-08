@@ -40,7 +40,8 @@ Themes come before the shell, so the shell is built with the final palettes.
 8. Optional dock.
 9. Fastfetch in the theme colors, matching cursor and icons. **Icons
    done:** FairyWren, dark or light, folders in the accent's color.
-10. Custom lock screen and the two SDDM themes. **SDDM themes done**
+10. Custom lock screen and the two SDDM themes. **Done:** the lock screen
+    (Quickshell session lock, stacked clock style, PAM). **SDDM themes done**
     (`tfem sddm install`), installed by the installer and kept in the
     theme's colors by `tfem generate`.
 
@@ -305,7 +306,8 @@ Look of Serpantinum's settings window (original code):
 ## 7. Lock screen, login screens, authentication
 
 - **Done:** `hyprlock` config generated from `theme.toml` (hyprlock does not
-  lock without one). **Next:** a custom lock screen in the chosen style.
+  lock without one), kept as the fallback. **Done:** the shell's lock screen
+  in the stacked clock style (Wayland session lock, PAM password rule).
 - **Built-in Polkit agent**: administrator password prompts drawn by the
   shell in the current theme (Quickshell 0.3 supports Polkit agents).
 - **Done:** two SDDM themes in `extras/sddm/`, installed by the installer, colors from the

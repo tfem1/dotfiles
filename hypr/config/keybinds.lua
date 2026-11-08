@@ -75,8 +75,10 @@ run("qs ipc -c " .. shell .. " call bar toggleAutohide", "Toggle bar autohide")(
 run("qs kill -c " .. shell .. "; qs -c " .. shell .. " -n -d", "Restart the shell")(mod .. " + R")
 
 -- Session -------------------------------------------------------------------
-run("pidof hyprlock || hyprlock", "Lock the screen", { locked = true, repeating = true })(mod .. " + L")
-run("pidof hyprlock || hyprlock", "Lock the screen", locked)("XF86PowerOff")
+-- The shell's lock screen; hyprlock when the shell is not running.
+local lock = "qs ipc -c " .. shell .. " call lock lock || pidof hyprlock || hyprlock"
+run(lock, "Lock the screen", { locked = true, repeating = true })(mod .. " + L")
+run(lock, "Lock the screen", locked)("XF86PowerOff")
 panel("power", "Power menu: lock, log out, suspend, restart, shut down")(mod .. " + Escape")
 
 -- Media ---------------------------------------------------------------------

@@ -329,9 +329,18 @@ shortcut on screen. The tests load the config in a fake Hyprland API and check
 every key: the dispatcher exists, the program it runs is installed by the
 installer, and the shell panel it opens exists.
 
-- **Lock screen** (`SUPER + L`): hyprlock, with a config generated from
-  `theme.toml` (`~/.config/hypr/hyprlock.conf`): hyprlock does not lock without
-  one.
+- **Lock screen** (`SUPER + L`, the power key, after the idle time and
+  before suspend): the shell's own, in the style of the stacked clock login
+  screen: your wallpaper under a veil, the date, the hours over the minutes
+  in the accent color. Typing brings the card (your initial, your name, the
+  password, the keyboard layout); a wrong password shakes it. It uses the
+  Wayland session lock, so every window stays hidden until the password is
+  accepted; the password is checked by PAM with the shell's own rule
+  (`quickshell/lock/pam/password.conf`: your password, nothing else). When
+  the shell is not running, the same keys start hyprlock instead, with a
+  config generated from `theme.toml` (`~/.config/hypr/hyprlock.conf`).
+
+  ![Lock screen](docs/images/lock-screen.png)
 
 ## Login screen (SDDM)
 
