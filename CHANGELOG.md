@@ -28,6 +28,16 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- 31 more themes, 48 in all. Twelve more My Little Pony characters, from
+  their canon colors on the MLP wiki: Applejack, Sweetie Belle, Vinyl
+  Scratch, Derpy, Discord, Scootaloo, Apple Bloom, Sunset Shimmer,
+  Chrysalis, Spike, Octavia and Zecora; their wallpapers in the collection
+  now bring their theme. Nineteen well-known palettes from tinted-theming
+  (Catppuccin, Dracula, Nord, Gruvbox, Tokyo Night Moon, Solarized, One,
+  Ayu, Material Palenight, GitHub Dark, Everforest Light, Tomorrow Night
+  Eighties), imported by `tools/import_tinted.py` with their signature color
+  (made readable when needed); the tinted-theming MIT license is now in
+  `licenses/`.
 - Two SDDM login screens (Qt 6), original, in the colors, font and wallpaper
   of the desktop theme: **Welcome panel** (frosted side panel: greeting,
   clock, user, password with show button and Caps Lock warning, session,

@@ -64,14 +64,31 @@ class PonyThemesTest(unittest.TestCase):
                               cwd=REPO, env={"PYTHONPATH": str(REPO / "scripts")}, capture_output=True, text=True)
         self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
 
-    def test_ten_pony_themes_pass_every_check(self):
-        self.assertEqual(len(PONY_THEMES), 10)
+    def test_twenty_two_pony_themes_pass_every_check(self):
+        self.assertEqual(len(PONY_THEMES), 22)
         for path in PONY_THEMES:
             with self.subTest(theme=path.stem):
                 palette = load_palette(path)
                 self.assertEqual(palette.family, "Pony")
                 self.assertEqual(hue_problems(palette.colors), [])
                 self.assertIsNotNone(palette.accent)
+
+
+class KnownThemesTest(unittest.TestCase):
+    """Well-known palettes imported from tinted-theming (tools/import_tinted.py)."""
+
+    def test_every_imported_theme_is_there_credited_and_readable(self):
+        sys.path.insert(0, str(REPO / "tools"))
+        from import_tinted import PICKS
+        self.assertGreaterEqual(len(PICKS), 19)
+        for name in PICKS:
+            with self.subTest(theme=name):
+                path = REPO / "themes" / f"{name}.toml"
+                self.assertIn("tinted-theming/schemes (MIT)", path.read_text().splitlines()[0])
+                palette = load_palette(path)
+                self.assertEqual(hue_problems(palette.colors), [])
+                self.assertGreaterEqual(contrast(palette.accent, palette.colors["base00"]), 4.5)
+        self.assertTrue((REPO / "licenses/MIT-tinted-theming.txt").is_file())
 
 
 class GreenThemesTest(unittest.TestCase):

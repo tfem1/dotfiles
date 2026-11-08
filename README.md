@@ -108,8 +108,8 @@ follow = true                   # false: a wallpaper never changes the theme
 
 ## Themes
 
-Ten themes in the colors of My Little Pony characters, mostly pink, purple
-and blue. **Twilight** is the default.
+48 themes: 22 in the colors of My Little Pony characters, 19 well-known
+palettes and 7 green ones. **Twilight** is the default.
 
 | Theme | Look |
 |---|---|
@@ -121,8 +121,33 @@ and blue. **Twilight** is the default.
 | `pony-luna` | indigo night, royal blue accent |
 | `pony-trixie` | midnight blue, silver text, sky blue accent |
 | `pony-rainbow` | dark sky, the full rainbow |
+| `pony-applejack` | warm brown, orange accent, green touches |
+| `pony-vinyl` | Vinyl Scratch: midnight blue, cobalt, cerise touches |
+| `pony-derpy` | blue grey, pale yellow accent |
+| `pony-discord` | dark brown, yellow eyes, red touches |
+| `pony-scootaloo` | plum, orange accent, purple touches |
+| `pony-sunset` | Sunset Shimmer: dark red, amber accent, cyan touches |
+| `pony-chrysalis` | dark teal, changeling green |
+| `pony-spike` | dark purple, mulberry accent, green spikes |
+| `pony-octavia` | warm grey, purple accent |
+| `pony-zecora` | indigo black, gold accent, cyan touches |
 | `pony-fluttershy` | light: cream and pink |
 | `pony-celestia` | light: white and pastel pink |
+| `pony-sweetie-belle` | light: soft grey, mulberry accent, green touches |
+| `pony-apple-bloom` | light: pale yellow, red and pink |
+
+**Well-known palettes**, colors unchanged from
+[tinted-theming/schemes](https://github.com/tinted-theming/schemes) (MIT, see
+`licenses/MIT-tinted-theming.txt`), each with its signature color as accent:
+Catppuccin Latte, Frappé, Macchiato and Mocha, Dracula, Nord and Nord Light,
+Gruvbox dark and light, Tokyo Night Moon, Solarized Dark and Light, OneDark
+and One Light, Ayu Mirage and Light, Material Palenight, GitHub Dark,
+Everforest Light, Tomorrow Night Eighties (`catppuccin-frappe`, `dracula`,
+`nord`, `gruvbox-dark-medium`, `tokyo-night-moon`... the file names in
+`themes/`). `tools/import_tinted.py` imports them again from a copy of the
+schemes; when a signature color is too pale or too dark to read on its
+background, only its lightness is moved. Rosé Pine and the other Tokyo
+Night variants are left out: some of their hues are not in their slot.
 
 Pick one in `~/.config/tfem/theme.toml`:
 
@@ -149,7 +174,7 @@ greens only for the forest themes, the character's colors for a pony theme
 alerts only. Change it per module in `[modules]` of `theme.toml` if you want
 more color (`wifi = "blue"`, for instance).
 
-Six **green** themes, with a green accent:
+**Green** themes, with a green accent:
 
 | Theme | Look |
 |---|---|

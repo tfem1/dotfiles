@@ -104,3 +104,112 @@ text    = "#E18FE4"
 accent  = "#E18FE4"
 accent3 = "#63C6E3"            # cyan of the mane, used sparingly
 slots   = { cyan = "#63C6E3", blue = "#93B9FF", pink = "#F5ADFF", purple = "#E18FE4" }
+
+# Added on 2026-11-08, colors from the same wiki (each character's infobox).
+
+[themes.applejack]                # Applejack: orange coat, blond mane, green eyes
+name    = "Applejack"
+variant = "dark"
+tint    = "#FDC363"
+text    = "#FBF9AF"
+accent  = "#FDC363"
+accent3 = "#68C85C"            # green eyes, used sparingly
+slots   = { orange = "#FDC363", yellow = "#FBF9AF", green = "#68C85C", red = "#E52246" }
+
+[themes.sweetie-belle]            # Sweetie Belle: white coat, mulberry mane, green eyes
+name    = "Sweetie Belle"
+variant = "light"
+tint    = "#EDEAEB"
+text    = "#A47BB4"
+accent  = "#A47BB4"
+accent3 = "#A6D397"            # green eyes, used sparingly
+slots   = { purple = "#A47BB4", green = "#A6D397" }
+
+[themes.vinyl]                    # Vinyl Scratch (DJ Pon-3): white coat, cobalt mane, cerise eyes
+name    = "Vinyl Scratch"
+variant = "dark"
+tint    = "#3366CC"
+text    = "#FEFDE7"
+accent  = "#3366CC"
+accent3 = "#BF1D79"            # cerise eyes, used sparingly
+slots   = { blue = "#3366CC", purple = "#48126F", pink = "#BF1D79" }
+
+[themes.derpy]                    # Derpy: bluish grey coat, pale yellow mane
+name    = "Derpy"
+variant = "dark"
+tint    = "#C1C5D3"
+text    = "#EFF4B4"
+accent  = "#EFF4B4"
+accent3 = "#C1C5D3"            # grey coat, used sparingly
+slots   = { yellow = "#EFF4B4", blue = "#C1C5D3" }
+
+[themes.discord]                  # Discord: brown body, red tail, yellow eyes
+name    = "Discord"
+variant = "dark"
+tint    = "#683E3D"
+text    = "#C2BEA2"
+accent  = "#FFFF37"
+accent3 = "#C2162E"            # red tail, used sparingly
+slots   = { yellow = "#FFFF37", red = "#C2162E" }
+
+[themes.scootaloo]                # Scootaloo: orange coat, cerise mane, purple eyes
+name    = "Scootaloo"
+variant = "dark"
+tint    = "#AB4388"
+text    = "#FFBE53"
+accent  = "#FFBE53"
+accent3 = "#A37DB5"            # purple eyes, used sparingly
+slots   = { orange = "#FFBE53", purple = "#A37DB5", pink = "#AB4388" }
+
+[themes.apple-bloom]              # Apple Bloom: pale yellow coat, red mane, pink bow
+name    = "Apple Bloom"
+variant = "light"
+tint    = "#F5F498"
+text    = "#EB3352"
+accent  = "#FF7293"
+accent3 = "#F1A313"            # orange eyes, used sparingly
+slots   = { red = "#EB3352", orange = "#F1A313", yellow = "#F5F498", pink = "#FF7293" }
+
+[themes.sunset]                   # Sunset Shimmer: amber coat, red and yellow mane, cyan eyes
+name    = "Sunset"
+variant = "dark"
+tint    = "#D3374C"
+text    = "#F9CA55"
+accent  = "#F9CA55"
+accent3 = "#2ECEC8"            # cyan eyes, used sparingly
+slots   = { red = "#D3374C", yellow = "#F9CA55", cyan = "#2ECEC8" }
+
+[themes.chrysalis]                # Queen Chrysalis: black chitin, cerulean mane, green eyes
+name    = "Chrysalis"
+variant = "dark"
+tint    = "#0F546C"
+text    = "#51C130"
+accent  = "#51C130"
+accent3 = "#10DC0D"            # green magic, used sparingly
+slots   = { green = "#51C130", cyan = "#0B545B" }
+
+[themes.spike]                    # Spike: mulberry scales, green spikes
+name    = "Spike"
+variant = "dark"
+tint    = "#D08BE7"
+text    = "#DCEDC1"
+accent  = "#D08BE7"
+accent3 = "#61A84A"            # green spikes, used sparingly
+slots   = { purple = "#D08BE7", green = "#61A84A" }
+
+[themes.octavia]                  # Octavia Melody: gold-grey coat, dark grey mane, purple eyes
+name    = "Octavia"
+variant = "dark"
+tint    = "#BAB8AF"
+text    = "#BAB8AF"
+accent  = "#9C5DAE"
+slots   = { purple = "#9C5DAE" }
+
+[themes.zecora]                   # Zecora: striped coat, gold jewelry, cyan eyes
+name    = "Zecora"
+variant = "dark"
+tint    = "#222028"
+text    = "#D9D1DA"
+accent  = "#E4AF27"
+accent3 = "#00868B"            # cyan eyes, used sparingly
+slots   = { yellow = "#E4AF27", cyan = "#00868B" }
