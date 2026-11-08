@@ -259,14 +259,34 @@ Rectangle {
         // theme grid and the Apply bar show it.
         SettingsContent {
             readonly property var sample: JSON.parse(scene.settingsJson)
-            visible: scene.mode === "settings" || scene.mode === "settings-system"
+            visible: scene.mode.startsWith("settings")
             anchors.fill: parent
             settings: sample.values ? sample : ({ values: {}, themes: [], folders: {} })
             pending: scene.mode === "settings" ? { "palette.source": "pony-luna", "shape.radius": 18 } : {}
-            page: scene.mode === "settings-system" ? "system" : "appearance"
+            page: scene.mode === "settings" ? "appearance" : scene.mode.slice(9)
             wallpaper: scene.wallpaper
             live: ({ gameMode: false, volume: 0.64, muted: false, micMuted: false, brightness: 0.8, wifi: true,
                      bluetooth: true, layout: "French", quiet: false, awake: false, idle: sample.values || {} })
+            // A 165 Hz screen just switched to 144 Hz, waiting to be kept.
+            display: ({
+                chosen: { "DP-1": "2560x1440@143.97" },
+                monitors: [{
+                    name: "DP-1", description: "Dell S2721DGF", current: "2560x1440@143.97", size: "2560x1440",
+                    resolutions: [
+                        { size: "2560x1440", rates: [{ label: "165 Hz", mode: "2560x1440@165.08" },
+                            { label: "144 Hz", mode: "2560x1440@143.97" }, { label: "120 Hz", mode: "2560x1440@119.99" },
+                            { label: "60 Hz", mode: "2560x1440@59.95" }] },
+                        { size: "1920x1080", rates: [{ label: "144 Hz", mode: "1920x1080@144.00" },
+                            { label: "60 Hz", mode: "1920x1080@60.00" }] },
+                        { size: "1280x720", rates: [{ label: "60 Hz", mode: "1280x720@60.00" }] }]
+                }, {
+                    name: "HDMI-A-1", description: "LG Electronics 24MP59G", current: "1920x1080@75.00",
+                    size: "1920x1080",
+                    resolutions: [{ size: "1920x1080", rates: [{ label: "75 Hz", mode: "1920x1080@75.00" },
+                        { label: "60 Hz", mode: "1920x1080@60.00" }] }]
+                }]
+            })
+            confirm: scene.mode === "settings-display" ? { name: "DP-1", previous: "auto", seconds: 12 } : null
         }
 
         CheatsheetContent {

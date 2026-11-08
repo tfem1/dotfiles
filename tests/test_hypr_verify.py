@@ -27,12 +27,14 @@ class HyprlandVerifyTest(SandboxTest):
     def test_the_installed_config_is_ok(self):
         hypr = self.home / ".config/hypr"
         shutil.copytree(REPO / "hypr", hypr)
+        # A mode picked in Settings → Display: display.lua gets a rule.
+        self.write_user_file("config.json", '{"display": {"modes": {"DP-1": "2560x1440@165.08"}}}')
         # theme.lua and shell.lua as the installer generates them. An empty
         # PATH: the generator then never reloads the Hyprland you are using.
         empty = self.home / "empty-bin"
         empty.mkdir()
         with contextlib.redirect_stdout(io.StringIO()):
-            code = generate(["--root", str(REPO), "--only", "hyprland,hyprland-shell", "--all"],
+            code = generate(["--root", str(REPO), "--only", "hyprland,hyprland-shell,hyprland-display", "--all"],
                             env={**self.env, "PATH": str(empty)})
         self.assertEqual(code, 0)
         runtime = self.home / "run"
@@ -44,6 +46,7 @@ class HyprlandVerifyTest(SandboxTest):
         result = output.split("Config parsing result:")[-1].strip()
         self.assertEqual(done.returncode, 0, result)
         self.assertEqual(result, "config ok")
+        self.assertIn('output = "DP-1"', (hypr / "display.lua").read_text())
 
 
 if __name__ == "__main__":

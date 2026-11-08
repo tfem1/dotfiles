@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from typing import Mapping
 
 from .colors import Color
+from .display import MODE, OUTPUT
 from .icons import FOLDER_COLORS
 
 HUES = ("red", "orange", "yellow", "green", "cyan", "blue", "purple", "brown")
@@ -26,7 +27,7 @@ _NAME = re.compile(r"[a-z0-9][a-z0-9_-]*")
 
 @dataclass(frozen=True)
 class Field:
-    kind: str  # bool | int | float | text | path | name | choice | hue | color
+    kind: str  # bool | int | float | text | path | name | choice | hue | color | mode
     low: float = 0
     high: float = 0
     choices: tuple[str, ...] = ()
@@ -47,6 +48,8 @@ class Field:
             return "must not be empty"
         if self.kind == "name" and not _NAME.fullmatch(value):
             return "use lowercase letters, digits, '-' or '_' only"
+        if self.kind == "mode" and not MODE.fullmatch(value):
+            return "expected a screen mode like 2560x1440@165.00"
         if self.kind == "color":
             try:
                 Color.parse(value)
@@ -101,7 +104,9 @@ THEME_SCHEMA: dict[str, Field] = {
     **{f"modules.{name}": Field("hue", choices=MODULE_COLORS) for name in MODULES},
 }
 
-# Tables with optional keys: prefix -> (allowed keys, type of the values).
+# Tables with optional keys: prefix -> (allowed keys, or a pattern they
+# match, type of the values).
+OpenTables = Mapping[str, tuple["tuple[str, ...] | re.Pattern[str]", Field]]
 THEME_OPEN_TABLES: dict[str, tuple[tuple[str, ...], Field]] = {
     "palette.overrides": (BASE16_KEYS, COLOR),
 }
@@ -115,11 +120,16 @@ CONFIG_SCHEMA: dict[str, Field] = {
     "idle.suspend": _int(0, 240),
 }
 
+# Settings → Display: the mode picked for a screen, by port name.
+CONFIG_OPEN_TABLES: dict[str, tuple[re.Pattern[str], Field]] = {
+    "display.modes": (OUTPUT, Field("mode")),
+}
+
 
 def validate(
     values: Mapping[str, object],
     schema: Mapping[str, Field],
-    open_tables: Mapping[str, tuple[tuple[str, ...], Field]] | None = None,
+    open_tables: OpenTables | None = None,
 ) -> list[str]:
     """Validate flat settings ("section.key") and return every problem found."""
     open_tables = open_tables or {}
@@ -134,14 +144,18 @@ def validate(
     return problems
 
 
-def _open_field(key: str, open_tables: Mapping[str, tuple[tuple[str, ...], Field]]) -> Field | None:
+def _open_field(key: str, open_tables: OpenTables) -> Field | None:
     for prefix, (allowed, field) in open_tables.items():
-        if key.startswith(prefix + ".") and key[len(prefix) + 1:] in allowed:
+        name = key[len(prefix) + 1:]
+        if not key.startswith(prefix + "."):
+            continue
+        if allowed.fullmatch(name) if isinstance(allowed, re.Pattern) else name in allowed:
             return field
     return None
 
 
-def _unknown_key(key: str, schema: Mapping[str, Field], open_tables: Mapping) -> str:
-    known = list(schema) + [f"{p}.{k}" for p, (keys, _) in open_tables.items() for k in keys]
+def _unknown_key(key: str, schema: Mapping[str, Field], open_tables: OpenTables) -> str:
+    known = list(schema) + [f"{p}.{k}" for p, (keys, _) in open_tables.items()
+                            if not isinstance(keys, re.Pattern) for k in keys]
     close = difflib.get_close_matches(key, known, n=1)
     return f"{key}: unknown key" + (f" (did you mean '{close[0]}'?)" if close else "")

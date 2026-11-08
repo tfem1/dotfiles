@@ -31,6 +31,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- `tfem generate` ran the reload commands with its own environment
+  instead of the one it was given.
 - `tfem` was "command not found" in the terminal on Arch: `~/.local/bin` is
   not on its default PATH. Hyprland now adds it (once, even on reload) for
   every program it starts. Checked with `Hyprland --verify-config` 0.57.1.
@@ -48,6 +50,15 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Display** page in the Settings window: each screen's refresh rate and
+  resolution in one click, applied at once (Hyprland reloads), with
+  "Keep this display mode?" and a return to the previous mode after
+  15 seconds without an answer. `tfem display list | set NAME MODE | auto
+  NAME` does the same from a terminal. The modes live in `config.json`
+  (`display.modes`, checked like the other settings) and are written to
+  `~/.config/hypr/display.lua` by the new `hyprland-display` target;
+  `config/monitors.lua` loads it when it exists (checked with
+  `Hyprland --verify-config` 0.57.1, with and without the file).
 - The distro's logo at the top left of the bar, in the accent color of the
   theme (violet with Twilight, green with Chrysalis…); a click opens the
   Settings window. Read from `/etc/os-release`: the Arch Linux logo (Simple

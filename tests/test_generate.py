@@ -219,8 +219,9 @@ class ManifestTest(GenerateTest):
 
     def test_reload_runs_only_when_output_changes(self):
         marker = self.home / "reloaded"
+        # Reloads run with the PATH given to generate (empty here): a full path.
         self.use_manifest(
-            f'[demo]\ntemplate = "demo.tpl"\noutput = "{{config}}/demo.txt"\nreload = "touch {marker}"\n',
+            f'[demo]\ntemplate = "demo.tpl"\noutput = "{{config}}/demo.txt"\nreload = "{shutil.which("touch")} {marker}"\n',
             {"demo.tpl": "{{ accent }}\n"},
         )
         self.run_generate()

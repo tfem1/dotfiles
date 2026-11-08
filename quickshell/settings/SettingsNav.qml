@@ -16,10 +16,7 @@ Item {
     signal resultPicked(string page, string id)
     signal closed
 
-    readonly property var pages: [
-        { id: "appearance", title: "Appearance", icon: "wallpaper", text: "Theme, colors, wallpaper, effects" },
-        { id: "system", title: "System", icon: "settings", text: "Sound, screen, connections, sleep" }
-    ]
+    readonly property var pages: Settings.PAGES
 
     function focusSearch() {
         search.focusInput();
@@ -108,8 +105,7 @@ Item {
                     }
                     Label {
                         width: parent.width
-                        text: entry.isPage ? entry.modelData.text
-                            : (entry.modelData.page === "system" ? "System" : "Appearance")
+                        text: entry.isPage ? entry.modelData.text : Settings.pageOf(entry.modelData.page).title
                         small: true
                     }
                 }

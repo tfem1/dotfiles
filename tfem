@@ -23,6 +23,8 @@ Commands:
                 folders COLOR: color of their folders (tfem generate sets it)
   settings      get: every setting as JSON; set KEY=VALUE...: change and apply
                 (the Settings window, SUPER + H, uses it)
+  display       list: screens and their modes; set NAME MODE: e.g.
+                set DP-1 2560x1440@165.00; auto NAME: highest refresh rate
   sddm          install [NAME]: install and select a login screen (sudo)
                 test [NAME]: show it in a window; NAME: welcome-panel, stacked-clock
   help          Show this help
@@ -49,6 +51,7 @@ case "$command" in
   icons) need_python && exec python3 "$root/scripts/icons.py" "$@" ;;
   sddm) need_python && exec python3 "$root/scripts/sddm.py" "$@" ;;
   settings) need_python && exec python3 "$root/scripts/settings.py" "$@" ;;
+  display) need_python && exec python3 "$root/scripts/display.py" "$@" ;;
   help | -h | --help) usage ;;
   *)
     echo "$prog: unknown command '$command'" >&2

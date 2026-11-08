@@ -29,6 +29,14 @@ needs    = "Hyprland"
 reload   = "hyprctl reload"
 # Loaded by hyprland.lua (require("shell")): no include needed.
 
+# Modes picked in Settings → Display (config.json display.modes); loaded by
+# config/monitors.lua. Hyprland applies them when it reloads.
+[hyprland-display]
+template = "hypr/display.lua.tpl"
+output   = "{config}/hypr/display.lua"
+needs    = "Hyprland"
+reload   = "hyprctl reload"
+
 [quickshell]
 template = "quickshell/theme.json.tpl"
 output   = "{config}/quickshell/{shell}/theme.json"

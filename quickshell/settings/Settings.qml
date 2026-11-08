@@ -12,7 +12,8 @@ import "settings.js" as Settings
 // The Settings window (SUPER + H). Reads every setting with `tfem settings
 // get`; writes with `tfem settings set`, which regenerates the theme (the
 // shell recolors itself from the new theme.json). System settings drive
-// PipeWire, NetworkManager, BlueZ, brightnessctl and Hyprland directly.
+// PipeWire, NetworkManager, BlueZ, brightnessctl and Hyprland directly;
+// screens go through `tfem display` (DisplayControl).
 Scope {
     id: root
 
@@ -32,6 +33,7 @@ Scope {
         if (open) {
             reader.running = true;
             brightnessReader.running = true;
+            displayControl.refresh();
         } else {
             pending = {};
         }
@@ -75,6 +77,17 @@ Scope {
             Session.doNotDisturb = value;
         else if (name === "awake")
             Session.stayAwake = value;
+        else if (name === "display")
+            displayControl.apply(value.name, value.mode, true);
+        else if (name === "display-keep")
+            displayControl.keep();
+        else if (name === "display-revert")
+            displayControl.revert();
+    }
+
+    DisplayControl {
+        id: displayControl
+        cli: root.cli
     }
 
     Process {
@@ -135,6 +148,8 @@ Scope {
                 settings: root.settings
                 pending: root.pending
                 busy: writer.running
+                display: displayControl.listing
+                confirm: displayControl.confirm
                 wallpaper: Library.fileUrl(Theme.wallpaper)
                 live: ({
                     gameMode: !!root.settings.values["effects.game_mode"],

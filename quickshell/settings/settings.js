@@ -26,8 +26,24 @@ const INDEX = [
     { page: "system", id: "keyboard", title: "Keyboard layout", words: "language azerty qwerty" },
     { page: "system", id: "quiet", title: "Quiet mode", words: "do not disturb notifications" },
     { page: "system", id: "awake", title: "Stay awake", words: "caffeine idle sleep" },
-    { page: "system", id: "sleep", title: "Sleep", words: "idle dim lock screen off suspend energy power" }
+    { page: "system", id: "sleep", title: "Sleep", words: "idle dim lock screen off suspend energy power" },
+    { page: "display", id: "screens", title: "Refresh rate and resolution",
+      words: "display screen monitor hz hertz fps refresh rate resolution 144 165 240" }
 ];
+
+// The pages of the window, in the order of the menu.
+const PAGES = [
+    { id: "appearance", title: "Appearance", icon: "wallpaper", text: "Theme, colors, wallpaper, effects",
+      note: "Nothing changes until you press Apply: the preview shows it first." },
+    { id: "system", title: "System", icon: "settings", text: "Sound, brightness, connections, sleep",
+      note: "These settings act at once." },
+    { id: "display", title: "Display", icon: "computer", text: "Resolution and refresh rate",
+      note: "A new mode acts at once and asks to be kept: without an answer it goes back after 15 seconds." }
+];
+
+function pageOf(id) {
+    return PAGES.find(entry => entry.id === id) || PAGES[0];
+}
 
 // Rows whose title or words hold every word of `query` (nothing for "").
 function search(query) {
@@ -92,4 +108,39 @@ function minutes(count) {
 function changes(pending) {
     const count = Object.keys(pending || {}).length;
     return count === 1 ? "1 change" : count + " changes";
+}
+
+// "2560x1440@165.00" -> { size: "2560x1440", rate: 165 } (rate rounded).
+function modeParts(mode) {
+    const match = (mode || "").match(/^(\d+x\d+)@([\d.]+)$/);
+    return match ? { size: match[1], rate: Math.round(parseFloat(match[2])) } : { size: "", rate: 0 };
+}
+
+// "2560 × 1440 at 165 Hz".
+function modeLabel(mode) {
+    const parts = modeParts(mode);
+    return parts.size ? parts.size.replace("x", " × ") + " at " + parts.rate + " Hz" : "Unknown";
+}
+
+// The refresh rate choices of a screen at one resolution: the highest one
+// on its own ("auto": what Hyprland picks), then each rate.
+function rateChoices(screen, size) {
+    const found = ((screen || {}).resolutions || []).find(entry => entry.size === size);
+    return [{ value: "auto", label: "Highest" }]
+        .concat((found ? found.rates : []).map(rate => ({ value: rate.mode, label: rate.label })));
+}
+
+// The resolutions to offer: the biggest few, plus the one in use.
+function sizeChoices(screen, current, count) {
+    const sizes = ((screen || {}).resolutions || []).map(entry => entry.size);
+    const shown = sizes.slice(0, count || 6);
+    if (current && sizes.includes(current) && !shown.includes(current))
+        shown.push(current);
+    return shown.map(size => ({ value: size, label: size.replace("x", " × ") }));
+}
+
+// The fastest mode of a resolution (picked when the resolution changes).
+function fastest(screen, size) {
+    const found = ((screen || {}).resolutions || []).find(entry => entry.size === size);
+    return found && found.rates.length > 0 ? found.rates[0].mode : "";
 }

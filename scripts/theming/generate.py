@@ -108,13 +108,14 @@ def _run(target: Target, context: dict, writer: Writer, paths: Paths,
             command = render(target.reload, context, source=f"targets.toml [{target.name}] reload")
         except TemplateError as error:
             return Result(target, status, f"reload not run: {error}")
-        notes.append(_reload(command))
+        notes.append(_reload(command, env))
     return Result(target, status, "; ".join(notes))
 
 
-def _reload(command: str) -> str:
+def _reload(command: str, env: Mapping[str, str]) -> str:
+    """Runs a reload command with the environment given to `generate`."""
     try:
-        done = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=15)
+        done = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=15, env=dict(env))
     except subprocess.TimeoutExpired:
         return f"reload timed out: {command}"
     if done.returncode != 0:

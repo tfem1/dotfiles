@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Callable
 
 from .paths import Paths
-from .schema import CONFIG_SCHEMA, THEME_OPEN_TABLES, THEME_SCHEMA, validate
+from .schema import CONFIG_OPEN_TABLES, CONFIG_SCHEMA, THEME_OPEN_TABLES, THEME_SCHEMA, validate
 
 THEME_VERSION = 1
 CONFIG_VERSION = 1
@@ -32,7 +32,7 @@ def load_config(paths: Paths) -> dict[str, object]:
     """Flat, validated shell settings ("shell.name": "desktop", ...)."""
     return _load(
         paths.root / "config.json", paths.user_dir / "config.json",
-        _read_json, CONFIG_VERSION, CONFIG_SCHEMA, {},
+        _read_json, CONFIG_VERSION, CONFIG_SCHEMA, CONFIG_OPEN_TABLES,
     )
 
 

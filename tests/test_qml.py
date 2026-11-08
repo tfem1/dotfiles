@@ -41,7 +41,7 @@ VISUAL = [
     "power/PowerContent.qml", "system/SystemContent.qml",
     "settings/SettingsContent.qml", "settings/SettingsNav.qml", "settings/AppearancePage.qml",
     "settings/SystemPage.qml", "settings/LivePreview.qml", "settings/ThemeGrid.qml", "settings/Chips.qml",
-    "settings/SettingRow.qml", "settings/TextButton.qml",
+    "settings/SettingRow.qml", "settings/TextButton.qml", "settings/DisplayPage.qml",
 ]
 
 
@@ -66,7 +66,7 @@ class VisualComponentsTest(unittest.TestCase):
                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(done.returncode, 0, done.stderr)
             modes = ["bar", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "music",
-                     "power", "settings", "settings-system", "system", "volume", "wallpaper", "wifi"]
+                     "power", "settings", "settings-display", "settings-system", "system", "volume", "wallpaper", "wifi"]
             self.assertEqual(sorted(p.name for p in Path(out).iterdir()), sorted(f"pony-twilight-{m}.png" for m in modes))
 
     def probe(self, script, expression, value):
@@ -258,6 +258,22 @@ class VisualComponentsTest(unittest.TestCase):
         entry = {"colors": {"accent": "#111111", "blue": "#2222ff"}}
         self.assertEqual(self.probe(lib, '[Lib.accentColor(input, "theme"), Lib.accentColor(input, "blue")]', entry),
                          ["#111111", "#2222ff"])
+
+    def test_display_choices(self):
+        lib = SHELL / "settings/settings.js"
+        screen = {"resolutions": [
+            {"size": "2560x1440", "rates": [{"label": "165 Hz", "mode": "2560x1440@165.08"},
+                                            {"label": "60 Hz", "mode": "2560x1440@59.95"}]},
+            {"size": "1920x1080", "rates": [{"label": "60 Hz", "mode": "1920x1080@60.00"}]},
+        ]}
+        self.assertEqual(self.probe(lib, 'Lib.modeLabel("2560x1440@143.97")', None), "2560 × 1440 at 144 Hz")
+        self.assertEqual([c["value"] for c in self.probe(lib, 'Lib.rateChoices(input, "2560x1440")', screen)],
+                         ["auto", "2560x1440@165.08", "2560x1440@59.95"])
+        # Only the biggest resolutions, plus the one in use.
+        self.assertEqual([c["label"] for c in self.probe(lib, 'Lib.sizeChoices(input, "1920x1080", 1)', screen)],
+                         ["2560 × 1440", "1920 × 1080"])
+        self.assertEqual(self.probe(lib, 'Lib.fastest(input, "2560x1440")', screen), "2560x1440@165.08")
+        self.assertEqual(self.probe(lib, 'Lib.PAGES.map(p => p.id)', None), ["appearance", "system", "display"])
 
     def test_every_search_result_leads_to_a_row(self):
         # Rows made by a Repeater are visual children only: they are walked

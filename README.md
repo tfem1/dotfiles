@@ -309,7 +309,8 @@ autostart and keybinds. Every shortcut has a description; the full list is in
 and in `hypr/config/keybinds.lua`.
 
 - Every screen runs at its highest refresh rate, including screens plugged
-  in later.
+  in later, unless you pick a mode for it in Settings → Display
+  (`display.lua`, generated).
 - Apps, modifier key and keyboard layout are set in
   `hypr/config/variables.lua`.
 - Colors, gaps, corners and blur come from `theme.toml` through the generated
@@ -318,8 +319,7 @@ and in `hypr/config/keybinds.lua`.
 The installer copies it to `~/.config/hypr`. `SUPER + /` shows every
 shortcut on screen. The tests load the config in a fake Hyprland API and check
 every key: the dispatcher exists, the program it runs is installed by the
-installer, and the shell panel it opens exists. The keys of the panels still to
-build (settings) does nothing yet.
+installer, and the shell panel it opens exists.
 
 - **Lock screen** (`SUPER + L`): hyprlock, with a config generated from
   `theme.toml` (`~/.config/hypr/hyprlock.conf`): hyprlock does not lock without
@@ -411,6 +411,16 @@ folder name is `shell.name` in your `config.json`). Its colors follow
     microphone, brightness, Wi-Fi and Bluetooth (with their panel), keyboard
     layout, quiet mode, stay awake, and **sleep**: after how long the
     screen dims, locks, turns off and the computer suspends (or never).
+  - **Display**: each screen with its **refresh rate** and resolution as
+    one-click choices (165 Hz, 144 Hz, 60 Hz… or Highest). It acts at once
+    and asks "Keep this display mode?": without an answer it goes back
+    after 15 seconds, in case the screen stays black. Same from a terminal:
+    `tfem display list`, `tfem display set DP-1 2560x1440@165.08`,
+    `tfem display auto DP-1`. The choice is saved in `config.json`
+    (`display.modes`) and written to `~/.config/hypr/display.lua`, loaded
+    by `config/monitors.lua`; other screens keep the highest refresh rate.
+
+    ![Settings, Display page](docs/images/settings-display.png)
   - **Search** at the top: "blur", "wifi" or "sleep" lists the matching
     settings; Enter goes to the first one and lights it up.
   - Everything goes through `tfem settings get` and `tfem settings set

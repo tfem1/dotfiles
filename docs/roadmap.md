@@ -32,8 +32,9 @@ Themes come before the shell, so the shell is built with the final palettes.
 6. **Done:** wallpaper = character (pony wallpapers). The collection is
    My Little Pony only since 2026-11-08 (the forests were removed).
 7. **Done:** Settings window (`SUPER + H`): Appearance (with a live
-   preview, applied on Apply) and System (game mode, sound, screen,
-   connections, keyboard, sleep), search.
+   preview, applied on Apply), System (game mode, sound, screen,
+   connections, keyboard, sleep), Display (refresh rate and resolution in
+   one click, kept or reverted after 15 s), search.
 8. Optional dock.
 9. Fastfetch in the theme colors, matching cursor and icons. **Icons
    done:** FairyWren, dark or light, folders in the accent's color.
@@ -317,8 +318,9 @@ Look of Serpantinum's settings window (original code):
 
 ## 8. Displays and keybinds
 
-`max-hz.sh` (best mode per monitor, hot-plug), Display tab. Runtime monitor
-changes with the Lua config are to be verified. **Done:** keybind cheatsheet
+**Done:** Display page of the Settings window and `tfem display`: a mode
+per screen in `config.json`, written to `display.lua` and applied with
+`hyprctl reload`; other screens keep `highrr`. **Done:** keybind cheatsheet
 (`SUPER + /`), every key checked by the tests.
 
 Checked in the Hyprland wiki: `hl.monitor({ output = "", mode = "highrr" })`

@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Mapping
 
 from .accents import companions
+from .display import chosen, lua_rules
 from .icons import folder_color, theme_name
 from .idle import listeners
 from .palette import Palette
@@ -44,6 +45,7 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths,
     if theme.get("effects.game_mode"):
         context.update({"effects.animations": False, "effects.blur": False, "effects.shadow": False})
     context["idle.listeners"] = listeners(context)
+    context["display.rules"] = lua_rules(chosen(context))
     context["wallpaper.path"] = _wallpaper_path(str(theme["wallpaper.path"]), paths)
     context.update(_login_screen(str(context["wallpaper.path"]), paths))
     # GTK theme and color scheme that match the palette (adw-gtk3, gsettings values).

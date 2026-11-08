@@ -6,13 +6,15 @@ import "settings.js" as Settings
 
 // The Settings window (SUPER + H): a centered card, the pages and search on
 // the left, the settings of the page on the right. Appearance changes wait
-// in a bar at the bottom (Apply, Cancel); System settings act at once.
+// in a bar at the bottom (Apply, Cancel); System and Display act at once.
 Item {
     id: window
 
     property var settings: ({ values: {}, themes: [], folders: {} })   // `tfem settings get`
     property var pending: ({})
     property var live: ({})          // see SystemPage
+    property var display: ({ monitors: [], chosen: {} })   // `tfem display list`
+    property var confirm: null       // see DisplayPage
     property string wallpaper: ""    // file:// URL
     property string page: "appearance"
     property bool busy: false        // applying
@@ -31,9 +33,12 @@ Item {
         Qt.callLater(() => scrollTo(id));
     }
 
+    function pageItem() {
+        return page === "system" ? systemPage : page === "display" ? displayPage : appearancePage;
+    }
+
     function scrollTo(id) {
-        const column = page === "system" ? systemPage : appearancePage;
-        for (const item of column.children) {
+        for (const item of pageItem().children) {
             if (item.objectName !== id)
                 continue;
             flick.contentY = Math.max(0, Math.min(item.y - 12, flick.contentHeight - flick.height));
@@ -94,15 +99,17 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 4
                     Label {
-                        text: window.page === "system" ? "System" : "Appearance"
+                        text: Settings.pageOf(window.page).title
                         color: Theme.fgBright
                         font.pixelSize: Math.round(Theme.fontPixels * 1.3)
                         font.weight: Font.DemiBold
                     }
                     Label {
-                        text: window.page === "system" ? "These settings act at once."
-                            : "Nothing changes until you press Apply: the preview shows it first."
+                        width: header.width - 120
+                        text: Settings.pageOf(window.page).note
                         small: true
+                        wrapMode: Text.WordWrap
+                        elide: Text.ElideNone
                     }
                 }
                 IconButton {
@@ -119,7 +126,7 @@ Item {
                 anchors.top: header.bottom
                 anchors.bottom: applyBar.top
                 width: parent.width
-                contentHeight: (window.page === "system" ? systemPage : appearancePage).implicitHeight + 28
+                contentHeight: window.pageItem().implicitHeight + 28
                 boundsBehavior: Flickable.StopAtBounds
                 clip: true
 
@@ -142,6 +149,16 @@ Item {
                     x: 28
                     width: flick.width - 56
                     live: window.live
+                    onAction: (name, value) => window.action(name, value)
+                }
+                DisplayPage {
+                    id: displayPage
+                    visible: window.page === "display"
+                    x: 28
+                    width: flick.width - 56
+                    screens: (window.display || {}).monitors || []
+                    chosen: (window.display || {}).chosen || {}
+                    confirm: window.confirm
                     onAction: (name, value) => window.action(name, value)
                 }
             }
