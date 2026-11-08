@@ -149,6 +149,13 @@ class DeployTest(InstallTest):
             self.assertEqual(os.readlink(icons / theme / "places/colours/default"), "./violet")
         self.assertFalse((icons / "README.md").exists())
 
+    def test_sddm_option_installs_the_chosen_login_screen(self):
+        code, output = self.install("arch", "--dry-run", "--sddm", "stacked-clock")
+        self.assertEqual(code, 0, output)
+        self.assertIn("sddm install stacked-clock", output)
+        _, output = self.install("arch", "--dry-run")
+        self.assertNotIn("sddm install", output)
+
     def test_no_icons_skips_the_download(self):
         code, _ = self.install("arch", "--yes", "--no-wallpapers", "--no-packages", "--no-icons")
         self.assertEqual(code, 0)

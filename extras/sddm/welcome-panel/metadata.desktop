@@ -1,0 +1,12 @@
+[SddmGreeterTheme]
+Name=Welcome panel
+Description=A frosted panel on the left of your wallpaper: greeting, clock, user, password, session and power buttons, in the colors of your desktop theme.
+Author=dotfiles contributors
+License=GPL-3.0
+Type=sddm-theme
+Version=1.0
+MainScript=Main.qml
+ConfigFile=theme.conf
+Theme-Id=welcome-panel
+Theme-API=2.0
+QtVersion=6

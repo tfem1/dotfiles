@@ -21,6 +21,17 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Two SDDM login screens (Qt 6), original, in the colors, font and wallpaper
+  of the desktop theme: **Welcome panel** (frosted side panel: greeting,
+  clock, user, password with show button and Caps Lock warning, session,
+  suspend / restart / shut down) and **Stacked clock** (large stacked clock
+  in the accent color, "press any key", sign-in card). `tfem sddm install
+  [NAME]` builds and installs one (theme.conf from the template, wallpaper
+  copy, `/etc/sddm.conf.d/zz-login-theme.conf`, warning when `/etc/sddm.conf`
+  forces another theme); `tfem sddm test [NAME]` shows it in a window; the
+  installer takes `--sddm [NAME]`. Checked with the real `sddm-greeter-qt6`
+  in test mode; tests load both themes with stand-ins for SDDM and check the
+  login call and the wrong password message.
 - FairyWren icons (gitlab.com/FreshDoctor/FairyWren-Icons, GPL-3.0, not
   bundled): `tfem icons fetch` downloads only `FairyWren_Dark` and
   `FairyWren_Light`, the installer runs it (`--no-icons` to skip). The

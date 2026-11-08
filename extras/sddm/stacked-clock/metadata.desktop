@@ -1,0 +1,12 @@
+[SddmGreeterTheme]
+Name=Stacked clock
+Description=Your wallpaper with a large stacked clock (hours over minutes, in your accent color); any key opens the sign-in card. Colors from your desktop theme.
+Author=dotfiles contributors
+License=GPL-3.0
+Type=sddm-theme
+Version=1.0
+MainScript=Main.qml
+ConfigFile=theme.conf
+Theme-Id=stacked-clock
+Theme-API=2.0
+QtVersion=6

@@ -276,6 +276,34 @@ build (settings) does nothing yet.
   `theme.toml` (`~/.config/hypr/hyprlock.conf`): hyprlock does not lock without
   one.
 
+## Login screen (SDDM)
+
+Two login screens for SDDM (Qt 6), in the colors, font and wallpaper of
+your desktop theme:
+
+- **Welcome panel** (default): your wallpaper, and on its left a frosted
+  panel with a greeting, the time and date, who signs in (arrows when there
+  are several users), the password with a show button and a Caps Lock
+  warning, the session (Hyprland, or any other installed), and round
+  suspend, restart and shut down buttons.
+- **Stacked clock**: the whole wallpaper, the date at the top left and a
+  large clock, hours stacked over minutes in the accent color. Any key or a
+  click brings the sign-in card (what you type already goes into the
+  password); Escape, or 30 seconds without typing, goes back to the clock.
+
+```bash
+tfem sddm test stacked-clock      # look at it in a window, nothing installed
+tfem sddm install stacked-clock   # install and select it (asks for sudo)
+```
+
+`install` copies the theme to `/usr/share/sddm/themes/`, with a copy of your
+wallpaper (SDDM runs as its own user and cannot read your home), and selects
+it in `/etc/sddm.conf.d/zz-login-theme.conf`, read after the other files of
+that folder. Run it again after changing the theme or the wallpaper. The
+installer does it with `--sddm [welcome-panel|stacked-clock]`. SDDM itself
+must be installed and enabled (`sudo pacman -S sddm`,
+`sudo systemctl enable sddm`).
+
 ## Shell
 
 `quickshell/` is the desktop shell, one Quickshell process started with
@@ -381,6 +409,7 @@ scripts/screenshot.sh screenshots (region or full screen, optional editing)
 scripts/wallpapers.py wallpapers: download, list, set (with the theme they bring)
 scripts/wallpaper_collection.py  the collection and the theme of each wallpaper
 scripts/theming/      generator: settings, palette, template engine, safe writer
+extras/sddm/           the two login screens (tfem sddm install)
 tools/                icon generator, preview renderer
 tests/                unit and end-to-end tests, golden files
 licenses/             licenses of bundled third-party material

@@ -21,6 +21,8 @@ Commands:
                 (a pony or forest wallpaper also brings its theme)
   icons         fetch: download the FairyWren icons (dark and light)
                 folders COLOR: color of their folders (tfem generate sets it)
+  sddm          install [NAME]: install and select a login screen (sudo)
+                test [NAME]: show it in a window; NAME: welcome-panel, stacked-clock
   help          Show this help
 
 Your settings: \${XDG_CONFIG_HOME:-~/.config}/tfem/theme.toml and config.json
@@ -43,6 +45,7 @@ case "$command" in
   screenshot) exec "$root/scripts/screenshot.sh" "$@" ;;
   wallpapers) need_python && exec python3 "$root/scripts/wallpapers.py" "$@" ;;
   icons) need_python && exec python3 "$root/scripts/icons.py" "$@" ;;
+  sddm) need_python && exec python3 "$root/scripts/sddm.py" "$@" ;;
   help | -h | --help) usage ;;
   *)
     echo "$prog: unknown command '$command'" >&2

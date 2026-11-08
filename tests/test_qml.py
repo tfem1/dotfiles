@@ -313,7 +313,7 @@ QMLLINT = shutil.which("pyside6-qmllint", path=os.path.dirname(sys.executable)) 
 @unittest.skipUnless(QMLLINT, "qmllint not installed")
 class SyntaxTest(unittest.TestCase):
     def test_no_syntax_error_in_the_shell(self):
-        files = sorted(str(p) for p in SHELL.rglob("*.qml"))
+        files = sorted(str(p) for p in SHELL.rglob("*.qml")) + sorted(str(p) for p in (REPO / "extras/sddm").rglob("*.qml"))
         done = subprocess.run([QMLLINT, *files], capture_output=True, text=True)
         errors = [line for line in (done.stdout + done.stderr).splitlines() if "Error:" in line]
         self.assertEqual(errors, [])

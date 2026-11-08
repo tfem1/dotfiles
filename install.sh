@@ -9,7 +9,7 @@ set -euo pipefail
 REPO_URL="${TFEM_REPO_URL:-https://github.com/tfem1/dotfiles.git}"
 BRANCH="${TFEM_BRANCH:-main}"
 DEST="${TFEM_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/tfem}"
-PROFILE=full DRY_RUN=0 ASSUME_YES=0 UNINSTALL=0 WITH_PACKAGES=1 WITH_WALLPAPERS=1 WITH_ICONS=1
+PROFILE=full DRY_RUN=0 ASSUME_YES=0 UNINSTALL=0 WITH_PACKAGES=1 WITH_WALLPAPERS=1 WITH_ICONS=1 SDDM_THEME=""
 
 usage() {
   cat <<'EOF'
@@ -23,6 +23,8 @@ Usage: install.sh [options]
   --no-packages           skip package installation
   --no-wallpapers         skip the wallpaper download
   --no-icons              skip the FairyWren icons download
+  --sddm [NAME]           also install a login screen for SDDM (welcome-panel or
+                          stacked-clock, default welcome-panel; asks for sudo)
   --branch NAME           install another branch of the project
   -h, --help              show this help
 EOF
@@ -41,6 +43,10 @@ while (($#)); do
     --no-packages) WITH_PACKAGES=0 ;;
     --no-wallpapers) WITH_WALLPAPERS=0 ;;
     --no-icons) WITH_ICONS=0 ;;
+    --sddm)
+      SDDM_THEME=welcome-panel
+      if [[ ${2:-} == welcome-panel || ${2:-} == stacked-clock ]]; then SDDM_THEME="$2" && shift; fi
+      ;;
     --branch) BRANCH="${2:?--branch needs a name}" && shift ;;
     -h | --help) usage && exit 0 ;;
     *) usage >&2 && exit 64 ;;
@@ -105,6 +111,11 @@ seed_settings
 
 info "generating the theme files"
 run "$ROOT/tfem" generate
+
+if [[ -n $SDDM_THEME ]]; then
+  info "installing the '$SDDM_THEME' login screen"
+  run "$ROOT/tfem" sddm install "$SDDM_THEME" || warn "the login screen was not installed; run 'tfem sddm install' later"
+fi
 
 info "done. Log out and choose Hyprland at the login screen (or run 'start-hyprland' from a TTY)."
 info "change the look in ~/.config/tfem/theme.toml, then run 'tfem generate'"
