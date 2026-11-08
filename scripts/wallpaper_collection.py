@@ -2,9 +2,9 @@
 wallhaven images, and the theme each one goes with.
 
 A pony wallpaper that shows one character with a theme names it
-(`character = "luna"`): picking it switches to `pony-luna`. A forest
-wallpaper goes with the forest theme chosen in theme.toml. Any other image
-keeps the current theme.
+(`character = "luna"`): picking it switches to `pony-luna`. Any other image
+keeps the current theme. `removed` lists the wallpapers taken out of the
+collection, whose old downloads `fetch` deletes.
 """
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ from pathlib import Path
 _ID = re.compile(r"[a-z0-9]{6}")
 _NAME = re.compile(r"[a-z][a-z0-9_-]*")
 _FILE = re.compile(r"wallhaven-([a-z0-9]{6})")
-FOREST = "forest"
+REMOVED = "removed"
 
 
 @dataclass(frozen=True)
@@ -37,6 +37,8 @@ def load_collection(path: Path) -> list[Wallpaper]:
         data = tomllib.load(handle)
     entries = []
     for category, table in data.items():
+        if category == REMOVED:
+            continue
         if not _NAME.fullmatch(category) or not isinstance(table, dict):
             raise ValueError(f"invalid category '{category}' in {path}")
         for item in table.get("wallpapers", []):
@@ -49,6 +51,15 @@ def load_collection(path: Path) -> list[Wallpaper]:
     return entries
 
 
+def removed_ids(path: Path) -> list[str]:
+    """Ids of the wallpapers taken out of the collection."""
+    with path.open("rb") as handle:
+        ids = tomllib.load(handle).get(REMOVED, [])
+    if not isinstance(ids, list) or not all(isinstance(i, str) and _ID.fullmatch(i) for i in ids):
+        raise ValueError(f"invalid '{REMOVED}' list in {path}")
+    return ids
+
+
 def find(image: Path, wallpapers: list[Wallpaper]) -> Wallpaper | None:
     """The collection entry of a downloaded image (wallhaven-<id>.<ext>), if any."""
     match = _FILE.fullmatch(image.stem)
@@ -57,12 +68,31 @@ def find(image: Path, wallpapers: list[Wallpaper]) -> Wallpaper | None:
     return next((wallpaper for wallpaper in wallpapers if wallpaper.id == match.group(1)), None)
 
 
-def theme_for(wallpaper: Wallpaper | None, forest_theme: str) -> str | None:
+def theme_for(wallpaper: Wallpaper | None) -> str | None:
     """The theme that goes with a wallpaper, or None to keep the current one."""
-    if wallpaper is None:
+    if wallpaper is None or not wallpaper.character:
         return None
-    if wallpaper.character:
-        return f"{wallpaper.category}-{wallpaper.character}"
-    if wallpaper.category == FOREST:
-        return forest_theme
-    return None
+    return f"{wallpaper.category}-{wallpaper.character}"
+
+
+def prune(collection: Path, dest: Path, dry_run: bool) -> int:
+    """Deletes the downloads of wallpapers taken out of the collection: only
+    files named wallhaven-<removed id>.<ext>, then the folders this left
+    empty (never a folder of yours). Returns how many files went."""
+    gone = set(removed_ids(collection))
+    if not dest.is_dir():
+        return 0
+    count = 0
+    touched: set[Path] = set()
+    for path in sorted(dest.glob("*/wallhaven-*")):
+        if path.is_file() and path.stem.removeprefix("wallhaven-") in gone:
+            count += 1
+            touched.add(path.parent)
+            if dry_run:
+                print(f"would delete {path}")
+            else:
+                path.unlink()
+    for folder in touched:
+        if not dry_run and not any(folder.iterdir()):
+            folder.rmdir()
+    return count

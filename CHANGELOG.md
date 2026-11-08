@@ -5,6 +5,13 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Removed
+
+- The 50 forest wallpapers: the collection is My Little Pony only (51).
+  `wallpapers/collection.toml` lists the ids taken out (`removed`) and
+  `tfem wallpapers fetch` deletes their old downloads, only those files and
+  the folders this leaves empty. `wallpaper.forest_theme` is gone with them.
+
 ### Fixed
 
 - The shell did not start at all since the system panel was added: one line

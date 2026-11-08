@@ -79,7 +79,6 @@ THEME_SCHEMA: dict[str, Field] = {
     "palette.mode": Field("choice", choices=("dark", "light")),
     "wallpaper.path": PATH,
     "wallpaper.follow": BOOL,
-    "wallpaper.forest_theme": NAME,
     "font.sans": TEXT,
     "font.mono": TEXT,
     "font.size": _int(6, 32),

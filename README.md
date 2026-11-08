@@ -68,7 +68,7 @@ on it for the icons it does not draw.
   `FairyWren_Light` for light ones (Celestia, Fluttershy, Fern).
 - **Folders** take FairyWren's color that looks closest to the accent:
   violet for Twilight, pink for Pinkie, indigo for Luna, cyan for Rainbow,
-  green or pine for the forests. Pick one yourself with `folders` (blue,
+  green or pine for the green themes. Pick one yourself with `folders` (blue,
   cyan, green, indigo, magenta, pink, pine, red, teal, violet, yellow, ...).
 
 ```toml
@@ -82,14 +82,13 @@ folders = "theme"       # or "pink", "pine", ...
 
 ### Wallpapers
 
-`wallpapers/collection.toml` lists 101 wallpapers from
-[wallhaven.cc](https://wallhaven.cc): 51 My Little Pony and 50 forests (19 of
-them picked for their green: moss, canopy, paths, streams), SFW,
-at most 10 MB each, picked by hand. They are downloaded to
-`~/Pictures/Wallpapers/pony/` and `~/Pictures/Wallpapers/forest/` (about
-290 MB) and never stored in this repository: the images remain the property
-of their authors. Download or complete them at any time with
-`tfem wallpapers fetch`.
+`wallpapers/collection.toml` lists 51 My Little Pony wallpapers from
+[wallhaven.cc](https://wallhaven.cc), SFW, at most 10 MB each, picked by
+hand. They are downloaded to `~/Pictures/Wallpapers/pony/` and never stored
+in this repository: the images remain the property of their authors.
+Download or complete them at any time with `tfem wallpapers fetch`; it also
+deletes the wallpapers taken out of the collection (the former forests),
+only those files.
 
 Pick one with `SUPER + W` (see [Shell](#shell)) or `tfem wallpapers set
 IMAGE`: the choice is saved in your `theme.toml`, and the desktop and the
@@ -98,15 +97,13 @@ image you add there (jpg, png, webp) shows up in the selector.
 
 **Wallpaper = character.** A pony wallpaper that shows one character with
 a theme brings that theme: pick a Luna wallpaper and the whole desktop
-(shell, terminal, GTK, Qt, lock screen) turns Luna. A forest wallpaper
-brings the green `forest_theme` (Pine by default). Group pictures and your
+(shell, terminal, GTK, Qt, lock screen) turns Luna. Group pictures and your
 own images keep the current theme. The selector shows the theme a wallpaper
 brings, and searching a name ("luna") finds that character's wallpapers.
 
 ```toml
 [wallpaper]
 follow = true                   # false: a wallpaper never changes the theme
-forest_theme = "forest-pine"    # or forest-moss, kanagawa, everforest-dark-hard…
 ```
 
 ## Themes
@@ -152,7 +149,7 @@ greens only for the forest themes, the character's colors for a pony theme
 alerts only. Change it per module in `[modules]` of `theme.toml` if you want
 more color (`wifi = "blue"`, for instance).
 
-Six **green** themes, with a green accent, to go with the forest wallpapers:
+Six **green** themes, with a green accent:
 
 | Theme | Look |
 |---|---|

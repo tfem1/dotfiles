@@ -8,7 +8,8 @@ Files land in ~/Pictures/Wallpapers/<category>/wallhaven-<id>.<ext>; files
 already there are kept, so the command can be run again safely. `set` writes
 the wallpaper in your theme.toml and regenerates the files that use it. With
 `wallpaper.follow` on, a wallpaper of the collection also brings its theme
-(the pony's own, the forest theme): then every file is regenerated.
+(the pony's own): then every file is regenerated. `fetch` also deletes the
+old downloads of wallpapers taken out of the collection.
 """
 from __future__ import annotations
 
@@ -29,7 +30,7 @@ from theming.palette import WALLPAPER_SOURCE, PaletteError, find_theme, load_pal
 from theming.paths import Paths  # noqa: E402
 from theming.settings import SettingsError, load_theme  # noqa: E402
 from theming.writer import write_atomic  # noqa: E402
-from wallpaper_collection import Wallpaper, find, load_collection, theme_for  # noqa: E402
+from wallpaper_collection import Wallpaper, find, load_collection, prune, theme_for  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 IMAGES = {".jpg", ".jpeg", ".png", ".webp"}
@@ -72,6 +73,9 @@ def download(url: str, target: Path, attempts: int = 3) -> None:
 
 
 def fetch(args: argparse.Namespace) -> int:
+    removed = prune(args.collection, args.dest, args.dry_run)
+    if removed and not args.dry_run:
+        print(f"{removed} wallpapers no longer in the collection deleted")
     entries = load_collection(args.collection)
     if args.category:
         entries = [entry for entry in entries if entry.category == args.category]
@@ -100,7 +104,7 @@ def followed_theme(image: Path, wallpapers: list[Wallpaper], theme: Mapping[str,
     off, when the palette comes from the wallpaper, or for an image without one."""
     if not theme["wallpaper.follow"] or theme["palette.source"] == WALLPAPER_SOURCE:
         return None
-    return theme_for(find(image, wallpapers), str(theme["wallpaper.forest_theme"]))
+    return theme_for(find(image, wallpapers))
 
 
 def theme_title(name: str, paths: Paths, known: dict[str, str]) -> str:
@@ -177,7 +181,7 @@ def main(argv: list[str] | None = None, env: Mapping[str, str] = os.environ) -> 
     parser = argparse.ArgumentParser(prog="wallpapers", description="Download the wallpaper collection.")
     commands = parser.add_subparsers(dest="command", required=True)
     fetch_cmd = commands.add_parser("fetch", help="download the wallpapers that are missing")
-    fetch_cmd.add_argument("--category", help="only this category (e.g. forest, pony)")
+    fetch_cmd.add_argument("--category", help="only this category (e.g. pony)")
     fetch_cmd.add_argument("--dest", type=Path, default=default_dest(), help="target folder")
     fetch_cmd.add_argument("--dry-run", action="store_true", help="list what would be downloaded")
     fetch_cmd.add_argument("--collection", type=Path, default=COLLECTION,

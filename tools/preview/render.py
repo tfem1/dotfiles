@@ -32,8 +32,8 @@ MODES = ("desktop", "apps", "launcher", "clipboard", "cheatsheet", "wallpaper", 
          "calendar", "music", "power", "system")
 # Hues of the sample landscapes drawn for the wallpaper selector (degrees).
 SAMPLE_HUES = (215, 280, 330, 140, 25, 195, 255, 0, 50, 100, 300, 230, 160, 10)
-# The theme some samples bring, as a pony or forest wallpaper would.
-SAMPLE_THEMES = {215: "Luna", 280: "Twilight", 330: "Pinkie", 140: "Pine", 195: "Rainbow"}
+# The theme some samples bring, as a pony wallpaper would.
+SAMPLE_THEMES = {215: "Luna", 280: "Twilight", 330: "Pinkie", 140: "Fluttershy", 195: "Rainbow"}
 MODIFIERS = {"SHIFT": 1, "CTRL": 4, "ALT": 8, "SUPER": 64}
 # Running apps of the bar: name, generic stand-in icon (from an installed
 # icon theme, when there is one), windows, focused, tray icon.
@@ -131,7 +131,7 @@ def wallpaper_list(folder: Path | None, scratch: Path) -> list[dict[str, str]]:
     paths = Paths.from_env(ROOT, {"HOME": "/nonexistent"})
     themes = {}
     for p in found:
-        name = theme_for(find(p, collection), "forest-pine")
+        name = theme_for(find(p, collection))
         themes[p] = load_palette(find_theme(name, paths)).name if name else ""
     return [{"path": str(p), "name": p.stem, "category": p.parent.name, "theme": themes[p]} for p in found]
 

@@ -100,15 +100,15 @@ class VisualComponentsTest(unittest.TestCase):
 
     def test_wallpaper_filters_by_color_recent_and_search(self):
         images = [{"path": f"/w/{c}/{n}.jpg", "name": n, "category": c, "theme": t}
-                  for c, n, t in (("forest", "moss", "Pine"), ("pony", "twilight #1", ""), ("pony", "luna", "Luna"))]
-        colors = {"/w/forest/moss.jpg": "green", "/w/pony/twilight #1.jpg": "purple", "/w/pony/luna.jpg": "blue"}
+                  for c, n, t in (("other", "moss", "Fluttershy"), ("pony", "twilight #1", ""), ("pony", "luna", "Luna"))]
+        colors = {"/w/other/moss.jpg": "green", "/w/pony/twilight #1.jpg": "purple", "/w/pony/luna.jpg": "blue"}
         library = SHELL / "wallpaper/library.js"
         cases = {
             'Lib.filter(input, {}, null, "", "")': ["moss", "twilight #1", "luna"],
             f'Lib.filter(input, {json.dumps(colors)}, null, "purple", "")': ["twilight #1"],
-            'Lib.filter(input, {}, ["/w/pony/luna.jpg", "/gone.jpg", "/w/forest/moss.jpg"], "", "")': ["luna", "moss"],
+            'Lib.filter(input, {}, ["/w/pony/luna.jpg", "/gone.jpg", "/w/other/moss.jpg"], "", "")': ["luna", "moss"],
             'Lib.filter(input, {}, null, "", "PONY tw")': ["twilight #1"],
-            'Lib.filter(input, {}, null, "", "pine")': ["moss"],
+            'Lib.filter(input, {}, null, "", "flutter")': ["moss"],
         }
         for expression, expected in cases.items():
             with self.subTest(expression=expression):

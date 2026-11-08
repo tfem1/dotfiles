@@ -29,8 +29,8 @@ Themes come before the shell, so the shell is built with the final palettes.
 4. **Done:** power menu (lock, log out, suspend, reboot, shut down).
 5. **Done:** notification center (history), do not disturb and stay awake,
    in the system panel (`SUPER + B`), with hypridle.
-6. **Done:** wallpaper = character (pony wallpapers), forest wallpapers =
-   green theme.
+6. **Done:** wallpaper = character (pony wallpapers). The collection is
+   My Little Pony only since 2026-11-08 (the forests were removed).
 7. Settings window (`SUPER + H`).
 8. Optional dock.
 9. Fastfetch in the theme colors, matching cursor and icons. **Icons
@@ -210,14 +210,14 @@ palette from the wallpaper.
 - **Wallpaper = character (done):** each pony wallpaper of the collection
   that shows one character with a theme names it (`character = "luna"`, read
   from its wallhaven tags); picking it switches to that character's theme
-  (Luna wallpaper, Luna theme). Forest wallpapers switch to
-  `wallpaper.forest_theme` (Pine). Wallpapers without a character keep the
+  (Luna wallpaper, Luna theme). Wallpapers without a character keep the
   current theme (later: colors from the image). `wallpaper.follow = false`
   turns it off.
 
-**Collection (done: 50 forests, 19 of them green, and 51 My Little Pony): at least 50 wallpapers
-from [wallhaven.cc](https://wallhaven.cc), mostly forests, plus My Little Pony.** Real images taken from the site, none
-generated.
+**Collection (done: 51 My Little Pony; the 50 forests were removed on
+2026-11-08 at the user's request): wallpapers from
+[wallhaven.cc](https://wallhaven.cc).** Real images taken from the site, none
+generated. `tfem wallpapers fetch` deletes the downloads of removed ones.
 
 - wallhaven states that "all images remain property of their original
   owners", and My Little Pony belongs to Hasbro, so the images are **not
@@ -228,10 +228,7 @@ generated.
 - SFW only (`purity=100`), at least 1920×1080, each pick reviewed by hand.
 - Available on wallhaven (checked through its API): 268 forest wallpapers
   (16:9, top of the last year) and 125 My Little Pony wallpapers.
-- Categories: `forest` (majority), `pony`, then the original ones (abstract,
-  minimal, dark) if wanted.
-- Forest wallpapers pair naturally with the green palettes (Kanagawa,
-  Everforest) when the palette is extracted from the wallpaper.
+- Category: `pony` only.
 
 ## 5. Control panel and widgets
 
