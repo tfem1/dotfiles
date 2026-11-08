@@ -34,10 +34,11 @@ PanelWindow {
     mask: Region { item: window.revealed ? area : edge }
     WlrLayershell.namespace: "shell-bar"
 
-    // Stay awake: hypridle respects this inhibitor while the bar is shown.
+    // Stay awake, and game mode (a controller is not seen as activity):
+    // hypridle respects this inhibitor while the bar is shown.
     IdleInhibitor {
         window: window
-        enabled: Session.stayAwake
+        enabled: Session.stayAwake || Theme.gameMode
     }
 
     SystemClock {
@@ -85,6 +86,7 @@ PanelWindow {
         status.charging: Power.charging
         status.quiet: Session.doNotDisturb
         status.awake: Session.stayAwake
+        status.game: Theme.gameMode
 
         onWorkspaceClicked: id => Desktop.focus(id)
         onMediaToggled: Player.toggle()

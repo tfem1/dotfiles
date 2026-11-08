@@ -14,7 +14,12 @@ hl.config({
             active_border   = "rgba(d19fe4ff)",
             inactive_border = "rgba(242b42ff)",
         },
+        -- Game mode: fullscreen windows may tear, for less input lag.
+        allow_tearing = false,
     },
+
+    -- Game mode: a fullscreen game goes straight to the screen (1), else 0.
+    render = { direct_scanout = 0 },
 
     decoration = {
         rounding = 12,
@@ -30,3 +35,6 @@ hl.config({
 
     misc = { font_family = "JetBrainsMono Nerd Font" },
 })
+
+-- Fullscreen windows (games) tear when allow_tearing is on (game mode).
+hl.window_rule({ match = { fullscreen = true }, immediate = true })

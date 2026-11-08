@@ -415,6 +415,18 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   screen picks the corner with a click (`widgets.*` in `config.json`,
   `widgets.corner`: `top-left`, `top-right`, `bottom-left`, `bottom-right`). Only what shows runs: CPU and memory are read from
   `/proc` every 2 seconds, the disk every minute.
+- **Game mode** (`SUPER + G`, or Settings → System), for more performance
+  while you play; a gamepad shows in the bar while it is on:
+  - Hyprland drops what costs frames: no animations, blur or shadows;
+    a fullscreen game may **tear** (`allow_tearing` and an `immediate` rule
+    for fullscreen windows: less input lag) and goes straight to the screen
+    (**direct scanout**).
+  - [Feral GameMode](https://github.com/FeralInteractive/gamemode)
+    (installed with the rest) is asked for its optimisations while it is
+    on: the CPU in performance, and the rest of its settings.
+  - The desktop widgets hide and stop reading the CPU, the disk and the
+    sound; the screen never dims, locks or sleeps (a controller is not seen
+    as activity); notifications wait (urgent ones still show).
 - **OSD** under the bar for the volume and the brightness.
 - **Notifications**: the shell is the notification daemon; popups in the
   top-right corner, urgent ones stay until closed.
@@ -443,8 +455,7 @@ folder name is `shell.name` in your `config.json`). Its colors follow
     Nothing changes until **Apply**: a small desktop at the top shows the
     result first (bar, window, panel), and a bar at the bottom counts the
     changes waiting, with Cancel.
-  - **System**, acting at once: **game mode** (no animations, blur or
-    shadows, notifications wait; urgent ones still show), sound and
+  - **System**, acting at once: **game mode** (see below), sound and
     microphone, brightness, Wi-Fi and Bluetooth (with their panel), keyboard
     layout, quiet mode, stay awake, and **sleep**: after how long the
     screen dims, locks, turns off and the computer suspends (or never).

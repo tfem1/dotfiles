@@ -19,10 +19,17 @@ Pill {
     property bool charging: false
     property bool quiet: false      // do not disturb
     property bool awake: false      // stay awake
+    property bool game: false       // game mode
 
     spacing: 10
 
-    // Shown only while on: quiet mode and stay awake.
+    // Shown only while on: game mode, quiet mode and stay awake.
+    Icon {
+        anchors.verticalCenter: parent.verticalCenter
+        visible: area.game
+        name: "sports_esports"
+        color: Theme.accent
+    }
     Icon {
         anchors.verticalCenter: parent.verticalCenter
         visible: area.quiet

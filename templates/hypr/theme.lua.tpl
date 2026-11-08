@@ -14,7 +14,12 @@ hl.config({
             active_border   = "{{ accent | hypr }}",
             inactive_border = "{{ surface | hypr }}",
         },
+        -- Game mode: fullscreen windows may tear, for less input lag.
+        allow_tearing = {{ game.tearing }},
     },
+
+    -- Game mode: a fullscreen game goes straight to the screen (1), else 0.
+    render = { direct_scanout = {{ game.direct_scanout }} },
 
     decoration = {
         rounding = {{ shape.radius }},
@@ -30,3 +35,6 @@ hl.config({
 
     misc = { font_family = {{ font.mono | json }} },
 })
+
+-- Fullscreen windows (games) tear when allow_tearing is on (game mode).
+hl.window_rule({ match = { fullscreen = true }, immediate = true })

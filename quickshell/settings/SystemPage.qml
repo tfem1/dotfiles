@@ -35,7 +35,9 @@ Column {
     Toggle {
         name: "gamemode"
         title: "Game mode"
-        description: "For games: no animations, blur or shadows, and notifications wait (urgent ones still show)."
+        description: "For games (SUPER + G): no animations, blur or shadows; fullscreen games may tear for less "
+            + "input lag and go straight to the screen; the CPU in performance (GameMode); widgets stop; "
+            + "the screen never sleeps; notifications wait (urgent ones still show)."
         on: !!page.live.gameMode
     }
 

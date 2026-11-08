@@ -58,6 +58,14 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Game mode** does more for performance, and `SUPER + G` switches it:
+  fullscreen games may tear (less input lag) and are scanned out directly
+  (`allow_tearing`, an `immediate` rule for fullscreen windows,
+  `render.direct_scanout`: checked with `Hyprland --verify-config`
+  0.57.1); Feral GameMode is asked for its optimisations while it is on
+  (`gamemoded -r`, new package `gamemode`); the desktop widgets hide and
+  stop; the screen never sleeps; a gamepad shows in the bar. Checked in the
+  real Quickshell.
 - `.claude/settings.json`: the Ponytail plugin (DietrichGebert/ponytail,
   MIT) for Claude Code sessions in this repository.
 - Screens can be turned **off** (and on again) in Settings → Display, with

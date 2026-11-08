@@ -41,9 +41,13 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths,
         if field.kind == "hue":
             context[key] = context[str(theme[key])]
 
-    # Game mode: everything that costs frames is off, whatever the settings.
-    if theme.get("effects.game_mode"):
+    # Game mode: everything that costs frames is off, whatever the settings;
+    # a fullscreen game may tear (less input lag) and is scanned out directly.
+    game = bool(theme.get("effects.game_mode"))
+    if game:
         context.update({"effects.animations": False, "effects.blur": False, "effects.shadow": False})
+    context["game.tearing"] = game
+    context["game.direct_scanout"] = 1 if game else 0
     context["idle.listeners"] = listeners(context)
     context["display.rules"] = lua_rules(chosen(context))
     context["wallpaper.path"] = _wallpaper_path(str(theme["wallpaper.path"]), paths)

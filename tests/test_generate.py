@@ -82,6 +82,18 @@ class OutputTest(GenerateTest):
         self.assertIn("Hyprland not installed", output)
         self.assertFalse(self.hypr_theme.exists())
 
+    def test_game_mode_lets_games_tear_and_scan_out_directly(self):
+        self.write_user_file("theme.toml", "[effects]\ngame_mode = true\nblur = true\n")
+        self.run_generate("--all", "--only", "hyprland")
+        text = self.hypr_theme.read_text()
+        for line in ("allow_tearing = true", "direct_scanout = 1", "enabled = false",
+                     "match = { fullscreen = true }, immediate = true"):
+            self.assertIn(line, text)
+        self.write_user_file("theme.toml", "[effects]\ngame_mode = false\n")
+        self.run_generate("--all", "--only", "hyprland")
+        self.assertIn("allow_tearing = false", self.hypr_theme.read_text())
+        self.assertIn("direct_scanout = 0", self.hypr_theme.read_text())
+
     def test_the_login_screen_waits_for_its_folder(self):
         # /var/lib/tfem/sddm is made by `tfem sddm install`, with sudo.
         code, output = self.run_generate("--all")
