@@ -219,7 +219,12 @@ PYTHONPATH=scripts:tests python3 -m unittest discover -s tests
 With Quickshell (`qs`) and sway installed, `tests/test_shell_runtime.py` also
 runs the real shell in a headless sway session (software rendering, no GPU):
 it fails if the shell does not load or if opening any panel logs an error in
-its code. Without them it is skipped.
+its code. Without them it is skipped. With Hyprland installed,
+`tests/test_hypr_verify.py` checks the config with `Hyprland --verify-config`
+(run the tests as your user: Hyprland refuses root).
+
+Checked on 2026-11-08 with the versions Arch Linux ships: Hyprland 0.57.1
+(`config ok`) and Quickshell 0.3.2 (the shell loads, every panel opens).
 
 ## Hyprland config
 

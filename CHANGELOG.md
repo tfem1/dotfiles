@@ -15,6 +15,9 @@ All notable changes to this project are documented here. The format follows
   sway session, opens every panel through IPC and fails on any error from
   the shell's code. The previous QML tests only loaded the visual parts with
   plain Qt, which is why this slipped through.
+- New test `tests/test_hypr_verify.py`: the Hyprland config, with the
+  generated theme.lua and shell.lua, must pass `Hyprland --verify-config`
+  (checked with Hyprland 0.57.1, the version of Arch Linux: config ok).
 
 ### Added
 
