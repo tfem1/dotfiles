@@ -4,6 +4,8 @@ and the command line.
 Usage: display.py list               the screens and their modes, as JSON
        display.py set NAME MODE      use MODE on screen NAME (2560x1440@165.00)
        display.py auto NAME          back to the highest refresh rate
+       display.py off NAME           turn screen NAME off (never the last one on)
+       display.py on NAME            turn it on again (highest refresh rate)
 The choice goes to config.json (display.modes), then `tfem generate` writes
 ~/.config/hypr/display.lua and reloads Hyprland, which applies it at once.
 """
@@ -16,7 +18,7 @@ import sys
 from pathlib import Path
 from typing import Mapping
 
-from theming.display import MODE, OUTPUT, chosen, monitors  # noqa: E402  (scripts/ is on sys.path)
+from theming.display import MODE, OFF, OUTPUT, chosen, monitors  # noqa: E402  (scripts/ is on sys.path)
 from theming.generate import main as generate  # noqa: E402
 from theming.paths import Paths  # noqa: E402
 from theming.settings import SettingsError, load_config  # noqa: E402
@@ -26,9 +28,9 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 def screens(env: Mapping[str, str]) -> list[dict]:
-    """The screens Hyprland drives now ([] when it is not running)."""
+    """Every screen Hyprland knows, the ones off too ([] when it is not running)."""
     try:
-        done = subprocess.run(["hyprctl", "monitors", "-j"], capture_output=True, text=True,
+        done = subprocess.run(["hyprctl", "monitors", "all", "-j"], capture_output=True, text=True,
                               timeout=5, env=dict(env))
         return monitors(json.loads(done.stdout)) if done.returncode == 0 else []
     except (OSError, subprocess.TimeoutExpired, json.JSONDecodeError, TypeError, AttributeError):
@@ -43,7 +45,7 @@ def write_mode(paths: Paths, name: str, mode: str | None) -> None:
     """Sets (or with None removes) the mode of one screen in your config.json."""
     if not OUTPUT.fullmatch(name):
         raise ValueError(f"'{name}' is not a screen name (like DP-1 or HDMI-A-1)")
-    if mode is not None and not MODE.fullmatch(mode):
+    if mode is not None and mode != OFF and not MODE.fullmatch(mode):
         raise ValueError(f"'{mode}' is not a mode (like 2560x1440@165.00)")
     path = paths.user_dir / "config.json"
     config = json.loads(path.read_text()) if path.exists() else {}
@@ -56,6 +58,14 @@ def write_mode(paths: Paths, name: str, mode: str | None) -> None:
     load_config(paths)  # the file stays valid
 
 
+def keep_one_on(name: str, paths: Paths, env: Mapping[str, str]) -> None:
+    """Refuses to turn off the last screen on: nothing would show any more."""
+    picked = chosen(load_config(paths))
+    others = [s for s in screens(env) if s["name"] != name and s["on"] and picked.get(s["name"]) != OFF]
+    if not others:
+        raise ValueError(f"{name} is the only screen on: it stays on")
+
+
 def main(argv: list[str] | None = None, env: Mapping[str, str] = os.environ) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
     paths = Paths.from_env(ROOT, env)
@@ -63,15 +73,18 @@ def main(argv: list[str] | None = None, env: Mapping[str, str] = os.environ) -> 
         if args == ["list"]:
             print(json.dumps(listing(paths, env)))
             return 0
-        if (args[:1] == ["set"] and len(args) == 3) or (args[:1] == ["auto"] and len(args) == 2):
-            name, mode = args[1], (args[2] if args[0] == "set" else None)
+        if (args[:1] == ["set"] and len(args) == 3) or (args[:1] in (["auto"], ["off"], ["on"]) and len(args) == 2):
+            name = args[1]
+            mode = {"set": args[-1], "off": OFF}.get(args[0])     # auto and on: no rule
+            if mode == OFF:
+                keep_one_on(name, paths, env)
             write_mode(paths, name, mode)
             print(f"{name}: {mode or 'highest refresh rate'}")
             return generate(["--root", str(ROOT), "--only", "hyprland-display"], env=env)
     except (OSError, ValueError, SettingsError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 1
-    print("\n".join(__doc__.strip().splitlines()[3:6]), file=sys.stderr)
+    print("\n".join(__doc__.strip().splitlines()[3:8]), file=sys.stderr)
     return 64
 
 

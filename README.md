@@ -448,12 +448,14 @@ folder name is `shell.name` in your `config.json`). Its colors follow
     microphone, brightness, Wi-Fi and Bluetooth (with their panel), keyboard
     layout, quiet mode, stay awake, and **sleep**: after how long the
     screen dims, locks, turns off and the computer suspends (or never).
-  - **Display**: each screen with its **refresh rate** and resolution as
-    one-click choices (165 Hz, 144 Hz, 60 Hz… or Highest). It acts at once
-    and asks "Keep this display mode?": without an answer it goes back
-    after 15 seconds, in case the screen stays black. Same from a terminal:
+  - **Display**: each screen **on or off** with a switch, its **refresh
+    rate** and resolution as one-click choices (165 Hz, 144 Hz, 60 Hz… or
+    Highest). It acts at once and asks "Keep this change?": without an
+    answer it goes back after 15 seconds, in case a screen stays black. The
+    last screen on cannot be turned off. Same from a terminal:
     `tfem display list`, `tfem display set DP-1 2560x1440@165.08`,
-    `tfem display auto DP-1`. The choice is saved in `config.json`
+    `tfem display auto DP-1`, `tfem display off HDMI-A-1`,
+    `tfem display on HDMI-A-1`. The choice is saved in `config.json`
     (`display.modes`) and written to `~/.config/hypr/display.lua`, loaded
     by `config/monitors.lua`; other screens keep the highest refresh rate.
 

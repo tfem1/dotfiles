@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from typing import Mapping
 
 from .colors import Color
-from .display import MODE, OUTPUT
+from .display import MODE, OFF, OUTPUT
 from .icons import FOLDER_COLORS
 
 HUES = ("red", "orange", "yellow", "green", "cyan", "blue", "purple", "brown")
@@ -48,8 +48,8 @@ class Field:
             return "must not be empty"
         if self.kind == "name" and not _NAME.fullmatch(value):
             return "use lowercase letters, digits, '-' or '_' only"
-        if self.kind == "mode" and not MODE.fullmatch(value):
-            return "expected a screen mode like 2560x1440@165.00"
+        if self.kind == "mode" and value != OFF and not MODE.fullmatch(value):
+            return "expected a screen mode like 2560x1440@165.00, or off"
         if self.kind == "color":
             try:
                 Color.parse(value)

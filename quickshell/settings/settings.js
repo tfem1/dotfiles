@@ -27,8 +27,8 @@ const INDEX = [
     { page: "system", id: "quiet", title: "Quiet mode", words: "do not disturb notifications" },
     { page: "system", id: "awake", title: "Stay awake", words: "caffeine idle sleep" },
     { page: "system", id: "sleep", title: "Sleep", words: "idle dim lock screen off suspend energy power" },
-    { page: "display", id: "screens", title: "Refresh rate and resolution",
-      words: "display screen monitor hz hertz fps refresh rate resolution 144 165 240" },
+    { page: "display", id: "screens", title: "Screens: on or off, refresh rate, resolution",
+      words: "display screen monitor hz hertz fps refresh rate resolution 144 165 240 off on disable turn off" },
     { page: "widgets", id: "widget-corner", title: "Widgets corner",
       words: "desktop widgets corner position place left right top bottom" },
     { page: "widgets", id: "widget-clock", title: "Clock widget", words: "desktop time date" },
@@ -46,8 +46,8 @@ const PAGES = [
       note: "Nothing changes until you press Apply: the preview shows it first." },
     { id: "system", title: "System", icon: "settings", text: "Sound, brightness, connections, sleep",
       note: "These settings act at once." },
-    { id: "display", title: "Display", icon: "computer", text: "Resolution and refresh rate",
-      note: "A new mode acts at once and asks to be kept: without an answer it goes back after 15 seconds." },
+    { id: "display", title: "Display", icon: "computer", text: "Screens on or off, resolution, Hz",
+      note: "A change acts at once and asks to be kept: without an answer it goes back after 15 seconds." },
     { id: "widgets", title: "Widgets", icon: "grid_view", text: "Clock, music, CPU, GPU, RAM, disk",
       note: "On the desktop, under the windows, in the colors of the theme. These settings act at once." }
 ];
@@ -172,6 +172,15 @@ function sizeChoices(screen, current, count) {
     if (current && sizes.includes(current) && !shown.includes(current))
         shown.push(current);
     return shown.map(size => ({ value: size, label: size.replace("x", " × ") }));
+}
+
+// How many screens are on, counting what was picked in the window (a mode
+// turns a screen on, "off" turns it off). The last one on stays on.
+function screensOn(screens, chosen) {
+    return (screens || []).filter(screen => {
+        const picked = (chosen || {})[screen.name];
+        return picked === "off" ? false : picked ? true : screen.on !== false;
+    }).length;
 }
 
 // The fastest mode of a resolution (picked when the resolution changes).

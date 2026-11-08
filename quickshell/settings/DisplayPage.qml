@@ -4,9 +4,10 @@ import "../theme"
 import "../components"
 import "settings.js" as Settings
 
-// Display: the resolution and refresh rate of each screen, in one click.
-// A new mode acts at once and asks to be kept: without an answer it goes
-// back after 15 seconds, in case the screen shows nothing with it.
+// Display: each screen on or off, its resolution and refresh rate, in one
+// click. A change acts at once and asks to be kept: without an answer it
+// goes back after 15 seconds, in case the screen shows nothing with it. The
+// last screen on cannot be turned off.
 Column {
     id: page
 
@@ -37,7 +38,7 @@ Column {
             anchors.verticalCenter: parent.verticalCenter
             spacing: 3
             Label {
-                text: "Keep this display mode?"
+                text: "Keep this change?"
                 color: Theme.fgBright
                 font.weight: Font.DemiBold
             }
@@ -80,12 +81,17 @@ Column {
             required property var modelData
             required property int index
             readonly property string picked: page.chosen[modelData.name] || "auto"
-            readonly property string size: picked === "auto" ? modelData.size : Settings.modeParts(picked).size
+            readonly property bool on: picked === "off" ? false : picked !== "auto" || modelData.on !== false
+            readonly property bool last: on && Settings.screensOn(page.screens, page.chosen) <= 1
+            readonly property string size: picked === "auto" || picked === "off" ? modelData.size
+                : Settings.modeParts(picked).size
 
             objectName: index === 0 ? "screens" : ""
             title: modelData.name + (modelData.description ? "  ·  " + modelData.description : "")
-            description: "In use: " + Settings.modeLabel(modelData.current)
-                + (picked === "auto" ? " (the highest refresh rate)" : "")
+            description: !on ? "Off: nothing shows on it."
+                : modelData.current ? "In use: " + Settings.modeLabel(modelData.current)
+                    + (picked === "auto" ? " (the highest refresh rate)" : "")
+                : "On, with its highest refresh rate."
             wide: true
 
             Column {
@@ -93,6 +99,31 @@ Column {
                 spacing: 10
 
                 Row {
+                    spacing: 12
+                    Label {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 130
+                        text: "Screen"
+                    }
+                    Switch {
+                        anchors.verticalCenter: parent.verticalCenter
+                        checked: screen.on
+                        frozen: screen.last
+                        // On again: without the "off" rule; a screen turned off
+                        // elsewhere gets its fastest mode, which turns it on.
+                        onToggled: checked => page.pick(screen.modelData.name, !checked ? "off"
+                            : screen.picked === "off" ? "auto"
+                            : Settings.fastest(screen.modelData, (screen.modelData.resolutions[0] || {}).size))
+                    }
+                    Label {
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible: screen.last
+                        text: "The only screen on: it stays on."
+                        small: true
+                    }
+                }
+                Row {
+                    visible: screen.on
                     spacing: 12
                     Label {
                         anchors.verticalCenter: parent.verticalCenter
@@ -107,6 +138,7 @@ Column {
                     }
                 }
                 Row {
+                    visible: screen.on
                     spacing: 12
                     Label {
                         anchors.verticalCenter: parent.verticalCenter

@@ -325,6 +325,9 @@ Rectangle {
                     size: "1920x1080",
                     resolutions: [{ size: "1920x1080", rates: [{ label: "75 Hz", mode: "1920x1080@75.00" },
                         { label: "60 Hz", mode: "1920x1080@60.00" }] }]
+                }, {
+                    name: "eDP-1", description: "Laptop screen", on: false, current: "", size: "0x0",
+                    resolutions: [{ size: "1920x1200", rates: [{ label: "60 Hz", mode: "1920x1200@60.00" }] }]
                 }]
             })
             confirm: scene.mode === "settings-display" ? { name: "DP-1", previous: "auto", seconds: 12 } : null

@@ -7,12 +7,14 @@ Rectangle {
 
     property bool checked: false
     property color tint: Theme.accent
+    property bool frozen: false         // shown, but cannot be flipped
     signal toggled(bool checked)
 
     width: 40
     height: 22
     radius: height / 2
     color: checked ? tint : Theme.surface
+    opacity: frozen ? 0.45 : 1
     Behavior on color { ColorAnimation { duration: Theme.duration } }
 
     Rectangle {
@@ -25,5 +27,8 @@ Rectangle {
         Behavior on x { NumberAnimation { duration: Theme.duration; easing.type: Easing.OutCubic } }
     }
 
-    TapHandler { onTapped: toggle.toggled(!toggle.checked) }
+    TapHandler {
+        enabled: !toggle.frozen
+        onTapped: toggle.toggled(!toggle.checked)
+    }
 }

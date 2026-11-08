@@ -3,6 +3,7 @@ window, and the Hyprland rules for the modes picked there.
 
 A mode is "WIDTHxHEIGHT@RATE" (2560x1440@165.00), as `hl.monitor` takes it;
 the rate keeps the decimals Hyprland lists, so it matches the exact mode.
+"off" turns the screen off (`disabled = true`).
 """
 from __future__ import annotations
 
@@ -14,6 +15,7 @@ MODE = re.compile(r"(\d{2,5})x(\d{2,5})@(\d{1,3}(?:\.\d{1,3})?)")
 # Port names: DP-1, eDP-1, HDMI-A-1...
 OUTPUT = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,31}")
 PREFIX = "display.modes."   # config.json: {"display": {"modes": {"DP-1": "..."}}}
+OFF = "off"
 
 
 def mode(width: int, height: int, rate: float) -> str:
@@ -21,8 +23,9 @@ def mode(width: int, height: int, rate: float) -> str:
 
 
 def monitors(data: list[Mapping]) -> list[dict]:
-    """Each screen with its resolutions, biggest first, and their rates,
-    highest first ("165 Hz"); rates that round to the same Hz are one."""
+    """Each screen (from `hyprctl monitors all -j`, so the ones turned off too)
+    with its resolutions, biggest first, and their rates, highest first
+    ("165 Hz"); rates that round to the same Hz are one."""
     screens = []
     for screen in data:
         sizes: dict[tuple[int, int], dict[int, float]] = {}
@@ -32,11 +35,13 @@ def monitors(data: list[Mapping]) -> list[dict]:
             width, height, rate = int(match[1]), int(match[2]), float(match[3])
             rates = sizes.setdefault((width, height), {})
             rates[round(rate)] = max(rate, rates.get(round(rate), 0))
+        on = not screen.get("disabled", False)
         width, height = int(screen.get("width", 0)), int(screen.get("height", 0))
-        current = mode(width, height, float(screen.get("refreshRate", 0)))
+        current = mode(width, height, float(screen.get("refreshRate", 0))) if on else ""
         screens.append({
             "name": screen.get("name", ""),
             "description": screen.get("description", ""),
+            "on": on,
             "current": current,
             "size": f"{width}x{height}",
             "resolutions": [
@@ -60,6 +65,7 @@ def lua_rules(modes: Mapping[str, str]) -> str:
     if not modes:
         return "-- No mode picked: every screen uses its highest refresh rate."
     return "\n".join(
+        f"hl.monitor({{ output = {json.dumps(name)}, disabled = true }})" if value == OFF else
         f"hl.monitor({{ output = {json.dumps(name)}, mode = {json.dumps(value)}, "
         f'position = "auto", scale = 1 }})'
         for name, value in sorted(modes.items())

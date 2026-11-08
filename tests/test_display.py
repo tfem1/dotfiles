@@ -42,6 +42,17 @@ class ModesTest(unittest.TestCase):
         ])
         self.assertEqual([r["label"] for r in screen["resolutions"][1]["rates"]], ["144 Hz", "60 Hz"])
 
+    def test_a_screen_turned_off_is_listed_as_off(self):
+        off = {"name": "HDMI-A-1", "description": "LG", "width": 0, "height": 0, "refreshRate": 0,
+               "disabled": True, "availableModes": ["1920x1080@60.00Hz"]}
+        screens = monitors(HYPRCTL + [off])
+        self.assertEqual([(s["name"], s["on"]) for s in screens], [("DP-1", True), ("HDMI-A-1", False)])
+        self.assertEqual(screens[1]["current"], "")
+        self.assertEqual(screens[1]["resolutions"][0]["size"], "1920x1080")   # its modes, to turn it on
+
+    def test_a_screen_off_gets_a_disabled_rule(self):
+        self.assertEqual(lua_rules({"HDMI-A-1": "off"}), 'hl.monitor({ output = "HDMI-A-1", disabled = true })')
+
     def test_rules_name_each_screen_and_keep_the_others_automatic(self):
         self.assertIn("No mode picked", lua_rules({}))
         self.assertEqual(lua_rules({"DP-1": "2560x1440@165.08"}),
@@ -52,6 +63,8 @@ class ConfigTest(SandboxTest):
     def test_display_modes_are_checked(self):
         self.write_user_file("config.json", json.dumps({"display": {"modes": {"DP-1": "2560x1440@165.08"}}}))
         self.assertEqual(load_config(self.paths)["display.modes.DP-1"], "2560x1440@165.08")
+        self.write_user_file("config.json", json.dumps({"display": {"modes": {"DP-1": "off"}}}))
+        self.assertEqual(load_config(self.paths)["display.modes.DP-1"], "off")
         for modes, problem in (({"DP-1": "fast"}, "screen mode"), ({"DP 1": "1920x1080@60"}, "unknown key")):
             with self.subTest(modes=modes):
                 self.write_user_file("config.json", json.dumps({"display": {"modes": modes}}))
@@ -96,6 +109,23 @@ class CommandTest(SandboxTest):
         code, _ = self.run_display("auto", "DP-1")
         self.assertEqual(code, 0)
         self.assertNotIn("DP-1", (self.paths.config_home / "hypr/display.lua").read_text())
+
+    def test_off_and_on_turn_a_screen_off_and_back(self):
+        second = {"name": "HDMI-A-1", "description": "LG", "width": 1920, "height": 1080, "refreshRate": 60.0,
+                  "availableModes": ["1920x1080@60.00Hz"]}
+        (self.home / "monitors.json").write_text(json.dumps(HYPRCTL + [second]))
+        code, output = self.run_display("off", "HDMI-A-1")
+        self.assertEqual(code, 0, output)
+        self.assertIn('output = "HDMI-A-1", disabled = true', (self.paths.config_home / "hypr/display.lua").read_text())
+        code, _ = self.run_display("on", "HDMI-A-1")
+        self.assertEqual(code, 0)
+        self.assertNotIn("HDMI-A-1", (self.paths.config_home / "hypr/display.lua").read_text())
+
+    def test_the_last_screen_on_stays_on(self):
+        code, output = self.run_display("off", "DP-1")      # the only one
+        self.assertEqual(code, 1)
+        self.assertIn("the only screen on", output)
+        self.assertFalse((self.paths.user_dir / "config.json").exists())
 
     def test_bad_names_and_modes_are_refused(self):
         self.assertEqual(self.run_display("set", "DP-1", "fast")[0], 1)

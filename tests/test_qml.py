@@ -311,6 +311,11 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual([c["label"] for c in self.probe(lib, 'Lib.sizeChoices(input, "1920x1080", 1)', screen)],
                          ["2560 × 1440", "1920 × 1080"])
         self.assertEqual(self.probe(lib, 'Lib.fastest(input, "2560x1440")', screen), "2560x1440@165.08")
+        # Screens on: off in Hyprland, or turned off in the window, do not count.
+        screens = [{"name": "DP-1", "on": True}, {"name": "HDMI-A-1", "on": True}, {"name": "eDP-1", "on": False}]
+        self.assertEqual(self.probe(lib, 'Lib.screensOn(input, {})', screens), 2)
+        self.assertEqual(self.probe(lib, 'Lib.screensOn(input, {"HDMI-A-1": "off"})', screens), 1)
+        self.assertEqual(self.probe(lib, 'Lib.screensOn(input, {"eDP-1": "2560x1440@60.00"})', screens), 3)
         self.assertEqual(self.probe(lib, 'Lib.PAGES.map(p => p.id)', None),
                          ["appearance", "system", "display", "widgets"])
 
