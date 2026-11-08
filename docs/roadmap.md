@@ -33,7 +33,8 @@ Themes come before the shell, so the shell is built with the final palettes.
    green theme.
 7. Settings window (`SUPER + H`).
 8. Optional dock.
-9. Fastfetch in the theme colors, matching cursor and icons.
+9. Fastfetch in the theme colors, matching cursor and icons. **Icons
+   done:** FairyWren, dark or light, folders in the accent's color.
 10. Custom lock screen and the two SDDM themes.
 
 ## 1. Theme pipeline — done

@@ -6,5 +6,5 @@
 style=Fusion
 custom_palette=true
 color_scheme_path={{ dirs.config }}/qt6ct/colors/theme.conf
-icon_theme={{ icons.theme }}
+icon_theme={{ icons.name }}
 standard_dialogs=default

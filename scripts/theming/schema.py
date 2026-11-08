@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from typing import Mapping
 
 from .colors import Color
+from .icons import FOLDER_COLORS
 
 HUES = ("red", "orange", "yellow", "green", "cyan", "blue", "purple", "brown")
 # The theme's three colors first: modules set to them keep a theme minimal.
@@ -96,6 +97,7 @@ THEME_SCHEMA: dict[str, Field] = {
     "cursor.theme": TEXT,
     "cursor.size": _int(8, 96),
     "icons.theme": TEXT,
+    "icons.folders": Field("choice", choices=("theme", *FOLDER_COLORS)),
     **{f"modules.{name}": Field("hue", choices=MODULE_COLORS) for name in MODULES},
 }
 

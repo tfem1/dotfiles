@@ -21,6 +21,16 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- FairyWren icons (gitlab.com/FreshDoctor/FairyWren-Icons, GPL-3.0, not
+  bundled): `tfem icons fetch` downloads only `FairyWren_Dark` and
+  `FairyWren_Light`, the installer runs it (`--no-icons` to skip). The
+  default icon theme is now `FairyWren`: dark or light from the palette.
+  The folders take FairyWren's color that looks closest to the accent
+  (OKLab distance to each folder's measured color), or the one set in
+  `icons.folders`; a new `icons` target records it and points FairyWren's
+  folder link at it. Papirus (FairyWren's fallback) is now a core package.
+  New `{data}` placeholder for targets.
+
 - `theme.toml`: single source of truth for the look of the desktop (palette,
   accent, fonts, shape, effects, cursor, icons, one color per shell module).
 - `config.json`: shell settings, starting with the shell name.

@@ -120,7 +120,7 @@ uninstall() {
   restore_dir "$backup" "$CONFIG_HOME/hypr"
   restore_dir "$backup" "$SHELL_DIR"
   run mv "$INSTALL_LOG" "$INSTALL_LOG.uninstalled-$(date +%Y%m%d-%H%M%S)"
-  info "kept: your settings ($CONFIG_HOME/tfem), wallpapers, backups and installed packages"
+  info "kept: your settings ($CONFIG_HOME/tfem), wallpapers, icons, backups and installed packages"
   if grep -qx "cloned $ROOT" "$INSTALL_LOG"* 2>/dev/null; then
     info "remove the downloaded project with: rm -rf $ROOT"
   fi

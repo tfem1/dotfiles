@@ -84,12 +84,13 @@ def _include(where: str, entry: object, paths: Paths, shell: str) -> Include:
 
 
 def _expand(where: str, text: str, paths: Paths, shell: str) -> Path:
-    value = text.replace("{config}", str(paths.config_home)).replace("{shell}", shell)
+    value = (text.replace("{config}", str(paths.config_home)).replace("{data}", str(paths.data_home))
+             .replace("{shell}", shell))
     if leftover := _PLACEHOLDER.search(value):
         raise ManifestError(f"{where}: unknown placeholder {leftover.group()}")
     path = Path(value)
     if not path.is_absolute():
-        raise ManifestError(f"{where}: '{text}' must start with {{config}} or be absolute")
+        raise ManifestError(f"{where}: '{text}' must start with {{config}}, {{data}} or be absolute")
     return path
 
 

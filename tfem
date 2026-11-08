@@ -19,6 +19,8 @@ Commands:
   wallpapers    fetch [--category NAME]: download the collection
                 list [--json]: list your wallpapers; set IMAGE: use one
                 (a pony or forest wallpaper also brings its theme)
+  icons         fetch: download the FairyWren icons (dark and light)
+                folders COLOR: color of their folders (tfem generate sets it)
   help          Show this help
 
 Your settings: \${XDG_CONFIG_HOME:-~/.config}/tfem/theme.toml and config.json
@@ -40,6 +42,7 @@ case "$command" in
   generate) exec "$root/scripts/generate.sh" "$@" ;;
   screenshot) exec "$root/scripts/screenshot.sh" "$@" ;;
   wallpapers) need_python && exec python3 "$root/scripts/wallpapers.py" "$@" ;;
+  icons) need_python && exec python3 "$root/scripts/icons.py" "$@" ;;
   help | -h | --help) usage ;;
   *)
     echo "$prog: unknown command '$command'" >&2

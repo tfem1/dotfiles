@@ -44,3 +44,23 @@ class SandboxTest(unittest.TestCase):
 
 def environ_with(env: dict[str, str]) -> dict[str, str]:
     return {**os.environ, **env}
+
+
+def fake_fairywren(folder: Path) -> str:
+    """A tiny git repository shaped like FairyWren-Icons (each theme's folder
+    icons link to places/colours/default, itself a link to ./blue). Returns
+    a URL for TFEM_FAIRYWREN_URL, so no test downloads the real one."""
+    import subprocess
+    for theme in ("FairyWren_Dark", "FairyWren_Light"):
+        places = folder / theme / "places"
+        for color in ("blue", "pink", "violet"):
+            (places / "colours" / color).mkdir(parents=True)
+            (places / "colours" / color / "folder.svg").write_text(f"<svg><!-- {color} --></svg>\n")
+        (places / "colours/default").symlink_to("./blue")
+        (places / "folder.svg").symlink_to("./colours/default/folder.svg")
+        (folder / theme / "index.theme").write_text(f"[Icon Theme]\nName={theme}\nDirectories=places\n")
+    (folder / "README.md").write_text("not copied\n")
+    git = ["git", "-C", str(folder), "-c", "user.name=test", "-c", "user.email=test@example.org"]
+    for step in (["init", "--quiet"], ["add", "-A"], ["commit", "--quiet", "-m", "fake"]):
+        subprocess.run(git + step, check=True, capture_output=True)
+    return folder.as_uri()

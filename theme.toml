@@ -51,7 +51,11 @@ theme = "Adwaita"
 size  = 24
 
 [icons]
-theme = "Papirus-Dark"
+theme   = "FairyWren"           # FairyWren: dark or light from the palette (downloaded by
+                                # `tfem icons fetch`); or any installed icon theme's name
+folders = "theme"               # FairyWren folder color: theme (closest to the accent) or
+                                # blue, cyan, green, indigo, magenta, pink, pine, red, teal,
+                                # violet, yellow, grey, ... (FairyWren_Dark/places/colours)
 
 [modules]                       # color of each shell module: the theme's own three
                                 # colors (accent, accent2, accent3), so it stays

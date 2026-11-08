@@ -4,7 +4,7 @@
    named colors (before 1.6) and the variables (1.6 and later).
    Shade and border colors keep their defaults (transparent black).
    Set with gsettings when this file changes: theme {{ gtk.theme }},
-   style {{ gtk.color_scheme }}, icons {{ icons.theme }}, cursor {{ cursor.theme }} {{ cursor.size }}. */
+   style {{ gtk.color_scheme }}, icons {{ icons.name }}, cursor {{ cursor.theme }} {{ cursor.size }}. */
 
 @define-color accent_bg_color {{ accent }};
 @define-color accent_fg_color {{ bg }};

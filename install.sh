@@ -2,13 +2,14 @@
 # One-command installer for the Arch, Debian and Fedora families:
 #   bash <(curl -fsSL https://raw.githubusercontent.com/tfem1/dotfiles/main/install.sh)
 # Downloads the project, installs the packages, backs up then deploys the
-# configs, downloads the wallpapers and generates the theme. See --help.
+# configs, downloads the wallpapers and the icons and generates the theme.
+# See --help.
 set -euo pipefail
 
 REPO_URL="${TFEM_REPO_URL:-https://github.com/tfem1/dotfiles.git}"
 BRANCH="${TFEM_BRANCH:-main}"
 DEST="${TFEM_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/tfem}"
-PROFILE=full DRY_RUN=0 ASSUME_YES=0 UNINSTALL=0 WITH_PACKAGES=1 WITH_WALLPAPERS=1
+PROFILE=full DRY_RUN=0 ASSUME_YES=0 UNINSTALL=0 WITH_PACKAGES=1 WITH_WALLPAPERS=1 WITH_ICONS=1
 
 usage() {
   cat <<'EOF'
@@ -21,6 +22,7 @@ Usage: install.sh [options]
   --yes                   do not ask for confirmation
   --no-packages           skip package installation
   --no-wallpapers         skip the wallpaper download
+  --no-icons              skip the FairyWren icons download
   --branch NAME           install another branch of the project
   -h, --help              show this help
 EOF
@@ -38,6 +40,7 @@ while (($#)); do
     --yes) ASSUME_YES=1 ;;
     --no-packages) WITH_PACKAGES=0 ;;
     --no-wallpapers) WITH_WALLPAPERS=0 ;;
+    --no-icons) WITH_ICONS=0 ;;
     --branch) BRANCH="${2:?--branch needs a name}" && shift ;;
     -h | --help) usage && exit 0 ;;
     *) usage >&2 && exit 64 ;;
@@ -93,6 +96,10 @@ link_cli
 if ((WITH_WALLPAPERS)); then
   info "downloading wallpapers"
   run "$ROOT/tfem" wallpapers fetch || warn "some wallpapers could not be downloaded; run 'tfem wallpapers fetch' later"
+fi
+if ((WITH_ICONS)); then
+  info "downloading the FairyWren icons"
+  run "$ROOT/tfem" icons fetch || warn "the icons could not be downloaded; run 'tfem icons fetch' later"
 fi
 seed_settings
 

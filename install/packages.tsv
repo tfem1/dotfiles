@@ -31,5 +31,5 @@ nautilus	full	nautilus	nautilus	nautilus
 satty	full	satty	-	-
 font-inter	full	inter-font	fonts-inter	rsms-inter-fonts
 font-mono	full	ttf-jetbrains-mono-nerd	fonts-jetbrains-mono	jetbrains-mono-fonts
-icons	full	papirus-icon-theme	papirus-icon-theme	papirus-icon-theme
+icons	core	papirus-icon-theme	papirus-icon-theme	papirus-icon-theme
 cursor	full	adwaita-cursors	adwaita-icon-theme	adwaita-cursor-theme

@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Mapping
 
 from .accents import companions
+from .icons import folder_color, theme_name
 from .palette import Palette
 from .paths import Paths
 from .schema import THEME_SCHEMA
@@ -42,7 +43,13 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths,
     dark = palette.variant == "dark"
     context["gtk.theme"] = "adw-gtk3-dark" if dark else "adw-gtk3"
     context["gtk.color_scheme"] = "prefer-dark" if dark else "default"
+    # Icons: FairyWren's dark or light half, folders in the accent's color.
+    context["icons.name"] = theme_name(str(theme["icons.theme"]), palette.variant)
+    folders = str(theme["icons.folders"])
+    context["icons.folders"] = folder_color(context["accent"]) if folders == "theme" else folders
     context["dirs.config"] = str(paths.config_home)
+    context["dirs.data"] = str(paths.data_home)
+    context["dirs.root"] = str(paths.root)
     return context
 
 

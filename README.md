@@ -23,8 +23,8 @@ It downloads the project to `~/.local/share/tfem`, installs the packages,
 backs up every file it is about to replace (in
 `~/.local/state/tfem/backups/`), copies the Hyprland config to
 `~/.config/hypr`, puts the `tfem` command (and the `dots` and `wm` aliases) in
-`~/.local/bin`, downloads the wallpapers and generates the theme. It asks
-before changing anything.
+`~/.local/bin`, downloads the wallpapers and the FairyWren icons, and
+generates the theme. It asks before changing anything.
 
 | Option | Effect |
 |---|---|
@@ -32,7 +32,7 @@ before changing anything.
 | `--dry-run` | show every step, change nothing |
 | `--uninstall` | put your previous config back and remove the links |
 | `--yes` | do not ask for confirmation |
-| `--no-packages`, `--no-wallpapers` | skip that step |
+| `--no-packages`, `--no-wallpapers`, `--no-icons` | skip that step |
 
 Run the same command again to update. Installed packages are never removed.
 
@@ -54,6 +54,31 @@ missing ones instead of failing.
 On Fedora, the installer does not add third-party repositories by itself:
 enable a COPR you trust (for example `sudo dnf copr enable sdegler/hyprland`)
 and run it again. Versions checked on Repology on 2026-11-07.
+
+### Icons
+
+The icon theme is [FairyWren](https://gitlab.com/FreshDoctor/FairyWren-Icons)
+(GPL-3.0, Breeze parts LGPL-2.1), based on Papirus and Breeze. Like the
+wallpapers it is not stored in this repository: `tfem icons fetch` downloads
+only its two themes (about 160 MB) into `~/.local/share/icons`, and the
+installer runs it for you. Papirus is installed too, as FairyWren falls back
+on it for the icons it does not draw.
+
+- **Dark or light** follows the palette: `FairyWren_Dark` for dark themes,
+  `FairyWren_Light` for light ones (Celestia, Fluttershy, Fern).
+- **Folders** take FairyWren's color that looks closest to the accent:
+  violet for Twilight, pink for Pinkie, indigo for Luna, cyan for Rainbow,
+  green or pine for the forests. Pick one yourself with `folders` (blue,
+  cyan, green, indigo, magenta, pink, pine, red, teal, violet, yellow, ...).
+
+```toml
+[icons]
+theme   = "FairyWren"   # or any installed icon theme, e.g. "Papirus-Dark"
+folders = "theme"       # or "pink", "pine", ...
+```
+
+`tfem generate` applies it: GTK (gsettings), Qt (qt5ct, qt6ct) and the shell
+(launcher, running apps).
 
 ### Wallpapers
 
@@ -388,6 +413,10 @@ Settings window.
   theme file plus one marked include line instead of overwriting configs.
   Only ideas were reused: TFEM is an original implementation and contains no
   Serpantinum code.
+- **[FairyWren](https://gitlab.com/FreshDoctor/FairyWren-Icons)** (Isaiah M,
+  GPL-3.0 and LGPL-2.1): the icon theme, downloaded on your machine, never
+  copied into this repository; the folder color is set through its own
+  `places/colours/default` link, as its `colours.sh` does.
 - **[Material Symbols](https://github.com/google/material-design-icons)**
   (Google, Apache-2.0, see `licenses/Apache-2.0.txt`): the shell's icons,
   extracted by `tools/fetch_icons.py`.

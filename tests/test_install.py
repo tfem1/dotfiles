@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from helpers import REPO
+from helpers import REPO, fake_fairywren
 
 # Fake tools log their arguments; a package is available unless listed in $MISSING.
 AVAILABLE = 'for p in $MISSING; do [ "$p" = "${!#}" ] && exit 1; done; exit 0'
@@ -28,6 +28,15 @@ OS_RELEASE = {
 
 
 class InstallTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls._icons = tempfile.TemporaryDirectory()
+        cls.fairywren = fake_fairywren(Path(cls._icons.name) / "FairyWren-Icons")
+
+    @classmethod
+    def tearDownClass(cls):
+        cls._icons.cleanup()
+
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()
         self.home = Path(self._tmp.name)
@@ -60,6 +69,8 @@ class InstallTest(unittest.TestCase):
             "HOME": str(self.home), "PATH": ":".join(path), "LOG": str(self.log), "MISSING": missing,
             "TFEM_OS_RELEASE": str(release), "XDG_CONFIG_HOME": str(self.home / ".config"),
             "XDG_STATE_HOME": str(self.home / ".local/state"), "XDG_DATA_HOME": str(self.home / ".local/share"),
+            # Icons from a local stand-in: the tests never download the real ones.
+            "TFEM_FAIRYWREN_URL": self.fairywren,
         }
         done = subprocess.run(["bash", str(REPO / "install.sh"), *args], env=env,
                               capture_output=True, text=True, timeout=120)
@@ -127,6 +138,21 @@ class DeployTest(InstallTest):
         self.assertIn("[dry-run]", output)
         self.assertFalse(self.config("hypr").exists())
         self.assertNotIn("pacman -S --needed", self.calls())
+
+    def test_install_downloads_the_icons_with_the_theme_folder_color(self):
+        code, output = self.install("arch", "--yes", "--no-wallpapers", "--no-packages")
+        self.assertEqual(code, 0, output)
+        icons = self.home / ".local/share/icons"
+        for theme in ("FairyWren_Dark", "FairyWren_Light"):
+            self.assertTrue((icons / theme / "index.theme").is_file())
+            # Twilight's accent is violet: generate pointed the folders there.
+            self.assertEqual(os.readlink(icons / theme / "places/colours/default"), "./violet")
+        self.assertFalse((icons / "README.md").exists())
+
+    def test_no_icons_skips_the_download(self):
+        code, _ = self.install("arch", "--yes", "--no-wallpapers", "--no-packages", "--no-icons")
+        self.assertEqual(code, 0)
+        self.assertFalse((self.home / ".local/share/icons/FairyWren_Dark").exists())
 
     def test_install_backs_up_then_deploys_links_and_generates(self):
         self.config("hypr").mkdir(parents=True)

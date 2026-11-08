@@ -64,7 +64,7 @@ needs    = "gsettings"
 include  = { into = "{config}/gtk-4.0/gtk.css", line = '@import url("theme.css");', comment = "/*", comment_end = "*/", position = "start", create = true }
 # The settings GTK apps read on any desktop: theme (adw-gtk3 reads the
 # colors), dark or light style, icons, cursor. Open apps follow at once.
-reload   = "gsettings set org.gnome.desktop.interface gtk-theme {{ gtk.theme | quote }} && gsettings set org.gnome.desktop.interface color-scheme {{ gtk.color_scheme | quote }} && gsettings set org.gnome.desktop.interface icon-theme {{ icons.theme | quote }} && gsettings set org.gnome.desktop.interface cursor-theme {{ cursor.theme | quote }} && gsettings set org.gnome.desktop.interface cursor-size {{ cursor.size }}"
+reload   = "gsettings set org.gnome.desktop.interface gtk-theme {{ gtk.theme | quote }} && gsettings set org.gnome.desktop.interface color-scheme {{ gtk.color_scheme | quote }} && gsettings set org.gnome.desktop.interface icon-theme {{ icons.name | quote }} && gsettings set org.gnome.desktop.interface cursor-theme {{ cursor.theme | quote }} && gsettings set org.gnome.desktop.interface cursor-size {{ cursor.size }}"
 
 # Qt 5 and Qt 6 apps, through qt5ct and qt6ct (QT_QPA_PLATFORMTHEME=qt5ct is
 # set in hypr/config/variables.lua; qt6ct answers to that name too). Qt apps
@@ -88,3 +88,12 @@ needs    = "qt6ct"
 template = "qt/qt6ct.conf.tpl"
 output   = "{config}/qt6ct/qt6ct.conf"
 needs    = "qt6ct"
+
+# Folder color of the FairyWren icons. The file records it; the reload points
+# the icons' folder link at that color (until the icons are downloaded there
+# is nothing to change: `tfem icons fetch` reads this file then). The paths
+# are given in full, so a test sandbox never touches your own icons.
+[icons]
+template = "icons/folders.tpl"
+output   = "{data}/tfem/icon-folders"
+reload   = "python3 {{ dirs.root | quote }}/scripts/icons.py folders {{ icons.folders | quote }} --icons {{ dirs.data | quote }}/icons"
