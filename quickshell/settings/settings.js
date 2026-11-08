@@ -83,6 +83,30 @@ function change(values, pending, key, next) {
     return result;
 }
 
+// Changes asked for but not read back yet show at once over the saved
+// values: a switch flips on the click, not when `tfem settings set` ends.
+function overlay(values, asked) {
+    return Object.assign({}, values, asked);
+}
+
+// The changes still waiting once the values are read again: those now
+// saved leave.
+function settle(values, asked) {
+    const result = {};
+    for (const key in asked || {})
+        if ((values || {})[key] !== asked[key])
+            result[key] = asked[key];
+    return result;
+}
+
+// Without these keys (a write that failed: the saved value shows again).
+function drop(asked, keys) {
+    const result = Object.assign({}, asked);
+    for (const key of keys || [])
+        delete result[key];
+    return result;
+}
+
 // "KEY=VALUE" arguments for `tfem settings set`, in a stable order.
 function pairs(pending) {
     return Object.keys(pending || {}).sort().map(key => key + "=" + pending[key]);

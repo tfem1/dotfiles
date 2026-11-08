@@ -31,6 +31,14 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- The Settings window felt slow: a switch or a choice only moved once
+  `tfem settings set` had regenerated every file and the settings were read
+  again (up to a second or more). Now it moves on the click; the change is
+  confirmed when read back, and a write that fails puts the saved value
+  back. Widgets and game mode change in the shell at once too; Wi-Fi and
+  Bluetooth switches show the asked state while NetworkManager or BlueZ
+  answer; a Display mode shows as picked at once. Checked in the real
+  Quickshell with a write slowed down to 3 seconds.
 - `tfem generate` ran the reload commands with its own environment
   instead of the one it was given.
 - `tfem` was "command not found" in the terminal on Arch: `~/.local/bin` is

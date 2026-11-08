@@ -25,6 +25,14 @@ Scope {
         const previous = confirm && confirm.name === name ? confirm.previous : (listing.chosen || {})[name] || "auto";
         confirm = ask ? { name: name, previous: previous, seconds: 15 } : null;
         countdown.running = ask;
+        // The chips show the new mode at once; the screens are read again
+        // once it is applied.
+        const chosen = Object.assign({}, listing.chosen);
+        if (mode === "auto")
+            delete chosen[name];
+        else
+            chosen[name] = mode;
+        listing = Object.assign({}, listing, { chosen: chosen });
         run([cli, "display"].concat(mode === "auto" ? ["auto", name] : ["set", name, mode]));
     }
 

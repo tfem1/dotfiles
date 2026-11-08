@@ -263,6 +263,19 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual(self.probe(lib, '[Lib.accentColor(input, "theme"), Lib.accentColor(input, "blue")]', entry),
                          ["#111111", "#2222ff"])
 
+    def test_a_change_shows_at_once_then_is_confirmed_or_undone(self):
+        # The window shows what was asked for before `tfem settings set` ends.
+        lib = SHELL / "settings/settings.js"
+        values = {"widgets.cpu": True, "idle.lock": 10}
+        self.assertEqual(self.probe(lib, 'Lib.overlay(input, {"widgets.cpu": false})', values),
+                         {"widgets.cpu": False, "idle.lock": 10})
+        # Read back: confirmed keys leave the overlay, the others wait.
+        self.assertEqual(self.probe(lib, 'Lib.settle({"widgets.cpu": false, "idle.lock": 10}, input)',
+                                    {"widgets.cpu": False, "idle.lock": 15}), {"idle.lock": 15})
+        # Not written: the keys go, the saved value shows again.
+        self.assertEqual(self.probe(lib, 'Lib.drop(input, ["widgets.cpu"])', {"widgets.cpu": False, "x": 1}),
+                         {"x": 1})
+
     def test_widget_readings(self):
         lib = SHELL / "widgets/resources.js"
         stat = "cpu  100 0 50 800 50 0 0 0 0 0\ncpu0 1 1 1 1\ncpu1 1 1 1 1\nintr 5\n"
