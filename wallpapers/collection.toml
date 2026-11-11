@@ -8,8 +8,8 @@
 # screenshots, characters from brands, portrait images.
 #
 # theme = the theme that goes with the picture (themes/<theme>.toml): picking
-# the wallpaper switches to it. Day forests: Moss; night and mist: Pine;
-# snow: Nord; cats: Tabby.
+# the wallpaper switches to it. Several themes were made from these pictures'
+# own colors (Moonlit, Lagoon, Autumn, Sakura, Velvet; see themes/seeds).
 
 # Wallpapers taken out of the collection (the My Little Pony ones and the
 # older forests): `tfem wallpapers fetch` deletes their old downloads (only
@@ -33,33 +33,33 @@ removed = [
 [forest]
 wallpapers = [
   { id = "4gxwl0", ext = "png", size = "1920x1200", theme = "forest-moss" },
-  { id = "rrljjq", ext = "jpg", size = "1920x1080", theme = "forest-pine" },
+  { id = "rrljjq", ext = "jpg", size = "1920x1080", theme = "cat-velvet" },
   { id = "n6k9l7", ext = "png", size = "1920x1080", theme = "forest-moss" },
-  { id = "wewog7", ext = "jpg", size = "1920x1080", theme = "forest-pine" },
-  { id = "6k8p6l", ext = "jpg", size = "1920x1080", theme = "forest-moss" },
+  { id = "wewog7", ext = "jpg", size = "1920x1080", theme = "forest-moonlit" },
+  { id = "6k8p6l", ext = "jpg", size = "1920x1080", theme = "forest-lagoon" },
   { id = "qdj3kd", ext = "png", size = "1920x1080", theme = "forest-pine" },
-  { id = "dg6vlg", ext = "png", size = "1920x1080", theme = "forest-pine" },
-  { id = "01zxww", ext = "jpg", size = "1920x1200", theme = "forest-pine" },
-  { id = "73ze79", ext = "jpg", size = "1920x1080", theme = "forest-moss" },
-  { id = "lyg12l", ext = "png", size = "1920x1080", theme = "forest-moss" },
-  { id = "m3plq8", ext = "jpg", size = "1920x1080", theme = "forest-pine" },
-  { id = "rqyxpw", ext = "jpg", size = "1920x1080", theme = "forest-pine" },
+  { id = "dg6vlg", ext = "png", size = "1920x1080", theme = "forest-moonlit" },
+  { id = "01zxww", ext = "jpg", size = "1920x1200", theme = "forest-moonlit" },
+  { id = "73ze79", ext = "jpg", size = "1920x1080", theme = "forest-lagoon" },
+  { id = "lyg12l", ext = "png", size = "1920x1080", theme = "forest-autumn" },
+  { id = "m3plq8", ext = "jpg", size = "1920x1080", theme = "forest-moonlit" },
+  { id = "rqyxpw", ext = "jpg", size = "1920x1080", theme = "forest-lagoon" },
   { id = "zmeyvv", ext = "jpg", size = "1920x1080", theme = "forest-moss" },
-  { id = "vp265l", ext = "png", size = "1920x1080", theme = "nord" },
+  { id = "vp265l", ext = "png", size = "1920x1080", theme = "cat-sakura" },
   { id = "kwxpk7", ext = "jpg", size = "1920x1080", theme = "forest-pine" },
 ]
 
 [cats]
 wallpapers = [
-  { id = "ogd28l", ext = "png", size = "2880x1620", theme = "cat-tabby" },
-  { id = "2y6zl6", ext = "png", size = "1920x1080", theme = "cat-tabby" },
+  { id = "ogd28l", ext = "png", size = "2880x1620", theme = "forest-autumn" },
+  { id = "2y6zl6", ext = "png", size = "1920x1080", theme = "forest-moonlit" },
   { id = "yqmzwk", ext = "png", size = "2544x1424", theme = "cat-tabby" },
-  { id = "dgp9pl", ext = "png", size = "1920x1080", theme = "cat-tabby" },
-  { id = "o3j1yl", ext = "jpg", size = "1920x1080", theme = "cat-tabby" },
+  { id = "dgp9pl", ext = "png", size = "1920x1080", theme = "forest-moonlit" },
+  { id = "o3j1yl", ext = "jpg", size = "1920x1080", theme = "cat-sakura" },
   { id = "yxdq67", ext = "jpg", size = "2160x1215", theme = "cat-tabby" },
-  { id = "o59mg7", ext = "png", size = "1920x1080", theme = "cat-tabby" },
-  { id = "x6ydjo", ext = "png", size = "5120x2880", theme = "cat-tabby" },
-  { id = "r762ej", ext = "png", size = "1920x1080", theme = "cat-tabby" },
-  { id = "yj9mkd", ext = "png", size = "1920x1080", theme = "cat-tabby" },
-  { id = "ly9vey", ext = "png", size = "1920x1080", theme = "cat-tabby" },
+  { id = "o59mg7", ext = "png", size = "1920x1080", theme = "cat-velvet" },
+  { id = "x6ydjo", ext = "png", size = "5120x2880", theme = "cat-sakura" },
+  { id = "r762ej", ext = "png", size = "1920x1080", theme = "noir" },
+  { id = "yj9mkd", ext = "png", size = "1920x1080", theme = "noir" },
+  { id = "ly9vey", ext = "png", size = "1920x1080", theme = "nord" },
 ]

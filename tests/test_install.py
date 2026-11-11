@@ -183,8 +183,8 @@ class DeployTest(InstallTest):
         icons = self.home / ".local/share/icons"
         for theme in ("FairyWren_Dark", "FairyWren_Light"):
             self.assertTrue((icons / theme / "index.theme").is_file())
-            # Pine's accent is green: generate pointed the folders there.
-            self.assertEqual(os.readlink(icons / theme / "places/colours/default"), "./green")
+            # Moonlit's accent is teal: generate pointed the folders there.
+            self.assertEqual(os.readlink(icons / theme / "places/colours/default"), "./teal")
         self.assertFalse((icons / "README.md").exists())
 
     def test_the_stacked_clock_login_screen_is_installed_and_turned_on(self):

@@ -165,7 +165,8 @@ Scope {
                 modes: root.modes.on
                 about: ({
                     user: Quickshell.env("USER") || "",
-                    theme: (Settings.theme(store.settings.themes, store.values["palette.source"]) || {}).name || "",
+                    theme: store.values["palette.source"] === "wallpaper" ? "Wallpaper colors"
+                        : (Settings.theme(store.settings.themes, store.values["palette.source"]) || {}).name || "",
                     uptime: root.uptime > 0 ? Settings.uptime(root.uptime) : "",
                     system: Distro.name
                 })

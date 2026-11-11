@@ -106,7 +106,7 @@ Column {
     }
     SettingRow {
         title: "A wallpaper brings its theme"
-        description: "A wallpaper of the collection switches to its theme: a night forest to Pine, a cat to Tabby."
+        description: "A wallpaper of the collection switches to its theme: a night forest to Moonlit, a cat to Tabby; any other image to a theme made from its own colors."
         Switch {
             checked: !!page.v("wallpaper.follow")
             onToggled: checked => page.changed("wallpaper.follow", checked)

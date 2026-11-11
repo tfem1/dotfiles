@@ -15,7 +15,7 @@ CATPPUCCIN = '[palette]\nsource = "catppuccin-mocha"\n'
 class ResolveTest(SandboxTest):
     def test_loads_default_theme(self):
         palette = resolve_palette(load_theme(self.paths), self.paths)
-        self.assertEqual((palette.family, palette.name), ("Forest", "Pine"))
+        self.assertEqual((palette.family, palette.name), ("Forest", "Moonlit"))
 
     def test_loads_catppuccin(self):
         self.write_user_file("theme.toml", CATPPUCCIN)

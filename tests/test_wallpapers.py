@@ -17,6 +17,8 @@ from pathlib import Path
 from helpers import REPO, SandboxTest
 
 sys.path.insert(0, str(REPO / "scripts"))
+from theming.colors import Color
+from theming.hues import hue_class
 from wallpaper_collection import Wallpaper, find, theme_for  # noqa: E402
 from wallpapers import followed_theme, load_collection, main as wallpapers_main  # noqa: E402
 
@@ -75,11 +77,16 @@ class ThemeMatchTest(unittest.TestCase):
         self.assertIsNone(theme_for(group))
         self.assertIsNone(theme_for(None))
 
-    def test_follow_off_or_palette_from_the_wallpaper_keeps_the_theme(self):
-        image = Path("cats/wallhaven-abc123.png")
+    def test_follow_brings_the_collection_theme_or_one_made_from_the_colors(self):
+        image, mine = Path("cats/wallhaven-abc123.png"), Path("mine/beach.png")
+        colors = [Color.parse("#1c0e36"), Color.parse("#3e938a")]
         self.assertEqual(followed_theme(image, self.WALLPAPERS, self.SETTINGS), "cat-tabby")
+        self.assertEqual(followed_theme(image, self.WALLPAPERS, self.SETTINGS, colors), "cat-tabby")
+        self.assertEqual(followed_theme(image, self.WALLPAPERS, {**self.SETTINGS, "palette.source": "wallpaper"}),
+                         "cat-tabby")
+        self.assertEqual(followed_theme(mine, self.WALLPAPERS, self.SETTINGS, colors), "wallpaper")
+        self.assertIsNone(followed_theme(mine, self.WALLPAPERS, self.SETTINGS))   # colors unknown
         self.assertIsNone(followed_theme(image, self.WALLPAPERS, {**self.SETTINGS, "wallpaper.follow": False}))
-        self.assertIsNone(followed_theme(image, self.WALLPAPERS, {**self.SETTINGS, "palette.source": "wallpaper"}))
 
     def test_invalid_theme_is_refused(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -217,8 +224,8 @@ class ListAndSetTest(SandboxTest):
         return json.loads((self.home / ".config/quickshell/desktop/theme.json").read_text())
 
     def test_set_a_wallpaper_of_the_collection_switches_to_its_theme(self):
-        self.add("cats/wallhaven-2y6zl6.png")   # a cat asleep on a car
-        code, output = self.run_main("set", "cats/wallhaven-2y6zl6.png")
+        self.add("cats/wallhaven-yqmzwk.png")   # a cat by a window
+        code, output = self.run_main("set", "cats/wallhaven-yqmzwk.png")
         self.assertEqual(code, 0, output)
         self.assertIn("theme: cat-tabby", output)
         settings = tomllib.loads((self.home / ".config/tfem/theme.toml").read_text())
@@ -226,11 +233,11 @@ class ListAndSetTest(SandboxTest):
         self.assertEqual(self.shell_theme()["palette"]["name"], "Tabby")
 
     def test_follow_off_keeps_the_theme(self):
-        self.add("cats/wallhaven-2y6zl6.png")
+        self.add("cats/wallhaven-yqmzwk.png")
         settings = self.home / ".config/tfem/theme.toml"
         settings.parent.mkdir(parents=True)
         settings.write_text("[wallpaper]\nfollow = false\n")
-        code, output = self.run_main("set", "cats/wallhaven-2y6zl6.png")
+        code, output = self.run_main("set", "cats/wallhaven-yqmzwk.png")
         self.assertEqual(code, 0, output)
         self.assertNotIn("palette", tomllib.loads(settings.read_text()))
 
@@ -245,12 +252,26 @@ class ListAndSetTest(SandboxTest):
         self.assertNotIn("palette", tomllib.loads((self.home / ".config/tfem/theme.toml").read_text()))
 
     def test_list_names_the_theme_each_wallpaper_brings(self):
-        self.add("cats/wallhaven-2y6zl6.png")
+        self.add("cats/wallhaven-yqmzwk.png")
         code, output = self.run_main("list", "--json")
         self.assertEqual(code, 0, output)
         themes = {image["name"]: image["theme"] for image in json.loads(output)}
-        self.assertEqual(themes["wallhaven-2y6zl6"], "Tabby")
+        self.assertEqual(themes["wallhaven-yqmzwk"], "Tabby")
         self.assertEqual(themes["b"], "")
+
+    def test_an_image_of_yours_gets_a_theme_made_from_its_colors(self):
+        self.add("mine/night.png")
+        code, output = self.run_main("set", "mine/night.png", "--colors",
+                                     "#1c0e36,#1c0e36,#190b30,#170a28,#281b4d,#3f4378,#3e938a,#e9f8ec")
+        self.assertEqual(code, 0, output)
+        self.assertIn("theme: made from the wallpaper's colors", output)
+        settings = tomllib.loads((self.home / ".config/tfem/theme.toml").read_text())
+        self.assertEqual(settings["palette"]["source"], "wallpaper")
+        palette = self.shell_theme()
+        self.assertEqual(palette["palette"]["name"], "Wallpaper")
+        self.assertEqual(hue_class(Color.parse(palette["colors"]["accent"])), "cyan")   # the teal moon
+        self.assertEqual(hue_class(Color.parse(palette["colors"]["bg"])), "purple")     # the night sky
+        self.assertEqual(self.run_main("set", "mine/night.png", "--colors", "nope")[0], 1)
 
     def test_set_accepts_a_path_inside_the_wallpaper_folder(self):
         code, _ = self.run_main("set", "forest/c.webp")

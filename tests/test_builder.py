@@ -65,8 +65,10 @@ class ForestAndCatThemesTest(unittest.TestCase):
                                   cwd=REPO, env={"PYTHONPATH": str(REPO / "scripts")}, capture_output=True, text=True)
             self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
 
-    def test_pine_moss_and_tabby_pass_every_check(self):
-        self.assertEqual([path.stem for path in BUILT_THEMES], ["cat-tabby", "forest-moss", "forest-pine"])
+    def test_forest_and_cat_themes_pass_every_check(self):
+        self.assertEqual([path.stem for path in BUILT_THEMES], [
+            "cat-sakura", "cat-tabby", "cat-velvet", "forest-autumn", "forest-lagoon", "forest-moonlit",
+            "forest-moss", "forest-pine"])
         for path in BUILT_THEMES:
             with self.subTest(theme=path.stem):
                 palette = load_palette(path)
@@ -121,8 +123,7 @@ class GreenThemesTest(unittest.TestCase):
         self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
 
     def test_every_green_theme_is_green_and_well_formed(self):
-        names = [*self.OFFICIAL, *(p.stem for p in sorted((REPO / "themes").glob("forest-*.toml")))]
-        self.assertEqual(len(names), 4)
+        names = [*self.OFFICIAL, "forest-pine", "forest-moss"]
         for name in names:
             with self.subTest(theme=name):
                 palette = load_palette(REPO / "themes" / f"{name}.toml")

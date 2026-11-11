@@ -47,3 +47,12 @@ function dominantColors(colors) {
         data.push(Math.round(color.r * 255), Math.round(color.g * 255), Math.round(color.b * 255), 255);
     return dominant(data);
 }
+
+// The same colors as "#rrggbb,#rrggbb,...", for `tfem wallpapers set --colors`.
+function palette(colors) {
+    const hex = value => ("0" + Math.round(value * 255).toString(16)).slice(-2);
+    const result = [];
+    for (const color of colors)
+        result.push("#" + hex(color.r) + hex(color.g) + hex(color.b));
+    return result.join(",");
+}

@@ -40,7 +40,7 @@ class BuildTest(SandboxTest):
                     self.assertTrue((dest / part).is_file(), part)
                 self.assertIn("QtVersion=6", (dest / "metadata.desktop").read_text())
                 values = conf(dest / "theme.conf")
-                self.assertEqual(values["accent"], "#8fd18c")   # Pine
+                self.assertEqual(values["accent"], "#5fd0c0")   # Moonlit
                 self.assertEqual(values["background"], "")       # no wallpaper set
                 self.assertEqual(values["font"], "Monocraft")
 

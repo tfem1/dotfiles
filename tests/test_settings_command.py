@@ -22,7 +22,7 @@ class SettingsCommandTest(SandboxTest):
         code, output = self.run_main("get")
         self.assertEqual(code, 0, output)
         data = json.loads(output)
-        self.assertEqual(data["values"]["palette.source"], "forest-pine")
+        self.assertEqual(data["values"]["palette.source"], "forest-moonlit")
         self.assertEqual(data["values"]["idle.lock"], 10)
         self.assertEqual(data["fields"]["shape.radius"]["high"], 32)
         themes = {theme["id"]: theme for theme in data["themes"]}
@@ -66,4 +66,4 @@ class SettingsCommandTest(SandboxTest):
     def test_set_regenerates(self):
         code, output = self.run_main("set", "effects.game_mode=true")
         self.assertEqual(code, 0, output)
-        self.assertIn("Theme Pine", output)
+        self.assertIn("Theme Moonlit", output)

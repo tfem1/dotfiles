@@ -55,7 +55,7 @@ def fake_fairywren(folder: Path) -> str:
     import subprocess
     for theme in ("FairyWren_Dark", "FairyWren_Light"):
         places = folder / theme / "places"
-        for color in ("blue", "green", "pink", "violet"):
+        for color in ("blue", "pink", "teal", "violet"):
             (places / "colours" / color).mkdir(parents=True)
             (places / "colours" / color / "folder.svg").write_text(f"<svg><!-- {color} --></svg>\n")
         (places / "colours/default").symlink_to("./blue")

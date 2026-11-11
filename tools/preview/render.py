@@ -1,6 +1,6 @@
 """Renders the shell with sample data, for screenshots and visual checks.
 
-Usage: python tools/preview/render.py [--theme forest-pine ...] [--wallpaper IMAGE]
+Usage: python tools/preview/render.py [--theme forest-moonlit ...] [--wallpaper IMAGE]
                                      [--wallpapers DIR] [--out DIR]
 Needs PySide6 (pip install PySide6-Essentials), no Quickshell or Wayland:
 the components drawn here are the shell's own QML files, the theme comes from
@@ -137,7 +137,7 @@ def main(argv: list[str] | None = None) -> int:
     scratch = tempfile.TemporaryDirectory()
     wallpapers = json.dumps(wallpaper_list(args.wallpapers, Path(scratch.name)))
     settings = settings_json()
-    for name in args.theme or ["forest-pine"]:
+    for name in args.theme or ["forest-moonlit"]:
         for mode in MODES:
             view = QQuickView()
             view.setInitialProperties({"themeJson": theme_json(name), "bindsJson": binds, "wallpaper": wallpaper,

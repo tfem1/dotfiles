@@ -11,8 +11,8 @@ hl.config({
         gaps_out    = 6,
         border_size = 0,
         col = {
-            active_border   = "rgba(8fd18cff)",
-            inactive_border = "rgba(264036ff)",
+            active_border   = "rgba(5fd0c0ff)",
+            inactive_border = "rgba(2d2343ff)",
         },
         -- Game mode: fullscreen windows may tear, for less input lag.
         allow_tearing = false,

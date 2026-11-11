@@ -24,3 +24,30 @@ tint    = "#3B4A1E"
 text    = "#E6EBC6"
 accent  = "#8CC45A"
 slots   = { green = "#8CC45A", yellow = "#EBCB6B", orange = "#D9925A" }
+
+# The next ones take their colors from wallpapers of the collection
+# (wallpapers/collection.toml), measured on the images.
+
+[themes.moonlit]                  # night forest under a teal moon (m3plq8, wewog7)
+name    = "Moonlit"
+variant = "dark"
+tint    = "#2A1850"
+text    = "#E3DCF2"
+accent  = "#5FD0C0"
+slots   = { cyan = "#5FD0C0", purple = "#A68BE0", blue = "#7AA2DC" }
+
+[themes.lagoon]                   # turquoise lake in the woods (rqyxpw, 73ze79)
+name    = "Lagoon"
+variant = "dark"
+tint    = "#134A52"
+text    = "#D8F1F0"
+accent  = "#67DBE7"
+slots   = { cyan = "#67DBE7", green = "#58B293", yellow = "#D8CF8A" }
+
+[themes.autumn]                   # amber leaves, brown bark (lyg12l)
+name    = "Autumn"
+variant = "dark"
+tint    = "#3A2C20"
+text    = "#EFE3CC"
+accent  = "#E4B265"
+slots   = { yellow = "#E4B265", orange = "#D07A3E", green = "#8FA66A" }

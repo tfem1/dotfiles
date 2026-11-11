@@ -17,6 +17,13 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Themes in the colors of the wallpapers**, measured on the images:
+  Moonlit (night forest, teal moon; the new default), Lagoon, Autumn,
+  Sakura (light) and Velvet. The wallpapers of the collection bring them.
+- **A theme made from any image's colors**: picking one of your own images
+  in the selector reads its 8 main colors and `tfem wallpapers set --colors`
+  builds a readable theme from them (`palette.source = "wallpaper"`); an
+  image without color gets Noir.
 - **Monocraft**, a pixel font, everywhere by default: the shell, the lock
   screen, kitty (`font_family`), GTK (`font-name`, `monospace-font-name`),
   Qt (qt5ct and qt6ct `[Fonts]`), Hyprland and the login screen. The

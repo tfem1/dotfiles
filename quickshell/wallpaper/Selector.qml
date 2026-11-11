@@ -8,15 +8,17 @@ import "../overlay"
 // `tfem wallpapers list`, a pick goes through `tfem wallpapers set`, which
 // saves it in theme.toml and regenerates the files that show it (this
 // shell's wallpaper, the lock screen); a wallpaper of the collection also
-// brings its theme (Luna wallpaper, Luna theme), then the whole desktop
-// recolors. Recent picks and the color of each image are kept in the
-// shell's state folder. Only loaded while open.
+// brings its theme (a cat, Tabby), any other image a theme made from its own
+// colors (read here, passed with --colors), then the whole desktop recolors.
+// Recent picks and the colors of each image are kept in the shell's state
+// folder. Only loaded while open.
 Scope {
     id: root
 
     property bool open: false
     property var images: []    // [{ path, name, category, theme }]
     property var colors: ({})  // path -> color class, found once per image
+    property var palettes: ({}) // path -> its 8 main colors, "#rrggbb,..."
     property var recent: []    // paths, newest first
     readonly property string cli: Quickshell.env("HOME") + "/.local/bin/tfem"
 
@@ -29,20 +31,24 @@ Scope {
     }
 
     function apply(path) {
-        Quickshell.execDetached([cli, "wallpapers", "set", path]);
+        const palette = palettes[path];
+        Quickshell.execDetached([cli, "wallpapers", "set", path].concat(palette ? ["--colors", palette] : []));
         recent = [path].concat(recent.filter(other => other !== path)).slice(0, 30);
         save();
     }
 
-    function remember(path, color) {
+    function remember(path, color, palette) {
         const known = Object.assign({}, colors);
         known[path] = color;
         colors = known;
+        const read = Object.assign({}, palettes);
+        read[path] = palette;
+        palettes = read;
         saveSoon.restart();
     }
 
     function save() {
-        state.setText(JSON.stringify({ recent: recent, colors: colors }));
+        state.setText(JSON.stringify({ recent: recent, colors: colors, palettes: palettes }));
     }
 
     Process {
@@ -67,6 +73,7 @@ Scope {
                 const data = JSON.parse(text());
                 root.recent = data.recent || [];
                 root.colors = data.colors || {};
+                root.palettes = data.palettes || {};
             } catch (error) {
                 console.warn("wallpaper: cannot read the saved state:", error);
             }
@@ -82,8 +89,8 @@ Scope {
 
     // Colors are looked for only while the selector is open.
     ColorProbe {
-        queue: root.open ? root.images.map(image => image.path).filter(path => !(path in root.colors)) : []
-        onSampled: (path, color) => root.remember(path, color)
+        queue: root.open ? root.images.map(image => image.path).filter(path => !(path in root.palettes)) : []
+        onSampled: (path, color, palette) => root.remember(path, color, palette)
     }
 
     LazyLoader {

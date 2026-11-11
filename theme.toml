@@ -11,7 +11,7 @@
 schema = 1                      # format version, for clean migrations
 
 [palette]
-source = "forest-pine"          # a theme from themes/ or ~/.config/tfem/themes/, or "wallpaper"
+source = "forest-moonlit"       # a theme from themes/ or ~/.config/tfem/themes/, or "wallpaper"
 accent = "theme"                # theme (its own signature color) | red | orange | yellow | green
                                 # | cyan | blue | purple | brown
 mode   = "dark"                 # dark | light: used when the palette comes from the wallpaper
@@ -22,8 +22,9 @@ mode   = "dark"                 # dark | light: used when the palette comes from
 [wallpaper]
 path = ""                       # empty = none; relative to ~/Pictures/Wallpapers, or absolute
 follow = true                   # a wallpaper of the collection brings its theme
-                                # (night forest: Pine, cat: Tabby); other images
-                                # keep the current theme
+                                # (night forest: Moonlit, cat: Tabby); any other
+                                # image picked in the selector, a theme made from
+                                # its own colors; false: the theme never changes
 
 [font]
 sans      = "Monocraft"           # the pixel font everywhere (`tfem fonts fetch`);

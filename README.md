@@ -8,7 +8,7 @@ single settings file.
 > lock screen, launcher or notifications. See [Make it yours](#make-it-yours).
 
 **Status:** early work. Done: theme pipeline, Hyprland config, installer,
-wallpaper collection, 14 themes, the Quickshell shell, a Settings window and
+wallpaper collection, 19 themes, the Quickshell shell, a Settings window and
 the login screen, desktop widgets. The full plan is in
 [docs/roadmap.md](docs/roadmap.md).
 
@@ -101,7 +101,7 @@ still recognises OpenBSD and does the rest: it installs what OpenBSD 7.8
 packages (Python, kitty, glib2, qt5ct and qt6ct, the Papirus and Adwaita
 icons, the Inter and JetBrains Mono fonts, Firefox, Nautilus...) with
 `doas pkg_add`, links the `tfem` command, downloads the wallpapers and the
-icons, and themes your apps (kitty, GTK, Qt) with any of the 14 themes.
+icons, and themes your apps (kitty, GTK, Qt) with any of the 19 themes.
 The Hyprland config, the shell and the login screen are left out, and it
 says so. OpenBSD ships neither bash nor curl, so first:
 
@@ -154,10 +154,21 @@ lock screen follow. `tfem wallpapers list` shows what is in the folder; any
 image you add there (jpg, png, webp) shows up in the selector.
 
 **A wallpaper brings its theme.** Each wallpaper of the collection names
-the theme that goes with it: a day forest turns the whole desktop (shell,
-terminal, GTK, Qt, lock screen) **Moss**, a night or misty forest **Pine**,
-the snowy one **Nord**, a cat **Tabby**. Your own images keep the current
-theme. The selector shows the theme a wallpaper brings.
+the theme made for it, and the whole desktop (shell, terminal, GTK, Qt, lock
+screen) takes it: the night forest under the moon turns **Moonlit**, the
+turquoise lake **Lagoon**, the autumn wood **Autumn**, the cherry tree
+**Sakura**, the neon city **Velvet**, a cat by the window **Tabby**. The
+selector shows the theme a wallpaper brings.
+
+**Your own images get a theme made from their colors.** When you pick one
+in the selector (`SUPER + W`), the shell reads its 8 main colors
+(Quickshell's ColorQuantizer) and `tfem wallpapers set IMAGE --colors ...`
+builds a theme from them, with the same builder as the themes of the
+collection: the commonest dark color of the image for the backgrounds (the
+light one, with a light theme, for a light image), its most vivid color that
+stands out from them for the accent, every color made readable. An image
+without any color gets Noir. The theme is `palette.source = "wallpaper"`
+(Settings → Home shows "Wallpaper colors").
 
 ```toml
 [wallpaper]
@@ -166,12 +177,17 @@ follow = true                   # false: a wallpaper never changes the theme
 
 ## Themes
 
-14 themes, kept simple: 10 well-known palettes, 3 of our own for the
-wallpapers (two forests, one cat) and **Noir**, black and white. **Pine** is
-the default, with a night forest wallpaper.
+19 themes, kept simple: 10 well-known palettes, 8 of our own made for the
+wallpapers and **Noir**, black and white. **Moonlit** is the default, with
+its night forest wallpaper.
 
 | Theme | Look |
 |---|---|
+| `forest-moonlit` | indigo night sky, teal moon (from the night forest wallpaper) |
+| `forest-lagoon` | deep teal, turquoise water (from the forest lake) |
+| `forest-autumn` | brown bark, amber leaves (from the autumn wood) |
+| `cat-sakura` | light: cherry blossom pink, sky blue (from the cat under the cherry tree) |
+| `cat-velvet` | plum night, neon magenta (from the two cats in the city) |
 | `forest-pine` | deep pine night, young-leaf green, lichen teal |
 | `forest-moss` | olive moss, fresh green, sunlight yellow |
 | `cat-tabby` | warm brown fur, ginger orange, cream text, green eyes |
@@ -210,9 +226,10 @@ Pick one in `~/.config/tfem/theme.toml` (or in Settings → Appearance):
 source = "cat-tabby"
 ```
 
-**Pine, Moss and Tabby** are original, not written by hand:
+**Our themes** are original, not written by hand:
 `themes/seeds/forest.toml` and `themes/seeds/cat.toml` hold a few colors
-each (a pine wood, a ginger tabby), and
+each (a pine wood, a ginger tabby, and the colors measured on the
+wallpapers for Moonlit, Lagoon, Autumn, Sakura and Velvet), and
 `PYTHONPATH=scripts python3 -m theming.builder themes/seeds/cat.toml` turns
 them into full base16 themes, adjusting lightness until every color is
 readable (WCAG contrast 7:1 for text, 4.5:1 for colors) and checking that
@@ -425,7 +442,7 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   a little see-through (Hyprland's blur shows behind them, only inside
   their shape):
 
-  ![Desktop widgets on a night forest, Pine theme](docs/images/widgets.png)
+  ![Desktop widgets on the night forest, Moonlit theme](docs/images/widgets.png)
 
   - **Clock**: the date and the time in a pill of the accent color.
   - **CPU**, **GPU**, **RAM**, **Disk**, each in a soft organic shape (a
@@ -497,7 +514,7 @@ folder name is `shell.name` in your `config.json`). Its colors follow
     **Gaming hub** (the Tweaks page). Under it, one card per page.
 
     ![Settings, Home page](docs/images/settings-home.png)
-  - **Appearance**: theme (the 14 as cards in their own colors, with
+  - **Appearance**: theme (the 19 as cards in their own colors, with
     filters), accent color, wallpaper, folder color, rounded corners, space
     between windows, transparency, blur, shadows, animations, text size.
     Nothing changes until **Apply**: a small desktop at the top shows the

@@ -3,13 +3,15 @@ wallhaven.cc, list the images, and set the wallpaper.
 
 Usage: wallpapers.py fetch [--category NAME] [--dest DIR] [--dry-run]
        wallpapers.py list [--json]
-       wallpapers.py set IMAGE
+       wallpapers.py set IMAGE [--colors #RRGGBB,...]
 Files land in ~/Pictures/Wallpapers/<category>/wallhaven-<id>.<ext>; files
 already there are kept, so the command can be run again safely. `set` writes
 the wallpaper in your theme.toml and regenerates the files that use it. With
 `wallpaper.follow` on, a wallpaper of the collection also brings its theme
-(a night forest brings Pine, a cat Tabby): then every file is regenerated. `fetch` also deletes the
-old downloads of wallpapers taken out of the collection.
+(a night forest brings Moonlit, a cat Tabby), and any other image, given
+its main colors (the shell reads them), a theme made from those colors:
+then every file is regenerated. `fetch` also deletes the old downloads of
+wallpapers taken out of the collection.
 """
 from __future__ import annotations
 
@@ -24,9 +26,11 @@ import urllib.request
 from pathlib import Path
 from typing import Mapping
 
-from theming.edit import set_value  # noqa: E402  (scripts/ is on sys.path)
+from theming.colors import Color  # noqa: E402  (scripts/ is on sys.path)
+from theming.edit import set_value  # noqa: E402
+from theming.from_wallpaper import theme_text  # noqa: E402
 from theming.generate import main as generate  # noqa: E402
-from theming.palette import WALLPAPER_SOURCE, PaletteError, find_theme, load_palette  # noqa: E402
+from theming.palette import WALLPAPER_PALETTE, WALLPAPER_SOURCE, PaletteError, find_theme, load_palette  # noqa: E402
 from theming.paths import Paths  # noqa: E402
 from theming.settings import SettingsError, load_theme  # noqa: E402
 from theming.writer import write_atomic  # noqa: E402
@@ -99,12 +103,24 @@ def fetch(args: argparse.Namespace) -> int:
     return 2 if failed else 0
 
 
-def followed_theme(image: Path, wallpapers: list[Wallpaper], theme: Mapping[str, object]) -> str | None:
-    """The theme picking `image` switches to: none when `wallpaper.follow` is
-    off, when the palette comes from the wallpaper, or for an image without one."""
-    if not theme["wallpaper.follow"] or theme["palette.source"] == WALLPAPER_SOURCE:
+def followed_theme(image: Path, wallpapers: list[Wallpaper], theme: Mapping[str, object],
+                   colors: list[Color] | None = None) -> str | None:
+    """The theme picking `image` switches to, when `wallpaper.follow` is on:
+    the one a wallpaper of the collection names, else, with the image's
+    colors, a theme made from them ("wallpaper"); None keeps the theme."""
+    if not theme["wallpaper.follow"]:
         return None
-    return theme_for(find(image, wallpapers))
+    return theme_for(find(image, wallpapers)) or (WALLPAPER_SOURCE if colors else None)
+
+
+def parse_colors(text: str | None) -> list[Color] | None:
+    """"#1c0e36,#3e938a,...": the main colors the shell read in the image."""
+    if not text:
+        return None
+    colors = [Color.parse(part.strip()) for part in text.split(",") if part.strip()]
+    if not 1 <= len(colors) <= 64:
+        raise ValueError("--colors takes 1 to 64 colors")
+    return colors
 
 
 def theme_title(name: str, paths: Paths, known: dict[str, str]) -> str:
@@ -159,8 +175,17 @@ def set_wallpaper(args: argparse.Namespace, paths: Paths, env: Mapping[str, str]
     except ValueError:
         value = str(image)
     theme = load_theme(paths)
-    switch = followed_theme(image, load_collection(COLLECTION), theme)
-    if switch == theme["palette.source"]:
+    try:
+        colors = parse_colors(args.colors)
+    except ValueError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+    switch = followed_theme(image, load_collection(COLLECTION), theme, colors)
+    if switch == WALLPAPER_SOURCE:
+        # A theme made from this image's colors (theming/from_wallpaper.py).
+        noir = (ROOT / "themes/noir.toml").read_text()
+        write_atomic(paths.state_dir / WALLPAPER_PALETTE, theme_text(colors, image.name, noir))
+    elif switch == theme["palette.source"]:
         switch = None
     elif switch and not theme_title(switch, paths, {}):
         print(f"warning: theme '{switch}' not found: the theme is kept", file=sys.stderr)
@@ -171,7 +196,8 @@ def set_wallpaper(args: argparse.Namespace, paths: Paths, env: Mapping[str, str]
     if switch:
         text = set_value(text, "palette", "source", switch)
     write_atomic(settings, text)
-    print(f"wallpaper: {paths.pretty(image)}" + (f"\ntheme: {switch}" if switch else ""))
+    shown = "made from the wallpaper's colors" if switch == WALLPAPER_SOURCE else switch
+    print(f"wallpaper: {paths.pretty(image)}" + (f"\ntheme: {shown}" if switch else ""))
     # Same theme: only the files that show the wallpaper, no compositor reload.
     only = [] if switch else ["--only", "quickshell,hyprlock,sddm"]
     return generate(["--root", str(ROOT), *only], env=env)
@@ -190,6 +216,8 @@ def main(argv: list[str] | None = None, env: Mapping[str, str] = os.environ) -> 
     list_cmd.add_argument("--json", action="store_true", help="as JSON (used by the shell)")
     set_cmd = commands.add_parser("set", help="use an image as wallpaper")
     set_cmd.add_argument("image", help="image path, absolute or inside the wallpaper folder")
+    set_cmd.add_argument("--colors", help="the image's main colors (#rrggbb,...), read by the shell: "
+                                          "an image outside the collection then gets a theme made from them")
     args = parser.parse_args(argv)
     paths = Paths.from_env(ROOT, env)
     try:

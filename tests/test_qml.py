@@ -71,7 +71,7 @@ class VisualComponentsTest(unittest.TestCase):
             modes = ["bar", "bar-positions", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "lock", "music",
                      "power", "settings", "settings-display", "settings-home", "settings-system", "settings-tweaks",
                      "settings-widgets", "system", "volume", "wallpaper", "widgets", "wifi"]
-            self.assertEqual(sorted(p.name for p in Path(out).iterdir()), sorted(f"forest-pine-{m}.png" for m in modes))
+            self.assertEqual(sorted(p.name for p in Path(out).iterdir()), sorted(f"forest-moonlit-{m}.png" for m in modes))
 
     def probe(self, script, expression, value):
         """Evaluates `expression` (with `input` = value) against a JS file of the shell."""
@@ -140,6 +140,9 @@ class VisualComponentsTest(unittest.TestCase):
         colors = [{"r": 0.18, "g": 0.43, "b": 0.82}] * 5 + [{"r": 0.9, "g": 0.9, "b": 0.88}] * 3
         self.assertEqual(self.probe(SHELL / "wallpaper/colors.js", "Lib.dominantColors(input)", colors), "blue")
         self.assertEqual(self.probe(SHELL / "wallpaper/colors.js", "Lib.dominantColors(input)", []), "gray")
+        # The same colors for `tfem wallpapers set --colors`.
+        self.assertEqual(self.probe(SHELL / "wallpaper/colors.js", "Lib.palette(input)", colors[4:6]),
+                         "#2e6ed1,#e6e6e0")
 
     def test_selector_left_and_right_arrows_browse(self):
         from PySide6.QtCore import Qt

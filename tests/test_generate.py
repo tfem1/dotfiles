@@ -59,7 +59,7 @@ class OutputTest(GenerateTest):
     def test_shell_theme_is_valid_json(self):
         self.run_generate("--all")
         data = json.loads(self.shell_theme.read_text())
-        self.assertEqual(data["palette"]["name"], "Pine")
+        self.assertEqual(data["palette"]["name"], "Moonlit")
         self.assertEqual(data["modules"]["wifi"], data["colors"]["accent2"])
         self.assertEqual(data["modules"]["media"], data["colors"]["accent3"])
         self.assertEqual(data["modules"]["workspaces"], data["colors"]["accent"])
@@ -258,7 +258,7 @@ class ManifestTest(GenerateTest):
             {"demo.tpl": "{{ accent }}\n"},
         )
         self.run_generate()
-        self.assertEqual(marker.read_text(), "Pine")
+        self.assertEqual(marker.read_text(), "Moonlit")
 
     def test_no_reload_for_an_app_that_is_not_installed(self):
         marker = self.home / "reloaded"
