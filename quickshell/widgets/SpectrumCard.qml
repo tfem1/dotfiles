@@ -30,7 +30,7 @@ WidgetCard {
                     required property int index
                     readonly property real level: card.levels[index] || 0
 
-                    width: (card.width - 32 - bars.spacing * (card.levels.length - 1)) / Math.max(1, card.levels.length)
+                    width: (card.width - 44 - bars.spacing * (card.levels.length - 1)) / Math.max(1, card.levels.length)
                     height: bars.height
 
                     Rectangle {
@@ -63,7 +63,7 @@ WidgetCard {
             }
             Label {
                 anchors.verticalCenter: parent.verticalCenter
-                width: card.width - 32 - 23
+                width: card.width - 44 - 23
                 text: card.device || "No output device"
                 small: true
             }

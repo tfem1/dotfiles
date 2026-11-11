@@ -13,7 +13,7 @@ Rectangle {
     implicitWidth: row.implicitWidth + 44
     implicitHeight: 62
     radius: height / 2
-    color: Theme.accent
+    color: Qt.alpha(Theme.accent, 0.85)   // a little see-through, like the others
 
     Row {
         id: row

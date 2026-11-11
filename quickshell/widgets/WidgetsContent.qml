@@ -2,7 +2,8 @@ import QtQuick
 import "../theme"
 import "resources.js" as Resources
 
-// The desktop widgets, stacked: clock, resources (two by two), audio
+// The desktop widgets, stacked: clock, resources (two by two, each in an
+// organic shape: cookie, flower, circle, clover), audio
 // spectrum, now playing. Fed by plain properties so it can be shown with
 // real data (Widgets.qml) or sample data (tools/preview).
 Column {
@@ -23,13 +24,13 @@ Column {
     readonly property bool rightSide: (show.corner || "").endsWith("right")   // the clock goes to that edge
     readonly property var resources: [
         { key: "cpu", name: "CPU", value: cpu.usage, detail: cpu.cores + (cpu.cores === 1 ? " core" : " cores"),
-          tint: Theme.accent, shown: !!show.cpu },
-        { key: "gpu", name: "GPU", value: gpu.usage, tint: Theme.accent2, shown: !!show.gpu && gpu.name !== "",
+          tint: Theme.accent, shown: !!show.cpu, kind: "cookie" },
+        { key: "gpu", name: "GPU", value: gpu.usage, tint: Theme.accent2, shown: !!show.gpu && gpu.name !== "", kind: "flower",
           detail: gpu.total > 0 ? Resources.usage(gpu.used, gpu.total) : gpu.name },
         { key: "ram", name: "RAM", value: ram.total > 0 ? ram.used / ram.total : 0, tint: Theme.accent3,
-          detail: Resources.usage(ram.used, ram.total), shown: !!show.ram },
+          detail: Resources.usage(ram.used, ram.total), shown: !!show.ram, kind: "circle" },
         { key: "disk", name: "Disk", value: disk.total > 0 ? disk.used / disk.total : 0, tint: Theme.accent,
-          detail: Resources.usage(disk.used, disk.total), shown: !!show.disk }
+          detail: Resources.usage(disk.used, disk.total), shown: !!show.disk, kind: "clover" }
     ].filter(entry => entry.shown)
 
     width: 360
@@ -55,6 +56,7 @@ Column {
             ResourceCard {
                 required property var modelData
                 width: column.half
+                kind: modelData.kind
                 name: modelData.name
                 value: modelData.value
                 detail: modelData.detail

@@ -44,7 +44,7 @@ VISUAL = [
     "settings/SettingRow.qml", "settings/TextButton.qml", "settings/DisplayPage.qml",
     "settings/WidgetsPage.qml", "settings/ApplyBar.qml",
     "widgets/WidgetsContent.qml", "widgets/WidgetCard.qml", "widgets/ClockPill.qml", "widgets/ResourceCard.qml",
-    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "settings/HomePage.qml", "settings/WelcomeBanner.qml", "settings/Moon.qml", "settings/TweaksPage.qml",
+    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "widgets/OrganicShape.qml", "settings/HomePage.qml", "settings/WelcomeBanner.qml", "settings/Moon.qml", "settings/TweaksPage.qml",
 ]
 
 
@@ -242,6 +242,16 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual(self.probe(logos, '[Lib.has("arch"), Lib.has("cachyos"), Lib.has("")]', None),
                          [True, False, False])
         self.assertIn("fill%3D'%23d19fe4'", self.probe(logos, 'Lib.source("arch", "#d19fe4")', None))
+
+    def test_organic_shapes_stay_in_their_box(self):
+        lib = SHELL / "widgets/shapes.js"
+        for kind in ("cookie", "flower", "clover", "circle", "unknown"):
+            points = self.probe(lib, f'Lib.outline("{kind}", 200, 100, 90)', None)
+            self.assertEqual(len(points), 90)
+            self.assertTrue(all(0 <= x <= 200 and 0 <= y <= 100 for x, y in points), kind)
+        # A lobe points straight up; the circle is the same everywhere.
+        self.assertAlmostEqual(self.probe(lib, 'Lib.radius("flower", -Math.PI / 2)', None), 1)
+        self.assertAlmostEqual(self.probe(lib, 'Lib.radius("circle", 1.234)', None), 1)
 
     def test_welcome_greeting_and_uptime(self):
         lib = SHELL / "settings/settings.js"

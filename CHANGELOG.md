@@ -28,6 +28,10 @@ All notable changes to this project are documented here. The format follows
   be fully transparent, from Settings → Tweaks (`bar.position`,
   `bar.transparent` in `config.json`). On the left or right it is narrow,
   everything stacked.
+- Desktop widgets are a little see-through, with the blur behind them, and
+  CPU, GPU, RAM and disk each stand in an organic shape: a scalloped
+  cookie, a five-petal flower, a circle and a clover. The other cards get
+  very round corners.
 - Settings → **Tweaks**: the modes (Gaming, Coffee, Night, Do not disturb,
   Power saver, Presentation, Focus, Sleep, Screenshot, Region) as tiles.
 

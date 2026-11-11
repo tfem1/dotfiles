@@ -435,14 +435,16 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   policy](https://terms.archlinux.org/docs/trademark-policy/) asks; other
   systems get the Settings gear.
 - **Desktop widgets**, in the corner of the screen you pick (top left by
-  default, or any of the other three), under the windows, in the colors of the theme (violet with Twilight, green with
-  Chrysalis):
+  default, or any of the other three), under the windows, in the colors of the theme,
+  a little see-through (Hyprland's blur shows behind them, only inside
+  their shape):
 
   ![Desktop widgets in two themes](docs/images/widgets.png)
 
   - **Clock**: the date and the time in a pill of the accent color.
-  - **CPU**, **GPU**, **RAM**, **Disk**: a ring with the percentage, then
-    the cores, or what is used out of the total. GPU: AMD (driver files)
+  - **CPU**, **GPU**, **RAM**, **Disk**, each in a soft organic shape (a
+    scalloped cookie, a flower, a circle, a clover): a ring with the
+    percentage, then the cores, or what is used out of the total. GPU: AMD (driver files)
     and NVIDIA (`nvidia-smi`); without a reading the card hides.
   - **Audio spectrum**: 24 bars drawn by [cava](https://github.com/karlstav/cava)
     (installed with the rest), with the device the sound plays on; cava
