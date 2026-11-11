@@ -8,8 +8,8 @@ from theming.edit import set_value
 class SetValueTest(unittest.TestCase):
     def test_replaces_the_key_and_keeps_comments_and_other_keys(self):
         text = '# mine\n[wallpaper]\n# my pick\npath = "old.jpg"\n\n[font]\nsize = 12\n'
-        result = set_value(text, "wallpaper", "path", "pony/new.jpg")
-        self.assertEqual(result, '# mine\n[wallpaper]\n# my pick\npath = "pony/new.jpg"\n\n[font]\nsize = 12\n')
+        result = set_value(text, "wallpaper", "path", "forest/new.jpg")
+        self.assertEqual(result, '# mine\n[wallpaper]\n# my pick\npath = "forest/new.jpg"\n\n[font]\nsize = 12\n')
 
     def test_adds_the_key_to_an_existing_table(self):
         result = set_value('[wallpaper]\nmode = "fill"\n[font]\npath = "x"\n', "wallpaper", "path", "a.png")

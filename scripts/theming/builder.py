@@ -1,6 +1,6 @@
 """Builds base16 themes from a few seed colors (themes/seeds/*.toml).
 
-Usage: python3 -m theming.builder themes/seeds/pony.toml [--check]
+Usage: python3 -m theming.builder themes/seeds/forest.toml [--check]
 Each seed gives a tint (backgrounds), a text color, an accent and optional
 colors placed on hue slots; the builder derives a full, readable palette.
 """

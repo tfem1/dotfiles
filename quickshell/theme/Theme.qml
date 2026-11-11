@@ -3,45 +3,45 @@ import QtQuick
 
 // Colors, fonts and shapes of the shell, filled from the generated theme.json
 // by ThemeFile. Plain QtQuick (no Quickshell) so tools/preview can render the
-// same components. Defaults are the Twilight theme.
+// same components. Defaults are the Pine theme.
 QtObject {
     id: theme
 
-    property string name: "Twilight"
+    property string name: "Pine"
     property string variant: "dark"
 
-    property color bg: "#171c2b"
-    property color bgAlt: "#121521"
-    property color surface: "#242b42"
-    property color muted: "#414d77"
-    property color subtle: "#6a79ae"
-    property color fg: "#e1cfe7"
-    property color fgBright: "#ece0f0"
-    property color accent: "#d19fe4"
-    property color accent2: "#c084d6"    // the theme's two other colors
-    property color accent3: "#ed438d"
+    property color bg: "#182a23"
+    property color bgAlt: "#13201b"
+    property color surface: "#264036"
+    property color muted: "#447460"
+    property color subtle: "#6eaa92"
+    property color fg: "#d9e4d2"
+    property color fgBright: "#e6eee2"
+    property color accent: "#8fd18c"
+    property color accent2: "#aedaac"    // the theme's two other colors
+    property color accent3: "#91cc9d"
     property color red: "#e694a1"
-    property color orange: "#e6b694"
-    property color yellow: "#e6d594"
-    property color green: "#94e69a"
-    property color cyan: "#94e6e6"
-    property color blue: "#779bcb"
-    property color purple: "#d19fe4"
-    property color brown: "#ed438d"
+    property color orange: "#d69a62"
+    property color yellow: "#e8d27a"
+    property color green: "#8fd18c"
+    property color cyan: "#6cc3b0"
+    property color blue: "#94b6e6"
+    property color purple: "#c494e6"
+    property color brown: "#e694c4"
 
     // One color per module, chosen in theme.toml ([modules]).
     component ModuleColors: QtObject {
-        property color workspaces: "#d19fe4"
-        property color clock: "#d19fe4"
-        property color media: "#ed438d"
-        property color resources: "#ed438d"
-        property color battery: "#c084d6"
-        property color wifi: "#c084d6"
-        property color network: "#c084d6"
-        property color bluetooth: "#c084d6"
-        property color audio: "#c084d6"
-        property color brightness: "#c084d6"
-        property color notifications: "#d19fe4"
+        property color workspaces: "#8fd18c"
+        property color clock: "#8fd18c"
+        property color media: "#91cc9d"
+        property color resources: "#91cc9d"
+        property color battery: "#aedaac"
+        property color wifi: "#aedaac"
+        property color network: "#aedaac"
+        property color bluetooth: "#aedaac"
+        property color audio: "#aedaac"
+        property color brightness: "#aedaac"
+        property color notifications: "#8fd18c"
     }
     property ModuleColors modules: ModuleColors {}
 

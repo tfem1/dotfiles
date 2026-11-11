@@ -7,7 +7,7 @@ STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/tfem"
 INSTALL_LOG="$STATE_DIR/install.log"
 BIN_DIR="$HOME/.local/bin"
 CLI_NAMES=(tfem dots wm)
-DEFAULT_WALLPAPER="pony/wallhaven-wymvyx.jpg"
+DEFAULT_WALLPAPER="forest/wallhaven-m3plq8.jpg"
 
 # The shell's folder: ~/.config/quickshell/<shell.name of your config.json>.
 shell_dir() {
@@ -95,7 +95,7 @@ link_cli() {
   esac
 }
 
-# First install with wallpapers: start from a pony wallpaper.
+# First install with wallpapers: start from a night forest in pixel art.
 seed_settings() {
   local file="$CONFIG_HOME/tfem/theme.toml"
   [[ -e $file ]] && return 0

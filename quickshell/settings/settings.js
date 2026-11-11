@@ -6,9 +6,9 @@
 // Every row of the window: page, row id (its objectName), title, and the
 // words that find it.
 const INDEX = [
-    { page: "appearance", id: "theme", title: "Theme", words: "colors palette pony dark light catppuccin dracula nord gruvbox black white noir mono" },
+    { page: "appearance", id: "theme", title: "Theme", words: "colors palette forest cat tabby pine moss dark light catppuccin dracula nord gruvbox black white noir mono" },
     { page: "appearance", id: "accent", title: "Accent color", words: "highlight color" },
-    { page: "appearance", id: "wallpaper", title: "Wallpaper", words: "background picture image character" },
+    { page: "appearance", id: "wallpaper", title: "Wallpaper", words: "background picture image pixel forest cat" },
     { page: "appearance", id: "folders", title: "Folder color", words: "icons fairywren" },
     { page: "appearance", id: "corners", title: "Rounded corners", words: "radius shape round" },
     { page: "appearance", id: "gaps", title: "Space between windows", words: "gaps margin spacing" },

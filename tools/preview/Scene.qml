@@ -52,8 +52,8 @@ Rectangle {
             id: id, focused: id === 2, occupied: [1, 2, 4, 7].includes(id), urgent: false
         }))
         hasMedia: true
-        mediaTitle: "Winter Wrap Up"
-        mediaArtist: "Ponyville Chorus"
+        mediaTitle: "Night Forest"
+        mediaArtist: "Pixel Dreams"
         mediaProgress: 0.42
         mediaPlaying: true
         distro: "arch"
@@ -94,8 +94,8 @@ Rectangle {
         NotificationCard {
             appName: "Spotify"
             time: "now"
-            summary: "Winter Wrap Up"
-            body: "Ponyville Chorus — Season 1 Soundtrack"
+            summary: "Night Forest"
+            body: "Pixel Dreams — Night Forest"
         }
         NotificationCard {
             appName: "Battery"
@@ -119,8 +119,8 @@ Rectangle {
                  0.17, 0.11, 0.09, 0.13, 0.07, 0.05, 0.04, 0.03]
         device: "Speakers (Realtek Audio)"
         hasMedia: true
-        media: ({ song: "Winter Wrap Up", artist: "Ponyville Chorus",
-                  line: "Winter wrap up, winter wrap up!", next: "Let's finish our holiday cheer" })
+        media: ({ song: "Night Forest", artist: "Pixel Dreams",
+                  line: "Under the pines the lanterns glow", next: "Walking home through falling snow" })
     }
     SampleWidgets {
         x: 24
@@ -140,7 +140,7 @@ Rectangle {
         live: false
         now: new Date(2026, 10, 7, 17, 49)
         background: scene.wallpaper
-        user: "twilight"
+        user: "alex"
         password: "friendship"
         layout: "US"
     }
@@ -159,13 +159,13 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.margins: 10
             width: implicitWidth
-            wifi: ({ on: true, name: "Ponyville Library" })
+            wifi: ({ on: true, name: "Home" })
             bluetooth: ({ on: true, connected: 2 })
             doNotDisturb: true
             volume: ({ value: 0.64, muted: false })
             brightness: 0.8
             notifications: [
-                { appName: "Spotify", summary: "Winter Wrap Up", body: "Ponyville Chorus", time: new Date(2026, 10, 7, 17, 49) },
+                { appName: "Spotify", summary: "Night Forest", body: "Pixel Dreams", time: new Date(2026, 10, 7, 17, 49) },
                 { appName: "Battery", summary: "Battery low", body: "15% left. Plug in the charger.", urgent: true,
                   time: new Date(2026, 10, 7, 17, 31) },
                 { appName: "Discord", summary: "Rarity", body: "Darling, the dresses are ready!", time: new Date(2026, 10, 7, 16, 58) }
@@ -189,16 +189,16 @@ Rectangle {
             anchors.topMargin: 10
             width: implicitWidth
             height: implicitHeight
-            track: ({ title: "Winter Wrap Up", artist: "Ponyville Chorus", album: "Friendship is Magic, season 1",
+            track: ({ title: "Night Forest", artist: "Pixel Dreams", album: "Night Forest",
                       playing: true, position: 47, length: 158, canSeek: true, shuffle: false, loop: "playlist" })
             players: [{ name: "Spotify", current: true }, { name: "Firefox", current: false }]
             lyrics: ({ kind: "synced", lines: [
-                { time: 30, text: "Winter wrap up, winter wrap up" },
-                { time: 36, text: "Let's finish our holiday cheer" },
-                { time: 42, text: "Winter wrap up, winter wrap up" },
-                { time: 46, text: "'Cause tomorrow spring is here" },
-                { time: 52, text: "'Cause tomorrow spring is here" },
-                { time: 58, text: "'Cause tomorrow spring is here" }
+                { time: 30, text: "Under the pines the lanterns glow" },
+                { time: 36, text: "Walking home through falling snow" },
+                { time: 42, text: "A little cat beside the door" },
+                { time: 46, text: "Waits for me like the night before" },
+                { time: 52, text: "Under the pines the lanterns glow" },
+                { time: 58, text: "Walking home through falling snow" }
             ] })
         }
 
@@ -219,8 +219,8 @@ Rectangle {
                 { name: "Webcam microphone", current: false }
             ] })
             apps: [
-                { name: "Spotify", detail: "Winter Wrap Up · Ponyville Chorus", volume: 0.8, muted: false },
-                { name: "Firefox", detail: "Friendship is Magic, season 1", volume: 0.5, muted: true },
+                { name: "Spotify", detail: "Night Forest · Pixel Dreams", volume: 0.8, muted: false },
+                { name: "Firefox", detail: "Night Forest", volume: 0.5, muted: true },
                 { name: "Discord", detail: "", volume: 0.7, muted: false }
             ]
         }
@@ -247,7 +247,7 @@ Rectangle {
             wifi: ({
                 active: true, scanning: false, wired: "", connectivity: "full",
                 networks: [
-                    { name: "Ponyville Library", strength: 0.92, secured: true, known: true, connected: true },
+                    { name: "Home", strength: 0.92, secured: true, known: true, connected: true },
                     { name: "Sweet Apple Acres", strength: 0.71, secured: true, known: true },
                     { name: "Sugarcube Corner", strength: 0.62, secured: true, needsPassword: true, failed: "wrong" },
                     { name: "Canterlot Guest", strength: 0.55, secured: false },
@@ -314,7 +314,7 @@ Rectangle {
             visible: scene.mode.startsWith("settings")
             anchors.fill: parent
             settings: sample.values ? sample : ({ values: {}, themes: [], folders: {} })
-            pending: scene.mode === "settings" ? { "palette.source": "pony-luna", "shape.radius": 18 } : {}
+            pending: scene.mode === "settings" ? { "palette.source": "cat-tabby", "shape.radius": 18 } : {}
             page: scene.mode === "settings" ? "appearance" : scene.mode.slice(9)
             wallpaper: scene.wallpaper
             modes: ({ game: true, night: true })

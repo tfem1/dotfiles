@@ -22,17 +22,17 @@ class SettingsCommandTest(SandboxTest):
         code, output = self.run_main("get")
         self.assertEqual(code, 0, output)
         data = json.loads(output)
-        self.assertEqual(data["values"]["palette.source"], "pony-twilight")
+        self.assertEqual(data["values"]["palette.source"], "forest-pine")
         self.assertEqual(data["values"]["idle.lock"], 10)
         self.assertEqual(data["fields"]["shape.radius"]["high"], 32)
         themes = {theme["id"]: theme for theme in data["themes"]}
         self.assertEqual(len(themes), len(list((REPO / "themes").glob("*.toml"))))
-        self.assertEqual(themes["pony-twilight"]["colors"]["accent"], "#d19fe4")
+        self.assertEqual(themes["forest-pine"]["colors"]["accent"], "#8fd18c")
         self.assertEqual(set(themes["dracula"]["colors"]), {
             "bg", "bgAlt", "surface", "muted", "subtle", "fg", "fgBright", "accent", "accent2", "accent3",
             "red", "orange", "yellow", "green", "cyan", "blue", "purple", "brown"})
         self.assertEqual(data["folders"]["violet"], "#7749b5")
-        self.assertEqual(data["themes"][0]["family"], "Pony")   # ponies first
+        self.assertEqual(data["themes"][0]["family"], "Cat")   # cat and forest first
 
     def test_set_writes_typed_values_in_the_right_file(self):
         self.write_user_file("theme.toml", "# mine\n[font]\nsize = 12\n")
@@ -66,4 +66,4 @@ class SettingsCommandTest(SandboxTest):
     def test_set_regenerates(self):
         code, output = self.run_main("set", "effects.game_mode=true")
         self.assertEqual(code, 0, output)
-        self.assertIn("Theme Twilight", output)
+        self.assertIn("Theme Pine", output)

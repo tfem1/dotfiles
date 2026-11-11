@@ -11,7 +11,7 @@
 schema = 1                      # format version, for clean migrations
 
 [palette]
-source = "pony-twilight"        # a theme from themes/ or ~/.config/tfem/themes/, or "wallpaper"
+source = "forest-pine"          # a theme from themes/ or ~/.config/tfem/themes/, or "wallpaper"
 accent = "theme"                # theme (its own signature color) | red | orange | yellow | green
                                 # | cyan | blue | purple | brown
 mode   = "dark"                 # dark | light: used when the palette comes from the wallpaper
@@ -21,8 +21,8 @@ mode   = "dark"                 # dark | light: used when the palette comes from
 
 [wallpaper]
 path = ""                       # empty = none; relative to ~/Pictures/Wallpapers, or absolute
-follow = true                   # a pony wallpaper of the collection brings the pony's
-                                # theme (Luna wallpaper, Luna theme); other images
+follow = true                   # a wallpaper of the collection brings its theme
+                                # (night forest: Pine, cat: Tabby); other images
                                 # keep the current theme
 
 [font]

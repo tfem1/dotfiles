@@ -2,7 +2,7 @@
 # moss, fern, lichen, bark, sunlight), no other theme copied. Build the
 # theme files with:
 #   PYTHONPATH=scripts python3 -m theming.builder themes/seeds/forest.toml
-# Same keys as pony.toml: tint, text, accent and slots (hue slot -> color).
+# Same keys as cat.toml: tint, text, accent and slots (hue slot -> color).
 # The builder keeps each hue and adjusts lightness until it is readable.
 
 prefix = "forest"
@@ -24,11 +24,3 @@ tint    = "#3B4A1E"
 text    = "#E6EBC6"
 accent  = "#8CC45A"
 slots   = { green = "#8CC45A", yellow = "#EBCB6B", orange = "#D9925A" }
-
-[themes.fern]                     # light: pale fern, dark pine text
-name    = "Fern"
-variant = "light"
-tint    = "#CFE3C4"
-text    = "#1F3A2A"
-accent  = "#3E8E55"
-slots   = { green = "#3E8E55", cyan = "#2F8A80", orange = "#B5652E" }

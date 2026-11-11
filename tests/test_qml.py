@@ -71,7 +71,7 @@ class VisualComponentsTest(unittest.TestCase):
             modes = ["bar", "bar-positions", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "lock", "music",
                      "power", "settings", "settings-display", "settings-home", "settings-system", "settings-tweaks",
                      "settings-widgets", "system", "volume", "wallpaper", "widgets", "wifi"]
-            self.assertEqual(sorted(p.name for p in Path(out).iterdir()), sorted(f"pony-twilight-{m}.png" for m in modes))
+            self.assertEqual(sorted(p.name for p in Path(out).iterdir()), sorted(f"forest-pine-{m}.png" for m in modes))
 
     def probe(self, script, expression, value):
         """Evaluates `expression` (with `input` = value) against a JS file of the shell."""
@@ -270,12 +270,12 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual(self.probe(lib, 'Lib.search("sleep").map(e => e.id)', None), ["modes", "awake", "sleep"])
         self.assertEqual(self.probe(lib, 'Lib.search("WIFI net").map(e => e.id)', None), ["wifi"])
         self.assertEqual(self.probe(lib, 'Lib.search("  ").length', None), 0)
-        values = {"shape.radius": 12, "palette.source": "pony-twilight"}
+        values = {"shape.radius": 12, "palette.source": "forest-pine"}
         self.assertEqual(self.probe(lib, 'Lib.change(input, {}, "shape.radius", 8)', values), {"shape.radius": 8})
         self.assertEqual(self.probe(lib, 'Lib.change(input, {"shape.radius": 8}, "shape.radius", 12)', values), {})
         self.assertEqual(self.probe(lib, 'Lib.value(input, {"shape.radius": 4}, "shape.radius")', values), 4)
-        self.assertEqual(self.probe(lib, 'Lib.pairs({"b.x": true, "a.y": "pony-luna"})', None),
-                         ["a.y=pony-luna", "b.x=true"])
+        self.assertEqual(self.probe(lib, 'Lib.pairs({"b.x": true, "a.y": "cat-tabby"})', None),
+                         ["a.y=cat-tabby", "b.x=true"])
         self.assertEqual(self.probe(lib, '[0, 5, 60, 120].map(Lib.minutes)', None), ["Never", "5 min", "1 h", "2 h"])
         self.assertEqual(self.probe(lib, 'Lib.steps([0, 10, 15], 11)', None), [0, 10, 11, 15])
         self.assertEqual(self.probe(lib, 'Lib.steps([0, 10], 10)', None), [0, 10])

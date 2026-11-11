@@ -26,73 +26,73 @@ FIXTURE = """
 removed = ["old111", "old222"]
 [other]
 wallpapers = [ { id = "abc123", ext = "jpg", size = "1920x1080" } ]
-[pony]
+[cats]
 wallpapers = [ { id = "xyz789", ext = "png", size = "1920x1080" } ]
 """
 
 
 class CollectionTest(unittest.TestCase):
-    def test_at_least_fifty_wallpapers_all_my_little_pony(self):
+    def test_pixel_forests_mostly_and_cats(self):
         entries = load_collection(COLLECTION)
-        self.assertGreaterEqual(len(entries), 50)
-        self.assertEqual({entry.category for entry in entries}, {"pony"})
+        self.assertEqual({entry.category for entry in entries}, {"forest", "cats"})
+        forests = [entry for entry in entries if entry.category == "forest"]
+        self.assertGreater(len(forests), len(entries) / 2)
+        self.assertGreaterEqual(len(entries) - len(forests), 8)
 
     def test_removed_wallpapers_are_listed_for_deletion(self):
         from wallpaper_collection import removed_ids
         removed = set(removed_ids(COLLECTION))
         self.assertIn("pow2wp", removed)   # a former forest
+        self.assertIn("wymvyx", removed)   # a former My Little Pony wallpaper
         self.assertFalse(removed & {entry.id for entry in load_collection(COLLECTION)})
 
     def test_every_wallpaper_is_listed_once(self):
         ids = [entry.id for entry in load_collection(COLLECTION)]
         self.assertEqual(len(ids), len(set(ids)))
 
-    def test_every_character_has_its_theme(self):
-        characters = [entry for entry in load_collection(COLLECTION) if entry.character]
-        self.assertGreaterEqual(len(characters), 20)
-        for entry in characters:
+    def test_every_wallpaper_has_an_existing_theme(self):
+        for entry in load_collection(COLLECTION):
             with self.subTest(wallpaper=entry.id):
-                self.assertTrue((REPO / f"themes/{entry.category}-{entry.character}.toml").exists())
+                self.assertTrue((REPO / f"themes/{entry.theme}.toml").exists())
 
     def test_removed_wallpapers_stay_out(self):
-        # A drug parody and a humanized pony, found through their wallhaven tags.
         ids = {entry.id for entry in load_collection(COLLECTION)}
-        self.assertFalse(ids & {"kxowv6", "01jxqg"})
+        self.assertFalse(ids & {"kxowv6", "01jxqg", "wymvyx"})
 
 
 class ThemeMatchTest(unittest.TestCase):
-    WALLPAPERS = [Wallpaper("pony", "abc123", "png", "luna"), Wallpaper("pony", "grp456", "jpg")]
-    SETTINGS = {"wallpaper.follow": True, "palette.source": "pony-twilight"}
+    WALLPAPERS = [Wallpaper("cats", "abc123", "png", "cat-tabby"), Wallpaper("forest", "grp456", "jpg")]
+    SETTINGS = {"wallpaper.follow": True, "palette.source": "forest-pine"}
 
     def test_found_by_the_wallhaven_id_of_the_file_name(self):
-        self.assertEqual(find(Path("/x/pony/wallhaven-abc123.png"), self.WALLPAPERS).character, "luna")
-        self.assertIsNone(find(Path("/x/pony/abc123.png"), self.WALLPAPERS))
+        self.assertEqual(find(Path("/x/cats/wallhaven-abc123.png"), self.WALLPAPERS).theme, "cat-tabby")
+        self.assertIsNone(find(Path("/x/cats/abc123.png"), self.WALLPAPERS))
         self.assertIsNone(find(Path("/x/wallhaven-zzz999.png"), self.WALLPAPERS))
 
-    def test_character_or_nothing(self):
-        luna, group = self.WALLPAPERS
-        self.assertEqual(theme_for(luna), "pony-luna")
+    def test_theme_or_nothing(self):
+        cat, group = self.WALLPAPERS
+        self.assertEqual(theme_for(cat), "cat-tabby")
         self.assertIsNone(theme_for(group))
         self.assertIsNone(theme_for(None))
 
     def test_follow_off_or_palette_from_the_wallpaper_keeps_the_theme(self):
-        image = Path("pony/wallhaven-abc123.png")
-        self.assertEqual(followed_theme(image, self.WALLPAPERS, self.SETTINGS), "pony-luna")
+        image = Path("cats/wallhaven-abc123.png")
+        self.assertEqual(followed_theme(image, self.WALLPAPERS, self.SETTINGS), "cat-tabby")
         self.assertIsNone(followed_theme(image, self.WALLPAPERS, {**self.SETTINGS, "wallpaper.follow": False}))
         self.assertIsNone(followed_theme(image, self.WALLPAPERS, {**self.SETTINGS, "palette.source": "wallpaper"}))
 
-    def test_invalid_character_is_refused(self):
+    def test_invalid_theme_is_refused(self):
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / "collection.toml"
-            path.write_text('[pony]\nwallpapers = [ { id = "abc123", ext = "png", character = "../x" } ]\n')
+            path.write_text('[cats]\nwallpapers = [ { id = "abc123", ext = "png", theme = "../x" } ]\n')
             with self.assertRaisesRegex(ValueError, "invalid wallpaper"):
                 load_collection(path)
 
     def test_installer_default_wallpaper_is_in_the_collection(self):
         deploy = (REPO / "install/deploy.sh").read_text()
         with (REPO / "wallpapers/collection.toml").open("rb") as handle:
-            pony = {f"pony/wallhaven-{w['id']}.{w['ext']}" for w in tomllib.load(handle)["pony"]["wallpapers"]}
-        self.assertTrue(any(f'DEFAULT_WALLPAPER="{name}"' in deploy for name in pony))
+            forest = {f"forest/wallhaven-{w['id']}.{w['ext']}" for w in tomllib.load(handle)["forest"]["wallpapers"]}
+        self.assertTrue(any(f'DEFAULT_WALLPAPER="{name}"' in deploy for name in forest))
 
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
@@ -216,40 +216,40 @@ class ListAndSetTest(SandboxTest):
     def shell_theme(self):
         return json.loads((self.home / ".config/quickshell/desktop/theme.json").read_text())
 
-    def test_set_a_character_wallpaper_switches_to_its_theme(self):
-        self.add("pony/wallhaven-y857ol.png")   # Princess Luna alone
-        code, output = self.run_main("set", "pony/wallhaven-y857ol.png")
+    def test_set_a_wallpaper_of_the_collection_switches_to_its_theme(self):
+        self.add("cats/wallhaven-2y6zl6.png")   # a cat asleep on a car
+        code, output = self.run_main("set", "cats/wallhaven-2y6zl6.png")
         self.assertEqual(code, 0, output)
-        self.assertIn("theme: pony-luna", output)
+        self.assertIn("theme: cat-tabby", output)
         settings = tomllib.loads((self.home / ".config/tfem/theme.toml").read_text())
-        self.assertEqual(settings["palette"]["source"], "pony-luna")
-        self.assertEqual(self.shell_theme()["palette"]["name"], "Luna")
+        self.assertEqual(settings["palette"]["source"], "cat-tabby")
+        self.assertEqual(self.shell_theme()["palette"]["name"], "Tabby")
 
     def test_follow_off_keeps_the_theme(self):
-        self.add("pony/wallhaven-y857ol.png")
+        self.add("cats/wallhaven-2y6zl6.png")
         settings = self.home / ".config/tfem/theme.toml"
         settings.parent.mkdir(parents=True)
         settings.write_text("[wallpaper]\nfollow = false\n")
-        code, output = self.run_main("set", "pony/wallhaven-y857ol.png")
+        code, output = self.run_main("set", "cats/wallhaven-2y6zl6.png")
         self.assertEqual(code, 0, output)
         self.assertNotIn("palette", tomllib.loads(settings.read_text()))
 
-    def test_missing_character_theme_keeps_the_theme_with_a_warning(self):
-        self.add("pony/wallhaven-abc123.png")
+    def test_missing_theme_keeps_the_theme_with_a_warning(self):
+        self.add("cats/wallhaven-abc123.png")
         collection = self.home / "collection.toml"
-        collection.write_text('[pony]\nwallpapers = [ { id = "abc123", ext = "png", character = "ghost" } ]\n')
+        collection.write_text('[cats]\nwallpapers = [ { id = "abc123", ext = "png", theme = "cat-ghost" } ]\n')
         with mock.patch("wallpapers.COLLECTION", collection):
-            code, output = self.run_main("set", "pony/wallhaven-abc123.png")
+            code, output = self.run_main("set", "cats/wallhaven-abc123.png")
         self.assertEqual(code, 0, output)
-        self.assertIn("'pony-ghost' not found", output)
+        self.assertIn("'cat-ghost' not found", output)
         self.assertNotIn("palette", tomllib.loads((self.home / ".config/tfem/theme.toml").read_text()))
 
     def test_list_names_the_theme_each_wallpaper_brings(self):
-        self.add("pony/wallhaven-y857ol.png")
+        self.add("cats/wallhaven-2y6zl6.png")
         code, output = self.run_main("list", "--json")
         self.assertEqual(code, 0, output)
         themes = {image["name"]: image["theme"] for image in json.loads(output)}
-        self.assertEqual(themes["wallhaven-y857ol"], "Luna")
+        self.assertEqual(themes["wallhaven-2y6zl6"], "Tabby")
         self.assertEqual(themes["b"], "")
 
     def test_set_accepts_a_path_inside_the_wallpaper_folder(self):

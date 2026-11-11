@@ -1,0 +1,18 @@
+# Seeds of the cat theme: original colors of a ginger tabby asleep in the
+# evening (dark fur shadows, cream belly, orange stripes, green eyes), no
+# other theme copied. Build the theme file with:
+#   PYTHONPATH=scripts python3 -m theming.builder themes/seeds/cat.toml
+# Keys: tint (backgrounds), text, accent and slots (hue slot -> color). The
+# builder keeps each hue and adjusts lightness until it is readable.
+
+prefix = "cat"
+family = "Cat"
+credit = "Original colors of a ginger tabby"
+
+[themes.tabby]                    # orange stripes, cream belly, green eyes
+name    = "Tabby"
+variant = "dark"
+tint    = "#4A3222"
+text    = "#F2E3CF"
+accent  = "#F0A35E"
+slots   = { orange = "#F0A35E", yellow = "#EFCB8A", green = "#9CC98A" }

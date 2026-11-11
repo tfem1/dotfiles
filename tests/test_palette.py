@@ -15,7 +15,7 @@ CATPPUCCIN = '[palette]\nsource = "catppuccin-mocha"\n'
 class ResolveTest(SandboxTest):
     def test_loads_default_theme(self):
         palette = resolve_palette(load_theme(self.paths), self.paths)
-        self.assertEqual(palette.family, "Pony")
+        self.assertEqual((palette.family, palette.name), ("Forest", "Pine"))
 
     def test_loads_catppuccin(self):
         self.write_user_file("theme.toml", CATPPUCCIN)
@@ -118,7 +118,7 @@ class ContextTest(SandboxTest):
         self.assertEqual(hue_class(ctx["accent2"]), hue_class(ctx["accent"]))  # derived
 
     def test_a_chosen_accent_gets_companions_of_its_own(self):
-        ctx = self.context('[palette]\nsource = "pony-pinkie"\naccent = "blue"\n')
+        ctx = self.context('[palette]\nsource = "cat-tabby"\naccent = "blue"\n')
         self.assertEqual(hue_class(ctx["accent2"]), "blue")
         self.assertIn(hue_class(ctx["accent3"]), ("blue", "purple"))
 
@@ -131,10 +131,10 @@ class ContextTest(SandboxTest):
         self.assertEqual(ctx["wallpaper.path"], str(self.home / "Pictures/a.png"))
 
     def test_theme_accent_is_the_signature_color(self):
-        ctx = self.context('[palette]\nsource = "pony-pinkie"\n')
+        ctx = self.context('[palette]\nsource = "cat-tabby"\n')
         signature = resolve_palette(load_theme(self.paths), self.paths).accent
         self.assertEqual(ctx["accent"], signature)
-        self.assertNotEqual(ctx["accent"], ctx["purple"])  # pink, not her purple slot
+        self.assertNotEqual(ctx["accent"], ctx["purple"])  # its orange, not the purple slot
 
     def test_theme_without_signature_uses_its_purple(self):
         ctx = self.context(CATPPUCCIN)

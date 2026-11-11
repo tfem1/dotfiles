@@ -22,24 +22,12 @@ from theming.hues import contrast, hue_problems, readable  # noqa: E402
 # scheme -> (family, slot of the signature color, what it is)
 PICKS = {
     "catppuccin-latte": ("Catppuccin", "base0E", "its mauve"),
-    "catppuccin-frappe": ("Catppuccin", "base0E", "its mauve"),
-    "catppuccin-macchiato": ("Catppuccin", "base0E", "its mauve"),
     "dracula": ("Dracula", "base0D", "its purple"),
     "nord": ("Nord", "base0C", "its frost blue"),
-    "nord-light": ("Nord", "base0D", "its frost blue"),
     "gruvbox-dark-medium": ("Gruvbox", "base09", "its orange"),
-    "gruvbox-light-medium": ("Gruvbox", "base09", "its orange"),
     "tokyo-night-moon": ("Tokyo Night", "base0D", "its blue"),
     "solarized-dark": ("Solarized", "base0D", "its blue"),
-    "solarized-light": ("Solarized", "base0D", "its blue"),
     "onedark": ("One", "base0D", "its blue"),
-    "one-light": ("One", "base0D", "its blue"),
-    "ayu-mirage": ("Ayu", "base0A", "its amber"),
-    "ayu-light": ("Ayu", "base09", "its orange"),
-    "material-palenight": ("Material", "base0E", "its purple"),
-    "github-dark": ("GitHub", "base0D", "its blue"),
-    "everforest-light-medium": ("Everforest", "base0B", "its green"),
-    "tomorrow-night-eighties": ("Tomorrow", "base0D", "its blue"),
 }
 SLOTS = tuple(f"base0{digit}" for digit in "0123456789ABCDEF")
 

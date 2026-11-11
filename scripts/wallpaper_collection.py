@@ -1,9 +1,8 @@
 """The wallpaper collection (wallpapers/collection.toml): the curated list of
 wallhaven images, and the theme each one goes with.
 
-A pony wallpaper that shows one character with a theme names it
-(`character = "luna"`): picking it switches to `pony-luna`. Any other image
-keeps the current theme. `removed` lists the wallpapers taken out of the
+A wallpaper can name the theme that goes with it (`theme = "forest-moss"`):
+picking it switches to that theme. Any other image keeps the current one. `removed` lists the wallpapers taken out of the
 collection, whose old downloads `fetch` deletes.
 """
 from __future__ import annotations
@@ -24,7 +23,7 @@ class Wallpaper:
     category: str
     id: str
     ext: str
-    character: str = ""   # the pony shown, when it has a theme
+    theme: str = ""       # the theme that goes with it (themes/<theme>.toml)
 
     @property
     def file_name(self) -> str:
@@ -43,11 +42,11 @@ def load_collection(path: Path) -> list[Wallpaper]:
             raise ValueError(f"invalid category '{category}' in {path}")
         for item in table.get("wallpapers", []):
             wallpaper_id, ext = item.get("id", ""), item.get("ext", "")
-            character = item.get("character", "")
+            theme = item.get("theme", "")
             if (not _ID.fullmatch(wallpaper_id) or ext not in ("jpg", "png")
-                    or not isinstance(character, str) or character and not _NAME.fullmatch(character)):
+                    or not isinstance(theme, str) or theme and not _NAME.fullmatch(theme)):
                 raise ValueError(f"invalid wallpaper {item!r} in {path}")
-            entries.append(Wallpaper(category, wallpaper_id, ext, character))
+            entries.append(Wallpaper(category, wallpaper_id, ext, theme))
     return entries
 
 
@@ -70,9 +69,9 @@ def find(image: Path, wallpapers: list[Wallpaper]) -> Wallpaper | None:
 
 def theme_for(wallpaper: Wallpaper | None) -> str | None:
     """The theme that goes with a wallpaper, or None to keep the current one."""
-    if wallpaper is None or not wallpaper.character:
+    if wallpaper is None or not wallpaper.theme:
         return None
-    return f"{wallpaper.category}-{wallpaper.character}"
+    return wallpaper.theme
 
 
 def prune(collection: Path, dest: Path, dry_run: bool) -> int:

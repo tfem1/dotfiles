@@ -60,11 +60,11 @@ class ContextTest(SandboxTest):
     def test_defaults_give_fairywren_with_the_theme_folders(self):
         context = self.context()
         self.assertEqual(context["icons.name"], "FairyWren_Dark")
-        self.assertEqual(context["icons.folders"], "violet")
+        self.assertEqual(context["icons.folders"], "green")
         self.assertEqual(context["dirs.data"], str(self.home / ".local/share"))
 
     def test_light_theme_and_chosen_folders(self):
-        context = self.context('[palette]\nsource = "forest-fern"\n[icons]\nfolders = "pine"\n')
+        context = self.context('[palette]\nsource = "catppuccin-latte"\n[icons]\nfolders = "pine"\n')
         self.assertEqual(context["icons.name"], "FairyWren_Light")
         self.assertEqual(context["icons.folders"], "pine")
 

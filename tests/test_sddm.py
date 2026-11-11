@@ -40,19 +40,19 @@ class BuildTest(SandboxTest):
                     self.assertTrue((dest / part).is_file(), part)
                 self.assertIn("QtVersion=6", (dest / "metadata.desktop").read_text())
                 values = conf(dest / "theme.conf")
-                self.assertEqual(values["accent"], "#d19fe4")   # Twilight
+                self.assertEqual(values["accent"], "#8fd18c")   # Pine
                 self.assertEqual(values["background"], "")       # no wallpaper set
                 self.assertEqual(values["font"], "Inter")
 
     def test_the_wallpaper_is_copied_next_to_the_theme(self):
-        image = self.home / "Pictures/Wallpapers/pony/luna.png"
+        image = self.home / "Pictures/Wallpapers/cats/tabby.png"
         image.parent.mkdir(parents=True)
         image.write_bytes(PNG)
-        self.write_user_file("theme.toml", '[wallpaper]\npath = "pony/luna.png"\n[palette]\nsource = "pony-luna"\n')
+        self.write_user_file("theme.toml", '[wallpaper]\npath = "cats/tabby.png"\n[palette]\nsource = "cat-tabby"\n')
         dest = build("stacked-clock", self.home / "out", self.paths)
         self.assertEqual(conf(dest / "theme.conf")["background"], "background.png")
         self.assertEqual((dest / "background.png").read_bytes(), PNG)
-        self.assertIn("from Luna", (dest / "theme.conf").read_text())
+        self.assertIn("from Tabby", (dest / "theme.conf").read_text())
 
     def test_unknown_theme_is_refused(self):
         with self.assertRaisesRegex(ValueError, "unknown login theme"):
@@ -97,15 +97,15 @@ class InstallTest(SandboxTest):
 
     def test_the_theme_reads_its_colors_from_a_folder_you_own(self):
         # theme.conf.user links to the folder `tfem generate` keeps up to date.
-        image = self.home / "Pictures/Wallpapers/pony/luna.png"
+        image = self.home / "Pictures/Wallpapers/cats/tabby.png"
         image.parent.mkdir(parents=True)
         image.write_bytes(PNG)
-        self.write_user_file("theme.toml", '[wallpaper]\npath = "pony/luna.png"\n[palette]\nsource = "pony-luna"\n')
+        self.write_user_file("theme.toml", '[wallpaper]\npath = "cats/tabby.png"\n[palette]\nsource = "cat-tabby"\n')
         code, output, system = self.install()
         self.assertEqual(code, 0, output)
         user_conf = system / "themes/stacked-clock/theme.conf.user"
         self.assertEqual(Path(os.readlink(user_conf)), self.paths.sddm_dir / "theme.conf")
-        self.assertIn("from Luna", user_conf.read_text())
+        self.assertIn("from Tabby", user_conf.read_text())
         # An absolute path: Qt.resolvedUrl keeps it as is.
         self.assertEqual(conf(user_conf)["background"], str(self.paths.sddm_dir / "background.png"))
         self.assertEqual((self.paths.sddm_dir / "background.png").read_bytes(), PNG)

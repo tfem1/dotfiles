@@ -4,42 +4,42 @@
    reads these named colors (the default GTK 3 Adwaita does not).
    Shade and border colors keep their defaults (transparent black). */
 
-@define-color accent_bg_color #d19fe4;
-@define-color accent_fg_color #171c2b;
-@define-color accent_color #d19fe4;
+@define-color accent_bg_color #8fd18c;
+@define-color accent_fg_color #182a23;
+@define-color accent_color #8fd18c;
 @define-color destructive_bg_color #e694a1;
-@define-color destructive_fg_color #171c2b;
+@define-color destructive_fg_color #182a23;
 @define-color destructive_color #e694a1;
-@define-color success_bg_color #94e69a;
-@define-color success_fg_color #171c2b;
-@define-color success_color #94e69a;
-@define-color warning_bg_color #e6d594;
-@define-color warning_fg_color #171c2b;
-@define-color warning_color #e6d594;
+@define-color success_bg_color #8fd18c;
+@define-color success_fg_color #182a23;
+@define-color success_color #8fd18c;
+@define-color warning_bg_color #e8d27a;
+@define-color warning_fg_color #182a23;
+@define-color warning_color #e8d27a;
 @define-color error_bg_color #e694a1;
-@define-color error_fg_color #171c2b;
+@define-color error_fg_color #182a23;
 @define-color error_color #e694a1;
-@define-color window_bg_color #171c2b;
-@define-color window_fg_color #e1cfe7;
-@define-color view_bg_color #121521;
-@define-color view_fg_color #e1cfe7;
-@define-color headerbar_bg_color #242b42;
-@define-color headerbar_fg_color #e1cfe7;
-@define-color headerbar_backdrop_color #171c2b;
-@define-color sidebar_bg_color #121521;
-@define-color sidebar_fg_color #e1cfe7;
-@define-color sidebar_backdrop_color #121521;
-@define-color secondary_sidebar_bg_color #171c2b;
-@define-color secondary_sidebar_fg_color #e1cfe7;
-@define-color secondary_sidebar_backdrop_color #171c2b;
-@define-color card_bg_color #242b42;
-@define-color card_fg_color #e1cfe7;
-@define-color dialog_bg_color #242b42;
-@define-color dialog_fg_color #e1cfe7;
-@define-color popover_bg_color #242b42;
-@define-color popover_fg_color #e1cfe7;
-@define-color thumbnail_bg_color #242b42;
-@define-color thumbnail_fg_color #e1cfe7;
+@define-color window_bg_color #182a23;
+@define-color window_fg_color #d9e4d2;
+@define-color view_bg_color #13201b;
+@define-color view_fg_color #d9e4d2;
+@define-color headerbar_bg_color #264036;
+@define-color headerbar_fg_color #d9e4d2;
+@define-color headerbar_backdrop_color #182a23;
+@define-color sidebar_bg_color #13201b;
+@define-color sidebar_fg_color #d9e4d2;
+@define-color sidebar_backdrop_color #13201b;
+@define-color secondary_sidebar_bg_color #182a23;
+@define-color secondary_sidebar_fg_color #d9e4d2;
+@define-color secondary_sidebar_backdrop_color #182a23;
+@define-color card_bg_color #264036;
+@define-color card_fg_color #d9e4d2;
+@define-color dialog_bg_color #264036;
+@define-color dialog_fg_color #d9e4d2;
+@define-color popover_bg_color #264036;
+@define-color popover_fg_color #d9e4d2;
+@define-color thumbnail_bg_color #264036;
+@define-color thumbnail_fg_color #d9e4d2;
 
 /* adw-gtk3 writes white text on accent buttons: with pastel accents the
    theme's own text color reads better. */

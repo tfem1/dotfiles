@@ -8,7 +8,7 @@ single settings file.
 > lock screen, launcher or notifications. See [Make it yours](#make-it-yours).
 
 **Status:** early work. Done: theme pipeline, Hyprland config, installer,
-wallpaper collection, 49 themes, the Quickshell shell, a Settings window and
+wallpaper collection, 14 themes, the Quickshell shell, a Settings window and
 the login screen, desktop widgets. The full plan is in
 [docs/roadmap.md](docs/roadmap.md).
 
@@ -101,7 +101,7 @@ still recognises OpenBSD and does the rest: it installs what OpenBSD 7.8
 packages (Python, kitty, glib2, qt5ct and qt6ct, the Papirus and Adwaita
 icons, the Inter and JetBrains Mono fonts, Firefox, Nautilus...) with
 `doas pkg_add`, links the `tfem` command, downloads the wallpapers and the
-icons, and themes your apps (kitty, GTK, Qt) with any of the 49 themes.
+icons, and themes your apps (kitty, GTK, Qt) with any of the 14 themes.
 The Hyprland config, the shell and the login screen are left out, and it
 says so. OpenBSD ships neither bash nor curl, so first:
 
@@ -122,10 +122,10 @@ installer runs it for you. Papirus is installed too, as FairyWren falls back
 on it for the icons it does not draw.
 
 - **Dark or light** follows the palette: `FairyWren_Dark` for dark themes,
-  `FairyWren_Light` for light ones (Celestia, Fluttershy, Fern).
+  `FairyWren_Light` for light ones (Catppuccin Latte).
 - **Folders** take FairyWren's color that looks closest to the accent:
-  violet for Twilight, pink for Pinkie, indigo for Luna, cyan for Rainbow,
-  green or pine for the green themes. Pick one yourself with `folders` (blue,
+  green for Pine and Moss, orange for Tabby, violet for Dracula, cyan for
+  Nord... Pick one yourself with `folders` (blue,
   cyan, green, indigo, magenta, pink, pine, red, teal, violet, yellow, ...).
 
 ```toml
@@ -139,24 +139,25 @@ folders = "theme"       # or "pink", "pine", ...
 
 ### Wallpapers
 
-`wallpapers/collection.toml` lists 51 My Little Pony wallpapers from
-[wallhaven.cc](https://wallhaven.cc), SFW, at most 10 MB each, picked by
-hand. They are downloaded to `~/Pictures/Wallpapers/pony/` and never stored
-in this repository: the images remain the property of their authors.
+`wallpapers/collection.toml` lists 26 pixel-art wallpapers from
+[wallhaven.cc](https://wallhaven.cc), picked by hand: 15 forests (day,
+night, mist, snow) and 11 cats. SFW, landscape, every one looked at. They
+are downloaded to `~/Pictures/Wallpapers/forest/` and `cats/` and never
+stored in this repository: the images remain the property of their authors.
 Download or complete them at any time with `tfem wallpapers fetch`; it also
-deletes the wallpapers taken out of the collection (the former forests),
-only those files.
+deletes the wallpapers taken out of the collection (the former My Little
+Pony and forest ones), only those files.
 
 Pick one with `SUPER + W` (see [Shell](#shell)) or `tfem wallpapers set
 IMAGE`: the choice is saved in your `theme.toml`, and the desktop and the
 lock screen follow. `tfem wallpapers list` shows what is in the folder; any
 image you add there (jpg, png, webp) shows up in the selector.
 
-**Wallpaper = character.** A pony wallpaper that shows one character with
-a theme brings that theme: pick a Luna wallpaper and the whole desktop
-(shell, terminal, GTK, Qt, lock screen) turns Luna. Group pictures and your
-own images keep the current theme. The selector shows the theme a wallpaper
-brings, and searching a name ("luna") finds that character's wallpapers.
+**A wallpaper brings its theme.** Each wallpaper of the collection names
+the theme that goes with it: a day forest turns the whole desktop (shell,
+terminal, GTK, Qt, lock screen) **Moss**, a night or misty forest **Pine**,
+the snowy one **Nord**, a cat **Tabby**. Your own images keep the current
+theme. The selector shows the theme a wallpaper brings.
 
 ```toml
 [wallpaper]
@@ -165,96 +166,64 @@ follow = true                   # false: a wallpaper never changes the theme
 
 ## Themes
 
-49 themes: 22 in the colors of My Little Pony characters, 19 well-known
-palettes, 7 green ones and **Noir**, black and white. **Twilight** is the
-default.
+14 themes, kept simple: 10 well-known palettes, 3 of our own for the
+wallpapers (two forests, one cat) and **Noir**, black and white. **Pine** is
+the default, with a night forest wallpaper.
 
 | Theme | Look |
 |---|---|
-| `pony-twilight` | navy night, lavender text, magenta touches |
-| `pony-pinkie` | dark raspberry, hot pink accent |
-| `pony-rarity` | deep purple, white text |
-| `pony-cadance` | plum, magenta accent, gold |
-| `pony-starlight` | violet, teal touches |
-| `pony-luna` | indigo night, royal blue accent |
-| `pony-trixie` | midnight blue, silver text, sky blue accent |
-| `pony-rainbow` | dark sky, the full rainbow |
-| `pony-applejack` | warm brown, orange accent, green touches |
-| `pony-vinyl` | Vinyl Scratch: midnight blue, cobalt, cerise touches |
-| `pony-derpy` | blue grey, pale yellow accent |
-| `pony-discord` | dark brown, yellow eyes, red touches |
-| `pony-scootaloo` | plum, orange accent, purple touches |
-| `pony-sunset` | Sunset Shimmer: dark red, amber accent, cyan touches |
-| `pony-chrysalis` | dark teal, changeling green |
-| `pony-spike` | dark purple, mulberry accent, green spikes |
-| `pony-octavia` | warm grey, purple accent |
-| `pony-zecora` | indigo black, gold accent, cyan touches |
-| `pony-fluttershy` | light: cream and pink |
-| `pony-celestia` | light: white and pastel pink |
-| `pony-sweetie-belle` | light: soft grey, mulberry accent, green touches |
-| `pony-apple-bloom` | light: pale yellow, red and pink |
+| `forest-pine` | deep pine night, young-leaf green, lichen teal |
+| `forest-moss` | olive moss, fresh green, sunlight yellow |
+| `cat-tabby` | warm brown fur, ginger orange, cream text, green eyes |
+| `noir` | pure black, white text and accent, greys |
+| `catppuccin-mocha` | dark, mauve accent |
+| `catppuccin-latte` | light, mauve accent |
+| `dracula` | dark, purple |
+| `nord` | arctic blue grey, frost blue |
+| `gruvbox-dark-medium` | warm retro brown, orange |
+| `tokyo-night-moon` | night blue |
+| `everforest-dark-hard` | dark forest grey, soft green |
+| `kanagawa` | ink night, autumn green |
+| `onedark` | Atom's grey, blue |
+| `solarized-dark` | teal night, blue |
+
+The Settings window sorts them in four groups: **Forest & cats**, **Well
+known**, **Black & white** and **Light**.
 
 **Noir** (`noir`) is for black wallpapers: a pure black bar and panels,
 white text and accent (the clock pill turns white), greys for everything
-else; only red keeps a little color, so alerts still stand out. The
-Settings window lists it under **Black & white**.
+else; only red keeps a little color, so alerts still stand out.
 
 ![Noir on a black wallpaper](docs/images/theme-noir.png)
 
 **Well-known palettes**, colors unchanged from
 [tinted-theming/schemes](https://github.com/tinted-theming/schemes) (MIT, see
-`licenses/MIT-tinted-theming.txt`), each with its signature color as accent:
-Catppuccin Latte, Frappé, Macchiato and Mocha, Dracula, Nord and Nord Light,
-Gruvbox dark and light, Tokyo Night Moon, Solarized Dark and Light, OneDark
-and One Light, Ayu Mirage and Light, Material Palenight, GitHub Dark,
-Everforest Light, Tomorrow Night Eighties (`catppuccin-frappe`, `dracula`,
-`nord`, `gruvbox-dark-medium`, `tokyo-night-moon`... the file names in
-`themes/`). `tools/import_tinted.py` imports them again from a copy of the
-schemes; when a signature color is too pale or too dark to read on its
-background, only its lightness is moved. Rosé Pine and the other Tokyo
-Night variants are left out: some of their hues are not in their slot.
+`licenses/MIT-tinted-theming.txt`), each with its signature color as accent.
+`tools/import_tinted.py` imports them again from a copy of the schemes; when
+a signature color is too pale or too dark to read on its background, only
+its lightness is moved.
 
-Pick one in `~/.config/tfem/theme.toml`:
+Pick one in `~/.config/tfem/theme.toml` (or in Settings → Appearance):
 
 ```toml
 [palette]
-source = "pony-pinkie"
+source = "cat-tabby"
 ```
 
-Each theme comes with its signature color, used as the accent
-(`accent = "theme"`, the default). The themes are not written by hand:
-`themes/seeds/pony.toml` holds the canon colors of each character (from the
-My Little Pony Friendship is Magic Wiki), and
-`PYTHONPATH=scripts python3 -m theming.builder themes/seeds/pony.toml` turns
+**Pine, Moss and Tabby** are original, not written by hand:
+`themes/seeds/forest.toml` and `themes/seeds/cat.toml` hold a few colors
+each (a pine wood, a ginger tabby), and
+`PYTHONPATH=scripts python3 -m theming.builder themes/seeds/cat.toml` turns
 them into full base16 themes, adjusting lightness until every color is
 readable (WCAG contrast 7:1 for text, 4.5:1 for colors) and checking that
-each hue stays in its place. My Little Pony is a trademark of Hasbro; these
-are fan color schemes, with no artwork.
+each hue stays in its place.
 
 **Minimal colors:** a theme shows at most three colors, all its own. The
 accent (workspaces, clock), a second color of the same family (every status
 icon and the panels) and a third one used sparingly (the now-playing ring):
-greens only for the forest themes, the character's colors for a pony theme
-(Pinkie: her pink, a softer pink, the blue of her eyes). Red is kept for
-alerts only. Change it per module in `[modules]` of `theme.toml` if you want
-more color (`wifi = "blue"`, for instance).
-
-**Green** themes, with a green accent:
-
-| Theme | Look |
-|---|---|
-| `kanagawa` | ink night, autumn green (official Kanagawa palette) |
-| `kanagawa-dragon` | warm black, sage green (official palette) |
-| `everforest-dark-hard` | dark forest grey, soft green (official palette) |
-| `forest-pine` | deep pine, young-leaf green, lichen teal |
-| `forest-moss` | olive moss, fresh green, sunlight yellow |
-| `forest-fern` | light: pale fern, dark pine text |
-
-The first three come unchanged from
-[tinted-theming/schemes](https://github.com/tinted-theming/schemes) (MIT);
-the `forest-*` ones are original, built like the pony themes from
-`themes/seeds/forest.toml`. Every theme is checked: each hue in its slot,
-text readable.
+greens only for the forests, warm oranges for Tabby. Red is kept for alerts
+only. Change it per module in `[modules]` of `theme.toml` if you want more
+color (`wifi = "blue"`, for instance).
 
 ## How theming works
 
@@ -511,7 +480,7 @@ folder name is `shell.name` in your `config.json`). Its colors follow
     **Gaming hub** (the Tweaks page). Under it, one card per page.
 
     ![Settings, Home page](docs/images/settings-home.png)
-  - **Appearance**: theme (the 49 as cards in their own colors, with
+  - **Appearance**: theme (the 14 as cards in their own colors, with
     filters), accent color, wallpaper, folder color, rounded corners, space
     between windows, transparency, blur, shadows, animations, text size.
     Nothing changes until **Apply**: a small desktop at the top shows the
@@ -587,7 +556,7 @@ sample data):
 pip install PySide6-Essentials
 ```
 ```bash
-python3 tools/preview/render.py --theme pony-pinkie --wallpaper your-image.png --out preview/
+python3 tools/preview/render.py --theme cat-tabby --wallpaper your-image.png --out preview/
 ```
 
 ## Repository layout

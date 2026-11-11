@@ -1,9 +1,9 @@
 """The theme's three colors: its accent and two companions of the same
 family. Shell modules only use these three (and red for alerts), so a theme
-stays minimal: a forest theme is greens, a pony theme its character's colors.
+stays minimal: a forest theme is greens, the cat theme warm oranges.
 
-A theme file may set `accent2` and `accent3` itself (a second canon color of
-a character, say); otherwise they are derived from the accent:
+A theme file may set `accent2` and `accent3` itself (a second color it
+is known for, say); otherwise they are derived from the accent:
 - accent2: same hue, a step lighter, or a step deeper when the accent is
   already light (so it never fades to white), a little softer;
 - accent3: the neighbouring hue (about 14 degrees away), a little softer.

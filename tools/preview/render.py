@@ -1,6 +1,6 @@
 """Renders the shell with sample data, for screenshots and visual checks.
 
-Usage: python tools/preview/render.py [--theme pony-twilight ...] [--wallpaper IMAGE]
+Usage: python tools/preview/render.py [--theme forest-pine ...] [--wallpaper IMAGE]
                                      [--wallpapers DIR] [--out DIR]
 Needs PySide6 (pip install PySide6-Essentials), no Quickshell or Wayland:
 the components drawn here are the shell's own QML files, the theme comes from
@@ -33,8 +33,8 @@ MODES = ("desktop", "widgets", "lock", "launcher", "clipboard", "cheatsheet", "w
          "settings-widgets", "settings-home", "settings-tweaks", "bar-positions")
 # Hues of the sample landscapes drawn for the wallpaper selector (degrees).
 SAMPLE_HUES = (215, 280, 330, 140, 25, 195, 255, 0, 50, 100, 300, 230, 160, 10)
-# The theme some samples bring, as a pony wallpaper would.
-SAMPLE_THEMES = {215: "Luna", 280: "Twilight", 330: "Pinkie", 140: "Fluttershy", 195: "Rainbow"}
+# The theme some samples bring, as a wallpaper of the collection would.
+SAMPLE_THEMES = {215: "Pine", 140: "Moss", 25: "Tabby", 195: "Nord"}
 MODIFIERS = {"SHIFT": 1, "CTRL": 4, "ALT": 8, "SUPER": 64}
 SAMPLE_BINDS = [("SUPER + RETURN", "Open the terminal"), ("SUPER + D", "Open the launcher"),
                 ("SUPER + C", "Open the clipboard history"), ("SUPER + slash", "Show the keybind cheatsheet")]
@@ -137,7 +137,7 @@ def main(argv: list[str] | None = None) -> int:
     scratch = tempfile.TemporaryDirectory()
     wallpapers = json.dumps(wallpaper_list(args.wallpapers, Path(scratch.name)))
     settings = settings_json()
-    for name in args.theme or ["pony-twilight"]:
+    for name in args.theme or ["forest-pine"]:
         for mode in MODES:
             view = QQuickView()
             view.setInitialProperties({"themeJson": theme_json(name), "bindsJson": binds, "wallpaper": wallpaper,

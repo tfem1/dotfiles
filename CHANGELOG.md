@@ -17,6 +17,17 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Pixel-art wallpapers** from wallhaven.cc: 15 forests (day, night, mist,
+  snow) and 11 cats, picked by hand. Each one names its theme
+  (`theme = "forest-moss"` in `wallpapers/collection.toml`): day forests
+  bring Moss, night and mist Pine, snow Nord, cats Tabby.
+- **Tabby** (`cat-tabby`), an original cat theme built from a few colors of a
+  ginger tabby (`themes/seeds/cat.toml`).
+- 14 themes in all: Pine (the new default, with a night forest), Moss,
+  Tabby, Noir and 10 well-known ones (Catppuccin Mocha and Latte, Dracula,
+  Nord, Gruvbox, Tokyo Night Moon, Everforest, Kanagawa, OneDark, Solarized
+  Dark). The Settings window groups them: Forest & cats, Well known, Black
+  & white, Light.
 - The terminal (kitty) is slightly see-through (`effects.opacity`), so
   Hyprland's blur shows behind it.
 - `SUPER + SHIFT + Escape`: screenshot of the whole screen.
@@ -52,6 +63,13 @@ All notable changes to this project are documented here. The format follows
 
 ### Removed
 
+- **My Little Pony** is gone: its 22 themes, its 51 wallpapers (their old
+  downloads are deleted by `tfem wallpapers fetch`), the "My Little Pony"
+  filter, the pony samples in the previews.
+- Fewer themes, kept simple: Catppuccin Frappé and Macchiato, Nord Light,
+  Gruvbox Light, Solarized Light, One Light, Ayu, Material Palenight, GitHub
+  Dark, Everforest Light, Tomorrow Night Eighties, Kanagawa Dragon and Fern
+  are out.
 - `SUPER + K` and the modes menu: the modes are in Settings → Tweaks.
 - The running apps at the top left of the bar (icons, right-click menu with
   Quit): not wanted after all. The distro logo takes their place.

@@ -9,8 +9,8 @@ from theming.colors import Color
 from theming.hues import contrast, hue_class, hue_problems
 from theming.palette import load_palette
 
-SEEDS = REPO / "themes/seeds/pony.toml"
-PONY_THEMES = sorted((REPO / "themes").glob("pony-*.toml"))
+SEEDS = sorted((REPO / "themes/seeds").glob("*.toml"))
+BUILT_THEMES = sorted([*(REPO / "themes").glob("forest-*.toml"), *(REPO / "themes").glob("cat-*.toml")])
 
 
 class HueTest(unittest.TestCase):
@@ -58,18 +58,19 @@ class BuilderTest(unittest.TestCase):
             build_theme({**self.SEED, "slots": {"red": "#2C4DE0"}})   # a blue as "red"
 
 
-class PonyThemesTest(unittest.TestCase):
+class ForestAndCatThemesTest(unittest.TestCase):
     def test_generated_files_match_the_seeds(self):
-        done = subprocess.run([sys.executable, "-m", "theming.builder", str(SEEDS), "--check"],
-                              cwd=REPO, env={"PYTHONPATH": str(REPO / "scripts")}, capture_output=True, text=True)
-        self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
+        for seeds in SEEDS:
+            done = subprocess.run([sys.executable, "-m", "theming.builder", str(seeds), "--check"],
+                                  cwd=REPO, env={"PYTHONPATH": str(REPO / "scripts")}, capture_output=True, text=True)
+            self.assertEqual(done.returncode, 0, done.stdout + done.stderr)
 
-    def test_twenty_two_pony_themes_pass_every_check(self):
-        self.assertEqual(len(PONY_THEMES), 22)
-        for path in PONY_THEMES:
+    def test_pine_moss_and_tabby_pass_every_check(self):
+        self.assertEqual([path.stem for path in BUILT_THEMES], ["cat-tabby", "forest-moss", "forest-pine"])
+        for path in BUILT_THEMES:
             with self.subTest(theme=path.stem):
                 palette = load_palette(path)
-                self.assertEqual(palette.family, "Pony")
+                self.assertIn(palette.family, ("Forest", "Cat"))
                 self.assertEqual(hue_problems(palette.colors), [])
                 self.assertIsNotNone(palette.accent)
 
@@ -98,7 +99,7 @@ class KnownThemesTest(unittest.TestCase):
     def test_every_imported_theme_is_there_credited_and_readable(self):
         sys.path.insert(0, str(REPO / "tools"))
         from import_tinted import PICKS
-        self.assertGreaterEqual(len(PICKS), 19)
+        self.assertEqual(len(PICKS), 7)
         for name in PICKS:
             with self.subTest(theme=name):
                 path = REPO / "themes" / f"{name}.toml"
@@ -110,8 +111,8 @@ class KnownThemesTest(unittest.TestCase):
 
 
 class GreenThemesTest(unittest.TestCase):
-    """The green themes: three official palettes, three built from forest seeds."""
-    OFFICIAL = ("kanagawa", "kanagawa-dragon", "everforest-dark-hard")
+    """The green themes: two official palettes, two built from forest seeds."""
+    OFFICIAL = ("kanagawa", "everforest-dark-hard")
 
     def test_forest_files_match_their_seeds(self):
         done = subprocess.run([sys.executable, "-m", "theming.builder", str(REPO / "themes/seeds/forest.toml"),
@@ -121,7 +122,7 @@ class GreenThemesTest(unittest.TestCase):
 
     def test_every_green_theme_is_green_and_well_formed(self):
         names = [*self.OFFICIAL, *(p.stem for p in sorted((REPO / "themes").glob("forest-*.toml")))]
-        self.assertEqual(len(names), 6)
+        self.assertEqual(len(names), 4)
         for name in names:
             with self.subTest(theme=name):
                 palette = load_palette(REPO / "themes" / f"{name}.toml")

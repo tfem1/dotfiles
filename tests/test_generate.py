@@ -59,7 +59,7 @@ class OutputTest(GenerateTest):
     def test_shell_theme_is_valid_json(self):
         self.run_generate("--all")
         data = json.loads(self.shell_theme.read_text())
-        self.assertEqual(data["palette"]["name"], "Twilight")
+        self.assertEqual(data["palette"]["name"], "Pine")
         self.assertEqual(data["modules"]["wifi"], data["colors"]["accent2"])
         self.assertEqual(data["modules"]["media"], data["colors"]["accent3"])
         self.assertEqual(data["modules"]["workspaces"], data["colors"]["accent"])
@@ -110,17 +110,17 @@ class OutputTest(GenerateTest):
         self.assertFalse(self.paths.sddm_dir.exists())
 
     def test_the_login_screen_gets_the_colors_and_a_copy_of_the_wallpaper(self):
-        image = self.home / "Pictures/Wallpapers/pony/luna.jpg"
+        image = self.home / "Pictures/Wallpapers/cats/tabby.jpg"
         image.parent.mkdir(parents=True)
         image.write_bytes(b"jpeg")
-        self.write_user_file("theme.toml", '[wallpaper]\npath = "pony/luna.jpg"\n[palette]\nsource = "pony-luna"\n')
+        self.write_user_file("theme.toml", '[wallpaper]\npath = "cats/tabby.jpg"\n[palette]\nsource = "cat-tabby"\n')
         self.paths.sddm_dir.mkdir(parents=True)
         self.env["PATH"] = "/usr/bin:/bin"  # the copy runs `cp`
         code, output = self.run_generate("--only", "sddm")
         self.assertEqual(code, 0, output)
         text = (self.paths.sddm_dir / "theme.conf").read_text()
         self.assertIn(f"background={self.paths.sddm_dir / 'background.jpg'}\n", text)
-        self.assertIn("from Luna", text)
+        self.assertIn("from Tabby", text)
         self.assertEqual((self.paths.sddm_dir / "background.jpg").read_bytes(), b"jpeg")
 
     def test_only_limits_the_targets(self):
@@ -258,7 +258,7 @@ class ManifestTest(GenerateTest):
             {"demo.tpl": "{{ accent }}\n"},
         )
         self.run_generate()
-        self.assertEqual(marker.read_text(), "Twilight")
+        self.assertEqual(marker.read_text(), "Pine")
 
     def test_no_reload_for_an_app_that_is_not_installed(self):
         marker = self.home / "reloaded"
