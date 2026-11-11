@@ -31,7 +31,7 @@ ICONS = {
     "calendar_month": False, "today": False, "repeat": False, "repeat_one": False, "lyrics": False,
     "logout": False, "bedtime": True, "restart_alt": False, "coffee": True, "clear_all": False,
     "dark_mode": True, "eco": True, "co_present": True, "center_focus_strong": True, "tune": False,
-    "mode_standby": False,
+    "mode_standby": False, "screenshot_monitor": False, "screenshot_region": False,
 }
 
 

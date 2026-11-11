@@ -4,7 +4,8 @@ import "../theme"
 import "../components"
 
 // The modes menu (SUPER + K): one tile per mode, filled while it is on; a
-// click (or its number) turns it on or off, Sleep locks and suspends. Plain
+// click (or its number, 0 for the tenth) turns it on or off. Sleep locks and
+// suspends; Screenshot and Region take one, once the menu is gone. Plain
 // properties: shown with sample data by the preview.
 Rectangle {
     id: menu
@@ -21,7 +22,9 @@ Rectangle {
         { id: "saver", icon: "eco", title: "Power saver", text: "CPU saves, dim screen" },
         { id: "presentation", icon: "co_present", title: "Presentation", text: "No notifications" },
         { id: "focus", icon: "center_focus_strong", title: "Focus", text: "Quiet, no widgets" },
-        { id: "sleep", icon: "mode_standby", title: "Sleep", text: "Lock and suspend" }
+        { id: "sleep", icon: "mode_standby", title: "Sleep", text: "Lock and suspend" },
+        { id: "shot-full", icon: "screenshot_monitor", title: "Screenshot", text: "The whole screen" },
+        { id: "shot-region", icon: "screenshot_region", title: "Region", text: "Pick an area" }
     ]
 
     implicitWidth: grid.width + 48
@@ -33,7 +36,7 @@ Rectangle {
     focus: true
     Keys.onEscapePressed: closed()
     Keys.onPressed: event => {
-        const index = event.key - Qt.Key_1;
+        const index = event.key === Qt.Key_0 ? 9 : event.key - Qt.Key_1;
         if (index >= 0 && index < modes.length) {
             flipped(modes[index].id);
             event.accepted = true;
@@ -57,14 +60,14 @@ Rectangle {
                 font.weight: Font.DemiBold
             }
             Label {
-                text: "A click turns a mode on or off; 1 to 8 work too, Escape closes."
+                text: "A click turns a mode on or off; 1 to 9 and 0 work too, Escape closes."
                 small: true
             }
         }
 
         Grid {
             id: grid
-            columns: 4
+            columns: 5
             spacing: 10
 
             Repeater {
@@ -77,7 +80,7 @@ Rectangle {
 
                     width: 168
                     icon: modelData.icon
-                    title: (index + 1) + "  " + modelData.title
+                    title: (index + 1) % 10 + "  " + modelData.title
                     subtitle: active ? "On" : modelData.text
                     on: active
                     onClicked: menu.flipped(modelData.id)

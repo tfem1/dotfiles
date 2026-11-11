@@ -14,7 +14,8 @@ import "../services"
 //   then back to the one before;
 // - night: a warmer screen (NightFilter) and, like power saver, a dimmer one
 //   (brightnessctl saves the level and puts it back);
-// - sleep: the lock screen, then suspend.
+// - sleep: the lock screen, then suspend;
+// - screenshot, region: `tfem screenshot`, once the menu is gone.
 Scope {
     id: root
 
@@ -54,6 +55,10 @@ Scope {
             open = false;
             locker.lock();
             Quickshell.execDetached(["sh", "-c", "sleep 1 && systemctl suspend"]);
+        } else if (mode === "shot-full" || mode === "shot-region") {
+            open = false;                       // not in the picture
+            shot.kind = mode.slice(5);
+            shot.restart();
         }
     }
 
@@ -67,6 +72,14 @@ Scope {
         }
         writer.command = [cli, "settings", "set", "effects.game_mode=" + game, "effects.power_saver=" + saver];
         writer.running = true;
+    }
+
+    // The menu's window is gone after this, so the capture shows the desktop.
+    Timer {
+        id: shot
+        property string kind: "full"
+        interval: 350
+        onTriggered: Quickshell.execDetached([root.cli, "screenshot", kind])
     }
 
     function run(command) {
