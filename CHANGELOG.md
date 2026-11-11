@@ -17,6 +17,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Monocraft**, a pixel font, everywhere by default: the shell, the lock
+  screen, kitty (`font_family`), GTK (`font-name`, `monospace-font-name`),
+  Qt (qt5ct and qt6ct `[Fonts]`), Hyprland and the login screen. The
+  installer downloads it with `tfem fonts fetch` (release v4.2.1, checked
+  against its SHA-256; `--no-fonts` skips it), and `tfem sddm install`
+  copies it to `/usr/local/share/fonts/monocraft` for the login screen.
 - **Pixel-art wallpapers** from wallhaven.cc: 15 forests (day, night, mist,
   snow) and 11 cats, picked by hand. Each one names its theme
   (`theme = "forest-moss"` in `wallpapers/collection.toml`): day forests

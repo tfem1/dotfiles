@@ -5,6 +5,8 @@
 
 foreground {{ fg }}
 background {{ bg }}
+font_family {{ font.mono }}
+font_size {{ font.mono_size }}
 # A little see-through, so Hyprland's blur shows behind the text.
 background_opacity {{ effects.opacity }}
 # Lets a later theme change the opacity on reload.

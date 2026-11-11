@@ -57,6 +57,9 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths,
     dark = palette.variant == "dark"
     context["gtk.theme"] = "adw-gtk3-dark" if dark else "adw-gtk3"
     context["gtk.color_scheme"] = "prefer-dark" if dark else "default"
+    # GTK names a font with its size: "Monocraft 11".
+    context["gtk.font"] = f'{theme["font.sans"]} {theme["font.size"]}'
+    context["gtk.mono_font"] = f'{theme["font.mono"]} {theme["font.mono_size"]}'
     # Icons: FairyWren's dark or light half, folders in the accent's color.
     context["icons.name"] = theme_name(str(theme["icons.theme"]), palette.variant)
     folders = str(theme["icons.folders"])

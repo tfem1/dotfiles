@@ -26,8 +26,8 @@ follow = true                   # a wallpaper of the collection brings its theme
                                 # keep the current theme
 
 [font]
-sans      = "Inter"
-mono      = "JetBrainsMono Nerd Font"
+sans      = "Monocraft"           # the pixel font everywhere (`tfem fonts fetch`);
+mono      = "Monocraft"           # "Inter" and "JetBrainsMono Nerd Font" are installed too
 size      = 11                  # pt, shell text
 mono_size = 11                  # pt, terminals
 

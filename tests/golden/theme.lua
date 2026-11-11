@@ -36,7 +36,7 @@ hl.config({
 
     animations = { enabled = true },
 
-    misc = { font_family = "JetBrainsMono Nerd Font" },
+    misc = { font_family = "Monocraft" },
 })
 
 -- The shell's panels (bar, launcher, Wi-Fi, settings...) are blurred behind,

@@ -18,7 +18,8 @@ Commands:
   screenshot    Take a screenshot: region|full [--edit]
   wallpapers    fetch [--category NAME]: download the collection
                 list [--json]: list your wallpapers; set IMAGE: use one
-                (a pony or forest wallpaper also brings its theme)
+                (a wallpaper of the collection also brings its theme)
+  fonts         fetch: download Monocraft, the default font
   icons         fetch: download the FairyWren icons (dark and light)
                 folders COLOR: color of their folders (tfem generate sets it)
   settings      get: every setting as JSON; set KEY=VALUE...: change and apply
@@ -50,6 +51,7 @@ case "$command" in
   screenshot) exec "$root/scripts/screenshot.sh" "$@" ;;
   wallpapers) need_python && exec python3 "$root/scripts/wallpapers.py" "$@" ;;
   icons) need_python && exec python3 "$root/scripts/icons.py" "$@" ;;
+  fonts) need_python && exec python3 "$root/scripts/fonts.py" "$@" ;;
   sddm) need_python && exec python3 "$root/scripts/sddm.py" "$@" ;;
   settings) need_python && exec python3 "$root/scripts/settings.py" "$@" ;;
   display) need_python && exec python3 "$root/scripts/display.py" "$@" ;;

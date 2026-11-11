@@ -225,6 +225,23 @@ greens only for the forests, warm oranges for Tabby. Red is kept for alerts
 only. Change it per module in `[modules]` of `theme.toml` if you want more
 color (`wifi = "blue"`, for instance).
 
+### Font
+
+**[Monocraft](https://github.com/IdreesInc/Monocraft)**, a pixel font
+(SIL Open Font License 1.1), is the font of the whole desktop by default:
+the bar, the panels, the widgets and the lock screen, the terminal, GTK and
+Qt apps, Hyprland's own messages and the login screen. The installer
+downloads it (`tfem fonts fetch`, a pinned release checked against its
+SHA-256) into `~/.local/share/fonts/Monocraft`; `tfem sddm install` also
+copies it where the login screen can read it. Inter and JetBrains Mono stay
+installed: pick another font in `theme.toml`.
+
+```toml
+[font]
+sans = "Inter"                  # the shell, GTK and Qt
+mono = "JetBrainsMono Nerd Font"  # the terminal
+```
+
 ## How theming works
 
 One file, `theme.toml`, describes the look of the whole desktop: palette,

@@ -42,7 +42,7 @@ class BuildTest(SandboxTest):
                 values = conf(dest / "theme.conf")
                 self.assertEqual(values["accent"], "#8fd18c")   # Pine
                 self.assertEqual(values["background"], "")       # no wallpaper set
-                self.assertEqual(values["font"], "Inter")
+                self.assertEqual(values["font"], "Monocraft")
 
     def test_the_wallpaper_is_copied_next_to_the_theme(self):
         image = self.home / "Pictures/Wallpapers/cats/tabby.png"
@@ -77,6 +77,7 @@ class InstallTest(SandboxTest):
         env = {**os.environ, **self.env, "TFEM_SUDO": "", "TFEM_SDDM_THEMES": str(system / "themes"),
                "TFEM_SDDM_CONF": str(system / "etc/sddm.conf.d/zz-login-theme.conf"),
                "TFEM_SDDM_MAIN_CONF": str(system / "etc/sddm.conf"), "TFEM_DM_LINK": str(link),
+               "TFEM_SYSTEM_FONTS": str(system / "fonts/monocraft"),
                "PATH": f"{fake}:/usr/bin:/bin"}
         done = subprocess.run([sys.executable, str(REPO / "scripts/sddm.py"), "install", *args], env=env,
                               capture_output=True, text=True, timeout=60)
@@ -90,10 +91,19 @@ class InstallTest(SandboxTest):
         self.assertIn("SDDM is not installed", output)
         self.assertFalse((system / "systemctl.log").exists())  # no --enable: SDDM left off
 
+    def test_monocraft_is_copied_where_the_login_screen_can_read_it(self):
+        font = self.home / ".local/share/fonts/Monocraft/Monocraft.ttc"
+        font.parent.mkdir(parents=True)
+        font.write_bytes(b"ttc")
+        code, output, system = self.install()
+        self.assertEqual(code, 0, output)
+        self.assertEqual((system / "fonts/monocraft/Monocraft.ttc").read_bytes(), b"ttc")
+
     def test_the_stacked_clock_is_the_default(self):
         code, output, system = self.install()
         self.assertEqual(code, 0, output)
         self.assertIn("Current=stacked-clock", (system / "etc/sddm.conf.d/zz-login-theme.conf").read_text())
+        self.assertFalse((system / "fonts").exists())   # Monocraft not downloaded: nothing to copy
 
     def test_the_theme_reads_its_colors_from_a_folder_you_own(self):
         # theme.conf.user links to the folder `tfem generate` keeps up to date.

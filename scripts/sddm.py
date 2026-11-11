@@ -40,6 +40,9 @@ THEMES_DIR = Path(os.environ.get("TFEM_SDDM_THEMES", "/usr/share/sddm/themes"))
 CONF = Path(os.environ.get("TFEM_SDDM_CONF", "/etc/sddm.conf.d/zz-login-theme.conf"))
 MAIN_CONF = Path(os.environ.get("TFEM_SDDM_MAIN_CONF", "/etc/sddm.conf"))
 SUDO = os.environ.get("TFEM_SUDO", "sudo")
+# The login screen runs as its own user, who cannot read your fonts: Monocraft
+# is copied here for it (every user may use it then).
+SYSTEM_FONTS = Path(os.environ.get("TFEM_SYSTEM_FONTS", "/usr/local/share/fonts/monocraft"))
 # The login manager systemd starts; another one than SDDM is never replaced.
 DM_LINK = Path(os.environ.get("TFEM_DM_LINK", "/etc/systemd/system/display-manager.service"))
 
@@ -109,6 +112,10 @@ def install(name: str, paths: Paths, enable: bool, env: Mapping[str, str]) -> in
             f"chmod 755 {q(folder)} {q(folder.parent)}",
             f"mkdir -p {q(CONF.parent)}", f"printf '%s' {q(conf)} > {q(CONF)}",
         ]
+        font = paths.data_home / "fonts/Monocraft/Monocraft.ttc"   # `tfem fonts fetch`
+        if font.is_file():
+            steps += [f"mkdir -p {q(SYSTEM_FONTS)}", f"cp {q(font)} {q(SYSTEM_FONTS / font.name)}",
+                      f"chmod -R a+rX {q(SYSTEM_FONTS)}", "fc-cache -f >/dev/null 2>&1 || true"]
         other = other_manager()
         if enable and not other:
             steps.append("systemctl enable sddm.service")

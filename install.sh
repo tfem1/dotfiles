@@ -10,7 +10,7 @@ set -euo pipefail
 REPO_URL="${TFEM_REPO_URL:-https://github.com/tfem1/dotfiles.git}"
 BRANCH="${TFEM_BRANCH:-main}"
 DEST="${TFEM_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/tfem}"
-PROFILE=full DRY_RUN=0 ASSUME_YES=0 UNINSTALL=0 WITH_PACKAGES=1 WITH_WALLPAPERS=1 WITH_ICONS=1 SDDM_THEME=stacked-clock
+PROFILE=full DRY_RUN=0 ASSUME_YES=0 UNINSTALL=0 WITH_PACKAGES=1 WITH_WALLPAPERS=1 WITH_ICONS=1 WITH_FONTS=1 SDDM_THEME=stacked-clock
 
 usage() {
   cat <<'EOF'
@@ -24,6 +24,7 @@ Usage: install.sh [options]
   --no-packages           skip package installation
   --no-wallpapers         skip the wallpaper download
   --no-icons              skip the FairyWren icons download
+  --no-fonts              skip the Monocraft font download
   --sddm NAME             the login screen to install: stacked-clock (default)
                           or welcome-panel (SDDM, asks for sudo)
   --no-sddm               do not install SDDM nor its login screen
@@ -45,6 +46,7 @@ while (($#)); do
     --no-packages) WITH_PACKAGES=0 ;;
     --no-wallpapers) WITH_WALLPAPERS=0 ;;
     --no-icons) WITH_ICONS=0 ;;
+    --no-fonts) WITH_FONTS=0 ;;
     --sddm)
       [[ ${2:-} == stacked-clock || ${2:-} == welcome-panel ]] || { usage >&2; exit 64; }
       SDDM_THEME="$2" && shift
@@ -124,6 +126,10 @@ fi
 if ((WITH_ICONS)); then
   info "downloading the FairyWren icons"
   run "$ROOT/tfem" icons fetch || warn "the icons could not be downloaded; run 'tfem icons fetch' later"
+fi
+if ((WITH_FONTS)); then
+  info "downloading the Monocraft font"
+  run "$ROOT/tfem" fonts fetch || warn "Monocraft could not be downloaded; run 'tfem fonts fetch' later"
 fi
 seed_settings
 
