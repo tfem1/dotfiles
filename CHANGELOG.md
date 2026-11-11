@@ -17,6 +17,11 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Install screen**: the installer opens on a TFEM banner and the list of
+  what it will install (packages, wallpapers, icons, Monocraft, the login
+  screen), to change with the keyboard before anything happens. Pure bash
+  (`install/tui.sh`); `--no-tui` for the plain question, skipped with
+  `--yes` and `--dry-run`.
 - **Themes in the colors of the wallpapers**, measured on the images:
   Moonlit (night forest, teal moon; the new default), Lagoon, Autumn,
   Sakura (light) and Velvet. The wallpapers of the collection bring them.

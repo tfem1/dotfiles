@@ -36,8 +36,16 @@ backs up every file it is about to replace (in
 `~/.local/state/tfem/backups/`), copies the Hyprland config to
 `~/.config/hypr`, puts the `tfem` command (and the `dots` and `wm` aliases) in
 `~/.local/bin`, downloads the wallpapers and the FairyWren icons,
-generates the theme, and installs the **login screen** (SDDM, below). It asks
-before changing anything. Restart: the login screen shows, choose Hyprland.
+generates the theme, and installs the **login screen** (SDDM, below).
+Nothing changes before you say so: an install screen comes first, with the
+TFEM banner and what will be installed (packages, wallpapers, icons, the
+Monocraft font, the login screen), each one turned on or off with the
+keyboard (arrows or j/k, space, left/right for the login screen, enter to
+install, q to quit). Plain bash, nothing to install for it; `--no-tui` asks
+the usual yes/no question instead, `--yes` asks nothing. Restart: the login
+screen shows, choose Hyprland.
+
+![The install screen](docs/images/install-tui.png)
 
 | Option | Effect |
 |---|---|
