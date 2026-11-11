@@ -19,6 +19,7 @@ Scope {
     property var images: []    // [{ path, name, category, theme }]
     property var colors: ({})  // path -> color class, found once per image
     property var palettes: ({}) // path -> its 8 main colors, "#rrggbb,..."
+    property string waiting: ""  // picked before its colors were read: applied once they are
     property var recent: []    // paths, newest first
     readonly property string cli: Quickshell.env("HOME") + "/.local/bin/tfem"
 
@@ -30,7 +31,12 @@ Scope {
             save();
     }
 
+    // The theme is made from the image's colors: they are read first if needed.
     function apply(path) {
+        if (!(path in palettes)) {
+            waiting = path;
+            return;
+        }
         const palette = palettes[path];
         Quickshell.execDetached([cli, "wallpapers", "set", path].concat(palette ? ["--colors", palette] : []));
         recent = [path].concat(recent.filter(other => other !== path)).slice(0, 30);
@@ -44,6 +50,10 @@ Scope {
         const read = Object.assign({}, palettes);
         read[path] = palette;
         palettes = read;
+        if (path === waiting) {
+            waiting = "";
+            apply(path);
+        }
         saveSoon.restart();
     }
 
@@ -87,9 +97,12 @@ Scope {
         onTriggered: root.save()
     }
 
-    // Colors are looked for only while the selector is open.
+    // Colors are read in the background, one image after the other.
     ColorProbe {
-        queue: root.open ? root.images.map(image => image.path).filter(path => !(path in root.palettes)) : []
+        // While open, every image; the one picked and waiting, first and even
+        // once the selector is closed.
+        queue: (root.waiting ? [root.waiting] : []).concat(root.open
+            ? root.images.map(image => image.path).filter(path => !(path in root.palettes) && path !== root.waiting) : [])
         onSampled: (path, color, palette) => root.remember(path, color, palette)
     }
 

@@ -7,10 +7,10 @@ Usage: wallpapers.py fetch [--category NAME] [--dest DIR] [--dry-run]
 Files land in ~/Pictures/Wallpapers/<category>/wallhaven-<id>.<ext>; files
 already there are kept, so the command can be run again safely. `set` writes
 the wallpaper in your theme.toml and regenerates the files that use it. With
-`wallpaper.follow` on, a wallpaper of the collection also brings its theme
-(a night forest brings Moonlit, a cat Tabby), and any other image, given
-its main colors (the shell reads them), a theme made from those colors:
-then every file is regenerated. `fetch` also deletes the old downloads of
+`wallpaper.follow` on, the wallpaper also brings its theme: given the
+image's main colors (the shell reads them), a theme made from those colors,
+green for a green image, blue for a blue one; without them, the theme a
+wallpaper of the collection names. Then every file is regenerated. `fetch` also deletes the old downloads of
 wallpapers taken out of the collection.
 """
 from __future__ import annotations
@@ -106,11 +106,12 @@ def fetch(args: argparse.Namespace) -> int:
 def followed_theme(image: Path, wallpapers: list[Wallpaper], theme: Mapping[str, object],
                    colors: list[Color] | None = None) -> str | None:
     """The theme picking `image` switches to, when `wallpaper.follow` is on:
-    the one a wallpaper of the collection names, else, with the image's
-    colors, a theme made from them ("wallpaper"); None keeps the theme."""
+    with the image's colors (the shell reads them), a theme made from them
+    ("wallpaper"), so it always has the colors of the picture; without them,
+    the theme a wallpaper of the collection names; None keeps the theme."""
     if not theme["wallpaper.follow"]:
         return None
-    return theme_for(find(image, wallpapers)) or (WALLPAPER_SOURCE if colors else None)
+    return WALLPAPER_SOURCE if colors else theme_for(find(image, wallpapers))
 
 
 def parse_colors(text: str | None) -> list[Color] | None:
@@ -217,7 +218,7 @@ def main(argv: list[str] | None = None, env: Mapping[str, str] = os.environ) -> 
     set_cmd = commands.add_parser("set", help="use an image as wallpaper")
     set_cmd.add_argument("image", help="image path, absolute or inside the wallpaper folder")
     set_cmd.add_argument("--colors", help="the image's main colors (#rrggbb,...), read by the shell: "
-                                          "an image outside the collection then gets a theme made from them")
+                                          "the theme is then made from them")
     args = parser.parse_args(argv)
     paths = Paths.from_env(ROOT, env)
     try:

@@ -153,22 +153,20 @@ IMAGE`: the choice is saved in your `theme.toml`, and the desktop and the
 lock screen follow. `tfem wallpapers list` shows what is in the folder; any
 image you add there (jpg, png, webp) shows up in the selector.
 
-**A wallpaper brings its theme.** Each wallpaper of the collection names
-the theme made for it, and the whole desktop (shell, terminal, GTK, Qt, lock
-screen) takes it: the night forest under the moon turns **Moonlit**, the
-turquoise lake **Lagoon**, the autumn wood **Autumn**, the cherry tree
-**Sakura**, the neon city **Velvet**, a cat by the window **Tabby**. The
-selector shows the theme a wallpaper brings.
-
-**Your own images get a theme made from their colors.** When you pick one
-in the selector (`SUPER + W`), the shell reads its 8 main colors
-(Quickshell's ColorQuantizer) and `tfem wallpapers set IMAGE --colors ...`
-builds a theme from them, with the same builder as the themes of the
-collection: the commonest dark color of the image for the backgrounds (the
-light one, with a light theme, for a light image), its most vivid color that
-stands out from them for the accent, every color made readable. An image
-without any color gets Noir. The theme is `palette.source = "wallpaper"`
-(Settings → Home shows "Wallpaper colors").
+**The theme has the colors of the wallpaper.** Pick a wallpaper in the
+selector (`SUPER + W`): the shell reads its 8 main colors (Quickshell's
+ColorQuantizer) and `tfem wallpapers set IMAGE --colors ...` makes the
+theme from them. The hue that covers the most of the picture becomes the
+theme's color: a green forest gives a green theme, a blue night street a
+blue one, a magenta city a magenta one. The darkest color of that hue
+gives the backgrounds (the lightest, with a light theme, for a light
+image), its most vivid one the accent, and the theme builder makes every
+color readable. An image without any color gets Noir. The whole desktop
+follows: shell, terminal, GTK, Qt, Hyprland, lock and login screens.
+Settings → Home shows the theme as "Wallpaper colors"
+(`palette.source = "wallpaper"`). Without the colors (`tfem wallpapers set`
+from a terminal), a wallpaper of the collection brings the theme made for it
+(Moonlit, Lagoon, Autumn, Sakura, Velvet...).
 
 ```toml
 [wallpaper]

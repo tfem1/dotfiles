@@ -77,11 +77,11 @@ class ThemeMatchTest(unittest.TestCase):
         self.assertIsNone(theme_for(group))
         self.assertIsNone(theme_for(None))
 
-    def test_follow_brings_the_collection_theme_or_one_made_from_the_colors(self):
+    def test_follow_brings_a_theme_made_from_the_colors_else_the_collection_one(self):
         image, mine = Path("cats/wallhaven-abc123.png"), Path("mine/beach.png")
         colors = [Color.parse("#1c0e36"), Color.parse("#3e938a")]
         self.assertEqual(followed_theme(image, self.WALLPAPERS, self.SETTINGS), "cat-tabby")
-        self.assertEqual(followed_theme(image, self.WALLPAPERS, self.SETTINGS, colors), "cat-tabby")
+        self.assertEqual(followed_theme(image, self.WALLPAPERS, self.SETTINGS, colors), "wallpaper")
         self.assertEqual(followed_theme(image, self.WALLPAPERS, {**self.SETTINGS, "palette.source": "wallpaper"}),
                          "cat-tabby")
         self.assertEqual(followed_theme(mine, self.WALLPAPERS, self.SETTINGS, colors), "wallpaper")
@@ -269,8 +269,9 @@ class ListAndSetTest(SandboxTest):
         self.assertEqual(settings["palette"]["source"], "wallpaper")
         palette = self.shell_theme()
         self.assertEqual(palette["palette"]["name"], "Wallpaper")
-        self.assertEqual(hue_class(Color.parse(palette["colors"]["accent"])), "cyan")   # the teal moon
-        self.assertEqual(hue_class(Color.parse(palette["colors"]["bg"])), "purple")     # the night sky
+        # A violet night sky: a violet theme.
+        self.assertEqual(hue_class(Color.parse(palette["colors"]["accent"])), "purple")
+        self.assertEqual(hue_class(Color.parse(palette["colors"]["bg"])), "purple")
         self.assertEqual(self.run_main("set", "mine/night.png", "--colors", "nope")[0], 1)
 
     def test_set_accepts_a_path_inside_the_wallpaper_folder(self):

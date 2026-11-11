@@ -16,20 +16,25 @@ def colors(*hexes):
 
 
 class SeedTest(unittest.TestCase):
-    def test_night_forest_gets_its_sky_and_its_moon(self):
-        made = seed(colors("#1c0e36", "#1c0e36", "#190b30", "#170a28", "#281b4d", "#3f4378", "#3e938a", "#e9f8ec"))
+    def test_a_green_wallpaper_gives_a_green_theme(self):
+        made = seed(colors("#1d271e", "#304022", "#132111", "#244603", "#6a7f61", "#485933", "#8cb4bd", "#507d19"))
         self.assertEqual(made["variant"], "dark")
-        self.assertEqual(made["tint"], "#1c0e36")       # the commonest dark color
-        self.assertEqual(made["accent"], "#3e938a")     # the moon, not the sky
+        self.assertEqual(hue_class(Color.parse(made["accent"])), "green")
+        self.assertEqual(hue_class(Color.parse(made["tint"])), "green")
+
+    def test_a_blue_wallpaper_gives_a_blue_theme(self):
+        made = seed(colors("#0f283c", "#a6d6ed", "#97525d", "#090e19", "#214966", "#376d8b", "#909eb3", "#472831"))
+        self.assertEqual(hue_class(Color.parse(made["accent"])), "blue")
+        self.assertEqual(hue_class(Color.parse(made["tint"])), "blue")
 
     def test_a_light_image_gets_a_light_theme(self):
         made = seed(colors("#edbdc7", "#f3b4b8", "#e9c5d4", "#f3aca6", "#e4cbdf", "#dfd2ed", "#e2cee6", "#a34a1e"))
         self.assertEqual(made["variant"], "light")
-        self.assertEqual(hue_class(Color.parse(made["accent"])), "orange")
+        self.assertEqual(hue_class(Color.parse(made["accent"])), "red")    # a pink image: rose
 
-    def test_black_background_borrows_the_accent_hue(self):
+    def test_black_background_takes_the_image_hue(self):
         made = seed(colors("#000000", "#000000", "#020007", "#0907a3", "#0907a3", "#c5965b", "#000000", "#080614"))
-        self.assertNotEqual(made["tint"], "#000000")
+        self.assertEqual(hue_class(Color.parse(made["tint"])), "blue")
 
 
 class ThemeTest(unittest.TestCase):

@@ -1,15 +1,14 @@
-"""A theme made from a wallpaper's colors, for images outside the collection.
+"""A theme made from a wallpaper's colors: a green wallpaper gives a green
+theme, a blue one a blue theme.
 
 The shell reads the image's main colors with Quickshell's ColorQuantizer (8
 colors, each an equal share of the image) and passes them to `tfem
-wallpapers set`. From them come the seeds of the theme builder (builder.py),
-which makes every color readable:
-- tint: the commonest color of the dark half of the image (the light half
-  for a light image, which gets a light theme);
-- accent: the most vivid color that also covers a good part of the image
-  and stands out from the background (out of that half if it can, another
-  hue), placed on its own hue slot;
-- text: the tint's hue, so the text belongs to the picture too.
+wallpapers set`. The hue that covers the most of the image (counting how
+colorful each part is) becomes the theme's color, through the seeds of the
+theme builder (builder.py), which makes every color readable:
+- tint (backgrounds) and text: the darkest color of that hue in the image
+  (the lightest for a light image, which gets a light theme);
+- accent: the most vivid color of that hue covering a good part of it.
 A gray image (no color at all) gets Noir, the black and white theme.
 """
 from __future__ import annotations
@@ -26,7 +25,6 @@ from .icons import oklab
 NAME = "Wallpaper"
 LIGHT_IMAGE = 0.72     # mean OKLab lightness above which an image is light
 GRAY = 0.025           # OKLab chroma under which a color counts as gray
-TINTED = 0.012         # a background tint needs at least this much color
 
 
 def _chroma(color: Color) -> float:
@@ -34,37 +32,34 @@ def _chroma(color: Color) -> float:
     return math.hypot(a, b)
 
 
-def _hue_gap(one: Color, two: Color) -> float:
-    """Angle between two hues, from 0 (same) to 1 (opposite)."""
-    _, a1, b1 = oklab(one)
-    _, a2, b2 = oklab(two)
-    gap = abs(math.atan2(b1, a1) - math.atan2(b2, a2)) % (2 * math.pi)
-    return min(gap, 2 * math.pi - gap) / math.pi
-
-
 def seed(colors: Iterable[Color]) -> dict:
     counts = Counter(color.hex() for color in colors)
     if not counts:
         raise ValueError("no colors")
     shares = {Color.parse(hex_): count / sum(counts.values()) for hex_, count in counts.items()}
-    by_lightness = sorted(shares, key=lambda color: oklab(color)[0])
     light = sum(oklab(color)[0] * share for color, share in shares.items()) > LIGHT_IMAGE
-    half = by_lightness[len(by_lightness) // 2:] if light else by_lightness[:max(1, len(by_lightness) // 2)]
-    # The accent stands out from the background: taken from the other half
-    # of the image when it has color there.
-    tinted = [color for color in half if _chroma(color) >= TINTED]
-    background = max(tinted or half, key=lambda color: shares[color])
-    vivid = [color for color in shares if _chroma(color) >= GRAY]
-    vivid = [color for color in vivid if color not in half] or vivid
-    # Vivid, a good part of the image, and another hue than the background.
-    accent = max(vivid, key=lambda color: _chroma(color) * math.sqrt(shares[color])
-                 * (0.3 + _hue_gap(color, background))) if vivid else Color.parse("#202020" if light else "#f0f0f0")
-    # A black or white background has no hue of its own: the accent lends its.
-    tint = background if tinted else accent
+    # The color of the image: the hue that covers the most, counting how
+    # colorful each part is (a green forest is green, a blue lake blue).
+    weights: Counter = Counter()
+    for color, share in shares.items():
+        if _chroma(color) >= GRAY and (family := hue_class(color)):
+            weights[family] += _chroma(color) * share
+    if not weights:
+        tint = max(shares, key=lambda color: shares[color])
+        accent = Color.parse("#202020" if light else "#f0f0f0")
+        return {"name": NAME, "variant": "light" if light else "dark", "tint": tint.hex(),
+                "text": tint.hex(), "accent": accent.hex()}
+    family = weights.most_common(1)[0][0]
+    own = [color for color in shares if _chroma(color) >= GRAY and hue_class(color) == family]
+    # Accent: the most vivid color of that hue that covers a good part.
+    accent = max(own, key=lambda color: _chroma(color) * math.sqrt(shares[color]))
+    # Backgrounds: the darkest color of that hue (the lightest for a light
+    # image), so the whole theme has the color of the picture.
+    tint = (max if light else min)(own, key=lambda color: oklab(color)[0])
     result = {"name": NAME, "variant": "light" if light else "dark", "tint": tint.hex(),
               "text": tint.hex(), "accent": accent.hex()}
-    if vivid and (slot := hue_class(accent)) in SLOTS:
-        result["slots"] = {slot: accent.hex()}
+    if family in SLOTS:
+        result["slots"] = {family: accent.hex()}
     return result
 
 
