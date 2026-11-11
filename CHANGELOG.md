@@ -5,6 +5,22 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- No more blurred rectangle behind the shell: Hyprland blurs the bar, the
+  launcher, the panels, the notifications and the widgets only where they
+  are drawn (a layer rule with `ignore_alpha`), so the blur follows their
+  round corners. Right-click menus are blurred the same way.
+- Resizing on a touchpad: hold `SUPER + ALT` and move the pointer
+  (`SUPER + CTRL` to move the window), as the Hyprland wiki suggests.
+  `SUPER` + right drag and dragging a window's edge still work.
+
+### Added
+
+- The terminal (kitty) is slightly see-through (`effects.opacity`), so
+  Hyprland's blur shows behind it.
+- `SUPER + SHIFT + Escape`: screenshot of the whole screen.
+
 ### Changed
 
 - The installer installs SDDM and the **stacked clock** login screen by

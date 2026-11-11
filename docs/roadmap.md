@@ -193,7 +193,8 @@ Themes come before the shell, so the shell is built with the final palettes.
   | `SUPER + Space`, media keys | play / pause, previous, next |
   | volume, mute, mic, brightness keys | change the value, with OSD |
   | `Print` / `SHIFT + Print` | screenshot of a region / region then edit |
-  | `CTRL + SHIFT + S` | screenshot of the whole screen |
+  | `CTRL + SHIFT + S`, `SUPER + SHIFT + Escape` | screenshot of the whole screen |
+  | `SUPER` + right drag, `SUPER + ALT` held (touchpad) | resize the window |
   | `SUPER + Print` / `SUPER + SHIFT + Print` | full screenshot / full then edit |
 
   These keys bring two more features: clipboard history and screenshots with

@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import Quickshell.Wayland
 import "../theme"
 import "../services"
 import "../music"
@@ -55,6 +56,7 @@ Scope {
         PanelWindow {
             screen: Quickshell.screens[0] || null
             aboveWindows: false
+            WlrLayershell.namespace: "shell-widgets"
             exclusionMode: ExclusionMode.Normal
             anchors {
                 top: root.corner.startsWith("top")

@@ -36,6 +36,9 @@ bind(mod .. " + ALT + F", hl.dsp.window.fullscreen({ mode = "maximized", action 
 bind(mod .. " + SHIFT + F", hl.dsp.window.float({ action = "toggle" }), "Float or tile the window")
 bind(mod .. " + mouse:272", hl.dsp.window.drag(), "Drag the window", { mouse = true })
 bind(mod .. " + mouse:273", hl.dsp.window.resize(), "Resize the window", { mouse = true })
+-- On a touchpad: hold the keys and move the pointer (no click needed).
+bind(mod .. " + CTRL_L", hl.dsp.window.drag(), "Drag the window (touchpad)", { mouse = true })
+bind(mod .. " + ALT_L", hl.dsp.window.resize(), "Resize the window (touchpad)", { mouse = true })
 
 -- A list, not a table of keys, so the cheatsheet keeps this order. Key names
 -- are matched without case by Hyprland ("Left" = "left").
@@ -108,3 +111,4 @@ run(cli .. " screenshot full --edit", "Edit a screenshot of the screen", locked)
 -- The whole screen, also for keyboards without Print (it takes the key from
 -- apps that use it for "Save as").
 run(cli .. " screenshot full", "Screenshot of the screen")("CTRL + SHIFT + S")
+run(cli .. " screenshot full", "Screenshot of the screen")(mod .. " + SHIFT + Escape")

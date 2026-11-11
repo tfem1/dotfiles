@@ -173,7 +173,7 @@ class SafetyTest(GenerateTest):
         self.assertTrue(text.startswith("font_size 12\n"))
         self.assertTrue(text.rstrip().endswith("include theme.conf\n# <<< generated: kitty <<<"))
         # Only option names kitty knows (kitty/options/definition.py).
-        known = {"foreground", "background", "selection_foreground", "selection_background", "cursor",
+        known = {"foreground", "background", "background_opacity", "dynamic_background_opacity", "selection_foreground", "selection_background", "cursor",
                  "cursor_text_color", "url_color", "active_border_color", "inactive_border_color",
                  "bell_border_color", "active_tab_foreground", "active_tab_background", "inactive_tab_foreground",
                  "inactive_tab_background", "tab_bar_background", *(f"mark{i}_{side}" for i in (1, 2, 3)

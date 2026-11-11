@@ -20,7 +20,7 @@ Variants {
         }
         exclusionMode: ExclusionMode.Ignore
         WlrLayershell.layer: WlrLayer.Background
-        WlrLayershell.namespace: "shell-wallpaper"
+        WlrLayershell.namespace: "desktop-wallpaper"   // not "shell-": never blurred
 
         Backdrop {
             anchors.fill: parent

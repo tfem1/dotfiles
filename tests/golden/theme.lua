@@ -28,6 +28,9 @@ hl.config({
             enabled = true,
             size    = 8,
             passes  = 2,
+            -- Right-click menus too, only where they are drawn.
+            popups  = true,
+            popups_ignorealpha = 0.48,
         },
     },
 
@@ -35,6 +38,12 @@ hl.config({
 
     misc = { font_family = "JetBrainsMono Nerd Font" },
 })
+
+-- The shell's panels (bar, launcher, Wi-Fi, settings...) are blurred behind,
+-- but only where they are drawn: ignore_alpha leaves out their rounded
+-- corners and the light dimming around them (0.45 at most, panels are 0.5 or
+-- more), so no blurred rectangle shows.
+hl.layer_rule({ match = { namespace = "^shell-.*" }, blur = true, ignore_alpha = 0.48 })
 
 -- Fullscreen windows (games) tear when allow_tearing is on (game mode).
 hl.window_rule({ match = { fullscreen = true }, immediate = true })

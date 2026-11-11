@@ -5,6 +5,10 @@
 
 foreground {{ fg }}
 background {{ bg }}
+# A little see-through, so Hyprland's blur shows behind the text.
+background_opacity {{ effects.opacity }}
+# Lets a later theme change the opacity on reload.
+dynamic_background_opacity yes
 selection_foreground {{ bg }}
 selection_background {{ accent }}
 
