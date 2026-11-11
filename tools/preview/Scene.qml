@@ -40,10 +40,14 @@ Rectangle {
         fillMode: Image.PreserveAspectCrop
     }
 
+    // The bar as it is by default, at the top. In "bar-positions": on the
+    // left, and a transparent one at the bottom.
     BarContent {
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+        id: sampleBar
+        readonly property bool side: scene.mode === "bar-positions"
+        edge: side ? "left" : "top"
+        width: side ? 52 : parent.width
+        height: side ? parent.height : 44
         workspaces: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(id => ({
             id: id, focused: id === 2, occupied: [1, 2, 4, 7].includes(id), urgent: false
         }))
@@ -54,14 +58,21 @@ Rectangle {
         mediaPlaying: true
         distro: "arch"
         now: new Date(2026, 10, 7, 17, 49)
-        status.keyboard: "US"
-        status.volume: 0.64
-        status.network: "wifi"
-        status.wifiStrength: 0.9
-        status.bluetoothOn: true
-        status.bluetoothConnected: true
-        status.hasBattery: true
-        status.battery: 0.78
+        status: ({ keyboard: "US", volume: 0.64, network: "wifi", wifiStrength: 0.9, bluetoothOn: true,
+                   bluetoothConnected: true, hasBattery: true, battery: 0.78, game: side })
+    }
+    BarContent {
+        visible: sampleBar.side
+        edge: "bottom"
+        transparent: true
+        x: sampleBar.width
+        y: parent.height - height
+        width: parent.width - sampleBar.width
+        height: 44
+        workspaces: sampleBar.workspaces
+        now: sampleBar.now
+        distro: "arch"
+        status: sampleBar.status
     }
 
     // Desktop: volume OSD and two notifications (one urgent).
@@ -136,7 +147,7 @@ Rectangle {
 
     // Launcher, clipboard, cheatsheet, selector, network: the screen dims behind them.
     Rectangle {
-        visible: !["desktop", "widgets", "lock"].includes(scene.mode)
+        visible: !["desktop", "widgets", "lock", "bar-positions"].includes(scene.mode)
         anchors.fill: parent
         anchors.topMargin: 44
         color: Qt.alpha(Theme.bgAlt, ["wifi", "bluetooth", "volume", "calendar", "music", "system"].includes(scene.mode) ? 0.2 : 0.45)

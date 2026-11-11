@@ -189,6 +189,7 @@ Item {
                     x: 28
                     width: flick.width - 56
                     on: window.modes
+                    values: window.settings.values
                     onAction: (name, value) => window.action(name, value)
                 }
             }

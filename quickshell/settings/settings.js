@@ -18,6 +18,8 @@ const INDEX = [
     { page: "appearance", id: "animations", title: "Animations", words: "motion effects" },
     { page: "appearance", id: "textsize", title: "Text size", words: "font size bigger smaller" },
     { page: "tweaks", id: "modes", title: "Modes", words: "gaming coffee night sleep focus presentation power saver do not disturb screenshot region" },
+    { page: "tweaks", id: "bar-position", title: "Bar position", words: "top bottom left right side vertical edge panel" },
+    { page: "tweaks", id: "bar-transparent", title: "Transparent bar", words: "see-through invisible background clear panel" },
     { page: "home", id: "welcome", title: "Welcome", words: "home uptime system os greeting" },
     { page: "system", id: "gamemode", title: "Game mode", words: "games play performance fps roblox" },
     { page: "system", id: "sound", title: "Sound", words: "volume audio speaker mute" },

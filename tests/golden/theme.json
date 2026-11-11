@@ -52,6 +52,10 @@
     "gameMode": false,
     "powerSaver": false
   },
+  "bar": {
+    "position": "top",
+    "transparent": false
+  },
   "widgets": {
     "corner": "top-left",
     "clock": true,

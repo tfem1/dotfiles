@@ -13,7 +13,6 @@ Pill {
     padding: 8
 
     Image {
-        anchors.verticalCenter: parent.verticalCenter
         visible: Logos.has(button.distro)
         width: 18
         height: 18
@@ -24,7 +23,6 @@ Pill {
     }
 
     Icon {
-        anchors.verticalCenter: parent.verticalCenter
         visible: !Logos.has(button.distro)
         name: "settings"
         color: Theme.accent

@@ -52,6 +52,10 @@
     "gameMode": {{ effects.game_mode }},
     "powerSaver": {{ effects.power_saver }}
   },
+  "bar": {
+    "position": {{ bar.position | json }},
+    "transparent": {{ bar.transparent }}
+  },
   "widgets": {
     "corner": {{ widgets.corner | json }},
     "clock": {{ widgets.clock }},

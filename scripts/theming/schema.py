@@ -119,6 +119,9 @@ CONFIG_SCHEMA: dict[str, Field] = {
     "idle.lock": _int(0, 240),
     "idle.screen_off": _int(0, 240),
     "idle.suspend": _int(0, 240),
+    # The bar: on which edge of the screen, and with or without its background.
+    "bar.position": Field("choice", choices=("top", "bottom", "left", "right")),
+    "bar.transparent": BOOL,
     # Desktop widgets: which ones show, and in which corner of the screen.
     "widgets.corner": Field("choice", choices=("top-left", "top-right", "bottom-left", "bottom-right")),
     **{f"widgets.{name}": BOOL for name in ("clock", "audio", "media", "cpu", "gpu", "ram", "disk")},

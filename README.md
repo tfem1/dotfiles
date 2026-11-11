@@ -419,6 +419,15 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   workspaces 1 to 10 in a notch (click to switch), the clock and date; on the
   right the keyboard layout, sound, network, Bluetooth and battery, each in
   its module color.
+
+  In Settings → **Tweaks** it goes on any edge of the screen: top (the
+  default), bottom, left or right (narrow, everything stacked: the hours
+  over the minutes, the workspaces in a column), and it can be **fully
+  transparent**: no background, only its pills over the wallpaper
+  (`bar.position` and `bar.transparent` in `config.json`). Windows and
+  widgets keep clear of it on every edge.
+
+  ![The bar on the left, and a transparent one at the bottom](docs/images/bar-positions.png)
 - **Distro logo** (top left of the bar), in the theme's accent color: violet
   with a violet theme, green with a green one. A click opens the Settings
   window. The Arch Linux logo shows only on Arch itself, in one color and its

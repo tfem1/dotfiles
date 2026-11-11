@@ -2,7 +2,8 @@ import QtQuick
 import "../theme"
 import "../components"
 
-// Now playing: a progress ring around play/pause, then title and artist.
+// Now playing: a progress ring around play/pause, then title and artist
+// (only the ring when `vertical`).
 Pill {
     id: chip
 
@@ -16,7 +17,6 @@ Pill {
     onClicked: toggle()
 
     RingProgress {
-        anchors.verticalCenter: parent.verticalCenter
         value: chip.progress
         color: Theme.modules.media
         track: Theme.surface
@@ -30,7 +30,7 @@ Pill {
     }
 
     Column {
-        anchors.verticalCenter: parent.verticalCenter
+        visible: !chip.vertical    // the ring alone on a bar at the side
         width: Math.min(220, Math.max(titleLabel.implicitWidth, artistLabel.implicitWidth))
         rightPadding: 6
 

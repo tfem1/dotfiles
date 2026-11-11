@@ -4,9 +4,10 @@ import Quickshell.Wayland
 import "../theme"
 import "../services"
 
-// The bar on one screen: live data from the services into BarContent.
-// With autohide, windows use the whole screen and the bar slides down when
-// the pointer touches the top edge.
+// The bar on one screen: live data from the services into BarContent. It
+// stands on the edge picked in Settings → Tweaks (config.json bar.position).
+// With autohide, windows use the whole screen and the bar slides in when
+// the pointer touches that edge.
 PanelWindow {
     id: window
 
@@ -18,20 +19,25 @@ PanelWindow {
     signal logoClicked
     readonly property bool pointerIn: barHover.hovered || edgeHover.hovered
     readonly property bool revealed: !autohide || pointerIn || hideDelay.running
+    readonly property string edge: ["top", "bottom", "left", "right"].includes(Theme.bar.position)
+        ? Theme.bar.position : "top"
+    readonly property bool vertical: window.edge === "left" || window.edge === "right"
 
     onPointerInChanged: if (!pointerIn) hideDelay.restart()
 
     screen: modelData
     anchors {
-        top: true
-        left: true
-        right: true
+        top: window.edge !== "bottom"
+        bottom: window.edge !== "top"
+        left: window.edge !== "right"
+        right: window.edge !== "left"
     }
-    implicitHeight: content.implicitHeight
+    implicitHeight: vertical ? 0 : 44
+    implicitWidth: vertical ? 52 : 0
     color: "transparent"
     exclusionMode: autohide ? ExclusionMode.Ignore : ExclusionMode.Auto
-    // Hidden, only a thin strip at the top edge takes the pointer.
-    mask: Region { item: window.revealed ? area : edge }
+    // Hidden, only a thin strip at the screen edge takes the pointer.
+    mask: Region { item: window.revealed ? area : strip }
     WlrLayershell.namespace: "shell-bar"
 
     // Coffee (stay awake), game mode (a controller is not seen as activity)
@@ -62,8 +68,15 @@ PanelWindow {
         id: content
         width: parent.width
         height: parent.height
-        y: window.revealed ? 0 : -height
+        // Hidden: slid out past the screen edge.
+        readonly property real out: window.revealed ? 0 : window.edge === "top" || window.edge === "left" ? -1 : 1
+        x: window.vertical ? out * width : 0
+        y: window.vertical ? 0 : out * height
+        Behavior on x { NumberAnimation { duration: Theme.duration; easing.type: Easing.OutCubic } }
         Behavior on y { NumberAnimation { duration: Theme.duration; easing.type: Easing.OutCubic } }
+
+        edge: window.edge
+        transparent: !!Theme.bar.transparent
 
         workspaces: Desktop.workspaces
         hasMedia: Player.active
@@ -74,21 +87,15 @@ PanelWindow {
         now: clock.date
         distro: Distro.id
 
-        status.keyboard: Keyboard.short
-        status.volume: Audio.volume
-        status.muted: Audio.muted
-        status.network: Connectivity.state
-        status.wifiStrength: Connectivity.strength
-        status.bluetoothOn: Connectivity.bluetoothOn
-        status.bluetoothConnected: Connectivity.bluetoothConnected
-        status.hasBattery: Power.present
-        status.battery: Power.level
-        status.charging: Power.charging
-        status.quiet: Session.doNotDisturb
-        status.awake: Session.stayAwake
-        status.game: Theme.gameMode
-        status.modes: ({ saver: Theme.powerSaver, night: Session.night, presentation: Session.presentation,
-                         focus: Session.focus })
+        status: ({
+            keyboard: Keyboard.short, volume: Audio.volume, muted: Audio.muted,
+            network: Connectivity.state, wifiStrength: Connectivity.strength,
+            bluetoothOn: Connectivity.bluetoothOn, bluetoothConnected: Connectivity.bluetoothConnected,
+            hasBattery: Power.present, battery: Power.level, charging: Power.charging,
+            quiet: Session.doNotDisturb, awake: Session.stayAwake, game: Theme.gameMode,
+            modes: { saver: Theme.powerSaver, night: Session.night, presentation: Session.presentation,
+                     focus: Session.focus }
+        })
 
         onWorkspaceClicked: id => Desktop.focus(id)
         onMediaToggled: Player.toggle()
@@ -101,11 +108,11 @@ PanelWindow {
     }
 
     Item {
-        id: edge
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        height: 2
+        id: strip
+        x: window.edge === "right" ? parent.width - width : 0
+        y: window.edge === "bottom" ? parent.height - height : 0
+        width: window.vertical ? 2 : parent.width
+        height: window.vertical ? parent.height : 2
 
         HoverHandler { id: edgeHover }
     }

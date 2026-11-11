@@ -6,11 +6,13 @@ import "settings.js" as Settings
 
 // Tweaks: one tile per mode (game, coffee, night...), filled while it is on;
 // a click turns it on or off. Sleep locks and suspends; Screenshot and
-// Region close the window, then take one.
+// Region close the window, then take one. Under them, the bar: its edge of
+// the screen, and with or without its background; these act at once.
 Column {
     id: page
 
     property var on: ({})        // { game, saver, coffee, night, quiet, presentation, focus }
+    property var values: ({})    // `tfem settings get` values (bar.*)
     signal action(string name, var value)
 
     spacing: 12
@@ -35,6 +37,30 @@ Column {
                 on: active
                 onClicked: page.action("mode", modelData.id)
             }
+        }
+    }
+
+    SettingRow {
+        objectName: "bar-position"
+        width: page.width
+        title: "Bar position"
+        description: "The edge of the screen the bar stands on. On the left or right, it is narrow and stacked."
+        Chips {
+            current: page.values["bar.position"] || "top"
+            model: [{ label: "Top", value: "top" }, { label: "Bottom", value: "bottom" },
+                    { label: "Left", value: "left" }, { label: "Right", value: "right" }]
+            onPicked: value => page.action("bar.position", value)
+        }
+    }
+
+    SettingRow {
+        objectName: "bar-transparent"
+        width: page.width
+        title: "Transparent bar"
+        description: "No background: only the pills (workspaces, clock, icons) show over the wallpaper."
+        Switch {
+            checked: !!page.values["bar.transparent"]
+            onToggled: checked => page.action("bar.transparent", checked)
         }
     }
 

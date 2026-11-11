@@ -55,6 +55,8 @@ QtObject {
     property bool gameMode: false      // no animations, no notification popups
     property bool powerSaver: false    // no animations, a dimmer screen
     property string wallpaper: ""
+    // The bar (config.json bar.*): "top", "bottom", "left" or "right".
+    property var bar: ({ position: "top", transparent: false })
     // Desktop widgets shown (config.json widgets.*).
     property var widgets: ({ corner: "top-left", clock: true, audio: true, media: true, cpu: true, gpu: true, ram: true,
                              disk: true })
@@ -95,5 +97,7 @@ QtObject {
         theme.wallpaper = data.wallpaper || "";
         if (data.widgets)
             theme.widgets = data.widgets;
+        if (data.bar)
+            theme.bar = data.bar;
     }
 }

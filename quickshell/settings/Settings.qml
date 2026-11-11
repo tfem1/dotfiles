@@ -48,10 +48,12 @@ Scope {
     }
 
     // The shell follows some changes at once, before theme.json is written
-    // again (it brings the same values): widgets and game mode.
+    // again (it brings the same values): widgets, the bar and game mode.
     function follow(key, value) {
         if (key.startsWith("widgets."))
             Theme.widgets = Object.assign({}, Theme.widgets, { [key.slice(8)]: value });
+        else if (key.startsWith("bar."))
+            Theme.bar = Object.assign({}, Theme.bar, { [key.slice(4)]: value });
         else if (key === "effects.game_mode")
             Theme.gameMode = value;
     }
@@ -60,7 +62,7 @@ Scope {
         if (name === "gamemode") {
             follow("effects.game_mode", value);
             store.change({ "effects.game_mode": value });
-        } else if (name.startsWith("widgets.")) {
+        } else if (name.startsWith("widgets.") || name.startsWith("bar.")) {
             follow(name, value);
             store.change({ [name]: value });
         } else if (name.startsWith("idle."))

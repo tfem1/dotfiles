@@ -4,12 +4,16 @@ import "../components"
 
 // Numbered workspace circles: focused one filled with the module color,
 // occupied ones lightly tinted with it, empty ones only show their number.
-Row {
+// In a row, or a column when `vertical`.
+Grid {
     id: workspaces
 
     property var model: []          // [{ id, focused, occupied, urgent }]
+    property bool vertical: false
     signal clicked(int id)
 
+    columns: vertical ? 1 : -1
+    rows: vertical ? -1 : 1
     spacing: 4
 
     Repeater {

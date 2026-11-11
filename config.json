@@ -9,6 +9,10 @@
     "screen_off": 11,
     "suspend": 30
   },
+  "bar": {
+    "position": "top",
+    "transparent": false
+  },
   "widgets": {
     "corner": "top-left",
     "clock": true,

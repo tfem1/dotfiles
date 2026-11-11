@@ -24,6 +24,10 @@ All notable changes to this project are documented here. The format follows
   ("Good evening, alex", the date and time, theme, uptime and system, a
   moon drawn in the theme's colors), with **Wallpaper** and **Gaming hub**
   buttons, then one card per page.
+- The bar goes on any edge of the screen (top, bottom, left, right) and can
+  be fully transparent, from Settings → Tweaks (`bar.position`,
+  `bar.transparent` in `config.json`). On the left or right it is narrow,
+  everything stacked.
 - Settings → **Tweaks**: the modes (Gaming, Coffee, Night, Do not disturb,
   Power saver, Presentation, Focus, Sleep, Screenshot, Region) as tiles.
 
