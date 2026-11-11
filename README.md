@@ -408,7 +408,7 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   a little see-through (Hyprland's blur shows behind them, only inside
   their shape):
 
-  ![Desktop widgets in two themes](docs/images/widgets.png)
+  ![Desktop widgets on a night forest, Pine theme](docs/images/widgets.png)
 
   - **Clock**: the date and the time in a pill of the accent color.
   - **CPU**, **GPU**, **RAM**, **Disk**, each in a soft organic shape (a
