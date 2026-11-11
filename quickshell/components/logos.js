@@ -17,6 +17,13 @@ function distroId(osRelease) {
     return match ? match[1].trim().toLowerCase() : "";
 }
 
+// "Arch Linux", from PRETTY_NAME (else NAME) of /etc/os-release.
+function distroName(osRelease) {
+    const text = osRelease || "";
+    const match = text.match(/^PRETTY_NAME=["']?([^"'\n]*)["']?$/m) || text.match(/^NAME=["']?([^"'\n]*)["']?$/m);
+    return match ? match[1].trim() : "";
+}
+
 // True when this system has its own logo here.
 function has(id) {
     return Object.prototype.hasOwnProperty.call(LOGOS, id);

@@ -44,7 +44,7 @@ VISUAL = [
     "settings/SettingRow.qml", "settings/TextButton.qml", "settings/DisplayPage.qml",
     "settings/WidgetsPage.qml", "settings/ApplyBar.qml",
     "widgets/WidgetsContent.qml", "widgets/WidgetCard.qml", "widgets/ClockPill.qml", "widgets/ResourceCard.qml",
-    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "modes/ModesContent.qml",
+    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "settings/HomePage.qml", "settings/WelcomeBanner.qml", "settings/Moon.qml", "settings/TweaksPage.qml",
 ]
 
 
@@ -68,9 +68,9 @@ class VisualComponentsTest(unittest.TestCase):
             done = subprocess.run([sys.executable, str(REPO / "tools/preview/render.py"), "--out", out],
                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(done.returncode, 0, done.stderr)
-            modes = ["bar", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "lock", "modes", "music",
-                     "power", "settings", "settings-display", "settings-system", "settings-widgets", "system", "volume",
-                     "wallpaper", "widgets", "wifi"]
+            modes = ["bar", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "lock", "music",
+                     "power", "settings", "settings-display", "settings-home", "settings-system", "settings-tweaks",
+                     "settings-widgets", "system", "volume", "wallpaper", "widgets", "wifi"]
             self.assertEqual(sorted(p.name for p in Path(out).iterdir()), sorted(f"pony-twilight-{m}.png" for m in modes))
 
     def probe(self, script, expression, value):
@@ -243,9 +243,21 @@ class VisualComponentsTest(unittest.TestCase):
                          [True, False, False])
         self.assertIn("fill%3D'%23d19fe4'", self.probe(logos, 'Lib.source("arch", "#d19fe4")', None))
 
+    def test_welcome_greeting_and_uptime(self):
+        lib = SHELL / "settings/settings.js"
+        for hour, words in ((6, "Good morning"), (13, "Good afternoon"), (19, "Good evening"), (23, "Good night"),
+                            (3, "Good night")):
+            self.assertEqual(self.probe(lib, "Lib.greeting(input)", hour), words)
+        for seconds, text in ((600, "10 min"), (12300, "3 h 25 min"), (86400 * 2 + 3600 * 4, "2 days 4 h")):
+            self.assertEqual(self.probe(lib, "Lib.uptime(input)", seconds), text)
+        logos = SHELL / "components/logos.js"
+        release = 'NAME="Arch Linux"\nPRETTY_NAME="Arch Linux"\nID=arch\n'
+        self.assertEqual(self.probe(logos, "Lib.distroName(input)", release), "Arch Linux")
+        self.assertEqual(self.probe(logos, "Lib.distroName(input)", "NAME=Fedora\n"), "Fedora")
+
     def test_settings_search_and_pending_changes(self):
         lib = SHELL / "settings/settings.js"
-        self.assertEqual(self.probe(lib, 'Lib.search("sleep").map(e => e.id)', None), ["awake", "sleep"])
+        self.assertEqual(self.probe(lib, 'Lib.search("sleep").map(e => e.id)', None), ["modes", "awake", "sleep"])
         self.assertEqual(self.probe(lib, 'Lib.search("WIFI net").map(e => e.id)', None), ["wifi"])
         self.assertEqual(self.probe(lib, 'Lib.search("  ").length', None), 0)
         values = {"shape.radius": 12, "palette.source": "pony-twilight"}
@@ -317,7 +329,7 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual(self.probe(lib, 'Lib.screensOn(input, {"HDMI-A-1": "off"})', screens), 1)
         self.assertEqual(self.probe(lib, 'Lib.screensOn(input, {"eDP-1": "2560x1440@60.00"})', screens), 3)
         self.assertEqual(self.probe(lib, 'Lib.PAGES.map(p => p.id)', None),
-                         ["appearance", "system", "display", "widgets"])
+                         ["home", "appearance", "system", "display", "widgets", "tweaks"])
 
     def test_every_search_result_leads_to_a_row(self):
         # Rows made by a Repeater are visual children only: they are walked

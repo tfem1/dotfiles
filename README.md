@@ -445,10 +445,11 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   screen picks the corner with a click (`widgets.*` in `config.json`,
   `widgets.corner`: `top-left`, `top-right`, `bottom-left`, `bottom-right`). Only what shows runs: CPU and memory are read from
   `/proc` every 2 seconds, the disk every minute.
-- **Modes** (`SUPER + K`): one menu for every mode, a click (or its number)
-  turns one on or off; each shows an icon in the bar while it is on.
+- **Modes**, in Settings → **Tweaks** (or **Gaming hub** on the Home
+  page): one tile per mode, a click turns it on or off; each shows an icon
+  in the bar while it is on.
 
-  ![Modes menu](docs/images/modes.png)
+  ![Settings, Tweaks page](docs/images/settings-tweaks.png)
 
   - **Gaming** (also `SUPER + G`, and Settings → System): Hyprland drops
     what costs frames (no animations, blur or shadows); a fullscreen game
@@ -493,6 +494,12 @@ folder name is `shell.name` in your `config.json`). Its colors follow
 - **Settings** (`SUPER + H`, or the gear of the system panel): a window
   in quiet colors, the pages on the left, each setting with one sentence
   saying what it does.
+  - **Home**, where it opens: a banner on the wallpaper with a greeting for
+    the time of day ("Good evening, alex"), the date and time, the theme,
+    the uptime and the system, a moon, and two buttons: **Wallpaper** and
+    **Gaming hub** (the Tweaks page). Under it, one card per page.
+
+    ![Settings, Home page](docs/images/settings-home.png)
   - **Appearance**: theme (the 49 as cards in their own colors, with
     filters), accent color, wallpaper, folder color, rounded corners, space
     between windows, transparency, blur, shadows, animations, text size.

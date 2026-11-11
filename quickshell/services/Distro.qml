@@ -9,10 +9,14 @@ Singleton {
     id: root
 
     property string id: ""
+    property string name: ""        // "Arch Linux"
 
     FileView {
         path: "/etc/os-release"
         printErrors: false
-        onLoaded: root.id = Logos.distroId(text())
+        onLoaded: {
+            root.id = Logos.distroId(text());
+            root.name = Logos.distroName(text());
+        }
     }
 }

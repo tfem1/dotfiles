@@ -44,7 +44,10 @@ ShellRoot {
     Calendar { id: calendarLayer }
     MusicPanel { id: musicLayer }
     Lock { id: lockLayer }
-    Modes { locker: lockLayer }
+    Modes {
+        id: modesLayer
+        locker: lockLayer
+    }
     PowerMenu {
         id: powerLayer
         locker: lockLayer
@@ -59,6 +62,7 @@ ShellRoot {
         id: settingsLayer
         wallpapers: wallpaperLayer
         network: networkLayer
+        modes: modesLayer
     }
 
     Shortcuts {

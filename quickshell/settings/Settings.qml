@@ -9,7 +9,7 @@ import "../theme"
 import "../wallpaper/library.js" as Library
 import "settings.js" as Settings
 
-// The Settings window (SUPER + H). Settings are read and written by
+// The Settings window (SUPER + H), on Home first. Settings are read and written by
 // SettingsStore (`tfem settings`; the shell recolors itself from the new
 // theme.json), and show at once when changed. System settings drive
 // PipeWire, NetworkManager, BlueZ, brightnessctl and Hyprland directly;
@@ -19,12 +19,14 @@ Scope {
 
     required property var wallpapers   // the wallpaper selector
     required property var network      // the network panel
+    required property var modes        // Modes: game, coffee, night...
     property bool open: false
     property var pending: ({})          // Appearance changes waiting for Apply
     // Wi-Fi and Bluetooth answer through NetworkManager and BlueZ: their
     // switch shows the asked state for a moment meanwhile.
     property var radios: ({})
     property real brightness: -1
+    property real uptime: 0             // seconds, read when the window opens
     readonly property string cli: Quickshell.env("HOME") + "/.local/bin/tfem"
     readonly property var adapter: Bluetooth.defaultAdapter
 
@@ -34,6 +36,7 @@ Scope {
             store.refresh();
             brightnessReader.running = true;
             displayControl.refresh();
+            uptimeReader.reload();
         } else {
             pending = {};
         }
@@ -87,7 +90,12 @@ Scope {
             Session.doNotDisturb = value;
         else if (name === "awake")
             Session.stayAwake = value;
-        else if (name === "display")
+        else if (name === "mode") {
+            // Not in the screenshot, and the lock screen shows alone.
+            if (value === "sleep" || value.startsWith("shot-"))
+                open = false;
+            modes.flip(value);
+        } else if (name === "display")
             displayControl.apply(value.name, value.mode, true);
         else if (name === "display-keep")
             displayControl.keep();
@@ -114,6 +122,14 @@ Scope {
         id: radioWait
         interval: 4000
         onTriggered: root.radios = {}
+    }
+
+    // "12345.67 ..." : seconds since the system started.
+    FileView {
+        id: uptimeReader
+        path: "/proc/uptime"
+        printErrors: false
+        onLoaded: root.uptime = parseFloat(text()) || 0
     }
 
     // `brightnessctl -m` prints "device,class,current,percent%,max".
@@ -144,6 +160,13 @@ Scope {
                 display: displayControl.listing
                 confirm: displayControl.confirm
                 wallpaper: Library.fileUrl(Theme.wallpaper)
+                modes: root.modes.on
+                about: ({
+                    user: Quickshell.env("USER") || "",
+                    theme: (Settings.theme(store.settings.themes, store.values["palette.source"]) || {}).name || "",
+                    uptime: root.uptime > 0 ? Settings.uptime(root.uptime) : "",
+                    system: Distro.name
+                })
                 live: ({
                     gameMode: !!store.values["effects.game_mode"],
                     volume: Audio.volume,

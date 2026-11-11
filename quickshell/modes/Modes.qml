@@ -1,11 +1,11 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import "../overlay"
 import "../theme"
 import "../services"
 
-// The modes (SUPER + K; SUPER + G flips game mode). Game mode and power saver
+// The modes, turned on and off from Settings → Tweaks (SUPER + G flips game
+// mode). Game mode and power saver
 // are written to theme.toml (`tfem settings set`), so Hyprland drops its
 // effects too; only one of the two is on at a time. The others are kept by
 // the shell (Session). What each mode does outside the shell lives here:
@@ -15,12 +15,11 @@ import "../services"
 // - night: a warmer screen (NightFilter) and, like power saver, a dimmer one
 //   (brightnessctl saves the level and puts it back);
 // - sleep: the lock screen, then suspend;
-// - screenshot, region: `tfem screenshot`, once the menu is gone.
+// - screenshot, region: `tfem screenshot`, once the Settings window is gone.
 Scope {
     id: root
 
     required property var locker
-    property bool open: false
     readonly property string cli: Quickshell.env("HOME") + "/.local/bin/tfem"
     property var tools: ({})            // which helpers are installed
     property var waiting: null          // effects asked while the last ones are written
@@ -31,10 +30,6 @@ Scope {
         quiet: Session.doNotDisturb, presentation: Session.presentation, focus: Session.focus
     })
     readonly property bool dimmed: Session.night || Theme.powerSaver
-
-    function toggle() {
-        open = !open;
-    }
 
     function flip(mode) {
         if (mode === "game")
@@ -52,11 +47,9 @@ Scope {
         else if (mode === "focus")
             Session.focus = !Session.focus;
         else if (mode === "sleep") {
-            open = false;
             locker.lock();
             Quickshell.execDetached(["sh", "-c", "sleep 1 && systemctl suspend"]);
         } else if (mode === "shot-full" || mode === "shot-region") {
-            open = false;                       // not in the picture
             shot.kind = mode.slice(5);
             shot.restart();
         }
@@ -74,7 +67,7 @@ Scope {
         writer.running = true;
     }
 
-    // The menu's window is gone after this, so the capture shows the desktop.
+    // The Settings window is gone after this, so the capture shows the desktop.
     Timer {
         id: shot
         property string kind: "full"
@@ -154,38 +147,10 @@ Scope {
     }
 
     IpcHandler {
-        target: "modes"
-
-        function toggle(): void {
-            root.toggle();
-        }
-    }
-
-    IpcHandler {
         target: "gamemode"
 
         function toggle(): void {
             root.flip("game");
-        }
-    }
-
-    LazyLoader {
-        active: root.open
-
-        OverlayWindow {
-            name: "modes"
-            dim: 0.3
-            onDismissed: root.open = false
-
-            ModesContent {
-                anchors.centerIn: parent
-                width: implicitWidth
-                height: implicitHeight
-                on: root.on
-                onFlipped: mode => root.flip(mode)
-                onClosed: root.open = false
-                Component.onCompleted: forceActiveFocus()
-            }
         }
     }
 }

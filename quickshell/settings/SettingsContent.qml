@@ -16,7 +16,9 @@ Item {
     property var display: ({ monitors: [], chosen: {} })   // `tfem display list`
     property var confirm: null       // see DisplayPage
     property string wallpaper: ""    // file:// URL
-    property string page: "appearance"
+    property var about: ({})         // see HomePage
+    property var modes: ({})         // which modes are on, see TweaksPage
+    property string page: "home"
     property bool busy: false        // applying
     signal changed(string key, var value)
     signal apply
@@ -32,7 +34,8 @@ Item {
     }
 
     function pageItem() {
-        return ({ system: systemPage, display: displayPage, widgets: widgetsPage })[page] || appearancePage;
+        return ({ home: homePage, system: systemPage, display: displayPage, widgets: widgetsPage,
+                  tweaks: tweaksPage })[page] || appearancePage;
     }
 
     function scrollTo(id) {
@@ -128,6 +131,19 @@ Item {
                 boundsBehavior: Flickable.StopAtBounds
                 clip: true
 
+                HomePage {
+                    id: homePage
+                    visible: window.page === "home"
+                    x: 28
+                    width: flick.width - 56
+                    wallpaper: window.wallpaper
+                    about: window.about
+                    onChooseWallpaper: window.chooseWallpaper()
+                    onPagePicked: page => {
+                        window.page = page;
+                        flick.contentY = 0;
+                    }
+                }
                 AppearancePage {
                     id: appearancePage
                     visible: window.page === "appearance"
@@ -165,6 +181,14 @@ Item {
                     x: 28
                     width: flick.width - 56
                     values: window.settings.values
+                    onAction: (name, value) => window.action(name, value)
+                }
+                TweaksPage {
+                    id: tweaksPage
+                    visible: window.page === "tweaks"
+                    x: 28
+                    width: flick.width - 56
+                    on: window.modes
                     onAction: (name, value) => window.action(name, value)
                 }
             }

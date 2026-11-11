@@ -16,7 +16,6 @@ import "../../quickshell/system"
 import "../../quickshell/settings"
 import "../../quickshell/widgets"
 import "../../quickshell/lock"
-import "../../quickshell/modes"
 
 // A 1920x1080 desktop with the shell's components and sample data.
 Rectangle {
@@ -120,16 +119,6 @@ Rectangle {
         x: parent.width - width - 24
         y: parent.height - height - 24
         show: ({ corner: "bottom-right", clock: true, cpu: true, gpu: false, ram: true, disk: false })
-    }
-
-    // The modes menu (SUPER + K), game mode and night on.
-    ModesContent {
-        visible: scene.mode === "modes"
-        anchors.centerIn: parent
-        width: implicitWidth
-        height: implicitHeight
-        z: 10
-        on: ({ game: true, night: true })
     }
 
     // The lock screen, a password being typed (the card shows).
@@ -317,6 +306,8 @@ Rectangle {
             pending: scene.mode === "settings" ? { "palette.source": "pony-luna", "shape.radius": 18 } : {}
             page: scene.mode === "settings" ? "appearance" : scene.mode.slice(9)
             wallpaper: scene.wallpaper
+            modes: ({ game: true, night: true })
+            about: ({ user: "alex", theme: "Catppuccin Mocha", uptime: "3 h 25 min", system: "Arch Linux" })
             live: ({ gameMode: false, volume: 0.64, muted: false, micMuted: false, brightness: 0.8, wifi: true,
                      bluetooth: true, layout: "French", quiet: false, awake: false, idle: sample.values || {} })
             // A 165 Hz screen just switched to 144 Hz, waiting to be kept.

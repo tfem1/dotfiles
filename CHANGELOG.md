@@ -20,6 +20,12 @@ All notable changes to this project are documented here. The format follows
 - The terminal (kitty) is slightly see-through (`effects.opacity`), so
   Hyprland's blur shows behind it.
 - `SUPER + SHIFT + Escape`: screenshot of the whole screen.
+- Settings opens on a **Home** page: a welcome banner on the wallpaper
+  ("Good evening, alex", the date and time, theme, uptime and system, a
+  moon drawn in the theme's colors), with **Wallpaper** and **Gaming hub**
+  buttons, then one card per page.
+- Settings → **Tweaks**: the modes (Gaming, Coffee, Night, Do not disturb,
+  Power saver, Presentation, Focus, Sleep, Screenshot, Region) as tiles.
 
 ### Changed
 
@@ -38,6 +44,7 @@ All notable changes to this project are documented here. The format follows
 
 ### Removed
 
+- `SUPER + K` and the modes menu: the modes are in Settings → Tweaks.
 - The running apps at the top left of the bar (icons, right-click menu with
   Quit): not wanted after all. The distro logo takes their place.
 - The 50 forest wallpapers: the collection is My Little Pony only (51).

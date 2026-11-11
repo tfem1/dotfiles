@@ -17,6 +17,8 @@ const INDEX = [
     { page: "appearance", id: "shadows", title: "Shadows", words: "effects shadow" },
     { page: "appearance", id: "animations", title: "Animations", words: "motion effects" },
     { page: "appearance", id: "textsize", title: "Text size", words: "font size bigger smaller" },
+    { page: "tweaks", id: "modes", title: "Modes", words: "gaming coffee night sleep focus presentation power saver do not disturb screenshot region" },
+    { page: "home", id: "welcome", title: "Welcome", words: "home uptime system os greeting" },
     { page: "system", id: "gamemode", title: "Game mode", words: "games play performance fps roblox" },
     { page: "system", id: "sound", title: "Sound", words: "volume audio speaker mute" },
     { page: "system", id: "microphone", title: "Microphone", words: "mic input mute" },
@@ -42,6 +44,8 @@ const INDEX = [
 
 // The pages of the window, in the order of the menu.
 const PAGES = [
+    { id: "home", title: "Home", icon: "home", text: "Welcome, theme, uptime",
+      note: "Your desktop at a glance." },
     { id: "appearance", title: "Appearance", icon: "wallpaper", text: "Theme, colors, wallpaper, effects",
       note: "Nothing changes until you press Apply: the preview shows it first." },
     { id: "system", title: "System", icon: "settings", text: "Sound, brightness, connections, sleep",
@@ -49,8 +53,41 @@ const PAGES = [
     { id: "display", title: "Display", icon: "computer", text: "Screens on or off, resolution, Hz",
       note: "A change acts at once and asks to be kept: without an answer it goes back after 15 seconds." },
     { id: "widgets", title: "Widgets", icon: "grid_view", text: "Clock, music, CPU, GPU, RAM, disk",
-      note: "On the desktop, under the windows, in the colors of the theme. These settings act at once." }
+      note: "On the desktop, under the windows, in the colors of the theme. These settings act at once." },
+    { id: "tweaks", title: "Tweaks", icon: "tune", text: "Gaming, coffee, night, screenshots",
+      note: "A click turns a mode on or off, at once." }
 ];
+
+// The modes of the Tweaks page; ids are those of Modes.flip.
+const MODES = [
+    { id: "game", icon: "sports_esports", title: "Gaming", text: "Tearing, CPU boost" },
+    { id: "coffee", icon: "coffee", title: "Coffee", text: "Never sleeps" },
+    { id: "night", icon: "dark_mode", title: "Night", text: "Warm, dim, quiet" },
+    { id: "quiet", icon: "notifications_off", title: "Do not disturb", text: "Notifications wait" },
+    { id: "saver", icon: "eco", title: "Power saver", text: "CPU saves, dim screen" },
+    { id: "presentation", icon: "co_present", title: "Presentation", text: "No notifications" },
+    { id: "focus", icon: "center_focus_strong", title: "Focus", text: "Quiet, no widgets" },
+    { id: "sleep", icon: "mode_standby", title: "Sleep", text: "Lock and suspend" },
+    { id: "shot-full", icon: "screenshot_monitor", title: "Screenshot", text: "The whole screen" },
+    { id: "shot-region", icon: "screenshot_region", title: "Region", text: "Pick an area" }
+];
+
+// "Good morning" from 5 h, "Good afternoon" from 12 h, "Good evening" from
+// 18 h, "Good night" from 22 h.
+function greeting(hour) {
+    return hour >= 5 && hour < 12 ? "Good morning" : hour >= 12 && hour < 18 ? "Good afternoon"
+        : hour >= 18 && hour < 22 ? "Good evening" : "Good night";
+}
+
+// "3 h 25 min", "2 days 4 h", "12 min" from seconds.
+function uptime(seconds) {
+    const minutes = Math.floor((seconds || 0) / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    if (days > 0)
+        return days + (days === 1 ? " day " : " days ") + hours % 24 + " h";
+    return hours > 0 ? hours + " h " + minutes % 60 + " min" : minutes + " min";
+}
 
 function pageOf(id) {
     return PAGES.find(entry => entry.id === id) || PAGES[0];
