@@ -17,6 +17,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **17 themes in every color**: Ruby, Ember, Amber, Lime, Emerald, Ocean,
+  Sapphire, Indigo, Amethyst, Orchid, Rose (dark) and Peach, Lemon, Mint,
+  Sky, Lavender, Blossom (light), built from `themes/seeds/colors.toml`;
+  a "Colors" filter in Settings. 36 themes in all.
 - **fastfetch in the theme's colors**: harilvfs/fastfetch's boxed layout,
   keys and percentages in the accent colors, frames in the quiet one, logo
   in the accent

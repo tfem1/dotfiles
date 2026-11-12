@@ -49,7 +49,7 @@ def themes(paths: Paths, theme: Mapping[str, object], config: Mapping[str, objec
             colors = {name: context[key].hex() for name, key in PREVIEW.items()}
             found.append({"id": path.stem, "name": palette.name, "family": palette.family,
                           "variant": palette.variant, "colors": colors})
-    return sorted(found, key=lambda item: (item["family"] not in ("Forest", "Cat"), item["family"], item["name"]))
+    return sorted(found, key=lambda item: (item["family"] not in ("Forest", "Cat", "Colors"), item["family"], item["name"]))
 
 
 def get(paths: Paths) -> dict:

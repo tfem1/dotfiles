@@ -8,7 +8,7 @@ single settings file.
 > lock screen, launcher or notifications. See [Make it yours](#make-it-yours).
 
 **Status:** early work. Done: theme pipeline, Hyprland config, installer,
-wallpaper collection, 19 themes, the Quickshell shell, a Settings window and
+wallpaper collection, 36 themes, the Quickshell shell, a Settings window and
 the login screen, desktop widgets. The full plan is in
 [docs/roadmap.md](docs/roadmap.md).
 
@@ -129,7 +129,7 @@ still recognises OpenBSD and does the rest: it installs what OpenBSD 7.8
 packages (Python, kitty, glib2, qt5ct and qt6ct, the Papirus and Adwaita
 icons, the Inter and JetBrains Mono fonts, Firefox, Nautilus...) with
 `doas pkg_add`, links the `tfem` command, downloads the wallpapers and the
-icons, and themes your apps (kitty, GTK, Qt) with any of the 19 themes.
+icons, and themes your apps (kitty, GTK, Qt) with any of the 36 themes.
 The Hyprland config, the shell and the login screen are left out, and it
 says so. OpenBSD ships neither bash nor curl, so first:
 
@@ -203,9 +203,18 @@ follow = true                   # false: a wallpaper never changes the theme
 
 ## Themes
 
-19 themes, kept simple: 10 well-known palettes, 8 of our own made for the
-wallpapers and **Noir**, black and white. **Moonlit** is the default, with
-its night forest wallpaper.
+36 themes: 17 in every color of the wheel, 8 made from the wallpapers'
+colors, 10 well-known palettes and **Noir**, black and white. **Moonlit**
+is the default, with its night forest wallpaper.
+
+![Every theme](docs/images/themes.png)
+
+**Colors**, one theme per color, original: Ruby (red), Ember (orange),
+Amber (yellow), Lime and Emerald (green), Ocean (cyan), Sapphire and
+Indigo (blue), Amethyst (purple), Orchid (magenta), Rose (pink), and light
+ones: Peach, Lemon, Mint, Sky, Lavender, Blossom (`color-ruby`…,
+`themes/seeds/colors.toml`). Each is checked: its accent, backgrounds and
+text are its color, the text readable.
 
 | Theme | Look |
 |---|---|
@@ -229,8 +238,8 @@ its night forest wallpaper.
 | `onedark` | Atom's grey, blue |
 | `solarized-dark` | teal night, blue |
 
-The Settings window sorts them in four groups: **Forest & cats**, **Well
-known**, **Black & white** and **Light**.
+The Settings window sorts them in five groups: **Forest & cats**,
+**Colors**, **Well known**, **Black & white** and **Light**.
 
 **Noir** (`noir`) is for black wallpapers: a pure black bar and panels,
 white text and accent (the clock pill turns white), greys for everything
@@ -593,7 +602,7 @@ folder name is `shell.name` in your `config.json`). Its colors follow
     **Gaming hub** (the Tweaks page). Under it, one card per page.
 
     ![Settings, Home page](docs/images/settings-home.png)
-  - **Appearance**: theme (the 19 as cards in their own colors, with
+  - **Appearance**: theme (the 36 as cards in their own colors, with
     filters), accent color, wallpaper, folder color, rounded corners, space
     between windows, transparency, blur, shadows, animations, text size.
     Nothing changes until **Apply**: a small desktop at the top shows the

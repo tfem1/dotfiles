@@ -15,8 +15,9 @@ Column {
 
     readonly property var shown: themes.filter(entry =>
         filter === "all" || (filter === "nature" ? ["Forest", "Cat"].includes(entry.family)
+            : filter === "colors" ? entry.family === "Colors"
             : filter === "mono" ? entry.family === "Mono"
-            : filter === "light" ? entry.variant === "light" : !["Forest", "Cat", "Mono"].includes(entry.family)))
+            : filter === "light" ? entry.variant === "light" : !["Forest", "Cat", "Colors", "Mono"].includes(entry.family)))
     readonly property int columns: Math.max(2, Math.floor(width / 190))
 
     spacing: 12
@@ -27,6 +28,7 @@ Column {
         model: [
             { value: "all", label: "All · " + grid.themes.length },
             { value: "nature", label: "Forest & cats" },
+            { value: "colors", label: "Colors" },
             { value: "known", label: "Well known" },
             { value: "mono", label: "Black & white" },
             { value: "light", label: "Light" }

@@ -1,0 +1,146 @@
+# Seeds of the color themes: one theme for each color of the wheel, dark,
+# and a few light ones. Original colors, no other theme copied. Build the
+# theme files with:
+#   PYTHONPATH=scripts python3 -m theming.builder themes/seeds/colors.toml
+# Keys: tint (backgrounds), text, accent and slots (hue slot -> color). The
+# builder keeps each hue and adjusts lightness until it is readable.
+
+prefix = "color"
+family = "Colors"
+credit = "Original colors, one per hue"
+
+[themes.ruby]                     # deep red
+name    = "Ruby"
+variant = "dark"
+tint    = "#4A1520"
+text    = "#F3DADD"
+accent  = "#F0566E"
+slots   = { red = "#F0566E" }
+
+[themes.ember]                    # burning orange
+name    = "Ember"
+variant = "dark"
+tint    = "#4A2414"
+text    = "#F5E2D6"
+accent  = "#FF8A4C"
+slots   = { orange = "#FF8A4C" }
+
+[themes.amber]                    # golden yellow
+name    = "Amber"
+variant = "dark"
+tint    = "#3F3214"
+text    = "#F4EDD5"
+accent  = "#F5C542"
+slots   = { yellow = "#F5C542" }
+
+[themes.lime]                     # bright yellow-green
+name    = "Lime"
+variant = "dark"
+tint    = "#2C3814"
+text    = "#EAF2D6"
+accent  = "#8EE04E"
+slots   = { green = "#8EE04E" }
+
+[themes.emerald]                  # jewel green
+name    = "Emerald"
+variant = "dark"
+tint    = "#123A1C"
+text    = "#D8F2E4"
+accent  = "#34D058"
+slots   = { green = "#34D058" }
+
+[themes.ocean]                    # sea cyan
+name    = "Ocean"
+variant = "dark"
+tint    = "#0F3640"
+text    = "#D6EEF2"
+accent  = "#3CCFE6"
+slots   = { cyan = "#3CCFE6" }
+
+[themes.sapphire]                 # deep blue
+name    = "Sapphire"
+variant = "dark"
+tint    = "#14244A"
+text    = "#DAE3F5"
+accent  = "#4F8CFF"
+slots   = { blue = "#4F8CFF" }
+
+[themes.indigo]                   # blue-violet
+name    = "Indigo"
+variant = "dark"
+tint    = "#221A4D"
+text    = "#E0DCF5"
+accent  = "#8B7CFF"
+slots   = { blue = "#8B7CFF" }
+
+[themes.amethyst]                 # purple
+name    = "Amethyst"
+variant = "dark"
+tint    = "#33184A"
+text    = "#EADAF5"
+accent  = "#C17BFF"
+slots   = { purple = "#C17BFF" }
+
+[themes.orchid]                   # magenta
+name    = "Orchid"
+variant = "dark"
+tint    = "#45163F"
+text    = "#F5DAF0"
+accent  = "#F26BD8"
+slots   = { pink = "#F26BD8" }
+
+[themes.rose]                     # soft pink
+name    = "Rose"
+variant = "dark"
+tint    = "#45172C"
+text    = "#F5DCE6"
+accent  = "#FF7EAD"
+slots   = { pink = "#FF7EAD" }
+
+[themes.peach]                    # light: peach and coral
+name    = "Peach"
+variant = "light"
+tint    = "#FBE3D6"
+text    = "#4A2A1C"
+accent  = "#D9572B"
+slots   = { orange = "#D9572B" }
+
+[themes.lemon]                    # light: lemon and olive
+name    = "Lemon"
+variant = "light"
+tint    = "#F7F0C8"
+text    = "#3D3814"
+accent  = "#9C7A00"
+slots   = { yellow = "#9C7A00" }
+
+[themes.mint]                     # light: mint and green
+name    = "Mint"
+variant = "light"
+tint    = "#D8F5DC"
+text    = "#173D2B"
+accent  = "#2E9E4A"
+slots   = { green = "#2E9E4A" }
+
+[themes.sky]                      # light: sky blue
+name    = "Sky"
+variant = "light"
+tint    = "#D8E9FA"
+text    = "#162C45"
+accent  = "#2A6FD1"
+slots   = { blue = "#2A6FD1" }
+
+[themes.lavender]                 # light: lavender and violet
+name    = "Lavender"
+variant = "light"
+tint    = "#E8DEF8"
+text    = "#30204A"
+accent  = "#7E4CD1"
+slots   = { purple = "#7E4CD1" }
+
+[themes.blossom]                  # light: cherry blossom pink
+name    = "Blossom"
+variant = "light"
+tint    = "#FADDE8"
+text    = "#45192C"
+accent  = "#D23E7C"
+slots   = { pink = "#D23E7C" }

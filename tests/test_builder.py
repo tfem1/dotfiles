@@ -77,6 +77,26 @@ class ForestAndCatThemesTest(unittest.TestCase):
                 self.assertIsNotNone(palette.accent)
 
 
+class ColorThemesTest(unittest.TestCase):
+    """One theme per color of the wheel: its accent, backgrounds and text are that color."""
+    EXPECTED = {"ruby": "red", "ember": "orange", "amber": "yellow", "lime": "green", "emerald": "green",
+                "ocean": "cyan", "sapphire": "blue", "indigo": "blue", "amethyst": "purple", "orchid": "purple",
+                "rose": "red", "peach": "orange", "lemon": "yellow", "mint": "green", "sky": "blue",
+                "lavender": "purple", "blossom": "red"}
+
+    def test_every_color_theme_has_its_color_and_reads_well(self):
+        found = sorted(p.stem.removeprefix("color-") for p in (REPO / "themes").glob("color-*.toml"))
+        self.assertEqual(found, sorted(self.EXPECTED))
+        for name, hue in self.EXPECTED.items():
+            with self.subTest(theme=name):
+                palette = load_palette(REPO / "themes" / f"color-{name}.toml")
+                self.assertEqual(palette.family, "Colors")
+                self.assertIn(hue_class(palette.accent), (hue, {"purple": "red", "red": "purple"}.get(hue)))
+                self.assertEqual(hue_problems(palette.colors), [])
+                self.assertGreaterEqual(contrast(palette.colors["base05"], palette.colors["base00"]), 7)
+                self.assertGreaterEqual(contrast(palette.accent, palette.colors["base00"]), 4.5)
+
+
 class NoirThemeTest(unittest.TestCase):
     """Black and white, for black wallpapers: greys only, red kept for alerts."""
 
