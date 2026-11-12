@@ -17,7 +17,8 @@ Column {
         filter === "all" || (filter === "nature" ? ["Forest", "Cat"].includes(entry.family)
             : filter === "colors" ? entry.family === "Colors"
             : filter === "mono" ? entry.family === "Mono"
-            : filter === "light" ? entry.variant === "light" : !["Forest", "Cat", "Colors", "Mono"].includes(entry.family)))
+            : filter === "yvis" ? entry.family === "YVIS"
+            : filter === "light" ? entry.variant === "light" : !["Forest", "Cat", "Colors", "Mono", "YVIS"].includes(entry.family)))
     readonly property int columns: Math.max(2, Math.floor(width / 190))
 
     spacing: 12
@@ -31,6 +32,7 @@ Column {
             { value: "colors", label: "Colors" },
             { value: "known", label: "Well known" },
             { value: "mono", label: "Black & white" },
+            { value: "yvis", label: "YVIS" },
             { value: "light", label: "Light" }
         ]
         onPicked: value => grid.filter = value

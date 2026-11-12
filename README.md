@@ -8,14 +8,14 @@ single settings file.
 > lock screen, launcher or notifications. See [Make it yours](#make-it-yours).
 
 **Status:** early work. Done: theme pipeline, Hyprland config, installer,
-wallpaper collection, 36 themes, the Quickshell shell, a Settings window and
+wallpaper collection, 38 themes, the Quickshell shell, a Settings window and
 the login screen, desktop widgets. The full plan is in
 [docs/roadmap.md](docs/roadmap.md).
 
 ## Install
 
-One command, on Arch, Debian or Fedora and their derivatives (OpenBSD in
-part, see below):
+One command, on Arch, Debian, Fedora, YVIS and their derivatives (OpenBSD
+in part, see below):
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/tfem1/dotfiles/main/install.sh)
@@ -129,7 +129,7 @@ still recognises OpenBSD and does the rest: it installs what OpenBSD 7.8
 packages (Python, kitty, glib2, qt5ct and qt6ct, the Papirus and Adwaita
 icons, the Inter and JetBrains Mono fonts, Firefox, Nautilus...) with
 `doas pkg_add`, links the `tfem` command, downloads the wallpapers and the
-icons, and themes your apps (kitty, GTK, Qt) with any of the 36 themes.
+icons, and themes your apps (kitty, GTK, Qt) with any of the 38 themes.
 The Hyprland config, the shell and the login screen are left out, and it
 says so. OpenBSD ships neither bash nor curl, so first:
 
@@ -203,8 +203,9 @@ follow = true                   # false: a wallpaper never changes the theme
 
 ## Themes
 
-36 themes: 17 in every color of the wheel, 8 made from the wallpapers'
-colors, 10 well-known palettes and **Noir**, black and white. **Moonlit**
+38 themes: 17 in every color of the wheel, 8 made from the wallpapers'
+colors, 10 well-known palettes, **Noir**, black and white, and the two
+**YVIS** themes in the colors of the YVIS logo. **Moonlit**
 is the default, with its night forest wallpaper.
 
 ![Every theme](docs/images/themes.png)
@@ -232,6 +233,8 @@ text are its color, the text readable.
 | `forest-pine` | deep pine night, young-leaf green, lichen teal |
 | `forest-moss` | olive moss, fresh green, sunlight yellow |
 | `cat-tabby` | warm brown fur, ginger orange, cream text, green eyes |
+| `yvis-night` | deep night, YVIS violet (the colors of the YVIS logo) |
+| `yvis-day` | light: the YVIS logo on white, deep violet |
 | `noir` | pure black, white text and accent, greys |
 | `catppuccin-mocha` | dark, mauve accent |
 | `catppuccin-latte` | light, mauve accent |
@@ -244,8 +247,8 @@ text are its color, the text readable.
 | `onedark` | Atom's grey, blue |
 | `solarized-dark` | teal night, blue |
 
-The Settings window sorts them in five groups: **Forest & cats**,
-**Colors**, **Well known**, **Black & white** and **Light**.
+The Settings window sorts them in six groups: **Forest & cats**,
+**Colors**, **Well known**, **Black & white**, **YVIS** and **Light**.
 
 **Noir** (`noir`) is for black wallpapers: a pure black bar and panels,
 white text and accent (the clock pill turns white), greys for everything
@@ -268,8 +271,9 @@ source = "cat-tabby"
 ```
 
 **Our themes** are original, not written by hand:
-`themes/seeds/forest.toml` and `themes/seeds/cat.toml` hold a few colors
-each (a pine wood, a ginger tabby, and the colors measured on the
+`themes/seeds/forest.toml`, `themes/seeds/cat.toml` and
+`themes/seeds/yvis.toml` hold a few colors each (a pine wood, a ginger
+tabby, the YVIS logo, and the colors measured on the
 wallpapers for Moonlit, Lagoon, Autumn, Sakura and Velvet), and
 `PYTHONPATH=scripts python3 -m theming.builder themes/seeds/cat.toml` turns
 them into full base16 themes, adjusting lightness until every color is
@@ -602,7 +606,7 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   lists the last 20 colors picked.
 - **Updates**: the bar shows an icon and how many packages can be updated
   (counted 2 minutes after login, then every hour: `checkupdates` on Arch,
-  apt on Debian, dnf on Fedora). A click opens kitty, which updates them
+  `yone check-updates` on YVIS, apt on Debian, dnf on Fedora). A click opens kitty, which updates them
   (`tfem updates install`, it asks for your password).
 - **Workspace overview** (`SUPER + Tab`): workspaces 1 to 10 as small
   screens, each window where it is, as a live picture (Hyprland's toplevel
@@ -634,7 +638,7 @@ folder name is `shell.name` in your `config.json`). Its colors follow
     **Gaming hub** (the Tweaks page). Under it, one card per page.
 
     ![Settings, Home page](docs/images/settings-home.png)
-  - **Appearance**: theme (the 36 as cards in their own colors, with
+  - **Appearance**: theme (the 38 as cards in their own colors, with
     filters), accent color, wallpaper, folder color, rounded corners, space
     between windows, transparency, blur, shadows, animations, text size.
     Nothing changes until **Apply**: a small desktop at the top shows the

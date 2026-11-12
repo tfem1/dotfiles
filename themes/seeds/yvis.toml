@@ -1,0 +1,26 @@
+# Seeds of the YVIS themes: the colors of the YVIS logo (violet branch
+# #8B5CF6 on the installer's night #13101C, #6D28D9 on light backgrounds).
+# Build the theme files with:
+#   PYTHONPATH=scripts python3 -m theming.builder themes/seeds/yvis.toml
+# Keys: tint (backgrounds), text, accent and slots (hue slot -> color). The
+# builder keeps each hue and adjusts lightness until it is readable.
+
+prefix = "yvis"
+family = "YVIS"
+credit = "Colors of the YVIS logo"
+
+[themes.night]                    # the installer and login screen: violet on deep night
+name    = "YVIS Night"
+variant = "dark"
+tint    = "#13101C"
+text    = "#EEEAF6"
+accent  = "#8B5CF6"
+slots   = { purple = "#8B5CF6", blue = "#7C8CF8", pink = "#C084FC" }
+
+[themes.day]                      # light: the logo on white
+name    = "YVIS Day"
+variant = "light"
+tint    = "#F4F2F8"
+text    = "#16131F"
+accent  = "#6D28D9"
+slots   = { purple = "#6D28D9", blue = "#4F46E5", pink = "#A21CAF" }
