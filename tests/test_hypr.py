@@ -12,7 +12,7 @@ LUA = shutil.which("lua5.4") or shutil.which("lua")
 
 # Every key the roadmap promises (Serpantinum's layout plus SUPER + slash).
 EXPECTED_KEYS = {
-    "SUPER + RETURN", "SUPER + F", "SUPER + E", "SUPER + Q", "SUPER + ALT + F", "SUPER + SHIFT + F",
+    "SUPER + RETURN", "SUPER + Tab", "SUPER + F", "SUPER + E", "SUPER + Q", "SUPER + ALT + F", "SUPER + SHIFT + F",
     "SUPER + Left", "SUPER + CTRL + Left", "SUPER + SHIFT + Left", "SUPER + mouse:272", "SUPER + mouse:273", "SUPER + CTRL_L", "SUPER + ALT_L",
     "SUPER + 1", "SUPER + 0", "SUPER + SHIFT + 1", "SUPER + SHIFT + 0",
     "SUPER + D", "SUPER + B", "SUPER + M", "SUPER + W", "SUPER + S", "SUPER + N", "SUPER + V",

@@ -65,6 +65,7 @@ end
 
 -- Shell panels --------------------------------------------------------------
 panel("launcher", "Search and open apps")(mod .. " + D")
+panel("overview", "Workspace overview: every window, drag to move")(mod .. " + Tab")
 panel("system", "Open the system panel")(mod .. " + B")
 panel("music", "Open the music panel")(mod .. " + M")
 panel("wallpaper", "Open the wallpaper selector")(mod .. " + W")

@@ -19,6 +19,7 @@ import "widgets"
 import "lock"
 import "modes"
 import "dock"
+import "overview"
 import "ipc"
 
 // Entry point: only composes the parts, each one lives in its own folder.
@@ -28,6 +29,7 @@ ShellRoot {
     WallpaperLayer {}
     Widgets {}
     Dock {}
+    Overview {}
     Bars {
         id: barLayer
         onStatusClicked: networkLayer.toggle()

@@ -507,6 +507,13 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   top-right corner, urgent ones stay until closed.
 - **Wallpaper**: drawn by the shell itself, under the windows (no other
   program needed); a new one fades in.
+- **Workspace overview** (`SUPER + Tab`): workspaces 1 to 10 as small
+  screens, each window where it is, as a live picture (Hyprland's toplevel
+  export). Click a workspace to go there, a window to bring it forward;
+  drag a window onto another workspace to move it there (you stay where you
+  are). 1 to 9 and 0 pick a workspace, Escape closes.
+
+  ![Workspace overview](docs/images/overview.png)
 - **Launcher** (`SUPER + D`): search and open apps. Every word typed is
   looked for in the name, description, keywords and command, so `nautilus`
   finds Files. Terminal apps (btop, nvim…) open in your terminal

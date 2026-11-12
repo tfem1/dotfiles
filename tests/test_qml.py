@@ -44,7 +44,7 @@ VISUAL = [
     "settings/SettingRow.qml", "settings/TextButton.qml", "settings/DisplayPage.qml",
     "settings/WidgetsPage.qml", "settings/ApplyBar.qml",
     "widgets/WidgetsContent.qml", "widgets/WidgetCard.qml", "widgets/ClockPill.qml", "widgets/ResourceCard.qml",
-    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "widgets/OrganicShape.qml", "dock/DockContent.qml", "settings/DockPage.qml", "settings/HomePage.qml", "settings/WelcomeBanner.qml", "settings/Moon.qml", "settings/TweaksPage.qml",
+    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "widgets/OrganicShape.qml", "dock/DockContent.qml", "overview/OverviewContent.qml", "settings/DockPage.qml", "settings/HomePage.qml", "settings/WelcomeBanner.qml", "settings/Moon.qml", "settings/TweaksPage.qml",
 ]
 
 
@@ -68,7 +68,7 @@ class VisualComponentsTest(unittest.TestCase):
             done = subprocess.run([sys.executable, str(REPO / "tools/preview/render.py"), "--out", out],
                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(done.returncode, 0, done.stderr)
-            modes = ["bar", "bar-positions", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "lock", "music",
+            modes = ["bar", "bar-positions", "overview", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "lock", "music",
                      "power", "settings", "settings-display", "settings-home", "settings-dock", "settings-system", "settings-tweaks",
                      "settings-widgets", "system", "volume", "wallpaper", "widgets", "wifi"]
             self.assertEqual(sorted(p.name for p in Path(out).iterdir()), sorted(f"forest-moonlit-{m}.png" for m in modes))
@@ -286,6 +286,27 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual(self.probe(logos, '[Lib.has("arch"), Lib.has("cachyos"), Lib.has("")]', None),
                          [True, False, False])
         self.assertIn("fill%3D'%23d19fe4'", self.probe(logos, 'Lib.source("arch", "#d19fe4")', None))
+
+    def test_overview_places_windows_in_their_workspace(self):
+        lib = SHELL / "overview/overview.js"
+        screens = [{"id": 1, "monitor": {"x": 1920, "y": 0, "width": 3840, "height": 2160, "scale": 2}},
+                   {"id": 3, "monitor": None}]
+        windows = [{"address": "0xa", "workspace": 1, "at": [2400, 540], "size": [960, 540], "floating": True},
+                   {"address": "0xb", "workspace": 1, "at": [1920, 0], "size": [480, 1080], "focused": True},
+                   {"address": "0xc", "workspace": 12, "at": [0, 0], "size": [10, 10]}]
+        model = self.probe(lib, "Lib.model(input.s, input.w, 1)", {"s": screens, "w": windows})
+        self.assertEqual([w["id"] for w in model], list(range(1, 11)))
+        first = model[0]
+        self.assertTrue(first["focused"])
+        # Tiled first, floating on top; places in parts of the (scaled) screen.
+        self.assertEqual([(w["address"], w["x"], w["y"], w["w"], w["h"]) for w in first["windows"]],
+                         [("0xb", 0, 0, 0.25, 1), ("0xa", 0.25, 0.5, 0.5, 0.5)])
+        self.assertEqual(model[2]["windows"], [])
+        self.assertEqual(self.probe(lib, 'Lib.moveCommand("55d8", 4)', None),
+                         'hl.dsp.window.move({ window = "address:0x55d8", workspace = 4, follow = false })')
+        self.assertEqual(self.probe(lib, 'Lib.focusCommand("0x55d8")', None),
+                         'hl.dsp.focus({ window = "address:0x55d8" })')
+        self.assertEqual(self.probe(lib, '["1", "9", "0", "a", ""].map(Lib.workspaceForKey)', None), [1, 9, 10, 0, 0])
 
     def test_dock_lists_pinned_apps_then_running_ones(self):
         lib = SHELL / "dock/dock.js"

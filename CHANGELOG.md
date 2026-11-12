@@ -17,6 +17,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Workspace overview** (`SUPER + Tab`): the 10 workspaces with their
+  windows in place, as live pictures; click to go to a workspace or a
+  window, drag a window to another workspace to move it, 1–0 and Escape.
 - **Lyrics for almost every song**: cleaned names (videos, "- Topic",
   "feat.", remasters, "Artist - Song" titles), then four requests in turn
   (exact, without album, search by title and artist, free search), the

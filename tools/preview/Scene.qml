@@ -15,6 +15,8 @@ import "../../quickshell/power"
 import "../../quickshell/system"
 import "../../quickshell/settings"
 import "../../quickshell/dock"
+import "../../quickshell/overview"
+import "../../quickshell/overview/overview.js" as OverviewLib
 import "../../quickshell/widgets"
 import "../../quickshell/lock"
 
@@ -74,6 +76,24 @@ Rectangle {
         now: sampleBar.now
         distro: "arch"
         status: sampleBar.status
+    }
+
+    // The workspace overview (SUPER + Tab): windows of a few workspaces.
+    OverviewContent {
+        visible: scene.mode === "overview"
+        anchors.fill: parent
+        anchors.topMargin: 44
+        z: 10
+        workspaces: OverviewLib.model([1, 2, 3, 4, 7].map(id => ({ id: id, monitor: { x: 0, y: 0, width: 1920, height: 1080, scale: 1 } })), [
+            { address: "1", appClass: "firefox", workspace: 1, at: [6, 50], size: [1200, 1024] },
+            { address: "2", appClass: "kitty", workspace: 1, at: [1214, 50], size: [700, 510] },
+            { address: "3", appClass: "kitty", workspace: 1, at: [1214, 566], size: [700, 508] },
+            { address: "4", appClass: "code", workspace: 2, at: [6, 50], size: [1908, 1024], focused: true },
+            { address: "5", appClass: "spotify", workspace: 3, at: [6, 50], size: [950, 1024] },
+            { address: "6", appClass: "discord", workspace: 3, at: [962, 50], size: [952, 1024] },
+            { address: "7", appClass: "steam", workspace: 4, at: [300, 200], size: [1300, 750], floating: true },
+            { address: "8", appClass: "nautilus", workspace: 7, at: [6, 50], size: [1908, 1024] }
+        ], 2)
     }
 
     // The dock at the bottom: pinned apps, two running, one focused.
@@ -164,7 +184,7 @@ Rectangle {
 
     // Launcher, clipboard, cheatsheet, selector, network: the screen dims behind them.
     Rectangle {
-        visible: !["desktop", "widgets", "lock", "bar-positions"].includes(scene.mode)
+        visible: !["desktop", "widgets", "lock", "bar-positions", "overview"].includes(scene.mode)
         anchors.fill: parent
         anchors.topMargin: 44
         color: Qt.alpha(Theme.bgAlt, ["wifi", "bluetooth", "volume", "calendar", "music", "system"].includes(scene.mode) ? 0.2 : 0.45)
