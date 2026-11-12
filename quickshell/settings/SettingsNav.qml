@@ -68,18 +68,8 @@ Item {
 
                 width: parent.width
                 height: isPage ? 58 : 40
-                radius: Theme.radius - 2
-                color: chosen ? Theme.surface : hover.hovered ? Qt.alpha(Theme.surface, 0.55) : "transparent"
-
-                Rectangle {
-                    visible: entry.chosen
-                    x: 0
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 3
-                    height: parent.height - 20
-                    radius: 1.5
-                    color: Theme.accent
-                }
+                radius: height / 2
+                color: chosen ? Qt.alpha(Theme.accent, 0.22) : hover.hovered ? Qt.alpha(Theme.surface, 0.55) : "transparent"
                 Icon {
                     id: pageIcon
                     visible: entry.isPage

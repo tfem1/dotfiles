@@ -49,7 +49,7 @@ Column {
 
                 width: (grid.width - (grid.columns - 1) * 10) / grid.columns
                 height: 76
-                radius: Theme.radius - 2
+                radius: Theme.radius + 6
                 color: modelData.colors.bg
                 border.width: chosen ? 2 : 1
                 border.color: chosen ? Theme.accent : Qt.alpha(modelData.colors.fg, hover.hovered ? 0.35 : 0.12)

@@ -376,6 +376,8 @@ Rectangle {
             page: scene.mode === "settings" ? "appearance" : scene.mode.slice(9)
             wallpaper: scene.wallpaper
             modes: ({ game: true, night: true })
+            fonts: ({ all: ["Cantarell", "DejaVu Sans", "DejaVu Sans Mono", "Inter", "JetBrains Mono", "Monocraft",
+                            "Noto Sans", "Ubuntu"], mono: ["DejaVu Sans Mono", "JetBrains Mono", "Monocraft"] })
             about: ({ user: "alex", theme: "Catppuccin Mocha", uptime: "3 h 25 min", system: "Arch Linux" })
             live: ({ gameMode: false, volume: 0.64, muted: false, micMuted: false, brightness: 0.8, wifi: true,
                      bluetooth: true, layout: "French", quiet: false, awake: false, idle: sample.values || {} })

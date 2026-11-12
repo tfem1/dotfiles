@@ -17,6 +17,7 @@ Item {
     property var confirm: null       // see DisplayPage
     property string wallpaper: ""    // file:// URL
     property var about: ({})         // see HomePage
+    property var fonts: ({ all: [], mono: [] })   // see FontsPage
     property var modes: ({})         // which modes are on, see TweaksPage
     property string page: "home"
     property bool busy: false        // applying
@@ -35,7 +36,7 @@ Item {
 
     function pageItem() {
         return ({ home: homePage, system: systemPage, display: displayPage, widgets: widgetsPage,
-                  dock: dockPage, tweaks: tweaksPage })[page] || appearancePage;
+                  dock: dockPage, tweaks: tweaksPage, fonts: fontsPage })[page] || appearancePage;
     }
 
     function scrollTo(id) {
@@ -156,6 +157,15 @@ Item {
                     wallpaper: window.wallpaper
                     onChanged: (key, value) => window.changed(key, value)
                     onChooseWallpaper: window.chooseWallpaper()
+                }
+                FontsPage {
+                    id: fontsPage
+                    visible: window.page === "fonts"
+                    x: 28
+                    width: flick.width - 56
+                    values: window.settings.values
+                    fonts: window.fonts
+                    onAction: (name, value) => window.action(name, value)
                 }
                 SystemPage {
                     id: systemPage

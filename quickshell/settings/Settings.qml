@@ -38,6 +38,7 @@ Scope {
             brightnessReader.running = true;
             displayControl.refresh();
             uptimeReader.reload();
+            fontReader.running = true;
         } else {
             pending = {};
         }
@@ -101,6 +102,8 @@ Scope {
             Session.doNotDisturb = value;
         else if (name === "awake")
             Session.stayAwake = value;
+        else if (name === "font")
+            store.change({ [value.key]: value.value });
         else if (name === "widgets-edit") {
             open = false;
             widgets.edit();
@@ -145,6 +148,21 @@ Scope {
         onTriggered: root.radios = {}
     }
 
+    // The fonts installed (fontconfig): every family, then the monospace ones.
+    property var fonts: ({ all: [], mono: [] })
+    Process {
+        id: fontReader
+        command: ["sh", "-c", "fc-list --format '%{family[0]}\\n' | sort -u; echo ---; "
+            + "fc-list :spacing=mono --format '%{family[0]}\\n' | sort -u"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const parts = text.split("---\n");
+                const names = part => (part || "").split("\n").map(name => name.trim()).filter(name => name);
+                root.fonts = { all: names(parts[0]), mono: names(parts[1]) };
+            }
+        }
+    }
+
     // "12345.67 ..." : seconds since the system started.
     FileView {
         id: uptimeReader
@@ -182,6 +200,7 @@ Scope {
                 confirm: displayControl.confirm
                 wallpaper: Library.fileUrl(Theme.wallpaper)
                 modes: root.modes.on
+                fonts: root.fonts
                 about: ({
                     user: Quickshell.env("USER") || "",
                     theme: store.values["palette.source"] === "wallpaper" ? "Wallpaper colors"

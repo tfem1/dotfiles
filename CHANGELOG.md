@@ -17,6 +17,17 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **The logo of your distro** at the top left: 30 systems (Arch, Fedora,
+  Debian, Ubuntu, NixOS, Mint, Pop!_OS, openSUSE, EndeavourOS, Manjaro...),
+  from Simple Icons, Tux for any other Linux.
+- Settings → **Fonts**: interface and monospace fonts picked among the
+  fonts installed (each drawn in its own face, with a search), and their
+  sizes.
+
+### Changed
+
+- Settings are rounder: the pages are pills (the one open tinted with the
+  accent), the rows and the theme cards have rounder corners.
 - **Calendar widget**: the month, today in the accent color
   (`widgets.calendar`).
 - **Widgets you can move**: Settings → Widgets → Move… (or

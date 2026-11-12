@@ -30,7 +30,7 @@ from wallpaper_collection import find, load_collection, theme_for  # noqa: E402
 
 MODES = ("desktop", "widgets", "lock", "launcher", "clipboard", "cheatsheet", "wallpaper", "wifi", "bluetooth", "volume",
          "calendar", "music", "power", "system", "settings", "settings-system", "settings-display",
-         "settings-widgets", "settings-home", "settings-tweaks", "settings-dock", "bar-positions", "overview", "widgets-edit")
+         "settings-widgets", "settings-home", "settings-tweaks", "settings-dock", "bar-positions", "overview", "widgets-edit", "settings-fonts")
 # Hues of the sample landscapes drawn for the wallpaper selector (degrees).
 SAMPLE_HUES = (215, 280, 330, 140, 25, 195, 255, 0, 50, 100, 300, 230, 160, 10)
 # The theme some samples bring, as a wallpaper of the collection would.

@@ -44,7 +44,7 @@ VISUAL = [
     "settings/SettingRow.qml", "settings/TextButton.qml", "settings/DisplayPage.qml",
     "settings/WidgetsPage.qml", "settings/ApplyBar.qml",
     "widgets/WidgetsContent.qml", "widgets/WidgetCard.qml", "widgets/ClockPill.qml", "widgets/ResourceCard.qml",
-    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "widgets/OrganicShape.qml", "dock/DockContent.qml", "overview/OverviewContent.qml", "widgets/CalendarCard.qml", "widgets/WidgetBlock.qml", "widgets/WidgetsDesktop.qml", "settings/DockPage.qml", "settings/HomePage.qml", "settings/WelcomeBanner.qml", "settings/Moon.qml", "settings/TweaksPage.qml",
+    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "widgets/OrganicShape.qml", "dock/DockContent.qml", "overview/OverviewContent.qml", "widgets/CalendarCard.qml", "widgets/WidgetBlock.qml", "widgets/WidgetsDesktop.qml", "settings/DockPage.qml", "settings/FontsPage.qml", "settings/HomePage.qml", "settings/WelcomeBanner.qml", "settings/Moon.qml", "settings/TweaksPage.qml",
 ]
 
 
@@ -69,7 +69,7 @@ class VisualComponentsTest(unittest.TestCase):
                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(done.returncode, 0, done.stderr)
             modes = ["bar", "bar-positions", "overview", "widgets-edit", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "lock", "music",
-                     "power", "settings", "settings-display", "settings-home", "settings-dock", "settings-system", "settings-tweaks",
+                     "power", "settings", "settings-display", "settings-home", "settings-dock", "settings-fonts", "settings-system", "settings-tweaks",
                      "settings-widgets", "system", "volume", "wallpaper", "widgets", "wifi"]
             self.assertEqual(sorted(p.name for p in Path(out).iterdir()), sorted(f"forest-moonlit-{m}.png" for m in modes))
 
@@ -285,6 +285,13 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual(self.probe(logos, "Lib.distroId(input)", "ID=cachyos\nID_LIKE=arch\n"), "cachyos")
         self.assertEqual(self.probe(logos, '[Lib.has("arch"), Lib.has("cachyos"), Lib.has("")]', None),
                          [True, False, False])
+        # Each system its own logo; a derivative Tux, not its parent's; none: the gear ("").
+        ids = ["arch", "fedora", "debian", "ubuntu", "nixos", "linuxmint", "pop", "opensuse-tumbleweed",
+               "endeavouros", "manjaro", "gentoo", "void", "cachyos", ""]
+        self.assertEqual(self.probe(logos, "input.map(Lib.logoFor)", ids),
+                         ids[:7] + ["opensuse-tumbleweed", "endeavouros", "manjaro", "gentoo", "void", "linux", ""])
+        shapes = self.probe(logos, 'input.map(id => Lib.source(Lib.logoFor(id), "#fff"))', ids[:-1])
+        self.assertEqual(len(set(shapes[:12])), 12)   # all different
         self.assertIn("fill%3D'%23d19fe4'", self.probe(logos, 'Lib.source("arch", "#d19fe4")', None))
 
     def test_widget_places_are_parts_of_the_free_space(self):
@@ -427,7 +434,7 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual(self.probe(lib, 'Lib.screensOn(input, {"HDMI-A-1": "off"})', screens), 1)
         self.assertEqual(self.probe(lib, 'Lib.screensOn(input, {"eDP-1": "2560x1440@60.00"})', screens), 3)
         self.assertEqual(self.probe(lib, 'Lib.PAGES.map(p => p.id)', None),
-                         ["home", "appearance", "system", "display", "widgets", "dock", "tweaks"])
+                         ["home", "appearance", "fonts", "system", "display", "widgets", "dock", "tweaks"])
 
     def test_every_search_result_leads_to_a_row(self):
         # Rows made by a Repeater are visual children only: they are walked

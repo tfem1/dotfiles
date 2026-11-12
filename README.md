@@ -447,12 +447,16 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   file ids, `"firefox,kitty,org.gnome.Nautilus"` by default).
 
   ![Settings, Dock page](docs/images/settings-dock.png)
-- **Distro logo** (top left of the bar), in the theme's accent color: violet
-  with a violet theme, green with a green one. A click opens the Settings
-  window. The Arch Linux logo shows only on Arch itself, in one color and its
-  own proportions, as the [Arch trademark
-  policy](https://terms.archlinux.org/docs/trademark-policy/) asks; other
-  systems get the Settings gear.
+- **Distro logo** (top left of the bar), in the theme's accent color, the
+  logo of the system you run: Arch, Fedora, Debian, Ubuntu, NixOS, Linux
+  Mint, Pop!_OS, openSUSE, EndeavourOS, Manjaro, Gentoo, Void, Kali, Zorin,
+  elementary, Alpine, Rocky, AlmaLinux, CentOS, Red Hat, Garuda, Nobara,
+  Artix, MX, KDE neon, Slackware, Asahi, OpenBSD, FreeBSD (from
+  `/etc/os-release`). A click opens the Settings window. Logos come from
+  [Simple Icons](https://simpleicons.org) (CC0, `tools/import_logos.py`),
+  each shown only on its own system, in one color and its own proportions,
+  as trademark policies such as [Arch's](https://terms.archlinux.org/docs/trademark-policy/)
+  ask: a derivative without its own logo (CachyOS…) gets Tux.
 - **Desktop widgets**, in the corner of the screen you pick (top left by
   default, or any of the other three), under the windows, in the colors of the theme,
   a little see-through (Hyprland's blur shows behind them, only inside
@@ -556,6 +560,12 @@ folder name is `shell.name` in your `config.json`). Its colors follow
     Nothing changes until **Apply**: a small desktop at the top shows the
     result first (bar, window, panel), and a bar at the bottom counts the
     changes waiting, with Cancel.
+  - **Fonts**: the interface font (bar, panels, Settings, GTK and Qt
+    apps) and the monospace one (terminal), each picked in the list of the
+    fonts installed, drawn in its own face, with a search; sizes 9 to 14;
+    a sample on top. They act at once.
+
+    ![Settings, Fonts page](docs/images/settings-fonts.png)
   - **System**, acting at once: **game mode** (see Modes below), sound and
     microphone, brightness, Wi-Fi and Bluetooth (with their panel), keyboard
     layout, quiet mode, stay awake, and **sleep**: after how long the
