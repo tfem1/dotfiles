@@ -81,6 +81,7 @@ PanelWindow {
 
         edge: window.edge
         transparent: !!Theme.bar.transparent
+        layout: Theme.bar.layout || ""
 
         workspaces: Desktop.workspaces
         hasMedia: Player.active
@@ -108,6 +109,7 @@ PanelWindow {
         onClockClicked: window.clockClicked()
         onPowerClicked: window.powerClicked()
         onLogoClicked: window.logoClicked()
+        onUpdatesClicked: Updates.install()
 
         HoverHandler { id: barHover }
     }

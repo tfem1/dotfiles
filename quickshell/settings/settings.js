@@ -19,6 +19,7 @@ const INDEX = [
     { page: "appearance", id: "textsize", title: "Text size", words: "font size bigger smaller" },
     { page: "tweaks", id: "modes", title: "Modes", words: "gaming coffee night sleep focus presentation power saver do not disturb screenshot region" },
     { page: "tweaks", id: "bar-position", title: "Bar position", words: "top bottom left right side vertical edge panel" },
+    { page: "tweaks", id: "bar-layout", title: "Bar layout", words: "modules order move drag hide clock workspaces logo power status" },
     { page: "tweaks", id: "record-audio", title: "Sound in screen recordings", words: "record video audio microphone sound capture screencast" },
     { page: "tweaks", id: "bar-transparent", title: "Transparent bar", words: "see-through invisible background clear panel" },
     { page: "dock", id: "dock-enabled", title: "Dock", words: "apps pinned taskbar launcher icons" },

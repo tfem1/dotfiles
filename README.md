@@ -484,6 +484,12 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   (`bar.position` and `bar.transparent` in `config.json`). Windows and
   widgets keep clear of it on every edge.
 
+  **Bar layout** (Settings → Tweaks): drag its modules (distro logo, music,
+  workspaces, clock, status icons, power button) to the start, the middle
+  or the end of the bar, in any order, or into Hidden. Saved as
+  `bar.layout` in `config.json`: `"logo|media,workspaces,clock|status,power"`
+  (start|middle|end, modules separated by commas).
+
   ![The bar on the left, and a transparent one at the bottom](docs/images/bar-positions.png)
 - **Dock**: your pinned apps, then the ones running, with a mark under the
   running ones (longer for the focused one). A click opens the app or brings

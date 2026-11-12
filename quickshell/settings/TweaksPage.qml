@@ -65,6 +65,19 @@ Column {
     }
 
     SettingRow {
+        objectName: "bar-layout"
+        width: page.width
+        title: "Bar layout"
+        description: "Drag the modules of the bar to another place, to the start, the middle or the end, or into Hidden."
+        wide: true
+        BarLayoutEditor {
+            width: parent.width
+            layout: page.values["bar.layout"] || ""
+            onChanged: text => page.action("bar.layout", text)
+        }
+    }
+
+    SettingRow {
         objectName: "record-audio"
         width: page.width
         title: "Sound in screen recordings"

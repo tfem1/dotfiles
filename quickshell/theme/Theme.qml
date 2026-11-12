@@ -56,7 +56,7 @@ QtObject {
     property bool powerSaver: false    // no animations, a dimmer screen
     property string wallpaper: ""
     // The bar (config.json bar.*): "top", "bottom", "left" or "right".
-    property var bar: ({ position: "top", transparent: false })
+    property var bar: ({ position: "top", transparent: false, layout: "logo|media,workspaces,clock|status,power" })
     // The dock (config.json dock.*); its colors come from the theme.
     property var dock: ({ enabled: true, position: "bottom", opacity: 0.85, autohide: false,
                           pinned: "firefox,kitty,org.gnome.Nautilus" })

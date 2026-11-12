@@ -21,6 +21,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Bar layout (Settings → Tweaks): drag the bar's modules to its start,
+  middle or end, in any order, or hide them (`bar.layout`).
 - Color picker (`SUPER + SHIFT + C`, `tfem pick`): the color of the pixel
   clicked is copied as `#RRGGBB`; `tfem pick history` lists the last ones.
 - Update icon in the bar with the number of packages to update; a click

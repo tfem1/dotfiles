@@ -54,7 +54,8 @@
   },
   "bar": {
     "position": "top",
-    "transparent": false
+    "transparent": false,
+    "layout": "logo|media,workspaces,clock|status,power"
   },
   "dock": {
     "enabled": true,

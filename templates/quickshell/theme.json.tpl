@@ -54,7 +54,8 @@
   },
   "bar": {
     "position": {{ bar.position | json }},
-    "transparent": {{ bar.transparent }}
+    "transparent": {{ bar.transparent }},
+    "layout": {{ bar.layout | json }}
   },
   "dock": {
     "enabled": {{ dock.enabled }},

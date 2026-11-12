@@ -45,6 +45,7 @@ VISUAL = [
     "settings/WidgetsPage.qml", "settings/ApplyBar.qml",
     "widgets/WidgetsContent.qml", "widgets/WidgetCard.qml", "widgets/ClockPill.qml", "widgets/ResourceCard.qml",
     "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "widgets/OrganicShape.qml", "dock/DockContent.qml", "overview/OverviewContent.qml", "widgets/CalendarCard.qml", "widgets/WidgetBlock.qml", "widgets/WidgetsDesktop.qml", "settings/DockPage.qml", "settings/FontsPage.qml", "settings/HomePage.qml", "settings/WelcomeBanner.qml", "settings/Moon.qml", "settings/TweaksPage.qml",
+    "settings/BarLayoutEditor.qml", "bar/WorkspaceNotch.qml",
 ]
 
 
@@ -143,6 +144,40 @@ class VisualComponentsTest(unittest.TestCase):
         # The same colors for `tfem wallpapers set --colors`.
         self.assertEqual(self.probe(SHELL / "wallpaper/colors.js", "Lib.palette(input)", colors[4:6]),
                          "#2e6ed1,#e6e6e0")
+
+    def test_bar_modules_are_dragged_to_another_zone(self):
+        from PySide6.QtCore import QPoint, Qt
+        from PySide6.QtQuick import QQuickView
+        from PySide6.QtTest import QTest
+        with tempfile.TemporaryDirectory() as folder:
+            harness = Path(folder) / "Harness.qml"
+            harness.write_text(f'''import QtQuick
+import "file:{SHELL / "settings"}"
+Item {{
+    width: 700; height: 230
+    property string layout: "logo|media,workspaces,clock|status,power"
+    BarLayoutEditor {{ width: 700; layout: parent.layout; onChanged: text => parent.layout = text }}
+}}
+''')
+            view = QQuickView()
+            view.setSource(QUrl.fromLocalFile(str(harness)))
+            self.assertEqual([e.toString() for e in view.errors()], [])
+            view.show()
+            self.app.processEvents()
+
+            def drag(start, end):
+                QTest.mousePress(view, Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier, start)
+                for step in range(1, 21):
+                    QTest.mouseMove(view, start + (end - start) * step / 20, 10)
+                    self.app.processEvents()
+                QTest.mouseRelease(view, Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier, end)
+                self.app.processEvents()
+                return view.rootObject().property("layout")
+
+            # Rows of 46 px, 8 apart: Start, Middle, End, Hidden. The logo, first of
+            # Start, goes to the end of End, then into Hidden.
+            self.assertEqual(drag(QPoint(120, 23), QPoint(690, 131)), "|media,workspaces,clock|status,power,logo")
+            self.assertEqual(drag(QPoint(120, 77), QPoint(300, 185)), "|workspaces,clock|status,power,logo")
 
     def test_selector_left_and_right_arrows_browse(self):
         from PySide6.QtCore import Qt
