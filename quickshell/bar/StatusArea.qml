@@ -11,12 +11,28 @@ Pill {
 
     // { keyboard, volume, muted, network (wifi | wired | offline), wifiStrength,
     //   bluetoothOn, bluetoothConnected, hasBattery, battery, charging,
-    //   quiet, awake, game, modes: { saver, night, presentation, focus } }
+    //   quiet, awake, game, recording, updates (packages to update),
+    //   modes: { saver, night, presentation, focus } }
     property var status: ({})
+    signal updatesClicked   // the update icon: opens a terminal that updates
     readonly property var s: status || {}
 
     spacing: 10
 
+    // Packages to update: the icon and how many; a click updates them.
+    Icon {
+        visible: area.s.updates > 0
+        name: "system_update_alt"
+        color: Theme.accent2
+        TapHandler { onTapped: area.updatesClicked() }
+    }
+    Label {
+        visible: area.s.updates > 0 && !area.vertical
+        text: String(area.s.updates || "")
+        small: true
+        color: Theme.accent2
+        TapHandler { onTapped: area.updatesClicked() }
+    }
     Icon {   // recording the screen
         visible: !!area.s.recording
         name: "radio_button_checked"

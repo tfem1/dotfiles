@@ -113,5 +113,8 @@ run(cli .. " screenshot full --edit", "Edit a screenshot of the screen", locked)
 run(cli .. " screenshot full", "Screenshot of the screen")("CTRL + SHIFT + S")
 run(cli .. " screenshot full", "Screenshot of the screen")(mod .. " + SHIFT + Escape")
 
+-- Color picker: click a pixel, its #RRGGBB is copied.
+run(cli .. " pick", "Pick a color on the screen")(mod .. " + SHIFT + C")
+
 -- Screen recording (saved in ~/Videos/Screencasts): again to stop.
 run(cli .. " record", "Record the screen (again to stop)")(mod .. " + ALT + R")

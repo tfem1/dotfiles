@@ -3,6 +3,9 @@
 # stops and saves. Usage: record.sh [full|region] [--audio]
 #   full (default): the screen in focus; region: an area picked with slurp;
 #   --audio: with the sound of the default input (microphone).
+# Without --audio, the sound comes from config.json record.audio (Settings →
+# Tweaks): "computer" (what you hear: the monitor of the default output),
+# "microphone" or "none".
 # Videos go to ~/Videos/Screencasts. The shell shows a red dot in the bar
 # while it records (`qs ipc call recording ...`).
 set -euo pipefail
@@ -42,6 +45,17 @@ for arg in "$@"; do
   esac
 done
 command -v wf-recorder >/dev/null 2>&1 || { echo "wf-recorder is not installed" >&2; exit 1; }
+
+if [[ ${#audio[@]} -eq 0 ]]; then
+  root="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+  sound="$(python3 "$root/settings.py" get 2>/dev/null \
+    | python3 -c 'import json, sys; print(json.load(sys.stdin)["values"].get("record.audio", "none"))' 2>/dev/null)" || sound=none
+  if [[ $sound == microphone ]]; then
+    audio=(--audio)
+  elif [[ $sound == computer ]] && sink="$(pactl get-default-sink 2>/dev/null)" && [[ -n $sink ]]; then
+    audio=("--audio=$sink.monitor")   # PulseAudio / PipeWire: what the output plays
+  fi
+fi
 
 # The screen in focus, from the compositor in use (with several screens,
 # wf-recorder would otherwise ask which one).

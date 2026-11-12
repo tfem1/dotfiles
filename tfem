@@ -17,6 +17,8 @@ Commands:
                   --all               render even if the app is not installed
   screenshot    Take a screenshot: region|full [--edit]
   record        Record the screen: [full|region] [--audio]; again to stop
+  pick          Pick a color on the screen (copied as #RRGGBB); history: the last ones
+  updates       count: packages to update; install: update them (sudo)
   wallpapers    fetch [--category NAME]: download the collection
                 list [--json]: list your wallpapers; set IMAGE: use one
                 (a wallpaper of the collection also brings its theme)
@@ -51,6 +53,8 @@ case "$command" in
   generate) exec "$root/scripts/generate.sh" "$@" ;;
   screenshot) exec "$root/scripts/screenshot.sh" "$@" ;;
   record) exec "$root/scripts/record.sh" "$@" ;;
+  pick) exec "$root/scripts/pick.sh" "$@" ;;
+  updates) exec "$root/scripts/updates.sh" "$@" ;;
   wallpapers) need_python && exec python3 "$root/scripts/wallpapers.py" "$@" ;;
   icons) need_python && exec python3 "$root/scripts/icons.py" "$@" ;;
   fonts) need_python && exec python3 "$root/scripts/fonts.py" "$@" ;;

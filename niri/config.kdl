@@ -127,6 +127,9 @@ binds {
     Ctrl+Shift+S { spawn-sh "~/.local/bin/tfem screenshot full"; }
     Mod+Shift+Escape { spawn-sh "~/.local/bin/tfem screenshot full"; }
 
+    // Color picker: click a pixel, its #RRGGBB is copied.
+    Mod+Shift+C { spawn-sh "~/.local/bin/tfem pick"; }
+
     // Screen recording (saved in ~/Videos/Screencasts): again to stop.
     Mod+Alt+R { spawn-sh "~/.local/bin/tfem record"; }
 }

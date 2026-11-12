@@ -20,6 +20,9 @@
     "autohide": false,
     "pinned": "firefox,kitty,org.gnome.Nautilus"
   },
+  "record": {
+    "audio": "computer"
+  },
   "widgets": {
     "corner": "top-left",
     "clock": true,

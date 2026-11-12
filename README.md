@@ -571,13 +571,22 @@ folder name is `shell.name` in your `config.json`). Its colors follow
 - **Notifications**: the shell is the notification daemon; popups in the
   top-right corner, urgent ones stay until closed.
 - **Wallpaper**: drawn by the shell itself, under the windows (no other
-  program needed); a new one fades in.
+  program needed); a new one slides in from the right.
 - **Screen recording** (`SUPER + ALT + R`, again to stop): the screen in
   focus, with wf-recorder, saved to `~/Videos/Screencasts`; a red dot in
   the bar while it records, a notification at the start and with the file
   at the end. From a terminal: `tfem record` (`region` for an area picked
-  with the mouse, `--audio` to add the microphone). On Hyprland, Sway and
-  Niri.
+  with the mouse, `--audio` for the microphone). The sound recorded is set
+  in Settings → Tweaks (`record.audio` in config.json): **Computer** (what
+  you hear, the default; through `pactl`), **Microphone** or **None**. On
+  Hyprland, Sway and Niri.
+- **Color picker** (`SUPER + SHIFT + C`): click any pixel, its `#RRGGBB` is
+  copied (slurp and grim) and a notification shows it. `tfem pick history`
+  lists the last 20 colors picked.
+- **Updates**: the bar shows an icon and how many packages can be updated
+  (counted 2 minutes after login, then every hour: `checkupdates` on Arch,
+  apt on Debian, dnf on Fedora). A click opens kitty, which updates them
+  (`tfem updates install`, it asks for your password).
 - **Workspace overview** (`SUPER + Tab`): workspaces 1 to 10 as small
   screens, each window where it is, as a live picture (Hyprland's toplevel
   export). Click a workspace to go there, a window to bring it forward;

@@ -21,6 +21,13 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Color picker (`SUPER + SHIFT + C`, `tfem pick`): the color of the pixel
+  clicked is copied as `#RRGGBB`; `tfem pick history` lists the last ones.
+- Update icon in the bar with the number of packages to update; a click
+  updates them in a terminal (`tfem updates count|install`; pacman-contrib
+  on Arch).
+- Sound in screen recordings: the computer's sound by default, or the
+  microphone, or none (Settings → Tweaks, `record.audio`).
 - A new wallpaper slides in from the right over the old one.
 - `tfem wallpapers thumbs`: 720 px copies of the wallpapers (ffmpeg, now
   installed), made after `fetch` and by the shell in the background. The

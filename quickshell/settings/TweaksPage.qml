@@ -64,9 +64,22 @@ Column {
         }
     }
 
+    SettingRow {
+        objectName: "record-audio"
+        width: page.width
+        title: "Sound in screen recordings"
+        description: "SUPER + ALT + R records the screen: with what the computer plays, with your microphone, or silent."
+        Chips {
+            current: page.values["record.audio"] || "computer"
+            model: [{ label: "Computer", value: "computer" }, { label: "Microphone", value: "microphone" },
+                    { label: "None", value: "none" }]
+            onPicked: value => page.action("record.audio", value)
+        }
+    }
+
     Label {
         width: page.width
-        text: "SUPER + G turns game mode on or off; CTRL + SHIFT + S or SUPER + SHIFT + Escape takes a screenshot."
+        text: "SUPER + SHIFT + C picks a color on the screen; SUPER + G turns game mode on or off; CTRL + SHIFT + S or SUPER + SHIFT + Escape takes a screenshot."
         small: true
         wrapMode: Text.WordWrap
     }

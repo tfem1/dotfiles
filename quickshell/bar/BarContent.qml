@@ -1,6 +1,7 @@
 import QtQuick
 import "../theme"
 import "../components"
+import "../services"
 
 // Everything drawn in the bar, fed by plain properties so it can be shown
 // with real data (Bar.qml) or sample data (tools/preview). `edge`: the side
@@ -118,6 +119,7 @@ Rectangle {
         vertical: bar.vertical
         status: bar.status
         onClicked: bar.rightClicked()
+        onUpdatesClicked: Updates.install()
     }
 
     // Opens the power menu.

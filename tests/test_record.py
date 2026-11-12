@@ -23,6 +23,7 @@ FAKES = {
                    'PY',
     "hyprctl": 'echo \'[{"name": "DP-2", "focused": false}, {"name": "HDMI-A-1", "focused": true}]\'',
     "qs": 'echo "qs $*" >> "$LOG"',
+    "pactl": 'echo alsa_output.pci-0000_00_1f.3.analog-stereo',
 }
 
 
@@ -56,6 +57,26 @@ class RecordTest(SandboxTest):
         self.assertEqual([v.read_text() for v in videos], ["video\n"])
         self.assertIn("call recording stopped", self.log.read_text())
         self.assertFalse((self.runtime / "tfem-recording.pid").exists())
+
+    def sound(self, choice):
+        config = self.home / ".config/tfem/config.json"
+        config.parent.mkdir(parents=True, exist_ok=True)
+        config.write_text('{"schema": 1, "record": {"audio": "%s"}}' % choice)
+        self.assertEqual(self.record().returncode, 0)
+        time.sleep(0.3)
+        self.record()
+        return next(line for line in self.log.read_text().splitlines() if line.startswith("wf-recorder"))
+
+    def test_the_computer_sound_by_default(self):
+        self.assertEqual(self.record().returncode, 0)
+        time.sleep(0.3)
+        self.record()
+        self.assertIn("--audio=alsa_output.pci-0000_00_1f.3.analog-stereo.monitor", self.log.read_text())
+
+    def test_the_microphone_or_no_sound_when_chosen(self):
+        self.assertRegex(self.sound("microphone"), r"--audio( |$)")
+        self.log.unlink()
+        self.assertNotIn("--audio", self.sound("none"))
 
     def test_bad_arguments_are_refused(self):
         self.assertEqual(self.record("everything").returncode, 64)

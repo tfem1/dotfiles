@@ -27,7 +27,11 @@ fastfetch	core	fastfetch	fastfetch	fastfetch	fastfetch
 # Screen recording (tfem record, SUPER + ALT + R) and its notifications.
 wf-recorder	core	wf-recorder	wf-recorder	wf-recorder	-
 libnotify	core	libnotify	libnotify-bin	libnotify	-
+# Counting the package updates on Arch (checkupdates).
+pacman-contrib	core	pacman-contrib	-	-	-
 # Small copies of the wallpapers for the selector (tfem wallpapers thumbs).
+# The computer's sound in recordings: the default output (pactl).
+pactl	core	libpulse	pulseaudio-utils	pulseaudio-utils	-
 ffmpeg	core	ffmpeg	ffmpeg	ffmpeg-free|ffmpeg	-
 brightnessctl	core	brightnessctl	brightnessctl	brightnessctl	-
 playerctl	core	playerctl	playerctl	playerctl	playerctl

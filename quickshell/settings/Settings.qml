@@ -75,7 +75,7 @@ Scope {
         } else if (name.startsWith("widgets.") || name.startsWith("bar.") || name.startsWith("dock.")) {
             follow(name, value);
             store.change({ [name]: value });
-        } else if (name.startsWith("idle."))
+        } else if (name.startsWith("idle.") || name.startsWith("record."))
             store.change({ [name]: value });
         else if (name === "volume" && Audio.sink)
             Audio.sink.audio.volume = value;

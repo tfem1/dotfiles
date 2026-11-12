@@ -117,6 +117,9 @@ bindsym $mod+Shift+Print exec $tfem screenshot full --edit
 bindsym Ctrl+Shift+s exec $tfem screenshot full
 bindsym $mod+Shift+Escape exec $tfem screenshot full
 
+# Color picker: click a pixel, its #RRGGBB is copied.
+bindsym $mod+Shift+c exec $tfem pick
+
 # Screen recording (saved in ~/Videos/Screencasts): again to stop.
 bindsym $mod+Alt+r exec $tfem record
 

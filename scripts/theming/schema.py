@@ -136,6 +136,8 @@ CONFIG_SCHEMA: dict[str, Field] = {
     "dock.opacity": _float(0.2, 1.0),
     "dock.autohide": BOOL,
     "dock.pinned": TEXT,      # desktop file ids, comma separated: "firefox,kitty"
+    # Screen recordings (tfem record): the sound they take, if any.
+    "record.audio": Field("choice", choices=("none", "computer", "microphone")),
     # Desktop widgets: which ones show, and in which corner of the screen.
     "widgets.corner": Field("choice", choices=("top-left", "top-right", "bottom-left", "bottom-right")),
     **{f"widgets.{name}": BOOL for name in ("clock", "audio", "media", "calendar", "cpu", "gpu", "ram", "disk")},
