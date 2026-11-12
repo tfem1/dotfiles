@@ -216,13 +216,54 @@ class VisualComponentsTest(unittest.TestCase):
                          ["tv", "headphones", "headphones", "speaker", "mic"])
         self.assertEqual(self.probe(sound, "Lib.percent(0.644)", None), "64%")
 
+    def test_lyrics_names_are_cleaned_for_any_player(self):
+        lyrics = SHELL / "music/lyrics.js"
+        cases = [
+            (("Bohemian Rhapsody (Remastered 2011)", "Queen"), {"title": "Bohemian Rhapsody", "artist": "Queen"}),
+            (("Daft Punk - Get Lucky (Official Video) ft. Pharrell Williams", "Daft Punk"),
+             {"title": "Get Lucky", "artist": "Daft Punk"}),
+            (("Blinding Lights [Official Audio]", "The Weeknd - Topic"), {"title": "Blinding Lights", "artist": "The Weeknd"}),
+            (("Adele - Hello", ""), {"title": "Hello", "artist": "Adele"}),
+            (("Stay (with Justin Bieber)", "The Kid LAROI, Justin Bieber"), {"title": "Stay", "artist": "The Kid LAROI"}),
+            (("Clocks - Remastered 2008", "Coldplay"), {"title": "Clocks", "artist": "Coldplay"}),
+            (("Hey Jude", "The Beatles"), {"title": "Hey Jude", "artist": "The Beatles"}),
+        ]
+        for (title, artist), expected in cases:
+            with self.subTest(title=title):
+                self.assertEqual(self.probe(lyrics, f"Lib.clean({json.dumps(title)}, {json.dumps(artist)})", None), expected)
+
+    def test_lyrics_requests_go_from_exact_to_searches(self):
+        lyrics = SHELL / "music/lyrics.js"
+        urls = self.probe(lyrics, 'Lib.attempts("Clocks - Remastered 2008", "Coldplay", "A Rush of Blood", 307.9)'
+                                  '.map(a => (a.search ? "S " : "G ") + a.url)', None)
+        self.assertEqual(urls, [
+            "G https://lrclib.net/api/get?track_name=Clocks&artist_name=Coldplay&album_name=A%20Rush%20of%20Blood&duration=308",
+            "G https://lrclib.net/api/get?track_name=Clocks&artist_name=Coldplay&duration=308",
+            "S https://lrclib.net/api/search?track_name=Clocks&artist_name=Coldplay",
+            "S https://lrclib.net/api/search?q=Coldplay%20Clocks"])
+        # No artist (a radio, a video): only the free search.
+        self.assertEqual(self.probe(lyrics, 'Lib.attempts("Some Song", "", "", 0).length', None), 1)
+
+    def test_lyrics_search_keeps_the_best_record(self):
+        lyrics = SHELL / "music/lyrics.js"
+        records = [{"id": 1, "duration": 300, "plainLyrics": "a"},
+                   {"id": 2, "duration": 260, "syncedLyrics": "[00:01.00] a"},     # 48 s off: dropped
+                   {"id": 3, "duration": 311, "syncedLyrics": "[00:01.00] a"},
+                   {"id": 4, "duration": 308}]                                    # no lyrics
+        self.assertEqual(self.probe(lyrics, "Lib.best(input, 308).id", records), 3)
+        self.assertEqual(self.probe(lyrics, "Lib.best(input, 0).id", records), 2)   # length unknown: synced first
+        self.assertIsNone(self.probe(lyrics, "Lib.best(input, 308)", []))
+        # Every version far from the song's length: the words, without timing.
+        far = self.probe(lyrics, "Lib.fromAnswer(Lib.best(input, 400))", records[1:3])
+        self.assertEqual((far["kind"], [line["text"] for line in far["lines"]]), ("plain", ["a"]))
+
     def test_lyrics_times_and_lines(self):
         lyrics = SHELL / "music/lyrics.js"
         self.assertEqual(self.probe(lyrics, "[0, 9.9, 65, 185.4, 3600].map(Lib.clock)", None),
                          ["0:00", "0:09", "1:05", "3:05", "60:00"])
-        self.assertEqual(self.probe(lyrics, 'Lib.url("Winter Wrap Up", "Ponyville Chorus", "", 158.6)', None),
-                         "https://lrclib.net/api/get?track_name=Winter%20Wrap%20Up"
-                         "&artist_name=Ponyville%20Chorus&duration=159")
+        self.assertEqual(self.probe(lyrics, 'Lib.url("Night Forest", "Pixel Dreams", "", 158.6)', None),
+                         "https://lrclib.net/api/get?track_name=Night%20Forest"
+                         "&artist_name=Pixel%20Dreams&duration=159")
         answer = {"syncedLyrics": "[00:17.12] Winter wrap up\n[00:05.00] Intro\n[01:02.5] Spring is here\n[01:10.00] ",
                   "plainLyrics": "x"}
         lines = self.probe(lyrics, "Lib.fromAnswer(input)", answer)

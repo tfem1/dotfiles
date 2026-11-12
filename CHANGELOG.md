@@ -17,6 +17,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Lyrics for almost every song**: cleaned names (videos, "- Topic",
+  "feat.", remasters, "Artist - Song" titles), then four requests in turn
+  (exact, without album, search by title and artist, free search), the
+  synced record of the closest length kept, plain words when only other
+  versions exist; found lyrics kept for the session; lrclib is told who asks
+  (`Lrclib-Client`), as its documentation requests.
 - **Dock** with its Settings page: pinned and running apps (Wayland
   windows, desktop files), click to open or cycle windows, right click to
   pin; colors from the theme, opacity from 20 to 100 %, bottom, left or

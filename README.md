@@ -577,6 +577,13 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   the choice of player when several are open (Spotify, Firefox…); and the
   lyrics on request, synced with the song (from lrclib.net, asked only when
   you open the lyrics: title, artist, album and length are sent).
+  Lyrics are found for almost every song, whatever plays it: the names are
+  cleaned first (YouTube's "Artist - Song (Official Video)" by "Artist -
+  Topic", "feat." guests, "Remastered 2011"...), then the exact match is
+  asked, then without the album, then lrclib's searches, keeping synced
+  lyrics of the closest length; a version too far from yours (a video with
+  a long intro) gives its words without the timing. What is found is kept
+  for the session, for the panel and the widget alike.
 - **Volume panel** (`SUPER + V`): output volume and mute, choice of output
   (speakers, headphones, HDMI), microphone and its choice, then one slider
   per app playing sound, with its icon and what it plays. Click, drag or
