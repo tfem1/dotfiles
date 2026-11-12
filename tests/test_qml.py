@@ -45,7 +45,7 @@ VISUAL = [
     "settings/WidgetsPage.qml", "settings/ApplyBar.qml",
     "widgets/WidgetsContent.qml", "widgets/WidgetCard.qml", "widgets/ClockPill.qml", "widgets/ResourceCard.qml",
     "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "widgets/OrganicShape.qml", "dock/DockContent.qml", "overview/OverviewContent.qml", "widgets/CalendarCard.qml", "widgets/WidgetBlock.qml", "widgets/WidgetsDesktop.qml", "settings/DockPage.qml", "settings/FontsPage.qml", "settings/HomePage.qml", "settings/WelcomeBanner.qml", "settings/Moon.qml", "settings/TweaksPage.qml",
-    "settings/BarLayoutEditor.qml", "bar/WorkspaceNotch.qml",
+    "settings/BarLayoutEditor.qml", "bar/WorkspaceNotch.qml", "settings/KeybindsPage.qml",
 ]
 
 
@@ -70,7 +70,7 @@ class VisualComponentsTest(unittest.TestCase):
                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(done.returncode, 0, done.stderr)
             modes = ["bar", "bar-positions", "overview", "widgets-edit", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "lock", "music",
-                     "power", "settings", "settings-display", "settings-home", "settings-dock", "settings-fonts", "settings-system", "settings-tweaks",
+                     "power", "settings", "settings-display", "settings-home", "settings-dock", "settings-fonts", "settings-keys", "settings-system", "settings-tweaks",
                      "settings-widgets", "system", "volume", "wallpaper", "widgets", "wifi"]
             self.assertEqual(sorted(p.name for p in Path(out).iterdir()), sorted(f"forest-moonlit-{m}.png" for m in modes))
 
@@ -178,6 +178,44 @@ Item {{
             # Start, goes to the end of End, then into Hidden.
             self.assertEqual(drag(QPoint(120, 23), QPoint(690, 131)), "|media,workspaces,clock|status,power,logo")
             self.assertEqual(drag(QPoint(120, 77), QPoint(300, 185)), "|workspaces,clock|status,power,logo")
+
+    def test_a_new_key_is_caught_and_saved(self):
+        from PySide6.QtCore import QMetaObject, QObject, Qt
+        from PySide6.QtQuick import QQuickView
+        from PySide6.QtTest import QTest
+        view = QQuickView()
+        view.resize(700, 400)
+        view.setSource(QUrl.fromLocalFile(str(SHELL / "settings/KeybindsPage.qml")))
+        self.assertEqual([e.toString() for e in view.errors()], [])
+        page = view.rootObject()
+        page.setProperty("width", 700)
+        page.setProperty("keys", {"actions": [
+            {"id": "launcher", "title": "Search and open apps", "key": "SUPER + D", "default": "SUPER + D"},
+            {"id": "pick", "title": "Pick a color", "key": "SUPER + SHIFT + C", "default": "SUPER + SHIFT + C"}],
+            "reserved": ["SUPER + Q"]})
+        saved = []
+        page.action.connect(lambda name, value: saved.append((name, value)))
+        view.show()
+        self.app.processEvents()
+        catcher = page.findChild(QObject, "catcher")
+
+        def press(key, modifiers):
+            page.setProperty("listening", "pick")
+            QMetaObject.invokeMethod(catcher, "forceActiveFocus")
+            QTest.keyClick(view, key, modifiers)
+            self.app.processEvents()
+
+        meta, shift = Qt.KeyboardModifier.MetaModifier, Qt.KeyboardModifier.ShiftModifier
+        press(Qt.Key.Key_Q, meta)        # the window manager's: refused, still waiting
+        self.assertEqual((saved, page.property("listening")), ([], "pick"))
+        press(Qt.Key.Key_P, meta | shift)
+        self.assertEqual(saved, [("keys.pick", "SUPER + SHIFT + P")])
+        self.assertEqual(page.property("listening"), "")
+        press(Qt.Key.Key_D, meta)        # the launcher's: taken from it, and said so
+        self.assertEqual(saved[-1], ("keys.pick", "SUPER + D"))
+        self.assertIn("Search and open apps", page.property("note"))
+        press(Qt.Key.Key_Escape, Qt.KeyboardModifier.NoModifier)
+        self.assertEqual((len(saved), page.property("listening")), (2, ""))
 
     def test_selector_left_and_right_arrows_browse(self):
         from PySide6.QtCore import Qt
@@ -469,7 +507,7 @@ Item {{
         self.assertEqual(self.probe(lib, 'Lib.screensOn(input, {"HDMI-A-1": "off"})', screens), 1)
         self.assertEqual(self.probe(lib, 'Lib.screensOn(input, {"eDP-1": "2560x1440@60.00"})', screens), 3)
         self.assertEqual(self.probe(lib, 'Lib.PAGES.map(p => p.id)', None),
-                         ["home", "appearance", "fonts", "system", "display", "widgets", "dock", "tweaks"])
+                         ["home", "appearance", "fonts", "system", "display", "widgets", "dock", "tweaks", "keys"])
 
     def test_every_search_result_leads_to_a_row(self):
         # Rows made by a Repeater are visual children only: they are walked

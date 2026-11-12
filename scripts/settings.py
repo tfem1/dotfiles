@@ -20,6 +20,7 @@ from theming.generate import main as generate  # noqa: E402
 from theming.palette import PaletteError, load_palette, resolve_palette, theme_dirs  # noqa: E402
 from theming.paths import Paths  # noqa: E402
 from theming.icons import MEASURED  # noqa: E402
+from theming.keys import load as load_keys, resolve as resolve_keys  # noqa: E402
 from theming.schema import (CONFIG_OPEN_TABLES, CONFIG_RENAMED, CONFIG_SCHEMA, HUES, THEME_OPEN_TABLES,  # noqa: E402
                             THEME_SCHEMA, Field)
 from theming.settings import SettingsError, load_config, load_theme  # noqa: E402
@@ -58,8 +59,13 @@ def get(paths: Paths) -> dict:
     resolve_palette(theme, paths)
     fields = {key: {"kind": field.kind, "low": field.low, "high": field.high, "choices": list(field.choices)}
               for key, field in {**THEME_SCHEMA, **CONFIG_SCHEMA}.items()}
+    # Settings → Keybinds: each action with its key now and by default, and the
+    # keys the window manager keeps for itself.
+    defaults, reserved = load_keys()
+    keys = [dict(id=a["id"], title=a["title"], key=a["key"], default=d["key"])
+            for a, d in zip(resolve_keys(config), defaults)]
     return {"values": {**theme, **config}, "fields": fields, "themes": themes(paths, theme, config),
-            "folders": MEASURED}
+            "folders": MEASURED, "keys": {"actions": keys, "reserved": reserved}}
 
 
 def field_of(key: str) -> tuple[Field, str]:

@@ -3,6 +3,7 @@ import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Io
 import Quickshell.Networking
+import Quickshell.Wayland
 import "../overlay"
 import "../services"
 import "../theme"
@@ -75,7 +76,7 @@ Scope {
         } else if (name.startsWith("widgets.") || name.startsWith("bar.") || name.startsWith("dock.")) {
             follow(name, value);
             store.change({ [name]: value });
-        } else if (name.startsWith("idle.") || name.startsWith("record."))
+        } else if (name.startsWith("idle.") || name.startsWith("record.") || name.startsWith("keys."))
             store.change({ [name]: value });
         else if (name === "volume" && Audio.sink)
             Audio.sink.audio.volume = value;
@@ -187,11 +188,20 @@ Scope {
         active: root.open
 
         OverlayWindow {
+            id: settingsWindow
             name: "settings"
             dim: 0.35
             onDismissed: root.open = false
 
+            // Settings → Keybinds waits for a key: the window manager's own
+            // shortcuts are held back, so SUPER + D comes here.
+            ShortcutInhibitor {
+                window: settingsWindow
+                enabled: content.capturing
+            }
+
             SettingsContent {
+                id: content
                 anchors.fill: parent
                 settings: Object.assign({}, store.settings, { values: store.values })
                 pending: root.pending

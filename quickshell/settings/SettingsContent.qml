@@ -20,6 +20,8 @@ Item {
     property var fonts: ({ all: [], mono: [] })   // see FontsPage
     property var modes: ({})         // which modes are on, see TweaksPage
     property string page: "home"
+    // Settings → Keybinds waits for a key (see Settings.qml).
+    readonly property bool capturing: page === "keys" && keybindsPage.capturing
     property bool busy: false        // applying
     signal changed(string key, var value)
     signal apply
@@ -36,7 +38,8 @@ Item {
 
     function pageItem() {
         return ({ home: homePage, system: systemPage, display: displayPage, widgets: widgetsPage,
-                  dock: dockPage, tweaks: tweaksPage, fonts: fontsPage })[page] || appearancePage;
+                  dock: dockPage, tweaks: tweaksPage, fonts: fontsPage,
+                  keys: keybindsPage })[page] || appearancePage;
     }
 
     function scrollTo(id) {
@@ -199,6 +202,14 @@ Item {
                     x: 28
                     width: flick.width - 56
                     values: window.settings.values
+                    onAction: (name, value) => window.action(name, value)
+                }
+                KeybindsPage {
+                    id: keybindsPage
+                    visible: window.page === "keys"
+                    x: 28
+                    width: flick.width - 56
+                    keys: window.settings.keys || ({ actions: [], reserved: [] })
                     onAction: (name, value) => window.action(name, value)
                 }
                 TweaksPage {

@@ -9,6 +9,7 @@ from .accents import companions
 from .display import chosen, lua_rules
 from .icons import folder_color, theme_name
 from .idle import DPMS_ON, listeners
+from .keys import context as keys_context
 from .palette import ANSI, ROLES, Palette
 from .paths import Paths
 from .schema import THEME_SCHEMA
@@ -58,6 +59,7 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths,
     context["game.direct_scanout"] = 1 if game else 0
     context["idle.listeners"] = listeners(context)
     context["idle.screen_on"] = DPMS_ON
+    context.update(keys_context(context))
     context["display.rules"] = lua_rules(chosen(context))
     context["wallpaper.path"] = _wallpaper_path(str(theme["wallpaper.path"]), paths)
     context.update(_login_screen(str(context["wallpaper.path"]), paths))

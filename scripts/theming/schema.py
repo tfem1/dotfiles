@@ -13,6 +13,7 @@ from typing import Mapping
 from .colors import Color
 from .display import MODE, OFF, OUTPUT
 from .icons import FOLDER_COLORS
+from .keys import load as load_keys, parse as parse_key
 
 HUES = ("red", "orange", "yellow", "green", "cyan", "blue", "purple", "brown")
 # The theme's three colors first: modules set to them keep a theme minimal.
@@ -55,6 +56,11 @@ class Field:
             return "expected a screen mode like 2560x1440@165.00, or off"
         if self.kind == "place" and value != "auto" and not PLACE.fullmatch(value):
             return 'expected "auto" or a place like "0.25,0.6" (parts of the screen, 0 to 1)'
+        if self.kind == "key":
+            try:
+                parse_key(value)
+            except ValueError as error:
+                return str(error)
         if self.kind == "color":
             try:
                 Color.parse(value)
@@ -156,6 +162,8 @@ CONFIG_OPEN_TABLES: dict[str, tuple[re.Pattern[str], Field]] = {
     "display.modes": (OUTPUT, Field("mode")),
     # Where each widget was dragged ("auto": back in its corner).
     "widgets.places": (re.compile("|".join(WIDGETS)), Field("place")),
+    # Settings → Keybinds: the key chosen for an action of keybinds.toml.
+    "keys": (re.compile("|".join(re.escape(action["id"]) for action in load_keys()[0])), Field("key")),
 }
 
 

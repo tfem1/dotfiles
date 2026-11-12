@@ -85,22 +85,9 @@ binds {
     Mod+Shift+9 { move-column-to-workspace 9; }
     Mod+Shift+0 { move-column-to-workspace 10; }
 
-    // Shell panels; Mod+Tab is niri's own overview.
+    // Mod+Tab is niri's own overview; Mod+R restarts the shell.
     Mod+Tab { toggle-overview; }
-    Mod+D { spawn-sh "qs ipc -c desktop call launcher toggle"; }
-    Mod+B { spawn-sh "qs ipc -c desktop call system toggle"; }
-    Mod+M { spawn-sh "qs ipc -c desktop call music toggle"; }
-    Mod+W { spawn-sh "qs ipc -c desktop call wallpaper toggle"; }
-    Mod+S { spawn-sh "qs ipc -c desktop call calendar toggle"; }
-    Mod+N { spawn-sh "qs ipc -c desktop call network toggle"; }
-    Mod+V { spawn-sh "qs ipc -c desktop call volume toggle"; }
-    Mod+C { spawn-sh "qs ipc -c desktop call clipboard toggle"; }
-    Mod+H { spawn-sh "qs ipc -c desktop call settings toggle"; }
-    Mod+G { spawn-sh "qs ipc -c desktop call gamemode toggle"; }
-    Mod+Slash { spawn-sh "qs ipc -c desktop call cheatsheet toggle"; }
-    Mod+A { spawn-sh "qs ipc -c desktop call bar toggleAutohide"; }
     Mod+R { spawn-sh "qs kill -c desktop; PATH=$HOME/.local/bin:$PATH qs -c desktop -n -d"; }
-    Mod+Escape { spawn-sh "qs ipc -c desktop call power toggle"; }
 
     // Session: the shell's lock screen, swaylock when the shell is not running.
     Mod+L allow-when-locked=true { spawn-sh "qs ipc -c desktop call lock lock || swaylock"; }
@@ -118,18 +105,8 @@ binds {
     XF86AudioMicMute allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
     XF86MonBrightnessUp allow-when-locked=true { spawn-sh "brightnessctl -e4 -n2 set 5%+ && qs ipc -c desktop call osd brightness"; }
     XF86MonBrightnessDown allow-when-locked=true { spawn-sh "brightnessctl -e4 -n2 set 5%- && qs ipc -c desktop call osd brightness"; }
-
-    // Screenshots (saved in ~/Pictures/Screenshots and copied)
-    Print { spawn-sh "~/.local/bin/tfem screenshot region"; }
-    Shift+Print { spawn-sh "~/.local/bin/tfem screenshot region --edit"; }
-    Mod+Print { spawn-sh "~/.local/bin/tfem screenshot full"; }
-    Mod+Shift+Print { spawn-sh "~/.local/bin/tfem screenshot full --edit"; }
-    Ctrl+Shift+S { spawn-sh "~/.local/bin/tfem screenshot full"; }
-    Mod+Shift+Escape { spawn-sh "~/.local/bin/tfem screenshot full"; }
-
-    // Color picker: click a pixel, its #RRGGBB is copied.
-    Mod+Shift+C { spawn-sh "~/.local/bin/tfem pick"; }
-
-    // Screen recording (saved in ~/Videos/Screencasts): again to stop.
-    Mod+Alt+R { spawn-sh "~/.local/bin/tfem record"; }
 }
+
+// Shell panels, screenshots, recording, color picker: the shortcuts you can
+// change in Settings → Keybinds (generated from keybinds.toml and config.json).
+include "keybinds.kdl"

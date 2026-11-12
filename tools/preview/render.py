@@ -22,6 +22,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from theming.context import build_context  # noqa: E402
+from theming.keys import hyprland as hyprland_keys, resolve as resolve_keys  # noqa: E402
 from theming.palette import find_theme, load_palette, resolve_palette  # noqa: E402
 from theming.paths import Paths  # noqa: E402
 from theming.settings import load_config, load_theme  # noqa: E402
@@ -30,7 +31,7 @@ from wallpaper_collection import find, load_collection, theme_for  # noqa: E402
 
 MODES = ("desktop", "widgets", "lock", "launcher", "clipboard", "cheatsheet", "wallpaper", "wifi", "bluetooth", "volume",
          "calendar", "music", "power", "system", "settings", "settings-system", "settings-display",
-         "settings-widgets", "settings-home", "settings-tweaks", "settings-dock", "bar-positions", "overview", "widgets-edit", "settings-fonts")
+         "settings-widgets", "settings-home", "settings-tweaks", "settings-dock", "settings-keys", "bar-positions", "overview", "widgets-edit", "settings-fonts")
 # Hues of the sample landscapes drawn for the wallpaper selector (degrees).
 SAMPLE_HUES = (215, 280, 330, 140, 25, 195, 255, 0, 50, 100, 300, 230, 160, 10)
 # The theme some samples bring, as a wallpaper of the collection would.
@@ -55,7 +56,9 @@ def binds_json() -> str:
     lua = shutil.which("lua5.4") or shutil.which("lua")
     binds = SAMPLE_BINDS
     if lua:
-        done = subprocess.run([lua, str(ROOT / "tests/lua/check_hypr.lua"), str(ROOT / "hypr")],
+        keys = Path(tempfile.mkdtemp()) / "keys.lua"
+        keys.write_text(hyprland_keys(resolve_keys({}), "desktop"))
+        done = subprocess.run([lua, str(ROOT / "tests/lua/check_hypr.lua"), str(ROOT / "hypr"), str(keys)],
                               capture_output=True, text=True, check=True)
         calls = [json.loads(line) for line in done.stdout.splitlines()]
         binds = [(c["args"][0], c["args"][2]["description"]) for c in calls if c["call"] == "bind"]

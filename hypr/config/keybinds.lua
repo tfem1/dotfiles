@@ -63,20 +63,17 @@ for i = 1, 10 do
   bind(mod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }), "Send the window to workspace " .. i)
 end
 
--- Shell panels --------------------------------------------------------------
-panel("launcher", "Search and open apps")(mod .. " + D")
+-- Shell panels, screenshots, recording, color picker: the shortcuts you can
+-- change in Settings → Keybinds. Generated from keybinds.toml and config.json
+-- (keys.*) into keys.lua; their key is written with SUPER for the main key.
+local found, keys = pcall(require, "keys")
+for _, k in ipairs(found and type(keys) == "table" and keys or {}) do
+  local combo = k.key:gsub("^SUPER", mod)
+  bind(combo, hl.dsp.exec_cmd(k.run), k.description, k.locked and locked or nil)
+end
+
+-- Fixed shortcuts of the shell ----------------------------------------------
 panel("overview", "Workspace overview: every window, drag to move")(mod .. " + Tab")
-panel("system", "Open the system panel")(mod .. " + B")
-panel("music", "Open the music panel")(mod .. " + M")
-panel("wallpaper", "Open the wallpaper selector")(mod .. " + W")
-panel("calendar", "Open the calendar")(mod .. " + S")
-panel("network", "Open the network panel")(mod .. " + N")
-panel("volume", "Open the volume panel")(mod .. " + V")
-panel("clipboard", "Open the clipboard history")(mod .. " + C")
-panel("settings", "Open the settings")(mod .. " + H")
-panel("gamemode", "Game mode on or off: more performance for games")(mod .. " + G")
-panel("cheatsheet", "Show the keybind cheatsheet")(mod .. " + slash")
-run("qs ipc -c " .. shell .. " call bar toggleAutohide", "Toggle bar autohide")(mod .. " + A")
 run("qs kill -c " .. shell .. "; qs -c " .. shell .. " -n -d", "Restart the shell")(mod .. " + R")
 
 -- Session -------------------------------------------------------------------
@@ -84,7 +81,6 @@ run("qs kill -c " .. shell .. "; qs -c " .. shell .. " -n -d", "Restart the shel
 local lock = "qs ipc -c " .. shell .. " call lock lock || pidof hyprlock || hyprlock"
 run(lock, "Lock the screen", { locked = true, repeating = true })(mod .. " + L")
 run(lock, "Lock the screen", locked)("XF86PowerOff")
-panel("power", "Power menu: lock, log out, suspend, restart, shut down")(mod .. " + Escape")
 
 -- Media ---------------------------------------------------------------------
 run("playerctl play-pause", "Play or pause", locked)(mod .. " + SPACE")
@@ -103,18 +99,3 @@ local osd = " && qs ipc -c " .. shell .. " call osd brightness"
 run("brightnessctl -e4 -n2 set 5%+" .. osd, "Raise the brightness", held)("XF86MonBrightnessUp")
 run("brightnessctl -e4 -n2 set 5%-" .. osd, "Lower the brightness", held)("XF86MonBrightnessDown")
 
--- Screenshots (saved in ~/Pictures/Screenshots and copied) -----------------
-run(cli .. " screenshot region", "Screenshot of a region", locked)("Print")
-run(cli .. " screenshot region --edit", "Edit a screenshot of a region", locked)("SHIFT + Print")
-run(cli .. " screenshot full", "Screenshot of the screen", locked)(mod .. " + Print")
-run(cli .. " screenshot full --edit", "Edit a screenshot of the screen", locked)(mod .. " + SHIFT + Print")
--- The whole screen, also for keyboards without Print (it takes the key from
--- apps that use it for "Save as").
-run(cli .. " screenshot full", "Screenshot of the screen")("CTRL + SHIFT + S")
-run(cli .. " screenshot full", "Screenshot of the screen")(mod .. " + SHIFT + Escape")
-
--- Color picker: click a pixel, its #RRGGBB is copied.
-run(cli .. " pick", "Pick a color on the screen")(mod .. " + SHIFT + C")
-
--- Screen recording (saved in ~/Videos/Screencasts): again to stop.
-run(cli .. " record", "Record the screen (again to stop)")(mod .. " + ALT + R")

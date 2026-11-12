@@ -21,6 +21,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Keybind editor (Settings → Keybinds): click a shortcut, press the new
+  keys, it acts at once on Hyprland, Sway and Niri. The panel, screenshot,
+  recording and color picker shortcuts now come from one list
+  (`keybinds.toml`, `keys.*` in config.json), written by `tfem generate`
+  (`hypr/keys.lua`, `sway/keybinds.conf`, `niri/keybinds.kdl`). While a key
+  is awaited, a shortcuts inhibitor holds the window manager's shortcuts.
 - Bar layout (Settings → Tweaks): drag the bar's modules to its start,
   middle or end, in any order, or hide them (`bar.layout`).
 - Color picker (`SUPER + SHIFT + C`, `tfem pick`): the color of the pixel

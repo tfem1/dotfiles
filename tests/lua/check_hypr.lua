@@ -1,6 +1,7 @@
 -- Loads hypr/hyprland.lua with a fake `hl` API that records every call, then
 -- prints one JSON object per call so tests/test_hypr.py can check the config.
--- Usage: lua5.4 tests/lua/check_hypr.lua <repo>/hypr
+-- Usage: lua5.4 tests/lua/check_hypr.lua <repo>/hypr [keys.lua]
+-- (keys.lua: the generated shortcuts of Settings → Keybinds, if given)
 
 local root = assert(arg[1], "usage: check_hypr.lua <hypr dir>")
 package.path = root .. "/?.lua;" .. package.path
@@ -8,6 +9,7 @@ package.path = root .. "/?.lua;" .. package.path
 -- Generated modules do not exist in the repository: stand-ins.
 package.preload["theme"] = function() return true end
 package.preload["shell"] = function() shellName = "desktop"; return true end
+package.preload["keys"] = function() return arg[2] and dofile(arg[2]) or {} end
 
 local calls = {}
 

@@ -30,6 +30,25 @@ output   = "{config}/sway/theme.conf"
 needs    = "sway"
 reload   = "swaymsg reload"
 
+# The shortcuts of Settings → Keybinds (keybinds.toml), for each window manager.
+[hyprland-keys]
+template = "hypr/keys.lua.tpl"
+output   = "{config}/hypr/keys.lua"
+needs    = "Hyprland"
+reload   = "hyprctl reload"
+# Loaded by hypr/config/keybinds.lua (require("keys")): no include needed.
+
+[sway-keys]
+template = "sway/keybinds.conf.tpl"
+output   = "{config}/sway/keybinds.conf"
+needs    = "sway"
+reload   = "swaymsg reload"
+
+[niri-keys]
+template = "niri/keybinds.kdl.tpl"
+output   = "{config}/niri/keybinds.kdl"
+needs    = "niri"
+
 [niri]
 template = "niri/theme.kdl.tpl"
 output   = "{config}/niri/theme.kdl"

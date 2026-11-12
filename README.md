@@ -403,6 +403,17 @@ autostart and keybinds. Every shortcut has a description; the full list is in
 [docs/roadmap.md](docs/roadmap.md#3-quickshell-shell-bar-osd-launcher-notifications)
 and in `hypr/config/keybinds.lua`.
 
+**Change your shortcuts** in Settings → **Keybinds**: click a shortcut, then
+press the new keys (the window manager's own shortcuts are held back while
+it waits, so `SUPER + D` reaches the page). It acts at once, on Hyprland,
+Sway and Niri: the shell panels, screenshots, recording and color picker are
+listed once in `keybinds.toml`, and `tfem generate` writes them for the
+window manager in use (`hypr/keys.lua`, `sway/keybinds.conf`,
+`niri/keybinds.kdl`). A key another action had is taken from it (the page
+says so); the keys of windows, workspaces, lock and media stay where they
+are and cannot be taken. From a terminal:
+`tfem settings set "keys.pick=SUPER + SHIFT + P"`.
+
 - Every screen runs at its highest refresh rate, including screens plugged
   in later, unless you pick a mode for it in Settings → Display
   (`display.lua`, generated).

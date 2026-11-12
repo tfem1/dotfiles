@@ -1,0 +1,154 @@
+# The shortcuts you can change in Settings → Keybinds (or with
+# `tfem settings set keys.ID="SUPER + SHIFT + X"`): one list for Hyprland,
+# Sway and Niri. `tfem generate` writes them for the window manager in use
+# (hypr/keys.lua, sway/keybinds.conf, niri/keybinds.kdl). The others (windows,
+# workspaces, media keys) stay in each window manager's own config.
+#
+# key: modifiers SUPER, CTRL, ALT, SHIFT then a key, joined by " + ".
+# run: a shell command; {shell} is the Quickshell config, {cli} the tfem command.
+# locked: also works on the lock screen.
+
+# Keys of the window managers' own shortcuts (apps, windows, workspaces,
+# lock, media): not offered for these actions.
+reserved = [
+  "SUPER + RETURN", "SUPER + F", "SUPER + E", "SUPER + Q", "SUPER + ALT + F", "SUPER + SHIFT + F",
+  "SUPER + TAB", "SUPER + R", "SUPER + L", "SUPER + SPACE",
+  "SUPER + LEFT", "SUPER + RIGHT", "SUPER + UP", "SUPER + DOWN",
+  "SUPER + CTRL + LEFT", "SUPER + CTRL + RIGHT", "SUPER + CTRL + UP", "SUPER + CTRL + DOWN",
+  "SUPER + SHIFT + LEFT", "SUPER + SHIFT + RIGHT", "SUPER + SHIFT + UP", "SUPER + SHIFT + DOWN",
+  "SUPER + 1", "SUPER + 2", "SUPER + 3", "SUPER + 4", "SUPER + 5",
+  "SUPER + 6", "SUPER + 7", "SUPER + 8", "SUPER + 9", "SUPER + 0",
+  "SUPER + SHIFT + 1", "SUPER + SHIFT + 2", "SUPER + SHIFT + 3", "SUPER + SHIFT + 4", "SUPER + SHIFT + 5",
+  "SUPER + SHIFT + 6", "SUPER + SHIFT + 7", "SUPER + SHIFT + 8", "SUPER + SHIFT + 9", "SUPER + SHIFT + 0",
+]
+
+[[action]]
+id = "launcher"
+title = "Search and open apps"
+key = "SUPER + D"
+run = "qs ipc -c {shell} call launcher toggle"
+
+[[action]]
+id = "system"
+title = "Open the system panel"
+key = "SUPER + B"
+run = "qs ipc -c {shell} call system toggle"
+
+[[action]]
+id = "music"
+title = "Open the music panel"
+key = "SUPER + M"
+run = "qs ipc -c {shell} call music toggle"
+
+[[action]]
+id = "wallpaper"
+title = "Open the wallpaper selector"
+key = "SUPER + W"
+run = "qs ipc -c {shell} call wallpaper toggle"
+
+[[action]]
+id = "calendar"
+title = "Open the calendar"
+key = "SUPER + S"
+run = "qs ipc -c {shell} call calendar toggle"
+
+[[action]]
+id = "network"
+title = "Open the network panel"
+key = "SUPER + N"
+run = "qs ipc -c {shell} call network toggle"
+
+[[action]]
+id = "volume"
+title = "Open the volume panel"
+key = "SUPER + V"
+run = "qs ipc -c {shell} call volume toggle"
+
+[[action]]
+id = "clipboard"
+title = "Open the clipboard history"
+key = "SUPER + C"
+run = "qs ipc -c {shell} call clipboard toggle"
+
+[[action]]
+id = "settings"
+title = "Open the settings"
+key = "SUPER + H"
+run = "qs ipc -c {shell} call settings toggle"
+
+[[action]]
+id = "gamemode"
+title = "Game mode on or off: more performance for games"
+key = "SUPER + G"
+run = "qs ipc -c {shell} call gamemode toggle"
+
+[[action]]
+id = "cheatsheet"
+title = "Show the keybind cheatsheet"
+key = "SUPER + SLASH"
+run = "qs ipc -c {shell} call cheatsheet toggle"
+
+[[action]]
+id = "autohide"
+title = "Toggle bar autohide"
+key = "SUPER + A"
+run = "qs ipc -c {shell} call bar toggleAutohide"
+
+[[action]]
+id = "power"
+title = "Power menu: lock, log out, suspend, restart, shut down"
+key = "SUPER + ESCAPE"
+run = "qs ipc -c {shell} call power toggle"
+
+[[action]]
+id = "screenshot-region"
+title = "Screenshot of a region"
+key = "PRINT"
+run = "{cli} screenshot region"
+locked = true
+
+[[action]]
+id = "screenshot-region-edit"
+title = "Edit a screenshot of a region"
+key = "SHIFT + PRINT"
+run = "{cli} screenshot region --edit"
+locked = true
+
+[[action]]
+id = "screenshot-full"
+title = "Screenshot of the screen"
+key = "SUPER + PRINT"
+run = "{cli} screenshot full"
+locked = true
+
+[[action]]
+id = "screenshot-full-edit"
+title = "Edit a screenshot of the screen"
+key = "SUPER + SHIFT + PRINT"
+run = "{cli} screenshot full --edit"
+locked = true
+
+# The whole screen again, for keyboards without Print.
+[[action]]
+id = "screenshot-full-2"
+title = "Screenshot of the screen (second key)"
+key = "CTRL + SHIFT + S"
+run = "{cli} screenshot full"
+
+[[action]]
+id = "screenshot-full-3"
+title = "Screenshot of the screen (third key)"
+key = "SUPER + SHIFT + ESCAPE"
+run = "{cli} screenshot full"
+
+[[action]]
+id = "pick"
+title = "Pick a color on the screen"
+key = "SUPER + SHIFT + C"
+run = "{cli} pick"
+
+[[action]]
+id = "record"
+title = "Record the screen (again to stop)"
+key = "SUPER + ALT + R"
+run = "{cli} record"

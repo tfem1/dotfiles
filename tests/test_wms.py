@@ -11,6 +11,11 @@ from pathlib import Path
 
 from helpers import REPO
 from test_hypr import ipc_handlers
+from theming.keys import niri as niri_keys, resolve as resolve_keys, sway as sway_keys
+
+# The shortcuts of Settings → Keybinds, as `tfem generate` writes them by default.
+SWAY_KEYS = sway_keys(resolve_keys({}), "desktop")
+NIRI_KEYS = niri_keys(resolve_keys({}), "desktop")
 
 SWAY = shutil.which("sway")
 # The keys every window manager config binds (same layout as Hyprland's).
@@ -24,7 +29,7 @@ def ipc_calls(text):
 
 
 class SwayTest(unittest.TestCase):
-    text = (REPO / "sway/config").read_text()
+    text = (REPO / "sway/config").read_text() + "\n" + SWAY_KEYS
 
     def test_every_ipc_call_reaches_a_handler(self):
         handlers = ipc_handlers()
@@ -46,6 +51,7 @@ class SwayTest(unittest.TestCase):
             config.mkdir(parents=True)
             shutil.copy(REPO / "sway/config", config / "config")
             shutil.copy(REPO / "tests/golden/sway-theme.conf", config / "theme.conf")
+            (config / "keybinds.conf").write_text(SWAY_KEYS)
             os.chmod(home, 0o700)
             env = {**os.environ, "HOME": home, "XDG_RUNTIME_DIR": home, "WLR_BACKENDS": "headless",
                    "WLR_RENDERER": "pixman", "WLR_LIBINPUT_NO_DEVICES": "1"}
@@ -55,7 +61,7 @@ class SwayTest(unittest.TestCase):
 
 
 class NiriTest(unittest.TestCase):
-    text = (REPO / "niri/config.kdl").read_text()
+    text = (REPO / "niri/config.kdl").read_text() + "\n" + NIRI_KEYS
 
     def test_every_ipc_call_reaches_a_handler(self):
         handlers = ipc_handlers()
@@ -79,6 +85,7 @@ class NiriTest(unittest.TestCase):
                 self.assertEqual(code.count("{"), code.count("}"))
                 self.assertEqual(code.count('"') % 2, 0)
         self.assertIn('include "theme.kdl"', self.text)
+        self.assertIn('include "keybinds.kdl"', self.text)
 
 
 class InstallerTest(unittest.TestCase):

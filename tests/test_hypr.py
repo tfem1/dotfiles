@@ -3,10 +3,13 @@ import json
 import re
 import shutil
 import subprocess
+import tempfile
 import unittest
 from collections import Counter
+from pathlib import Path
 
 from helpers import REPO
+from theming.keys import hyprland as hyprland_keys, resolve as resolve_keys
 
 LUA = shutil.which("lua5.4") or shutil.which("lua")
 
@@ -67,8 +70,11 @@ def ipc_handlers():
 
 def run_config(env=None):
     """Every `hl` call of the config, as {call, args}, run with this environment."""
-    done = subprocess.run([LUA, str(REPO / "tests/lua/check_hypr.lua"), str(REPO / "hypr")],
-                          capture_output=True, text=True, check=True, env=env)
+    with tempfile.TemporaryDirectory() as folder:
+        keys = Path(folder) / "keys.lua"   # what `tfem generate` writes, with the default keys
+        keys.write_text(hyprland_keys(resolve_keys({}), "desktop"))
+        done = subprocess.run([LUA, str(REPO / "tests/lua/check_hypr.lua"), str(REPO / "hypr"), str(keys)],
+                              capture_output=True, text=True, check=True, env=env)
     return [json.loads(line) for line in done.stdout.splitlines()]
 
 
