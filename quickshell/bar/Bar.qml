@@ -6,7 +6,8 @@ import "../services"
 
 // The bar on one screen: live data from the services into BarContent. It
 // stands on the edge picked in Settings → Tweaks (config.json bar.position).
-// With autohide, windows use the whole screen and the bar slides in when
+// The space it takes is kept free by a Reserve (Bars.qml); with autohide,
+// windows use the whole screen and the bar slides in when
 // the pointer touches that edge.
 PanelWindow {
     id: window
@@ -32,10 +33,13 @@ PanelWindow {
         left: window.edge !== "right"
         right: window.edge !== "left"
     }
-    implicitHeight: vertical ? 0 : 44
-    implicitWidth: vertical ? 52 : 0
+    readonly property int thickness: vertical ? 52 : 44
+    implicitHeight: vertical ? 0 : thickness
+    implicitWidth: vertical ? thickness : 0
     color: "transparent"
-    exclusionMode: autohide ? ExclusionMode.Ignore : ExclusionMode.Auto
+    // Always the whole edge, whatever the dock reserves: the space for the
+    // windows is kept by a Reserve (Bars.qml).
+    exclusionMode: ExclusionMode.Ignore
     // Hidden, only a thin strip at the screen edge takes the pointer.
     mask: Region { item: window.revealed ? area : strip }
     WlrLayershell.namespace: "shell-bar"

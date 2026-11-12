@@ -3,6 +3,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import "../theme"
+import "../components"
 import "dock.js" as DockLib
 
 // The dock on each screen (Settings → Dock): pinned apps and running ones.
@@ -45,6 +46,22 @@ Scope {
         Quickshell.execDetached([cli, "settings", "set", "dock.pinned=" + pinned]);
     }
 
+    readonly property int thickness: 64   // DockContent: 44 px icons + 20
+    // On the bar's edge, the dock stands next to the bar, not under it.
+    readonly property int gap: 8 + (Theme.bar.position === edge ? (edge === "bottom" ? 44 : 52) : 0)
+
+    Variants {
+        model: root.settings.enabled ? Quickshell.screens : []
+
+        // Windows stay clear of the dock, unless it hides itself.
+        Reserve {
+            required property var modelData
+            screen: modelData
+            edge: root.edge
+            size: root.settings.autohide ? 0 : root.thickness + 8
+        }
+    }
+
     Variants {
         model: root.settings.enabled ? Quickshell.screens : []
 
@@ -61,14 +78,15 @@ Scope {
                 right: root.edge === "right"
             }
             margins {
-                bottom: root.edge === "bottom" ? 8 : 0
-                left: root.edge === "left" ? 8 : 0
-                right: root.edge === "right" ? 8 : 0
+                bottom: root.edge === "bottom" ? root.gap : 0
+                left: root.edge === "left" ? root.gap : 0
+                right: root.edge === "right" ? root.gap : 0
             }
             implicitWidth: content.implicitWidth
             implicitHeight: content.implicitHeight
             color: "transparent"
-            exclusionMode: root.settings.autohide ? ExclusionMode.Ignore : ExclusionMode.Auto
+            // Placed on the whole screen, like the bar: neither pushes the other.
+            exclusionMode: ExclusionMode.Ignore
             // Hidden: only a thin strip on the screen edge takes the pointer.
             mask: Region { item: window.revealed ? content : strip }
             WlrLayershell.namespace: "shell-dock"

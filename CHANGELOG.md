@@ -7,6 +7,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- A dock on the left or right no longer pushes the top bar aside: the bar
+  always spans the whole screen edge and stays symmetric, and the dock stands
+  next to the bar when both are on the same edge. Invisible strips keep the
+  windows clear of both.
 - No more blurred rectangle behind the shell: Hyprland blurs the bar, the
   launcher, the panels, the notifications and the widgets only where they
   are drawn (a layer rule with `ignore_alpha`), so the blur follows their

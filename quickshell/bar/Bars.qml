@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import "../components"
 
 // One bar per screen, and what they share: autohide (SUPER + A).
 Scope {
@@ -18,12 +19,25 @@ Scope {
     Variants {
         model: Quickshell.screens
 
-        Bar {
-            autohide: root.autohide
-            onStatusClicked: root.statusClicked()
-            onClockClicked: root.clockClicked()
-            onPowerClicked: root.powerClicked()
-            onLogoClicked: root.logoClicked()
+        Scope {
+            id: perScreen
+            required property var modelData
+
+            Bar {
+                id: bar
+                modelData: perScreen.modelData
+                autohide: root.autohide
+                onStatusClicked: root.statusClicked()
+                onClockClicked: root.clockClicked()
+                onPowerClicked: root.powerClicked()
+                onLogoClicked: root.logoClicked()
+            }
+            // Windows stay clear of the bar; with autohide they use the whole screen.
+            Reserve {
+                screen: perScreen.modelData
+                edge: bar.edge
+                size: root.autohide ? 0 : bar.thickness
+            }
         }
     }
 }
