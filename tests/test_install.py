@@ -23,6 +23,8 @@ FAKES = {
     "pkg_info": f'[ "$1" = -Q ] && {{ ( {AVAILABLE} ) && echo "$2-1.0"; }}; exit 0',
     "pkg_add": 'echo "pkg_add $*" >> "$LOG"',
     "doas": 'exec "$@"',
+    # YVIS: `yone info NAME` succeeds when the package is installed or in a synced index.
+    "yone": f'echo "yone $*" >> "$LOG"; [ "$1" = info ] && {{ {AVAILABLE}; }}; exit 0',
 }
 # Where `tfem sddm install` writes, as TFEM_<name> paths under self.system.
 SYSTEM = {
@@ -35,6 +37,7 @@ OS_RELEASE = {
     "mint": 'ID=linuxmint\nID_LIKE="ubuntu debian"\n',
     "nobara": 'ID=nobara\nID_LIKE="rhel fedora"\n',
     "gentoo": 'ID=gentoo\n',
+    "yvis": 'ID=yvis\nNAME="YVIS"\n',
     "openbsd": "",   # no os-release: told apart by uname
 }
 
@@ -159,6 +162,20 @@ class PackagesTest(InstallTest):
         self.assertIn("generating the theme files", output)                 # the themes, for the apps
         self.assertIn("your apps follow the theme", output)
         self.assertEqual(Path(os.readlink(self.home / ".local/bin/tfem")), REPO / "tfem")
+
+    def test_yvis_installs_with_yone(self):
+        code, output = self.install("yvis", "--yes", "--no-wallpapers", missing="satty")
+        self.assertEqual(code, 0, output)
+        command = self.installed("yone install --noconfirm")
+        for name in ("hyprland", "quickshell", "sddm", "yone", "ttf-jetbrains-mono-nerd"):
+            self.assertIn(f" {name}", command)
+        self.assertNotIn("pacman-contrib", command)     # Yone counts the updates itself
+        self.assertIn("skipped: satty", output)
+        self.assertNotIn("pacman", self.calls())
+
+    def test_yvis_points_to_yone_when_hyprland_is_missing(self):
+        _, output = self.install("yvis", "--yes", "--no-wallpapers", "--no-packages", hyprland=False)
+        self.assertIn("sudo yone install hyprland", output)
 
     def test_unknown_distro_is_refused(self):
         code, output = self.install("gentoo", "--yes")

@@ -3,14 +3,18 @@
 # Usage: updates.sh count    how many packages can be updated (0 if unknown)
 #        updates.sh install  update them (asks for your password), then tell
 #                            the shell to count again
-# Arch: checkupdates (pacman-contrib: it syncs a copy of the database, never
-# the system's); Debian: apt's last package lists; Fedora: dnf check-update.
+# YVIS: yone check-updates; Arch: checkupdates (pacman-contrib); both sync a
+# private copy of the indexes, never the system's. Debian: apt's last package
+# lists; Fedora: dnf check-update.
 set -uo pipefail
 
 shell="${TFEM_SHELL:-desktop}"
 
 count() {
-  if command -v checkupdates >/dev/null 2>&1; then
+  if command -v yone >/dev/null 2>&1; then
+    # Exit code 2: nothing to update.
+    yone check-updates 2>/dev/null | grep -c . || true
+  elif command -v checkupdates >/dev/null 2>&1; then
     checkupdates 2>/dev/null | grep -c . || true
   elif command -v apt >/dev/null 2>&1; then
     apt list --upgradable 2>/dev/null | grep -c "upgradable from" || true
@@ -23,14 +27,16 @@ count() {
 }
 
 install() {
-  if command -v pacman >/dev/null 2>&1; then
+  if command -v yone >/dev/null 2>&1; then
+    sudo yone update && sudo yone upgrade
+  elif command -v pacman >/dev/null 2>&1; then
     sudo pacman -Syu
   elif command -v apt >/dev/null 2>&1; then
     sudo apt update && sudo apt upgrade
   elif command -v dnf >/dev/null 2>&1; then
     sudo dnf upgrade
   else
-    echo "updates: no known package manager (pacman, apt, dnf)" >&2
+    echo "updates: no known package manager (yone, pacman, apt, dnf)" >&2
     return 1
   fi
 }

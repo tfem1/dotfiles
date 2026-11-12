@@ -7,7 +7,7 @@
 # SDDM is left out with --no-sddm.
 package_cells() {
   local column skip=""
-  case "$FAMILY" in arch) column=3 ;; debian) column=4 ;; fedora) column=5 ;; openbsd) column=6 ;; esac
+  case "$FAMILY" in arch) column=3 ;; debian) column=4 ;; fedora) column=5 ;; openbsd) column=6 ;; yvis) column=7 ;; esac
   [[ -n ${SDDM_THEME:-} ]] || skip=sddm
   awk -F'\t' -v col="$column" -v profile="$PROFILE" -v skip="$skip" -v wm="wm-${WM:-hyprland}" '
     /^#/ || NF < 6 || $1 == skip { next }
@@ -24,6 +24,8 @@ package_available() {
     fedora) dnf info "$1" >/dev/null 2>&1 ;;
     # "python%3.12" is the branch of python-3.12.x; a stem must match a whole name.
     openbsd) pkg_info -Q "$(printf '%s' "$1" | tr '%' '-')" 2>/dev/null | grep -q "^$(printf '%s' "$1" | tr '%' '-')[-.0-9]" ;;
+    # Installed or in a synced repository index.
+    yvis) yone info "$1" >/dev/null 2>&1 ;;
   esac
 }
 
@@ -62,6 +64,11 @@ install_packages() {
     debian) run sudo apt install -y "${CHOSEN[@]}" ;;
     fedora) run sudo dnf install -y "${CHOSEN[@]}" ;;
     openbsd) run doas pkg_add -I "${CHOSEN[@]}" ;;
+    yvis)
+      local confirm_flag=()
+      ((ASSUME_YES)) && confirm_flag=(--noconfirm)
+      run sudo yone install "${confirm_flag[@]}" "${CHOSEN[@]}"
+      ;;
   esac
 }
 
@@ -111,5 +118,6 @@ hyprland_hint() {
     fedora) warn "Fedora ships no Hyprland: enable a COPR you trust, e.g. 'sudo dnf copr enable sdegler/hyprland', then run the installer again." ;;
     debian) warn "Debian 13 has no Hyprland and Ubuntu 26.04 ships 0.53: use Debian testing or unstable." ;;
     arch) warn "Install it with: sudo pacman -S hyprland" ;;
+    yvis) warn "Install it with: sudo yone install hyprland" ;;
   esac
 }

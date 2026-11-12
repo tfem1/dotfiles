@@ -65,6 +65,15 @@ class UpdatesTest(ToolTest):
         self.fake("checkupdates", "exit 2")
         self.assertEqual(self.count(), "0")
 
+    def test_yvis_counts_yone_check_updates_lines(self):
+        self.fake("yone", '[ "$1" = check-updates ] && printf "linux 7.1.8-1 -> 7.1.9-1\\n"; exit 0')
+        self.fake("checkupdates", 'printf "never asked\\n"')
+        self.assertEqual(self.count(), "1")
+
+    def test_yvis_nothing_to_update_is_zero(self):
+        self.fake("yone", "exit 2")
+        self.assertEqual(self.count(), "0")
+
     def test_debian_counts_upgradable_packages(self):
         self.fake("apt", 'printf "Listing...\\nvim/stable 9.1 amd64 [upgradable from: 9.0]\\n"')
         self.assertEqual(self.count(), "1")

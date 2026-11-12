@@ -1,62 +1,63 @@
 # Packages per distro family, read by install.sh.
-# Columns (tab separated): key, profile, arch, debian, fedora, openbsd.
+# Columns (tab separated): key, profile, arch, debian, fedora, openbsd, yvis.
 # OpenBSD has no Hyprland nor Quickshell yet: only the apps and their themes.
+# YVIS (Yone) names its packages like Arch; it counts updates itself (yone).
 # profile: core = always installed, full = only with --profile full,
 # wm-NAME = only with that window manager (--wm, or the install screen).
 # "-" = not in the official repositories; "a|b" = first available name;
 # several packages in one cell are separated by spaces.
 # The installer checks every name before installing and skips missing ones.
-hyprland	wm-hyprland	hyprland	hyprland	-	-
-hyprlock	wm-hyprland	hyprlock	hyprlock	-	-
-sway	wm-sway	sway	sway	sway	-
-swaylock	wm-sway	swaylock	swaylock	swaylock	-
-niri	wm-niri	niri	niri	niri	-
-swaylock-niri	wm-niri	swaylock	swaylock	swaylock	-
-hypridle	core	hypridle	hypridle	-	-
-quickshell	core	quickshell	quickshell	quickshell	-
-python	core	python	python3	python3	python%3.13|python%3.12
-git	core	git	git	git	git
-curl	core	curl	curl	curl	curl
-kitty	core	kitty	kitty	kitty	kitty
-wl-clipboard	core	wl-clipboard	wl-clipboard	wl-clipboard	-
-cliphist	core	cliphist	cliphist	cliphist	-
-grim	core	grim	grim	grim	grim
-slurp	core	slurp	slurp	slurp	slurp
+hyprland	wm-hyprland	hyprland	hyprland	-	-	hyprland
+hyprlock	wm-hyprland	hyprlock	hyprlock	-	-	hyprlock
+sway	wm-sway	sway	sway	sway	-	sway
+swaylock	wm-sway	swaylock	swaylock	swaylock	-	swaylock
+niri	wm-niri	niri	niri	niri	-	niri
+swaylock-niri	wm-niri	swaylock	swaylock	swaylock	-	swaylock
+hypridle	core	hypridle	hypridle	-	-	hypridle
+quickshell	core	quickshell	quickshell	quickshell	-	quickshell
+python	core	python	python3	python3	python%3.13|python%3.12	python
+git	core	git	git	git	git	git
+curl	core	curl	curl	curl	curl	curl
+kitty	core	kitty	kitty	kitty	kitty	kitty
+wl-clipboard	core	wl-clipboard	wl-clipboard	wl-clipboard	-	wl-clipboard
+cliphist	core	cliphist	cliphist	cliphist	-	cliphist
+grim	core	grim	grim	grim	grim	grim
+slurp	core	slurp	slurp	slurp	slurp	slurp
 # System info in the theme's colors (fastfetch).
-fastfetch	core	fastfetch	fastfetch	fastfetch	fastfetch
+fastfetch	core	fastfetch	fastfetch	fastfetch	fastfetch	fastfetch
 # Screen recording (tfem record, SUPER + ALT + R) and its notifications.
-wf-recorder	core	wf-recorder	wf-recorder	wf-recorder	-
-libnotify	core	libnotify	libnotify-bin	libnotify	-
+wf-recorder	core	wf-recorder	wf-recorder	wf-recorder	-	wf-recorder
+libnotify	core	libnotify	libnotify-bin	libnotify	-	libnotify
 # Counting the package updates on Arch (checkupdates).
-pacman-contrib	core	pacman-contrib	-	-	-
+pacman-contrib	core	pacman-contrib	-	-	-	yone
 # Small copies of the wallpapers for the selector (tfem wallpapers thumbs).
 # The computer's sound in recordings: the default output (pactl).
-pactl	core	libpulse	pulseaudio-utils	pulseaudio-utils	-
-ffmpeg	core	ffmpeg	ffmpeg	ffmpeg-free|ffmpeg	-
-brightnessctl	core	brightnessctl	brightnessctl	brightnessctl	-
-playerctl	core	playerctl	playerctl	playerctl	playerctl
+pactl	core	libpulse	pulseaudio-utils	pulseaudio-utils	-	libpulse
+ffmpeg	core	ffmpeg	ffmpeg	ffmpeg-free|ffmpeg	-	ffmpeg
+brightnessctl	core	brightnessctl	brightnessctl	brightnessctl	-	brightnessctl
+playerctl	core	playerctl	playerctl	playerctl	playerctl	playerctl
 # The audio spectrum widget.
-cava	core	cava	cava	cava	-
+cava	core	cava	cava	cava	-	cava
 # Game mode asks Feral GameMode for its optimisations (CPU in performance).
-gamemode	core	gamemode	gamemode	gamemode	-
+gamemode	core	gamemode	gamemode	gamemode	-	gamemode
 # Power saver mode (powerprofilesctl); recent Fedora ships tuned-ppd for it.
-power-profiles	core	power-profiles-daemon	power-profiles-daemon	tuned-ppd|power-profiles-daemon	-
+power-profiles	core	power-profiles-daemon	power-profiles-daemon	tuned-ppd|power-profiles-daemon	-	power-profiles-daemon
 # Night mode's warmer screen; not packaged on Fedora (night mode only dims).
-hyprsunset	wm-hyprland	hyprsunset	hyprsunset	-	-
-wireplumber	core	wireplumber	wireplumber	wireplumber	wireplumber
-networkmanager	core	networkmanager	network-manager	NetworkManager	-
-gsettings	core	glib2	libglib2.0-bin	glib2	glib2
-gtk-portal	core	xdg-desktop-portal-gtk	xdg-desktop-portal-gtk	xdg-desktop-portal-gtk	xdg-desktop-portal-gtk
-qt5ct	core	qt5ct	qt5ct	qt5ct	qt5ct
-qt6ct	core	qt6ct	qt6ct	qt6ct	qt6ct
-adw-gtk3	core	adw-gtk-theme	-	adw-gtk3-theme	-
-bluez	core	bluez bluez-utils	bluez	bluez	-
+hyprsunset	wm-hyprland	hyprsunset	hyprsunset	-	-	hyprsunset
+wireplumber	core	wireplumber	wireplumber	wireplumber	wireplumber	wireplumber
+networkmanager	core	networkmanager	network-manager	NetworkManager	-	networkmanager
+gsettings	core	glib2	libglib2.0-bin	glib2	glib2	glib2
+gtk-portal	core	xdg-desktop-portal-gtk	xdg-desktop-portal-gtk	xdg-desktop-portal-gtk	xdg-desktop-portal-gtk	xdg-desktop-portal-gtk
+qt5ct	core	qt5ct	qt5ct	qt5ct	qt5ct	qt5ct
+qt6ct	core	qt6ct	qt6ct	qt6ct	qt6ct	qt6ct
+adw-gtk3	core	adw-gtk-theme	-	adw-gtk3-theme	-	adw-gtk-theme
+bluez	core	bluez bluez-utils	bluez	bluez	-	bluez bluez-utils
 # The login screen (Qt 6 greeter); Debian ships the QtQuick.Effects module apart.
-sddm	core	sddm	sddm qml6-module-qtquick-effects	sddm	-
-firefox	full	firefox	firefox-esr|firefox	firefox	firefox
-nautilus	full	nautilus	nautilus	nautilus	nautilus
-satty	full	satty	-	-	-
-font-inter	full	inter-font	fonts-inter	rsms-inter-fonts	inter
-font-mono	full	ttf-jetbrains-mono-nerd	fonts-jetbrains-mono	jetbrains-mono-fonts	jetbrains-mono
-icons	core	papirus-icon-theme	papirus-icon-theme	papirus-icon-theme	papirus-icon-theme
-cursor	full	adwaita-cursors	adwaita-icon-theme	adwaita-cursor-theme	adwaita-icon-theme
+sddm	core	sddm	sddm qml6-module-qtquick-effects	sddm	-	sddm
+firefox	full	firefox	firefox-esr|firefox	firefox	firefox	firefox
+nautilus	full	nautilus	nautilus	nautilus	nautilus	nautilus
+satty	full	satty	-	-	-	satty
+font-inter	full	inter-font	fonts-inter	rsms-inter-fonts	inter	inter-font
+font-mono	full	ttf-jetbrains-mono-nerd	fonts-jetbrains-mono	jetbrains-mono-fonts	jetbrains-mono	ttf-jetbrains-mono-nerd
+icons	core	papirus-icon-theme	papirus-icon-theme	papirus-icon-theme	papirus-icon-theme	papirus-icon-theme
+cursor	full	adwaita-cursors	adwaita-icon-theme	adwaita-cursor-theme	adwaita-icon-theme	adwaita-cursors
