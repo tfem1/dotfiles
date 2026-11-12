@@ -17,6 +17,11 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- 5 colors per theme by default: background, text and the theme's 3 own
+  colors. The red, orange, yellow, green, cyan, blue, purple and brown of
+  the terminal, GTK, Qt, fastfetch and the shell take those 3 colors.
+  `palette.colors = "all"` (Settings → Appearance → Every color of the
+  theme) brings every color back.
 - **17 themes in every color**: Ruby, Ember, Amber, Lime, Emerald, Ocean,
   Sapphire, Indigo, Amethyst, Orchid, Rose (dark) and Peach, Lemon, Mint,
   Sky, Lavender, Blossom (light), built from `themes/seeds/colors.toml`;

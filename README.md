@@ -209,6 +209,12 @@ is the default, with its night forest wallpaper.
 
 ![Every theme](docs/images/themes.png)
 
+Each theme shows **5 colors**: its background, its text and its 3 own
+colors (the squares above). The terminal, GTK, Qt, fastfetch and the shell
+use only those 5. To get every color of a theme back (its red, green,
+blue…), turn on **Every color of the theme** in Settings → Appearance, or
+set `colors = "all"` under `[palette]` in `theme.toml`.
+
 **Colors**, one theme per color, original: Ruby (red), Ember (orange),
 Amber (yellow), Lime and Emerald (green), Ocean (cyan), Sapphire and
 Indigo (blue), Amethyst (purple), Orchid (magenta), Rose (pink), and light

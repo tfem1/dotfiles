@@ -15,6 +15,8 @@ source = "forest-moonlit"       # a theme from themes/ or ~/.config/tfem/themes/
 accent = "theme"                # theme (its own signature color) | red | orange | yellow | green
                                 # | cyan | blue | purple | brown
 mode   = "dark"                 # dark | light: used when the palette comes from the wallpaper
+colors = "few"                  # few: 5 colors per theme (background, text, its 3 own colors);
+                                # all: its red, orange, yellow, green, blue... too
 
 [palette.overrides]             # replace one base16 slot of the chosen theme, e.g.:
 # base00 = "#11111b"

@@ -85,6 +85,9 @@ THEME_SCHEMA: dict[str, Field] = {
     "palette.source": NAME,
     "palette.accent": Field("choice", choices=("theme", *HUES)),
     "palette.mode": Field("choice", choices=("dark", "light")),
+    # "few": a theme shows 5 colors (background, text and its three own);
+    # "all": also its red, orange, yellow, green, cyan, blue, purple, brown.
+    "palette.colors": Field("choice", choices=("few", "all")),
     "wallpaper.path": PATH,
     "wallpaper.follow": BOOL,
     "font.sans": TEXT,

@@ -9,7 +9,7 @@ from .accents import companions
 from .display import chosen, lua_rules
 from .icons import folder_color, theme_name
 from .idle import DPMS_ON, listeners
-from .palette import Palette
+from .palette import ANSI, ROLES, Palette
 from .paths import Paths
 from .schema import THEME_SCHEMA
 
@@ -42,6 +42,8 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths,
     second, third = companions(context["accent"], palette.colors["base00"], palette.variant)
     context["accent2"] = own[0] or second
     context["accent3"] = own[1] or third
+    if theme.get("palette.colors", "few") == "few":
+        _few_colors(context)
     for key, field in THEME_SCHEMA.items():
         if field.kind == "hue":
             context[key] = context[str(theme[key])]
@@ -93,3 +95,16 @@ def _wallpaper_path(value: str, paths: Paths) -> str:
         return str(paths.home / value[2:])
     path = Path(value)
     return str(path if path.is_absolute() else paths.wallpapers / path)
+
+
+# palette.colors = "few": the eight hue slots (terminal colors, GTK, Qt...)
+# take the theme's own three colors, so a theme shows five colors in all.
+FEW = {"base08": "accent3", "base09": "accent2", "base0A": "accent2", "base0B": "accent",
+       "base0C": "accent2", "base0D": "accent", "base0E": "accent3", "base0F": "accent3"}
+
+
+def _few_colors(context: dict[str, object]) -> None:
+    for slot, own in FEW.items():
+        context[slot] = context[own]
+    context.update({role: context[slot] for role, slot in ROLES.items() if slot in FEW})
+    context.update({f"ansi{index}": context[slot] for index, slot in enumerate(ANSI) if slot in FEW})

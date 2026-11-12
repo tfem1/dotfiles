@@ -110,6 +110,16 @@ class ContextTest(SandboxTest):
                     self.assertGreaterEqual(contrast(ctx[key], ctx["base00"]), 4.5, key)
                 self.assertEqual(len({ctx["accent"], ctx["accent2"], ctx["accent3"]}), 3)
 
+    def test_a_theme_shows_five_colors_unless_all_are_asked(self):
+        hues = ["red", "orange", "yellow", "green", "cyan", "blue", "purple", "brown"]
+        hues += [f"base0{n}" for n in "89ABCDEF"] + [f"ansi{n}" for n in range(16)]
+        few = self.context('[palette]\nsource = "color-ruby"\n')
+        shown = {few[key] for key in hues} | {few["base00"], few["base05"]}
+        self.assertLessEqual(len(shown - {few["base03"], few["base07"]}), 5)
+        self.assertLessEqual({few[key] for key in hues[:8]}, {few["accent"], few["accent2"], few["accent3"]})
+        every = self.context('[palette]\nsource = "color-ruby"\ncolors = "all"\n')
+        self.assertEqual(len({every[key] for key in hues[:8]}), 8)
+
     def test_a_theme_can_set_its_own_companions(self):
         text = ResolveTest.theme_text("Own").replace('[colors]', 'accent = "#f7438c"\naccent3 = "#76d2fb"\n[colors]')
         self.write_user_file("themes/own.toml", text)

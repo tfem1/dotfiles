@@ -14,14 +14,14 @@
     "accent": "#5fd0c0",
     "accent2": "#83d5c9",
     "accent3": "#67bec8",
-    "red": "#e694a1",
-    "orange": "#e6b694",
-    "yellow": "#e6d594",
-    "green": "#94e69a",
-    "cyan": "#5fd0c0",
-    "blue": "#7aa2dc",
-    "purple": "#a68be0",
-    "brown": "#e694c4"
+    "red": "#67bec8",
+    "orange": "#83d5c9",
+    "yellow": "#83d5c9",
+    "green": "#5fd0c0",
+    "cyan": "#83d5c9",
+    "blue": "#5fd0c0",
+    "purple": "#67bec8",
+    "brown": "#67bec8"
   },
   "modules": {
     "workspaces": "#5fd0c0",

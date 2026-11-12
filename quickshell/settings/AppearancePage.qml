@@ -95,6 +95,15 @@ Column {
         }
     }
     SettingRow {
+        objectName: "colors"
+        title: "Every color of the theme"
+        description: "Off: 5 colors (background, text and the theme's 3 own). On: its red, green, blue… too, in the terminal and your apps."
+        Switch {
+            checked: page.v("palette.colors") === "all"
+            onToggled: checked => page.changed("palette.colors", checked ? "all" : "few")
+        }
+    }
+    SettingRow {
         objectName: "wallpaper"
         title: "Wallpaper"
         description: "Opens the wallpaper selector (SUPER + W)."
