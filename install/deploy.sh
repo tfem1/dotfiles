@@ -31,7 +31,7 @@ record() {
 
 # Every path the installer writes; existing ones are copied first.
 managed_paths() {
-  printf '%s\n' "$CONFIG_HOME/hypr" "$CONFIG_HOME/tfem" "$SHELL_DIR"
+  printf '%s\n' "$CONFIG_HOME/hypr" "$CONFIG_HOME/sway" "$CONFIG_HOME/niri" "$CONFIG_HOME/tfem" "$SHELL_DIR"
   local name
   for name in "${CLI_NAMES[@]}"; do printf '%s\n' "$BIN_DIR/$name"; done
 }
@@ -54,6 +54,29 @@ deploy_hypr() {
   run mkdir -p "$CONFIG_HOME/hypr"
   run cp -r "$ROOT/hypr/." "$CONFIG_HOME/hypr/"
   info "Hyprland config copied to $CONFIG_HOME/hypr"
+}
+
+# The config folder of the window manager picked (--wm, or the install screen).
+wm_dir() {
+  case "$WM" in sway) echo sway ;; niri) echo niri ;; *) echo hypr ;; esac
+}
+
+wm_title() {
+  case "$WM" in sway) echo Sway ;; niri) echo Niri ;; *) echo Hyprland ;; esac
+}
+
+# Sway and Niri: their config next to the generated theme file.
+deploy_wm() {
+  local dir
+  dir="$(wm_dir)"
+  if [[ $dir == hypr ]]; then
+    deploy_hypr
+    return
+  fi
+  [[ -e $CONFIG_HOME/$dir ]] || record "created $CONFIG_HOME/$dir"
+  run mkdir -p "$CONFIG_HOME/$dir"
+  run cp -r "$ROOT/$dir/." "$CONFIG_HOME/$dir/"
+  info "$(wm_title) config copied to $CONFIG_HOME/$dir"
 }
 
 deploy_shell() {
@@ -119,6 +142,8 @@ uninstall() {
     [[ $line == link\ * && -L $path ]] && run rm -f "$path"
   done <"$INSTALL_LOG"
   restore_dir "$backup" "$CONFIG_HOME/hypr"
+  grep -qx "created $CONFIG_HOME/sway" "$INSTALL_LOG" && restore_dir "$backup" "$CONFIG_HOME/sway"
+  grep -qx "created $CONFIG_HOME/niri" "$INSTALL_LOG" && restore_dir "$backup" "$CONFIG_HOME/niri"
   restore_dir "$backup" "$SHELL_DIR"
   run mv "$INSTALL_LOG" "$INSTALL_LOG.uninstalled-$(date +%Y%m%d-%H%M%S)"
   info "kept: your settings ($CONFIG_HOME/tfem), wallpapers, icons, backups and installed packages"

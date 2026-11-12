@@ -9,8 +9,9 @@ package_cells() {
   local column skip=""
   case "$FAMILY" in arch) column=3 ;; debian) column=4 ;; fedora) column=5 ;; openbsd) column=6 ;; esac
   [[ -n ${SDDM_THEME:-} ]] || skip=sddm
-  awk -F'\t' -v col="$column" -v profile="$PROFILE" -v skip="$skip" '
+  awk -F'\t' -v col="$column" -v profile="$PROFILE" -v skip="$skip" -v wm="wm-${WM:-hyprland}" '
     /^#/ || NF < 6 || $1 == skip { next }
+    $2 ~ /^wm-/ { if ($2 == wm) print $1 "\t" $col; next }
     $2 == "core" || profile == "full" { print $1 "\t" $col }
   ' "$ROOT/install/packages.tsv"
 }
@@ -65,6 +66,21 @@ install_packages() {
 }
 
 # The Hyprland config is written in Lua, read by Hyprland 0.55 and newer.
+# The window manager picked is there (Hyprland: and recent enough).
+check_wm() {
+  [[ $FAMILY == openbsd ]] && WM=hyprland   # nothing to install there: check_hyprland says why
+  case "$WM" in
+    sway | niri)
+      if command -v "$WM" >/dev/null 2>&1; then
+        info "$(wm_title) found"
+      else
+        warn "$(wm_title) is not installed: install the '$WM' package"
+      fi
+      ;;
+    *) check_hyprland ;;
+  esac
+}
+
 check_hyprland() {
   if [[ $FAMILY == openbsd ]]; then
     warn "OpenBSD has no Hyprland nor Quickshell yet (Hyprland's OpenBSD port is in progress):"

@@ -97,7 +97,7 @@ Scope {
             open = false;
             network.show(name.slice(5));
         } else if (name === "next-layout")
-            Quickshell.execDetached(["hyprctl", "switchxkblayout", "all", "next"]);
+            Quickshell.execDetached(Compositor.nextLayout);
         else if (name === "quiet")
             Session.doNotDisturb = value;
         else if (name === "awake")

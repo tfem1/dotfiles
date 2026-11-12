@@ -4,6 +4,7 @@ import Quickshell.Hyprland
 import Quickshell.Io
 import Quickshell.Wayland
 import "../overlay"
+import "../services"
 import "../theme"
 import "overview.js" as OverviewLib
 
@@ -17,6 +18,13 @@ Scope {
     property bool open: false
 
     function toggle() {
+        // Niri has its own overview; Sway has none.
+        if (Compositor.name === "niri") {
+            Quickshell.execDetached(["niri", "msg", "action", "toggle-overview"]);
+            return;
+        }
+        if (Compositor.name !== "hyprland")
+            return;
         open = !open;
         if (open) {
             // Window places and sizes, fresh.

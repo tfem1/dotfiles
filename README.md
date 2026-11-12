@@ -47,6 +47,26 @@ screen shows, choose Hyprland.
 
 ![The install screen](docs/images/install-tui.png)
 
+### Window manager: Hyprland, Sway or Niri
+
+The first line of the install screen (or `--wm hyprland|sway|niri`) picks
+the window manager; the same shell (bar, panels, dock, widgets, lock screen,
+Settings) runs on all three, with the same keys.
+
+| | Hyprland | Sway | Niri |
+|---|---|---|---|
+| Config written | `~/.config/hypr` | `~/.config/sway/config` | `~/.config/niri/config.kdl` (niri 25.11+) |
+| Theme file (`tfem generate`) | `theme.lua` | `theme.conf`: border colors, gaps, font, cursor | `theme.kdl`: focus ring, gaps, rounded corners, cursor |
+| Workspaces in the bar | yes | yes (Sway's IPC) | yes (`niri msg`) |
+| `SUPER + Tab` | the shell's overview | — | niri's own overview |
+| Lock fallback | hyprlock | swaylock | swaylock |
+| Blur, game mode effects, night light, Settings → Display, keybind cheatsheet | yes | — | — |
+
+Idle (dim, lock, screens off, suspend) is hypridle on all three; it turns
+the screens off with the commands of the compositor in use. The packages
+follow the choice: Hyprland, hyprlock and hyprsunset only for Hyprland,
+Sway and swaylock for Sway, Niri and swaylock for Niri.
+
 | Option | Effect |
 |---|---|
 | `--profile minimal` | desktop essentials only, no apps, fonts or wallpapers |

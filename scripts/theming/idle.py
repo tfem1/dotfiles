@@ -1,12 +1,18 @@
 """hypridle listeners from config.json: idle.dim, idle.lock, idle.screen_off
 and idle.suspend, in minutes, 0 = never. The commands are those of the
-Hyprland wiki's hypridle example, with the 0.57 Lua dispatchers."""
+Hyprland wiki's hypridle example, with the 0.57 Lua dispatchers; the
+screens go off and on with the commands of the compositor in use."""
 from __future__ import annotations
 
 from typing import Mapping
 
-DPMS_ON = "hyprctl dispatch 'hl.dsp.dpms({ action = \"enable\" })'"
-DPMS_OFF = "hyprctl dispatch 'hl.dsp.dpms({ action = \"disable\" })'"
+# Screens off and on again, under the compositor in use (its socket says
+# which): Niri, Sway, else Hyprland. Niri turns them on by itself at input.
+DPMS_ON = ('[ -n "$NIRI_SOCKET" ] || { [ -n "$SWAYSOCK" ] && swaymsg "output * power on"; } '
+           "|| hyprctl dispatch 'hl.dsp.dpms({ action = \"enable\" })'")
+DPMS_OFF = ('if [ -n "$NIRI_SOCKET" ]; then niri msg action power-off-monitors; '
+            'elif [ -n "$SWAYSOCK" ]; then swaymsg "output * power off"; '
+            "else hyprctl dispatch 'hl.dsp.dpms({ action = \"disable\" })'; fi")
 # key -> (what it does, on-timeout, on-resume or "")
 STEPS = {
     "idle.dim": ("dim the screen", "brightnessctl -s set 10", "brightnessctl -r"),

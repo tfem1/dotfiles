@@ -22,6 +22,20 @@ reload   = "hyprctl reload"
 # create = false: never create an empty hyprland.lua in place of yours.
 include  = { into = "{config}/hypr/hyprland.lua", line = 'require("theme")', comment = "--" }
 
+# Sway and Niri, when picked in the installer instead of Hyprland: colors,
+# gaps, borders, corners and font of their windows.
+[sway]
+template = "sway/theme.conf.tpl"
+output   = "{config}/sway/theme.conf"
+needs    = "sway"
+reload   = "swaymsg reload"
+
+[niri]
+template = "niri/theme.kdl.tpl"
+output   = "{config}/niri/theme.kdl"
+needs    = "niri"
+# Niri reloads its config by itself when an included file changes.
+
 [hyprland-shell]
 template = "hypr/shell.lua.tpl"
 output   = "{config}/hypr/shell.lua"

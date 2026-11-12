@@ -222,6 +222,23 @@ class DeployTest(InstallTest):
         self.assertTrue(self.config("quickshell/desktop/theme.json").exists())
         self.assertEqual(Path(os.readlink(self.home / ".local/bin/tfem")), REPO / "tfem")
 
+    def test_sway_or_niri_get_their_config_instead_of_hyprland(self):
+        for wm, folder, main in (("sway", "sway", "config"), ("niri", "niri", "config.kdl")):
+            with self.subTest(wm=wm):
+                code, output = self.install("arch", "--yes", "--no-wallpapers", "--no-packages", "--no-sddm", "--wm", wm)
+                self.assertEqual(code, 0, output)
+                self.assertEqual(self.config(f"{folder}/{main}").read_text(), (REPO / folder / main).read_text())
+                self.assertIn(f"window manager: {wm}", output)
+        self.assertFalse(self.config("hypr/hyprland.lua").exists())
+
+    def test_the_wm_decides_which_packages(self):
+        self.install("arch", "--yes", "--no-wallpapers", "--wm", "sway")
+        command = self.installed("pacman -S --needed --noconfirm")
+        self.assertIn(" sway", command)
+        self.assertIn(" swaylock", command)
+        self.assertNotIn(" hyprland", command)
+        self.assertNotIn(" hyprlock", command)
+
     def test_someone_elses_command_is_not_replaced(self):
         bin_dir = self.home / ".local/bin"
         bin_dir.mkdir(parents=True)

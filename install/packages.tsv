@@ -1,12 +1,17 @@
 # Packages per distro family, read by install.sh.
 # Columns (tab separated): key, profile, arch, debian, fedora, openbsd.
 # OpenBSD has no Hyprland nor Quickshell yet: only the apps and their themes.
-# profile: core = always installed, full = only with --profile full.
+# profile: core = always installed, full = only with --profile full,
+# wm-NAME = only with that window manager (--wm, or the install screen).
 # "-" = not in the official repositories; "a|b" = first available name;
 # several packages in one cell are separated by spaces.
 # The installer checks every name before installing and skips missing ones.
-hyprland	core	hyprland	hyprland	-	-
-hyprlock	core	hyprlock	hyprlock	-	-
+hyprland	wm-hyprland	hyprland	hyprland	-	-
+hyprlock	wm-hyprland	hyprlock	hyprlock	-	-
+sway	wm-sway	sway	sway	sway	-
+swaylock	wm-sway	swaylock	swaylock	swaylock	-
+niri	wm-niri	niri	niri	niri	-
+swaylock-niri	wm-niri	swaylock	swaylock	swaylock	-
 hypridle	core	hypridle	hypridle	-	-
 quickshell	core	quickshell	quickshell	quickshell	-
 python	core	python	python3	python3	python%3.13|python%3.12
@@ -26,7 +31,7 @@ gamemode	core	gamemode	gamemode	gamemode	-
 # Power saver mode (powerprofilesctl); recent Fedora ships tuned-ppd for it.
 power-profiles	core	power-profiles-daemon	power-profiles-daemon	tuned-ppd|power-profiles-daemon	-
 # Night mode's warmer screen; not packaged on Fedora (night mode only dims).
-hyprsunset	core	hyprsunset	hyprsunset	-	-
+hyprsunset	wm-hyprland	hyprsunset	hyprsunset	-	-
 wireplumber	core	wireplumber	wireplumber	wireplumber	wireplumber
 networkmanager	core	networkmanager	network-manager	NetworkManager	-
 gsettings	core	glib2	libglib2.0-bin	glib2	glib2

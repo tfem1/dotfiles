@@ -47,7 +47,8 @@ class OutputTest(GenerateTest):
                  (config / "kitty/theme.conf", "kitty-theme.conf"),
                  (config / "gtk-3.0/theme.css", "gtk3-theme.css"), (config / "gtk-4.0/theme.css", "gtk4-theme.css"),
                  (config / "qt6ct/colors/theme.conf", "qt-colors.conf"), (config / "qt6ct/qt6ct.conf", "qt6ct.conf"),
-                 (hypr / "hypridle.conf", "hypridle.conf"))
+                 (hypr / "hypridle.conf", "hypridle.conf"),
+                 (config / "sway/theme.conf", "sway-theme.conf"), (config / "niri/theme.kdl", "niri-theme.kdl"))
         for produced, golden in pairs:
             with self.subTest(golden=golden):
                 # The config folder of the sandbox changes each run.

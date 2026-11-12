@@ -1,0 +1,120 @@
+# Sway config of this desktop: the same keys and the same shell as the
+# Hyprland one. Colors, gaps, borders and font come from theme.conf, written
+# by `tfem generate` from theme.toml (do not edit that one). Picked in the
+# installer (--wm sway); your own lines can go at the end.
+
+set $mod Mod4
+set $shell desktop
+set $tfem ~/.local/bin/tfem
+set $ipc qs ipc -c $shell call
+set $term kitty
+
+include ~/.config/sway/theme.conf
+
+# The terminal and the shell's launcher read these; Qt apps take the theme
+# colors from qt5ct / qt6ct; ~/.local/bin (tfem) on the PATH.
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+
+input type:keyboard {
+    xkb_layout us
+    xkb_options grp:alt_shift_toggle
+}
+input type:touchpad {
+    tap enabled
+    natural_scroll enabled
+}
+
+# Started once: clipboard history, idle (dim, lock, screen off, suspend) and
+# the shell (bar, panels, notifications, wallpaper, lock screen).
+exec wl-paste --type text --watch cliphist store
+exec wl-paste --type image --watch cliphist store
+exec hypridle
+exec env TERMINAL=$term QT_QPA_PLATFORMTHEME=qt5ct PATH=$HOME/.local/bin:$PATH qs -c $shell -n -d
+
+# Apps
+bindsym $mod+Return exec $term
+bindsym $mod+f exec firefox
+bindsym $mod+e exec nautilus
+
+# Windows
+bindsym $mod+q kill
+bindsym $mod+Alt+f fullscreen toggle
+bindsym $mod+Shift+f floating toggle
+floating_modifier $mod normal
+bindsym $mod+Left focus left
+bindsym $mod+Right focus right
+bindsym $mod+Up focus up
+bindsym $mod+Down focus down
+bindsym $mod+Ctrl+Left move left
+bindsym $mod+Ctrl+Right move right
+bindsym $mod+Ctrl+Up move up
+bindsym $mod+Ctrl+Down move down
+bindsym $mod+Shift+Left resize shrink width 50px
+bindsym $mod+Shift+Right resize grow width 50px
+bindsym $mod+Shift+Up resize shrink height 50px
+bindsym $mod+Shift+Down resize grow height 50px
+
+# Workspaces: keys 1 to 9, then 0 for workspace 10
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+bindsym $mod+0 workspace number 10
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+bindsym $mod+Shift+0 move container to workspace number 10
+
+# Shell panels
+bindsym $mod+d exec $ipc launcher toggle
+bindsym $mod+b exec $ipc system toggle
+bindsym $mod+m exec $ipc music toggle
+bindsym $mod+w exec $ipc wallpaper toggle
+bindsym $mod+s exec $ipc calendar toggle
+bindsym $mod+n exec $ipc network toggle
+bindsym $mod+v exec $ipc volume toggle
+bindsym $mod+c exec $ipc clipboard toggle
+bindsym $mod+h exec $ipc settings toggle
+bindsym $mod+g exec $ipc gamemode toggle
+bindsym $mod+slash exec $ipc cheatsheet toggle
+bindsym $mod+a exec $ipc bar toggleAutohide
+bindsym $mod+r exec qs kill -c $shell; exec qs -c $shell -n -d
+bindsym $mod+Escape exec $ipc power toggle
+
+# Session: the shell's lock screen, swaylock when the shell is not running.
+bindsym --locked $mod+l exec $ipc lock lock || swaylock
+bindsym --locked XF86PowerOff exec $ipc lock lock || swaylock
+
+# Media
+bindsym --locked $mod+space exec playerctl play-pause
+bindsym --locked XF86AudioPlay exec playerctl play-pause
+bindsym --locked XF86AudioPause exec playerctl play-pause
+bindsym --locked XF86AudioPrev exec playerctl previous
+bindsym --locked XF86AudioNext exec playerctl next
+bindsym --locked XF86AudioRaiseVolume exec wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+
+bindsym --locked XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindsym --locked XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindsym --locked XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+bindsym --locked XF86MonBrightnessUp exec brightnessctl -e4 -n2 set 5%+ && $ipc osd brightness
+bindsym --locked XF86MonBrightnessDown exec brightnessctl -e4 -n2 set 5%- && $ipc osd brightness
+
+# Screenshots (saved in ~/Pictures/Screenshots and copied)
+bindsym Print exec $tfem screenshot region
+bindsym Shift+Print exec $tfem screenshot region --edit
+bindsym $mod+Print exec $tfem screenshot full
+bindsym $mod+Shift+Print exec $tfem screenshot full --edit
+bindsym Ctrl+Shift+s exec $tfem screenshot full
+bindsym $mod+Shift+Escape exec $tfem screenshot full
+
+include ~/.config/sway/config.d/*

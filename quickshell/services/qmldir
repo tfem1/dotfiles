@@ -6,3 +6,4 @@ singleton Power 1.0 Power.qml
 singleton Connectivity 1.0 Connectivity.qml
 singleton Session 1.0 Session.qml
 singleton Distro 1.0 Distro.qml
+singleton Compositor 1.0 Compositor.qml

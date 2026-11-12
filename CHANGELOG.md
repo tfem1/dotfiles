@@ -17,6 +17,14 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Sway and Niri** besides Hyprland: the install screen's first line (or
+  `--wm sway|niri`) picks the window manager, installs its packages and
+  writes its config (`sway/config`, `niri/config.kdl`) with the same keys
+  and the same shell; `tfem generate` writes their theme file (colors,
+  gaps, corners, font, cursor). The bar's workspaces work on all three
+  (Sway's IPC, `niri msg`); log out, keyboard layout and screens off use the
+  compositor in use; `SUPER + Tab` opens niri's own overview there. The
+  Sway config is checked by `sway -C` in the tests.
 - **The logo of your distro** at the top left: 31 systems (Arch, CachyOS, Fedora,
   Debian, Ubuntu, NixOS, Mint, Pop!_OS, openSUSE, EndeavourOS, Manjaro...),
   from Simple Icons, Tux for any other Linux.

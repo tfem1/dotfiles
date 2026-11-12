@@ -1,0 +1,26 @@
+// Generated from theme.toml (Moonlit): do not edit by hand,
+// change a setting and run the generator again. Included by
+// ~/.config/niri/config.kdl; niri reloads it by itself.
+
+layout {
+    gaps 6
+    focus-ring {
+        width 2
+        active-color "#5fd0c0"
+        inactive-color "#2d2343"
+    }
+    border {
+        off
+    }
+}
+
+// Rounded windows, with the theme's radius.
+window-rule {
+    geometry-corner-radius 12
+    clip-to-geometry true
+}
+
+cursor {
+    xcursor-theme "Adwaita"
+    xcursor-size 24
+}

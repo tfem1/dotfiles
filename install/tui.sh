@@ -12,6 +12,7 @@ TUI_ACCENT=$'\033[38;2;95;208;192m'   # the teal of the default theme
 TUI_DIM=$'\033[2m' TUI_BOLD=$'\033[1m' TUI_OFF=$'\033[0m'
 TUI_ROW=0
 TUI_LOGINS=(stacked-clock welcome-panel none)
+TUI_WMS=(hyprland sway niri)
 
 tui_banner() {
   printf '%s' "$TUI_ACCENT$TUI_BOLD"
@@ -24,13 +25,15 @@ tui_banner() {
      ╚═╝   ╚═╝     ╚══════╝╚═╝     ╚═╝
 BANNER
   printf '%s' "$TUI_OFF"
-  printf '  %sHyprland + Quickshell, one settings file%s\n\n' "$TUI_DIM" "$TUI_OFF"
+  printf '  %sHyprland, Sway or Niri + Quickshell, one settings file%s\n\n' "$TUI_DIM" "$TUI_OFF"
 }
 
-# One line per choice: "label|variable|what it does". SDDM_THEME is a choice
-# of three, the others are on or off.
+# One line per choice: "label|variable|what it does". WM and SDDM_THEME are
+# choices of three, the others are on or off.
 tui_items() {
-  local items=("Packages|WITH_PACKAGES|apps, Hyprland, Quickshell, fonts (asks for sudo)"
+  local items=()
+  ((DESKTOP)) && items+=("Window manager|WM|the same desktop on Hyprland, Sway or Niri")
+  items+=("Packages|WITH_PACKAGES|apps, the window manager, Quickshell, fonts (asks for sudo)"
     "Wallpapers|WITH_WALLPAPERS|pixel-art forests and cats from wallhaven.cc"
     "Icons|WITH_ICONS|FairyWren, folders in the theme's color"
     "Monocraft|WITH_FONTS|the pixel font used everywhere")
@@ -42,6 +45,8 @@ tui_value() { # the text after the box: [x], [ ] or the login screen
   local name=$1
   if [[ $name == SDDM_THEME ]]; then
     printf '< %s >' "${SDDM_THEME:-none}"
+  elif [[ $name == WM ]]; then
+    printf '< %s >' "$WM"
   elif ((${!name})); then
     printf '%s[x]%s' "$TUI_ACCENT" "$TUI_OFF"
   else
@@ -57,7 +62,7 @@ tui_draw() {
   while IFS='|' read -r label name text; do
     pointer="  "
     ((index == TUI_ROW)) && pointer="$TUI_ACCENT> $TUI_OFF"
-    printf '  %s%-14s %s  %s%s%s\n' "$pointer" "$label" "$(tui_value "$name")" "$TUI_DIM" "$text" "$TUI_OFF"
+    printf '  %s%-15s %s  %s%s%s\n' "$pointer" "$label" "$(tui_value "$name")" "$TUI_DIM" "$text" "$TUI_OFF"
     index=$((index + 1))
   done < <(tui_items)
   printf '\n  %sYour configs are backed up first; --uninstall puts them back.%s\n' "$TUI_DIM" "$TUI_OFF"
@@ -66,7 +71,12 @@ tui_draw() {
 
 tui_toggle() { # $1: the row's variable, $2: +1 or -1 for the login screen
   local name=$1 step=${2:-1} i
-  if [[ $name == SDDM_THEME ]]; then
+  if [[ $name == WM ]]; then
+    for i in "${!TUI_WMS[@]}"; do
+      [[ ${TUI_WMS[$i]} == "$WM" ]] && break
+    done
+    WM="${TUI_WMS[$(((i + step + ${#TUI_WMS[@]}) % ${#TUI_WMS[@]}))]}"
+  elif [[ $name == SDDM_THEME ]]; then
     for i in "${!TUI_LOGINS[@]}"; do
       [[ ${TUI_LOGINS[$i]} == "${SDDM_THEME:-none}" ]] && break
     done

@@ -10,7 +10,7 @@ set -euo pipefail
 REPO_URL="${TFEM_REPO_URL:-https://github.com/tfem1/dotfiles.git}"
 BRANCH="${TFEM_BRANCH:-main}"
 DEST="${TFEM_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/tfem}"
-PROFILE=full DRY_RUN=0 ASSUME_YES=0 UNINSTALL=0 WITH_PACKAGES=1 WITH_WALLPAPERS=1 WITH_ICONS=1 WITH_FONTS=1 WITH_TUI=1 SDDM_THEME=stacked-clock
+PROFILE=full DRY_RUN=0 ASSUME_YES=0 UNINSTALL=0 WITH_PACKAGES=1 WITH_WALLPAPERS=1 WITH_ICONS=1 WITH_FONTS=1 WITH_TUI=1 WM=hyprland SDDM_THEME=stacked-clock
 
 usage() {
   cat <<'EOF'
@@ -26,6 +26,7 @@ Usage: install.sh [options]
   --no-icons              skip the FairyWren icons download
   --no-fonts              skip the Monocraft font download
   --no-tui                plain questions instead of the install screen
+  --wm NAME               the window manager: hyprland (default), sway or niri
   --sddm NAME             the login screen to install: stacked-clock (default)
                           or welcome-panel (SDDM, asks for sudo)
   --no-sddm               do not install SDDM nor its login screen
@@ -49,6 +50,10 @@ while (($#)); do
     --no-icons) WITH_ICONS=0 ;;
     --no-fonts) WITH_FONTS=0 ;;
     --no-tui) WITH_TUI=0 ;;
+    --wm)
+      [[ ${2:-} == hyprland || ${2:-} == sway || ${2:-} == niri ]] || { usage >&2; exit 64; }
+      WM="$2" && shift
+      ;;
     --sddm)
       [[ ${2:-} == stacked-clock || ${2:-} == welcome-panel ]] || { usage >&2; exit 64; }
       SDDM_THEME="$2" && shift
@@ -107,10 +112,10 @@ DESKTOP=1
 if tui_wanted; then
   tui_run || die "cancelled"
 else
-  info "distro family: $FAMILY, profile: $PROFILE$( ((DRY_RUN)) && echo ', dry run: nothing changes')"
+  info "distro family: $FAMILY, window manager: $WM, profile: $PROFILE$( ((DRY_RUN)) && echo ', dry run: nothing changes')"
   info "project: $ROOT"
   if ((DESKTOP)); then
-    info "will write: $CONFIG_HOME/hypr, $SHELL_DIR, $CONFIG_HOME/tfem, links in $BIN_DIR (existing files are backed up first)"
+    info "will write: $CONFIG_HOME/$(wm_dir), $SHELL_DIR, $CONFIG_HOME/tfem, links in $BIN_DIR (existing files are backed up first)"
   else
     info "will write: $CONFIG_HOME/tfem, your apps' theme files, links in $BIN_DIR (existing files are backed up first)"
   fi
@@ -121,10 +126,10 @@ fi
 
 [[ ${TFEM_CLONED:-0} == 1 ]] && record "cloned $ROOT"
 ((WITH_PACKAGES)) && install_packages
-check_hyprland
+check_wm
 backup_existing
 if ((DESKTOP)); then
-  deploy_hypr
+  deploy_wm
   deploy_shell
 fi
 link_cli
@@ -155,7 +160,7 @@ if [[ -n $SDDM_THEME ]]; then
 fi
 
 if ((DESKTOP)); then
-  info "done. Restart, then choose Hyprland at the login screen (or run 'start-hyprland' from a TTY)."
+  info "done. Restart, then choose $(wm_title) at the login screen."
 else
   info "done: your apps follow the theme. The desktop needs Hyprland and Quickshell, not on $FAMILY yet."
 fi

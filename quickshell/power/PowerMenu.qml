@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import "../overlay"
+import "../services"
 
 // Runs the power menu's actions. The menu closes first, so the lock screen
 // or the session end is not hidden behind it.
@@ -15,7 +16,7 @@ Scope {
     // Same commands as the keybinds and Hyprland's own example config.
     // Suspend locks first, so the session is safe when the computer wakes up.
     readonly property var commands: ({
-        logout: "command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'",
+        logout: Compositor.logout,   // Hyprland, Sway or Niri
         suspend: "sleep 1 && systemctl suspend",
         reboot: "systemctl reboot",
         poweroff: "systemctl poweroff"
