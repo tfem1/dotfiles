@@ -705,13 +705,6 @@ Settings window.
 - Visual references for the upcoming shell and login screens are listed in
   [docs/roadmap.md](docs/roadmap.md).
 
-## Working on it with Claude Code
-
-`.claude/settings.json` enables the [Ponytail](https://github.com/DietrichGebert/ponytail)
-plugin (MIT) for Claude Code sessions in this repository: a "lazy senior
-dev" prompt that keeps changes small, with `/ponytail-review` and
-`/ponytail-audit`. Claude Code offers to add it when you trust the folder.
-
 ## License
 
 [GPL-3.0](LICENSE).
