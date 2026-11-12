@@ -21,6 +21,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- A new wallpaper slides in from the right over the old one.
+- `tfem wallpapers thumbs`: 720 px copies of the wallpapers (ffmpeg, now
+  installed), made after `fetch` and by the shell in the background. The
+  selector (`SUPER + W`) shows them and reads their colors: opening it no
+  longer freezes the screen (worst frame 183 ms before, about 20 ms now, with
+  40 4K images), and the same list is not reloaded on each opening.
 - 5 colors per theme by default: background, text and the theme's 3 own
   colors. The red, orange, yellow, green, cyan, blue, purple and brown of
   the terminal, GTK, Qt, fastfetch and the shell take those 3 colors.

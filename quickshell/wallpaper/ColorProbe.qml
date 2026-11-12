@@ -14,10 +14,11 @@ ColorQuantizer {
     id: probe
 
     property var queue: []
+    property var thumbs: ({})   // path -> its small copy: read instead, much quicker
     readonly property string path: queue.length > 0 ? queue[0] : ""
     signal sampled(string path, string color, string palette)
 
-    source: Library.fileUrl(path)
+    source: Library.fileUrl(thumbs[path] || path)
     depth: 3
     rescaleSize: 64
 

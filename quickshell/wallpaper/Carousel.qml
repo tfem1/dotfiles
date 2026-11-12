@@ -5,7 +5,7 @@ import "library.js" as Library
 
 // The wallpapers as a row of slanted cards: the current one large in the
 // middle, the others narrower and shorter the farther they are.
-// `model` is [{ path, name, category }].
+// `model` is [{ path, name, category, thumb }] (thumb: a small copy, or "").
 ListView {
     id: carousel
 
@@ -52,7 +52,7 @@ ListView {
             width: parent.width
             height: carousel.height * (slot.distance === 0 ? 1 : Math.max(0.5, 0.86 - 0.07 * (slot.distance - 1)))
             opacity: slot.distance > 5 ? 0.4 : 1
-            source: Library.fileUrl(slot.modelData.path)
+            source: Library.fileUrl(slot.modelData.thumb || slot.modelData.path)
             active: slot.modelData.path === carousel.activePath
             onClicked: {
                 if (slot.distance === 0)

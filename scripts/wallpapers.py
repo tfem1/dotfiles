@@ -3,6 +3,7 @@ wallhaven.cc, list the images, and set the wallpaper.
 
 Usage: wallpapers.py fetch [--category NAME] [--dest DIR] [--dry-run]
        wallpapers.py list [--json]
+       wallpapers.py thumbs
        wallpapers.py set IMAGE [--colors #RRGGBB,...]
 Files land in ~/Pictures/Wallpapers/<category>/wallhaven-<id>.<ext>; files
 already there are kept, so the command can be run again safely. `set` writes
@@ -11,13 +12,15 @@ the wallpaper in your theme.toml and regenerates the files that use it. With
 image's main colors (the shell reads them), a theme made from those colors,
 green for a green image, blue for a blue one; without them, the theme a
 wallpaper of the collection names. Then every file is regenerated. `fetch` also deletes the old downloads of
-wallpapers taken out of the collection.
+wallpapers taken out of the collection. `thumbs` makes the small copies the
+shell's selector shows (theming/thumbs.py); `fetch` makes them too.
 """
 from __future__ import annotations
 
 import argparse
 import json
 import os
+import shutil
 import sys
 import time
 import tomllib
@@ -33,6 +36,7 @@ from theming.generate import main as generate  # noqa: E402
 from theming.palette import WALLPAPER_PALETTE, WALLPAPER_SOURCE, PaletteError, find_theme, load_palette  # noqa: E402
 from theming.paths import Paths  # noqa: E402
 from theming.settings import SettingsError, load_theme  # noqa: E402
+from theming.thumbs import cache_dir, existing, make  # noqa: E402
 from theming.writer import write_atomic  # noqa: E402
 from wallpaper_collection import Wallpaper, find, load_collection, prune, theme_for  # noqa: E402
 
@@ -76,7 +80,7 @@ def download(url: str, target: Path, attempts: int = 3) -> None:
         time.sleep(2 ** attempt)
 
 
-def fetch(args: argparse.Namespace) -> int:
+def fetch(args: argparse.Namespace, env: Mapping[str, str]) -> int:
     removed = prune(args.collection, args.dest, args.dry_run)
     if removed and not args.dry_run:
         print(f"{removed} wallpapers no longer in the collection deleted")
@@ -100,6 +104,8 @@ def fetch(args: argparse.Namespace) -> int:
             failed += 1
             print(f"  failed: {entry.category}/{target.name} ({error})", file=sys.stderr)
     print(f"{done} downloaded, {kept} already there, {failed} failed -> {args.dest}")
+    if not args.dry_run:
+        make_thumbs(args.dest, env)
     return 2 if failed else 0
 
 
@@ -144,8 +150,21 @@ def images(folder: Path) -> list[dict[str, str]]:
     return result
 
 
-def list_images(args: argparse.Namespace, paths: Paths) -> int:
+def make_thumbs(folder: Path, env: Mapping[str, str]) -> int:
+    ffmpeg = shutil.which("ffmpeg", path=env.get("PATH"))
+    if not ffmpeg:
+        print("no thumbnails: ffmpeg is not installed (the selector reads the images themselves)")
+        return 0
+    made, failed = make((Path(image["path"]) for image in images(folder)), cache_dir(env), ffmpeg)
+    print(f"{made} thumbnails made" + (f", {failed} failed" if failed else ""))
+    return 0
+
+
+def list_images(args: argparse.Namespace, paths: Paths, env: Mapping[str, str]) -> int:
     found = images(paths.wallpapers)
+    cache = cache_dir(env)
+    for image in found:
+        image["thumb"] = existing(Path(image["path"]), cache)  # "" until `thumbs` made it
     try:
         theme, wallpapers = load_theme(paths), load_collection(COLLECTION)
     except SettingsError as error:
@@ -215,6 +234,7 @@ def main(argv: list[str] | None = None, env: Mapping[str, str] = os.environ) -> 
                            help=argparse.SUPPRESS)
     list_cmd = commands.add_parser("list", help="list the images of the wallpaper folder")
     list_cmd.add_argument("--json", action="store_true", help="as JSON (used by the shell)")
+    commands.add_parser("thumbs", help="make the small copies shown by the shell's selector")
     set_cmd = commands.add_parser("set", help="use an image as wallpaper")
     set_cmd.add_argument("image", help="image path, absolute or inside the wallpaper folder")
     set_cmd.add_argument("--colors", help="the image's main colors (#rrggbb,...), read by the shell: "
@@ -223,10 +243,12 @@ def main(argv: list[str] | None = None, env: Mapping[str, str] = os.environ) -> 
     paths = Paths.from_env(ROOT, env)
     try:
         if args.command == "list":
-            return list_images(args, paths)
+            return list_images(args, paths, env)
+        if args.command == "thumbs":
+            return make_thumbs(paths.wallpapers, env)
         if args.command == "set":
             return set_wallpaper(args, paths, env)
-        return fetch(args)
+        return fetch(args, env)
     except (OSError, ValueError, tomllib.TOMLDecodeError, SettingsError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 1

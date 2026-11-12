@@ -5,6 +5,7 @@ import io
 import json
 import http.server
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -19,6 +20,7 @@ from helpers import REPO, SandboxTest
 sys.path.insert(0, str(REPO / "scripts"))
 from theming.colors import Color
 from theming.hues import hue_class
+from theming.thumbs import make
 from wallpaper_collection import Wallpaper, find, theme_for  # noqa: E402
 from wallpapers import followed_theme, load_collection, main as wallpapers_main  # noqa: E402
 
@@ -129,7 +131,8 @@ class FetchTest(unittest.TestCase):
 
     def fetch(self, *args):
         env = {**os.environ, "TFEM_WALLPAPER_BASE": f"http://127.0.0.1:{self.server.server_port}",
-               "NO_PROXY": "127.0.0.1", "no_proxy": "127.0.0.1"}
+               "NO_PROXY": "127.0.0.1", "no_proxy": "127.0.0.1",
+               "XDG_CACHE_HOME": str(self.dest.parent / "cache")}  # never the real thumbnails
         command = [sys.executable, str(REPO / "scripts/wallpapers.py"), "fetch",
                    "--collection", str(self.collection), "--dest", str(self.dest), *args]
         done = subprocess.run(command, env=env, capture_output=True, text=True, timeout=60)
@@ -197,6 +200,37 @@ class ListAndSetTest(SandboxTest):
         with contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
             code = wallpapers_main(list(args), env=self.env)
         return code, out.getvalue()
+
+    def test_thumbnails_are_made_once_listed_and_the_old_ones_dropped(self):
+        # A stand-in ffmpeg: writes its last argument, the output file.
+        (self.home / "bin/ffmpeg").write_text('#!/bin/sh\nfor last; do :; done\necho thumb > "$last"\n')
+        (self.home / "bin/ffmpeg").chmod(0o755)
+        self.env["XDG_CACHE_HOME"] = str(self.home / "cache")
+        cache = self.home / "cache/tfem/thumbs"
+        cache.mkdir(parents=True)
+        (cache / "gone.jpg").write_text("an image deleted since")
+        self.assertEqual(json.loads(self.run_main("list", "--json")[1])[0]["thumb"], "")
+        code, output = self.run_main("thumbs")
+        self.assertEqual((code, output.strip()), (0, "4 thumbnails made"))
+        listed = json.loads(self.run_main("list", "--json")[1])
+        self.assertTrue(all(Path(image["thumb"]).parent == cache for image in listed))
+        self.assertFalse((cache / "gone.jpg").exists())
+        self.assertEqual(self.run_main("thumbs")[1].strip(), "0 thumbnails made")
+
+    @unittest.skipUnless(shutil.which("ffmpeg"), "ffmpeg is not installed")
+    def test_a_thumbnail_is_a_small_jpeg(self):
+        image = self.home / "big.png"
+        subprocess.run(["ffmpeg", "-loglevel", "error", "-f", "lavfi", "-i", "color=red:size=3840x2160",
+                        "-frames:v", "1", str(image)], check=True)
+        self.assertEqual(make([image], self.home / "thumbs"), (1, 0))
+        thumb = next((self.home / "thumbs").glob("*.jpg"))
+        self.assertEqual(thumb.read_bytes()[:2], b"\xff\xd8")   # JPEG
+        self.assertLess(thumb.stat().st_size, 20000)
+
+    def test_without_ffmpeg_nothing_is_made(self):
+        self.env["XDG_CACHE_HOME"] = str(self.home / "cache")
+        self.assertIn("ffmpeg is not installed", self.run_main("thumbs")[1])
+        self.assertFalse((self.home / "cache/tfem").exists())
 
     def test_list_gives_every_image_by_category_then_name(self):
         code, output = self.run_main("list", "--json")

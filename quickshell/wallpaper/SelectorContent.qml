@@ -119,8 +119,8 @@ Item {
                 Image {
                     anchors.fill: parent
                     anchors.margins: parent.border.width
-                    source: Library.fileUrl(cell.modelData.path)
-                    sourceSize: Qt.size(400, 250)
+                    source: Library.fileUrl(cell.modelData.thumb || cell.modelData.path)
+                    sourceSize: Qt.size(720, 480)   // as the carousel: decoded once for both
                     fillMode: Image.PreserveAspectCrop
                     asynchronous: true
                 }

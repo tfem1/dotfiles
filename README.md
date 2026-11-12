@@ -680,6 +680,10 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   background, then remembered), recent picks, random pick and search. Left
   and right arrows browse (also while searching), Enter applies, typing
   searches. It never changes the wallpaper on its own.
+  It shows small 720 px copies of the images (`tfem wallpapers thumbs`, made
+  with ffmpeg in `~/.cache/tfem/thumbs` after a download, or in the
+  background by the shell): a dozen 4K images took long to decode and froze
+  the screen on opening. A new wallpaper slides in from the right.
 - **Clipboard history** (`SUPER + C`): what you copied (kept by cliphist),
   searchable; Enter copies it again.
 - **Keybind cheatsheet** (`SUPER + /`): read from Hyprland itself, so your own
