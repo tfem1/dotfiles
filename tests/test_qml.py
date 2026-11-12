@@ -44,7 +44,7 @@ VISUAL = [
     "settings/SettingRow.qml", "settings/TextButton.qml", "settings/DisplayPage.qml",
     "settings/WidgetsPage.qml", "settings/ApplyBar.qml",
     "widgets/WidgetsContent.qml", "widgets/WidgetCard.qml", "widgets/ClockPill.qml", "widgets/ResourceCard.qml",
-    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "widgets/OrganicShape.qml", "dock/DockContent.qml", "overview/OverviewContent.qml", "settings/DockPage.qml", "settings/HomePage.qml", "settings/WelcomeBanner.qml", "settings/Moon.qml", "settings/TweaksPage.qml",
+    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "widgets/OrganicShape.qml", "dock/DockContent.qml", "overview/OverviewContent.qml", "widgets/CalendarCard.qml", "widgets/WidgetBlock.qml", "widgets/WidgetsDesktop.qml", "settings/DockPage.qml", "settings/HomePage.qml", "settings/WelcomeBanner.qml", "settings/Moon.qml", "settings/TweaksPage.qml",
 ]
 
 
@@ -68,7 +68,7 @@ class VisualComponentsTest(unittest.TestCase):
             done = subprocess.run([sys.executable, str(REPO / "tools/preview/render.py"), "--out", out],
                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(done.returncode, 0, done.stderr)
-            modes = ["bar", "bar-positions", "overview", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "lock", "music",
+            modes = ["bar", "bar-positions", "overview", "widgets-edit", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "lock", "music",
                      "power", "settings", "settings-display", "settings-home", "settings-dock", "settings-system", "settings-tweaks",
                      "settings-widgets", "system", "volume", "wallpaper", "widgets", "wifi"]
             self.assertEqual(sorted(p.name for p in Path(out).iterdir()), sorted(f"forest-moonlit-{m}.png" for m in modes))
@@ -286,6 +286,14 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual(self.probe(logos, '[Lib.has("arch"), Lib.has("cachyos"), Lib.has("")]', None),
                          [True, False, False])
         self.assertIn("fill%3D'%23d19fe4'", self.probe(logos, 'Lib.source("arch", "#d19fe4")', None))
+
+    def test_widget_places_are_parts_of_the_free_space(self):
+        lib = SHELL / "widgets/places.js"
+        self.assertEqual(self.probe(lib, "Lib.fraction(0, 0, 360, 200, 1920, 1080)", None), [0, 0])
+        self.assertEqual(self.probe(lib, "Lib.fraction(1560, 880, 360, 200, 1920, 1080)", None), [1, 1])
+        self.assertEqual(self.probe(lib, "Lib.fraction(780, 440, 360, 200, 1920, 1080)", None), [0.5, 0.5])
+        self.assertEqual(self.probe(lib, "Lib.fraction(-50, 5000, 360, 200, 1920, 1080)", None), [0, 1])
+        self.assertEqual(self.probe(lib, "Lib.text([0.25, 0.6])", None), "0.25,0.6")
 
     def test_overview_places_windows_in_their_workspace(self):
         lib = SHELL / "overview/overview.js"

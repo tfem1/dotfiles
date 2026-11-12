@@ -9,6 +9,7 @@ from helpers import REPO, SandboxTest
 
 sys.path.insert(0, str(REPO / "scripts"))
 from settings import main as settings_main  # noqa: E402
+from theming.settings import load_config  # noqa: E402
 
 
 class SettingsCommandTest(SandboxTest):
@@ -62,6 +63,16 @@ class SettingsCommandTest(SandboxTest):
                 self.assertEqual(code, 1)
                 self.assertIn(message, output)
         self.assertFalse((self.paths.user_dir / "theme.toml").exists())
+
+    def test_widget_places_go_in_config_json(self):
+        code, output = self.run_main("set", "widgets.places.clock=0.5,0.25", "widgets.places.media=auto", "--no-generate")
+        self.assertEqual(code, 0, output)
+        config = json.loads((self.paths.user_dir / "config.json").read_text())
+        self.assertEqual(config["widgets"]["places"], {"clock": "0.5,0.25", "media": "auto"})
+        self.assertEqual(load_config(self.paths)["widgets.places.clock"], "0.5,0.25")
+        for bad in ("widgets.places.clock=9,9", "widgets.places.nope=0,0"):
+            with self.subTest(pair=bad):
+                self.assertEqual(self.run_main("set", bad, "--no-generate")[0], 1)
 
     def test_set_regenerates(self):
         code, output = self.run_main("set", "effects.game_mode=true")

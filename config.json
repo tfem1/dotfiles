@@ -28,6 +28,7 @@
     "cpu": true,
     "gpu": true,
     "ram": true,
-    "disk": true
+    "disk": true,
+    "calendar": true
   }
 }

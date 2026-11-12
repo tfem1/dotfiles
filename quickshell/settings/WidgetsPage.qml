@@ -19,10 +19,22 @@ Column {
         ["cpu", "CPU", "How busy the processor is, and its number of cores."],
         ["gpu", "GPU", "How busy the graphics card is, and its memory (AMD and NVIDIA cards)."],
         ["ram", "RAM", "Memory in use by the apps."],
-        ["disk", "Disk", "Space used on the disk of your home folder."]
+        ["disk", "Disk", "Space used on the disk of your home folder."],
+        ["calendar", "Calendar", "This month, today in the accent color."]
     ]
 
     spacing: 12
+
+    SettingRow {
+        objectName: "widget-move"
+        title: "Move the widgets"
+        description: "Drag each widget where you want it on the desktop; \"Back to the corner\" puts them back."
+        TextButton {
+            text: "Move…"
+            icon: "open_with"
+            onClicked: page.action("widgets-edit", true)
+        }
+    }
 
     SettingRow {
         id: cornerRow

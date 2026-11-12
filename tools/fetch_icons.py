@@ -32,7 +32,7 @@ ICONS = {
     "logout": False, "bedtime": True, "restart_alt": False, "coffee": True, "clear_all": False,
     "dark_mode": True, "eco": True, "co_present": True, "center_focus_strong": True, "tune": False,
     "mode_standby": False, "screenshot_monitor": False, "screenshot_region": False, "home": True,
-    "palette": True, "schedule": False,
+    "palette": True, "schedule": False, "open_with": False,
 }
 
 

@@ -9,7 +9,9 @@ import "../music/lyrics.js" as Lyrics
 import "resources.js" as Resources
 
 // The desktop widgets, on the first screen, in the corner picked in the
-// Settings (Widgets), under the windows: they take no clicks. In game mode,
+// Settings (Widgets) or where you dragged them, under the windows: they
+// take no clicks, except while you move them (Settings → Widgets → Move,
+// or `qs ipc call widgets edit`). In game mode,
 // power saver, focus and presentation they hide and stop. What feeds them runs only while they show: the resource readings
 // for the rings, cava for the spectrum (stopped in game mode), lrclib for
 // the lyrics of the song playing.
@@ -50,40 +52,58 @@ Scope {
         precision: SystemClock.Minutes
     }
 
+    // Editing: the widgets come above the windows and take the pointer.
+    property bool editing: false
+
+    function edit() {
+        editing = true;
+    }
+
+    function save(pairs) {
+        Quickshell.execDetached([cli, "settings", "set"].concat(pairs));
+    }
+
+    readonly property string cli: Quickshell.env("HOME") + "/.local/bin/tfem"
+
+    IpcHandler {
+        target: "widgets"
+
+        function edit(): void {
+            root.edit();
+        }
+    }
+
     LazyLoader {
-        active: root.any && !root.paused
+        active: (root.any && !root.paused) || root.editing
 
         PanelWindow {
             screen: Quickshell.screens[0] || null
-            aboveWindows: false
-            WlrLayershell.namespace: "shell-widgets"
-            exclusionMode: ExclusionMode.Normal
             anchors {
-                top: root.corner.startsWith("top")
-                bottom: root.corner.startsWith("bottom")
-                left: root.corner.endsWith("left")
-                right: root.corner.endsWith("right")
+                top: true
+                bottom: true
+                left: true
+                right: true
             }
-            // The bar's space is kept free (ExclusionMode.Normal): these
-            // margins count from it at the top.
-            margins {
-                top: 16
-                bottom: 24
-                left: 24
-                right: 24
-            }
-            implicitWidth: content.width
-            implicitHeight: content.implicitHeight
+            // The bar's space stays free (ExclusionMode.Normal).
+            exclusionMode: ExclusionMode.Normal
+            WlrLayershell.layer: root.editing ? WlrLayer.Top : WlrLayer.Bottom
+            WlrLayershell.keyboardFocus: root.editing ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
+            WlrLayershell.namespace: "shell-widgets"
             color: "transparent"
-            mask: Region {}
+            // Only while editing do they take clicks.
+            mask: root.editing ? null : noInput
+            Region { id: noInput }
 
-            WidgetsContent {
+            WidgetsDesktop {
                 id: content
 
                 readonly property var player: Player.player
                 readonly property var lines: lyrics.lyrics.kind === "synced" ? lyrics.lyrics.lines : []
                 readonly property int at: player ? Lyrics.current(lines, player.position) : -1
 
+                anchors.fill: parent
+                editing: root.editing
+                places: root.show.places || {}
                 show: root.show
                 now: clock.date
                 cpu: monitor.cpu
@@ -99,6 +119,16 @@ Scope {
                     line: at >= 0 ? lines[at].text : "",
                     next: at >= 0 && at + 1 < lines.length ? lines[at + 1].text : ""
                 })
+                onMoved: (name, x, y) => {
+                    const places = Object.assign({}, root.show.places || {}, { [name]: [x, y] });
+                    Theme.widgets = Object.assign({}, Theme.widgets, { places: places });
+                    root.save([`widgets.places.${name}=${x},${y}`]);
+                }
+                onReset: {
+                    Theme.widgets = Object.assign({}, Theme.widgets, { places: {} });
+                    root.save(["clock", "resources", "audio", "media", "calendar"].map(name => `widgets.places.${name}=auto`));
+                }
+                onDone: root.editing = false
             }
         }
     }

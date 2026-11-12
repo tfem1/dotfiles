@@ -19,6 +19,11 @@ def build_context(theme: Mapping[str, object], palette: Palette, paths: Paths,
     # Shell settings (config.json) first: their keys ("shell.name") never
     # clash with the appearance keys of theme.toml.
     context: dict[str, object] = dict(config or {})
+    # Widgets dragged on the desktop: {"clock": [0.1, 0.2]}, for the shell.
+    context["widgets.places"] = {
+        key.rsplit(".", 1)[1]: [float(part) for part in str(value).split(",")]
+        for key, value in (config or {}).items() if key.startswith("widgets.places.") and value != "auto"
+    }
     context.update(
         {key: value for key, value in theme.items() if not key.startswith("palette.overrides.")}
     )

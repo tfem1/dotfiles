@@ -17,6 +17,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Calendar widget**: the month, today in the accent color
+  (`widgets.calendar`).
+- **Widgets you can move**: Settings → Widgets → Move… (or
+  `qs ipc call widgets edit`), drag each widget anywhere, "Back to the
+  corner" to undo; places saved as `widgets.places.<name>` in
+  `config.json` (`tfem settings set` now writes such keys).
 - **Workspace overview** (`SUPER + Tab`): the 10 workspaces with their
   windows in place, as live pictures; click to go to a workspace or a
   window, drag a window to another workspace to move it, 1–0 and Escape.

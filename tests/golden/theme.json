@@ -68,6 +68,8 @@
     "clock": true,
     "audio": true,
     "media": true,
+    "calendar": true,
+    "places": {},
     "cpu": true,
     "gpu": true,
     "ram": true,

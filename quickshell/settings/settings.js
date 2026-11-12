@@ -24,6 +24,8 @@ const INDEX = [
     { page: "dock", id: "dock-opacity", title: "Dock opacity", words: "transparent see-through dock" },
     { page: "dock", id: "dock-position", title: "Dock position", words: "bottom left right side dock" },
     { page: "dock", id: "dock-autohide", title: "Hide the dock", words: "autohide hidden dock" },
+    { page: "widgets", id: "widget-move", title: "Move the widgets", words: "drag place position free desktop" },
+    { page: "widgets", id: "widget-calendar", title: "Calendar widget", words: "month days date desktop" },
     { page: "home", id: "welcome", title: "Welcome", words: "home uptime system os greeting" },
     { page: "system", id: "gamemode", title: "Game mode", words: "games play performance fps roblox" },
     { page: "system", id: "sound", title: "Sound", words: "volume audio speaker mute" },

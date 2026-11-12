@@ -68,6 +68,8 @@
     "clock": {{ widgets.clock }},
     "audio": {{ widgets.audio }},
     "media": {{ widgets.media }},
+    "calendar": {{ widgets.calendar }},
+    "places": {{ widgets.places | json }},
     "cpu": {{ widgets.cpu }},
     "gpu": {{ widgets.gpu }},
     "ram": {{ widgets.ram }},

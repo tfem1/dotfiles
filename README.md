@@ -471,6 +471,19 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   - **Now playing**, kept minimal: the song, its artist and the line of the
     lyrics being sung (from lrclib.net), the next one under it.
 
+  - **Calendar**: this month, its weeks starting on your language's first
+    day, today in the accent color, the weekend in the second color.
+
+  **Move them anywhere**: Settings → Widgets → **Move…** (or
+  `qs ipc call widgets edit`) brings the widgets above the windows, framed:
+  drag each one where you want it, "Back to the corner" puts them all back,
+  Done or Escape ends. Each place is saved in `config.json`
+  (`widgets.places.clock = "0.97,0.08"`: parts of the free space of the
+  screen, so it stays put on any screen size); the widgets never moved stay
+  stacked in their corner.
+
+  ![Moving the widgets](docs/images/widgets-move.png)
+
   Each one is turned on or off in Settings → **Widgets**, where a small
   screen picks the corner with a click (`widgets.*` in `config.json`,
   `widgets.corner`: `top-left`, `top-right`, `bottom-left`, `bottom-right`). Only what shows runs: CPU and memory are read from

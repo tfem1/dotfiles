@@ -23,11 +23,14 @@ MODULES = (
 )
 BASE16_KEYS = tuple(f"base0{digit}" for digit in "0123456789ABCDEF")
 _NAME = re.compile(r"[a-z0-9][a-z0-9_-]*")
+# A widget moved on the desktop: "x,y" in parts of the screen.
+PLACE = re.compile(r"(0(\.\d{1,4})?|1(\.0{1,4})?),(0(\.\d{1,4})?|1(\.0{1,4})?)")
+WIDGETS = ("clock", "resources", "audio", "media", "calendar")
 
 
 @dataclass(frozen=True)
 class Field:
-    kind: str  # bool | int | float | text | path | name | choice | hue | color | mode
+    kind: str  # bool | int | float | text | path | name | choice | hue | color | mode | place
     low: float = 0
     high: float = 0
     choices: tuple[str, ...] = ()
@@ -50,6 +53,8 @@ class Field:
             return "use lowercase letters, digits, '-' or '_' only"
         if self.kind == "mode" and value != OFF and not MODE.fullmatch(value):
             return "expected a screen mode like 2560x1440@165.00, or off"
+        if self.kind == "place" and value != "auto" and not PLACE.fullmatch(value):
+            return 'expected "auto" or a place like "0.25,0.6" (parts of the screen, 0 to 1)'
         if self.kind == "color":
             try:
                 Color.parse(value)
@@ -130,7 +135,7 @@ CONFIG_SCHEMA: dict[str, Field] = {
     "dock.pinned": TEXT,      # desktop file ids, comma separated: "firefox,kitty"
     # Desktop widgets: which ones show, and in which corner of the screen.
     "widgets.corner": Field("choice", choices=("top-left", "top-right", "bottom-left", "bottom-right")),
-    **{f"widgets.{name}": BOOL for name in ("clock", "audio", "media", "cpu", "gpu", "ram", "disk")},
+    **{f"widgets.{name}": BOOL for name in ("clock", "audio", "media", "calendar", "cpu", "gpu", "ram", "disk")},
 }
 
 # Keys that were renamed: old key -> (new key, old value -> new value). A
@@ -142,6 +147,8 @@ CONFIG_RENAMED: dict[str, tuple[str, dict[object, object]]] = {
 # Settings → Display: the mode picked for a screen, by port name.
 CONFIG_OPEN_TABLES: dict[str, tuple[re.Pattern[str], Field]] = {
     "display.modes": (OUTPUT, Field("mode")),
+    # Where each widget was dragged ("auto": back in its corner).
+    "widgets.places": (re.compile("|".join(WIDGETS)), Field("place")),
 }
 
 

@@ -20,6 +20,7 @@ Scope {
     required property var wallpapers   // the wallpaper selector
     required property var network      // the network panel
     required property var modes        // Modes: game, coffee, night...
+    required property var widgets      // the desktop widgets (to move them)
     property bool open: false
     property var pending: ({})          // Appearance changes waiting for Apply
     // Wi-Fi and Bluetooth answer through NetworkManager and BlueZ: their
@@ -100,7 +101,10 @@ Scope {
             Session.doNotDisturb = value;
         else if (name === "awake")
             Session.stayAwake = value;
-        else if (name === "mode") {
+        else if (name === "widgets-edit") {
+            open = false;
+            widgets.edit();
+        } else if (name === "mode") {
             // Not in the screenshot, and the lock screen shows alone.
             if (value === "sleep" || value.startsWith("shot-"))
                 open = false;

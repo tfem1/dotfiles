@@ -20,7 +20,8 @@ from theming.generate import main as generate  # noqa: E402
 from theming.palette import PaletteError, load_palette, resolve_palette, theme_dirs  # noqa: E402
 from theming.paths import Paths  # noqa: E402
 from theming.icons import MEASURED  # noqa: E402
-from theming.schema import CONFIG_RENAMED, CONFIG_SCHEMA, HUES, THEME_OPEN_TABLES, THEME_SCHEMA, Field  # noqa: E402
+from theming.schema import (CONFIG_OPEN_TABLES, CONFIG_RENAMED, CONFIG_SCHEMA, HUES, THEME_OPEN_TABLES,  # noqa: E402
+                            THEME_SCHEMA, Field)
 from theming.settings import SettingsError, load_config, load_theme  # noqa: E402
 from theming.writer import write_atomic  # noqa: E402
 
@@ -70,6 +71,10 @@ def field_of(key: str) -> tuple[Field, str]:
     for prefix, (allowed, field) in THEME_OPEN_TABLES.items():
         if key.startswith(prefix + ".") and key[len(prefix) + 1:] in allowed:
             return field, "theme"
+    # config.json tables of names, like widgets.places.clock (a pattern).
+    for prefix, (pattern, field) in CONFIG_OPEN_TABLES.items():
+        if key.startswith(prefix + ".") and pattern.fullmatch(key[len(prefix) + 1:]):
+            return field, "config"
     raise ValueError(f"unknown setting '{key}'")
 
 
@@ -107,8 +112,11 @@ def set_values(pairs: list[str], paths: Paths) -> list[str]:
         table, name = key.rsplit(".", 1)
         if field_of(key)[1] == "theme":
             text = set_value(text, table, name, value)
-        else:
-            config.setdefault(table, {})[name] = value
+        else:   # nested by every dot: widgets.places.clock -> {"widgets": {"places": {"clock": ...}}}
+            node = config
+            for part in table.split("."):
+                node = node.setdefault(part, {})
+            node[name] = value
     for old, (new, _) in CONFIG_RENAMED.items():   # the old name of a key just written goes
         old_table, old_name = old.rsplit(".", 1)
         if any(key == new for key, _ in changes):

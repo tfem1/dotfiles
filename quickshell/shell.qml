@@ -27,7 +27,7 @@ ShellRoot {
     ThemeFile {}
 
     WallpaperLayer {}
-    Widgets {}
+    Widgets { id: widgetsLayer }
     Dock {}
     Overview {}
     Bars {
@@ -67,6 +67,7 @@ ShellRoot {
         wallpapers: wallpaperLayer
         network: networkLayer
         modes: modesLayer
+        widgets: widgetsLayer
     }
 
     Shortcuts {

@@ -145,6 +145,27 @@ Rectangle {
 
     // The desktop widgets, with sample readings and a song with lyrics: in
     // the top left corner, and only the clock and the rings bottom right.
+    // Editing: the calendar moved to the top right, the rest in the corner.
+    WidgetsDesktop {
+        visible: scene.mode === "widgets-edit"
+        anchors.fill: parent
+        anchors.topMargin: 44
+        z: 5
+        editing: false
+        Component.onCompleted: if (visible) editing = true
+        show: ({ corner: "top-left", clock: true, cpu: true, gpu: true, ram: true, disk: true, audio: true,
+                 media: false, calendar: true })
+        places: ({ calendar: [0.97, 0.08] })
+        now: new Date(2026, 10, 7, 17, 49)
+        cpu: ({ usage: 0.44, cores: 8 })
+        gpu: ({ usage: 0.31, used: 2.1e9, total: 8.6e9, name: "AMD" })
+        ram: ({ used: 6.2e9, total: 16e9 })
+        disk: ({ used: 212e9, total: 494e9 })
+        levels: [0.18, 0.42, 0.66, 0.92, 0.78, 0.6, 0.47, 0.58, 0.36, 0.28, 0.33, 0.45, 0.31, 0.24, 0.19, 0.14,
+                 0.17, 0.11, 0.09, 0.13, 0.07, 0.05, 0.04, 0.03]
+        device: "Speakers (Realtek Audio)"
+    }
+
     component SampleWidgets: WidgetsContent {
         visible: scene.mode === "widgets"
         now: new Date(2026, 10, 7, 17, 49)
@@ -184,7 +205,7 @@ Rectangle {
 
     // Launcher, clipboard, cheatsheet, selector, network: the screen dims behind them.
     Rectangle {
-        visible: !["desktop", "widgets", "lock", "bar-positions", "overview"].includes(scene.mode)
+        visible: !["desktop", "widgets", "widgets-edit", "lock", "bar-positions", "overview"].includes(scene.mode)
         anchors.fill: parent
         anchors.topMargin: 44
         color: Qt.alpha(Theme.bgAlt, ["wifi", "bluetooth", "volume", "calendar", "music", "system"].includes(scene.mode) ? 0.2 : 0.45)
