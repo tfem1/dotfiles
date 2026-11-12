@@ -17,6 +17,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **fastfetch in the theme's colors**: harilvfs/fastfetch's boxed layout,
+  keys in the accent colors, frames in the quiet one, logo in the accent
+  (`~/.config/fastfetch/config.jsonc`, new `fastfetch` target and package;
+  new template filter `sgr`). Checked with fastfetch 2.70.
 - **Screen recording**: `SUPER + ALT + R` starts and stops it (Hyprland,
   Sway and Niri), `tfem record [full|region] [--audio]` from a terminal;
   wf-recorder on the screen in focus, videos in `~/Videos/Screencasts`, a

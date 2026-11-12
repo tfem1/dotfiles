@@ -63,5 +63,9 @@ class Color:
         """Decimal channels for rgb()/rgba() in CSS: "r, g, b"."""
         return f"{self.r}, {self.g}, {self.b}"
 
+    def sgr(self) -> str:
+        """Terminal true-color foreground code: "38;2;r;g;b" (fastfetch colors)."""
+        return f"38;2;{self.r};{self.g};{self.b}"
+
     def __str__(self) -> str:
         return self.hex()

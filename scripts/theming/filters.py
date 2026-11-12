@@ -71,6 +71,7 @@ FILTERS: dict[str, Callable[[object, str | None], object]] = {
     "hypr": _color_format("hypr", "hypr"),
     "argb": _color_format("argb", "argb"),
     "rgb": _color_format("rgb", "rgb"),
+    "sgr": _color_format("sgr", "sgr"),
     "alpha": _alpha,
     "json": _json,
     "quote": _quote,

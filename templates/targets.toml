@@ -132,6 +132,13 @@ template = "qt/qt6ct.conf.tpl"
 output   = "{config}/qt6ct/qt6ct.conf"
 needs    = "qt6ct"
 
+# fastfetch, in the theme's colors (keys, frames, logo). Replaces
+# ~/.config/fastfetch/config.jsonc: the old one is kept in the backups.
+[fastfetch]
+template = "fastfetch/config.jsonc.tpl"
+output   = "{config}/fastfetch/config.jsonc"
+needs    = "fastfetch"
+
 # Folder color of the FairyWren icons. The file records it; the reload points
 # the icons' folder link at that color (until the icons are downloaded there
 # is nothing to change: `tfem icons fetch` reads this file then). The paths

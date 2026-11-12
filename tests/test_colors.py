@@ -49,5 +49,10 @@ class FormatTest(unittest.TestCase):
                 self.mauve.with_alpha(bad)
 
 
+class SgrTest(unittest.TestCase):
+    def test_true_color_code_for_terminals(self):
+        self.assertEqual(Color.parse("#5fd0c0").sgr(), "38;2;95;208;192")
+
+
 if __name__ == "__main__":
     unittest.main()

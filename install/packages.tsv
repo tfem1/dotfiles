@@ -22,6 +22,8 @@ wl-clipboard	core	wl-clipboard	wl-clipboard	wl-clipboard	-
 cliphist	core	cliphist	cliphist	cliphist	-
 grim	core	grim	grim	grim	grim
 slurp	core	slurp	slurp	slurp	slurp
+# System info in the theme's colors (fastfetch).
+fastfetch	core	fastfetch	fastfetch	fastfetch	fastfetch
 # Screen recording (tfem record, SUPER + ALT + R) and its notifications.
 wf-recorder	core	wf-recorder	wf-recorder	wf-recorder	-
 libnotify	core	libnotify	libnotify-bin	libnotify	-
