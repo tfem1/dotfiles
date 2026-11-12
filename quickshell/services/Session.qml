@@ -16,6 +16,9 @@ Singleton {
     property bool focus: false        // notifications wait, widgets hidden
     property bool presentation: false // no notification at all, never sleeps, widgets hidden
     property bool ready: false    // saved state read (or missing): changes may be written
+    // A screen recording is running (`tfem record`, SUPER + ALT + R): the bar
+    // shows a red dot. Told by the script, never saved.
+    property bool recording: false
 
     function save() {
         file.setText(JSON.stringify({
@@ -48,5 +51,16 @@ Singleton {
         }
         // First start: no file yet.
         onLoadFailed: root.ready = true
+    }
+
+    IpcHandler {
+        target: "recording"
+
+        function started(): void {
+            root.recording = true;
+        }
+        function stopped(): void {
+            root.recording = false;
+        }
     }
 }

@@ -17,6 +17,11 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Screen recording**: `SUPER + ALT + R` starts and stops it (Hyprland,
+  Sway and Niri), `tfem record [full|region] [--audio]` from a terminal;
+  wf-recorder on the screen in focus, videos in `~/Videos/Screencasts`, a
+  red dot in the bar meanwhile (`qs ipc call recording`). New packages:
+  `wf-recorder`, `libnotify`.
 - **Sway and Niri** besides Hyprland: the install screen's first line (or
   `--wm sway|niri`) picks the window manager, installs its packages and
   writes its config (`sway/config`, `niri/config.kdl`) with the same keys

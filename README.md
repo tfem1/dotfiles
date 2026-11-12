@@ -544,6 +544,12 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   top-right corner, urgent ones stay until closed.
 - **Wallpaper**: drawn by the shell itself, under the windows (no other
   program needed); a new one fades in.
+- **Screen recording** (`SUPER + ALT + R`, again to stop): the screen in
+  focus, with wf-recorder, saved to `~/Videos/Screencasts`; a red dot in
+  the bar while it records, a notification at the start and with the file
+  at the end. From a terminal: `tfem record` (`region` for an area picked
+  with the mouse, `--audio` to add the microphone). On Hyprland, Sway and
+  Niri.
 - **Workspace overview** (`SUPER + Tab`): workspaces 1 to 10 as small
   screens, each window where it is, as a live picture (Hyprland's toplevel
   export). Click a workspace to go there, a window to bring it forward;

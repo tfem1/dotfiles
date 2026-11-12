@@ -16,6 +16,7 @@ Commands:
                   --only NAME[,NAME]  render only these targets
                   --all               render even if the app is not installed
   screenshot    Take a screenshot: region|full [--edit]
+  record        Record the screen: [full|region] [--audio]; again to stop
   wallpapers    fetch [--category NAME]: download the collection
                 list [--json]: list your wallpapers; set IMAGE: use one
                 (a wallpaper of the collection also brings its theme)
@@ -49,6 +50,7 @@ if [[ $# -gt 0 ]]; then shift; fi
 case "$command" in
   generate) exec "$root/scripts/generate.sh" "$@" ;;
   screenshot) exec "$root/scripts/screenshot.sh" "$@" ;;
+  record) exec "$root/scripts/record.sh" "$@" ;;
   wallpapers) need_python && exec python3 "$root/scripts/wallpapers.py" "$@" ;;
   icons) need_python && exec python3 "$root/scripts/icons.py" "$@" ;;
   fonts) need_python && exec python3 "$root/scripts/fonts.py" "$@" ;;

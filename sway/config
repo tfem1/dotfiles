@@ -117,4 +117,7 @@ bindsym $mod+Shift+Print exec $tfem screenshot full --edit
 bindsym Ctrl+Shift+s exec $tfem screenshot full
 bindsym $mod+Shift+Escape exec $tfem screenshot full
 
+# Screen recording (saved in ~/Videos/Screencasts): again to stop.
+bindsym $mod+Alt+r exec $tfem record
+
 include ~/.config/sway/config.d/*

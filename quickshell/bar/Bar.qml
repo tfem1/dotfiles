@@ -93,6 +93,7 @@ PanelWindow {
             bluetoothOn: Connectivity.bluetoothOn, bluetoothConnected: Connectivity.bluetoothConnected,
             hasBattery: Power.present, battery: Power.level, charging: Power.charging,
             quiet: Session.doNotDisturb, awake: Session.stayAwake, game: Theme.gameMode,
+            recording: Session.recording,
             modes: { saver: Theme.powerSaver, night: Session.night, presentation: Session.presentation,
                      focus: Session.focus }
         })

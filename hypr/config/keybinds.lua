@@ -112,3 +112,6 @@ run(cli .. " screenshot full --edit", "Edit a screenshot of the screen", locked)
 -- apps that use it for "Save as").
 run(cli .. " screenshot full", "Screenshot of the screen")("CTRL + SHIFT + S")
 run(cli .. " screenshot full", "Screenshot of the screen")(mod .. " + SHIFT + Escape")
+
+-- Screen recording (saved in ~/Videos/Screencasts): again to stop.
+run(cli .. " record", "Record the screen (again to stop)")(mod .. " + ALT + R")

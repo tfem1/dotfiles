@@ -178,6 +178,7 @@ Themes come before the shell, so the shell is built with the final palettes.
   | `SUPER + 1…0` / `SUPER + SHIFT + 1…0` | go to / send to workspace 1–10 |
   | `SUPER + D` | launcher |
   | `SUPER + Tab` | workspace overview |
+  | `SUPER + ALT + R` | record the screen (again to stop) |
   | `SUPER + B` | system panel (right sidebar) |
   | `SUPER + G` | game mode on or off |
   | `SUPER + M` | music (left sidebar) |

@@ -17,6 +17,11 @@ Pill {
 
     spacing: 10
 
+    Icon {   // recording the screen
+        visible: !!area.s.recording
+        name: "radio_button_checked"
+        color: Theme.red
+    }
     Repeater {
         model: Icons.modes(area.s)
 

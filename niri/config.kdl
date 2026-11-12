@@ -126,4 +126,7 @@ binds {
     Mod+Shift+Print { spawn-sh "~/.local/bin/tfem screenshot full --edit"; }
     Ctrl+Shift+S { spawn-sh "~/.local/bin/tfem screenshot full"; }
     Mod+Shift+Escape { spawn-sh "~/.local/bin/tfem screenshot full"; }
+
+    // Screen recording (saved in ~/Videos/Screencasts): again to stop.
+    Mod+Alt+R { spawn-sh "~/.local/bin/tfem record"; }
 }
