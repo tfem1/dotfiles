@@ -449,14 +449,14 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   ![Settings, Dock page](docs/images/settings-dock.png)
 - **Distro logo** (top left of the bar), in the theme's accent color, the
   logo of the system you run: Arch, Fedora, Debian, Ubuntu, NixOS, Linux
-  Mint, Pop!_OS, openSUSE, EndeavourOS, Manjaro, Gentoo, Void, Kali, Zorin,
+  Mint, Pop!_OS, openSUSE, CachyOS, EndeavourOS, Manjaro, Gentoo, Void, Kali, Zorin,
   elementary, Alpine, Rocky, AlmaLinux, CentOS, Red Hat, Garuda, Nobara,
   Artix, MX, KDE neon, Slackware, Asahi, OpenBSD, FreeBSD (from
   `/etc/os-release`). A click opens the Settings window. Logos come from
   [Simple Icons](https://simpleicons.org) (CC0, `tools/import_logos.py`),
   each shown only on its own system, in one color and its own proportions,
   as trademark policies such as [Arch's](https://terms.archlinux.org/docs/trademark-policy/)
-  ask: a derivative without its own logo (CachyOS…) gets Tux.
+  ask: a system without its own logo here (Bazzite…) gets Tux.
 - **Desktop widgets**, in the corner of the screen you pick (top left by
   default, or any of the other three), under the windows, in the colors of the theme,
   a little see-through (Hyprland's blur shows behind them, only inside

@@ -281,17 +281,17 @@ class VisualComponentsTest(unittest.TestCase):
         release = 'NAME="Arch Linux"\nPRETTY_NAME="Arch Linux"\nID=arch\nBUILD_ID=rolling\n'
         self.assertEqual(self.probe(logos, "Lib.distroId(input)", release), "arch")
         self.assertEqual(self.probe(logos, "Lib.distroId(input)", 'ID="fedora"\nVERSION_ID=43\n'), "fedora")
-        # A derivative is not Arch: ID_LIKE alone gives no logo (Arch's trademark policy).
+        # A derivative is not Arch: its own ID, never ID_LIKE (Arch's trademark policy).
         self.assertEqual(self.probe(logos, "Lib.distroId(input)", "ID=cachyos\nID_LIKE=arch\n"), "cachyos")
-        self.assertEqual(self.probe(logos, '[Lib.has("arch"), Lib.has("cachyos"), Lib.has("")]', None),
-                         [True, False, False])
+        self.assertEqual(self.probe(logos, '[Lib.has("arch"), Lib.has("cachyos"), Lib.has("bazzite"), Lib.has("")]', None),
+                         [True, True, False, False])
         # Each system its own logo; a derivative Tux, not its parent's; none: the gear ("").
         ids = ["arch", "fedora", "debian", "ubuntu", "nixos", "linuxmint", "pop", "opensuse-tumbleweed",
-               "endeavouros", "manjaro", "gentoo", "void", "cachyos", ""]
+               "endeavouros", "manjaro", "gentoo", "void", "cachyos", "bazzite", ""]
         self.assertEqual(self.probe(logos, "input.map(Lib.logoFor)", ids),
-                         ids[:7] + ["opensuse-tumbleweed", "endeavouros", "manjaro", "gentoo", "void", "linux", ""])
+                         ids[:7] + ["opensuse-tumbleweed", "endeavouros", "manjaro", "gentoo", "void", "cachyos", "linux", ""])
         shapes = self.probe(logos, 'input.map(id => Lib.source(Lib.logoFor(id), "#fff"))', ids[:-1])
-        self.assertEqual(len(set(shapes[:12])), 12)   # all different
+        self.assertEqual(len(set(shapes[:13])), 13)   # all different
         self.assertIn("fill%3D'%23d19fe4'", self.probe(logos, 'Lib.source("arch", "#d19fe4")', None))
 
     def test_widget_places_are_parts_of_the_free_space(self):

@@ -17,7 +17,7 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
-- **The logo of your distro** at the top left: 30 systems (Arch, Fedora,
+- **The logo of your distro** at the top left: 31 systems (Arch, CachyOS, Fedora,
   Debian, Ubuntu, NixOS, Mint, Pop!_OS, openSUSE, EndeavourOS, Manjaro...),
   from Simple Icons, Tux for any other Linux.
 - Settings → **Fonts**: interface and monospace fonts picked among the
@@ -189,8 +189,6 @@ All notable changes to this project are documented here. The format follows
   (`gamemoded -r`, new package `gamemode`); the desktop widgets hide and
   stop; the screen never sleeps; a gamepad shows in the bar. Checked in the
   real Quickshell.
-- `.claude/settings.json`: the Ponytail plugin (DietrichGebert/ponytail,
-  MIT) for Claude Code sessions in this repository.
 - Screens can be turned **off** (and on again) in Settings → Display, with
   a switch per screen, and with `tfem display off NAME` / `on NAME`. The
   page lists the screens already off too (`hyprctl monitors all`); the

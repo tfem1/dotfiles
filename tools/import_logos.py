@@ -1,7 +1,7 @@
 """Builds the LOGOS table of quickshell/components/logos.js from Simple Icons
 (CC0-1.0): the logo of each distro, one SVG path in a 24x24 box.
 
-Usage: npm pack simple-icons@15.22.0 && tar xzf simple-icons-15.22.0.tgz
+Usage: npm pack simple-icons@16.37.0 && tar xzf simple-icons-16.37.0.tgz
        python3 tools/import_logos.py package/icons
 Keys are the ID of /etc/os-release; several IDs can share a logo.
 """
@@ -20,6 +20,7 @@ LOGOS = {
     "opensuse": "opensuse", "opensuse-tumbleweed": "opensuse", "opensuse-leap": "opensuse",
     "nixos": "nixos", "gentoo": "gentoo", "void": "voidlinux", "alpine": "alpinelinux",
     "slackware": "slackware", "asahi": "asahilinux", "openbsd": "openbsd", "freebsd": "freebsd",
+    "cachyos": "cachyos",
     "linux": "linux",   # Tux: any other Linux
 }
 
