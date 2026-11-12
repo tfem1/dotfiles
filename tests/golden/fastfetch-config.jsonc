@@ -1,6 +1,6 @@
 // Generated from theme.toml (Moonlit): do not edit by hand,
-// change a setting and run the generator again. The keys, frames and logo
-// take the theme's colors. Layout from github.com/harilvfs/fastfetch
+// change a setting and run the generator again. The keys, frames, logo and
+// percentages take the theme's colors. Layout from github.com/harilvfs/fastfetch
 // (old-days branch), with the theme's colors instead of fixed ones.
 {
     "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
@@ -144,6 +144,13 @@
         }
     ],
     "display": {
+        "percent": {
+            "color": {
+                "green": "38;2;95;208;192",
+                "yellow": "38;2;131;213;201",
+                "red": "38;2;103;190;200"
+            }
+        },
         "color": {
             "keys": "38;2;95;208;192",
             "title": "38;2;95;208;192",

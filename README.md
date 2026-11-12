@@ -273,7 +273,8 @@ color (`wifi = "blue"`, for instance).
 `fastfetch` shows your system in the theme's colors: the boxed layout of
 [harilvfs/fastfetch](https://github.com/harilvfs/fastfetch/blob/old-days/fastfetch/config.jsonc)
 (hardware, software, uptime / age / date), its keys in the accent colors,
-its frames in the quiet one, the distro logo in the accent too. `tfem
+its frames in the quiet one, the distro logo and the percentages (memory,
+disks) in the accent colors too. `tfem
 generate` writes `~/.config/fastfetch/config.jsonc` (your old one is kept in
 the backups), so it changes with the theme and the wallpaper. Its icons
 need a Nerd Font symbol fallback (kitty has one).
