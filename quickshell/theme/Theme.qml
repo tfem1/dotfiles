@@ -57,6 +57,9 @@ QtObject {
     property string wallpaper: ""
     // The bar (config.json bar.*): "top", "bottom", "left" or "right".
     property var bar: ({ position: "top", transparent: false })
+    // The dock (config.json dock.*); its colors come from the theme.
+    property var dock: ({ enabled: true, position: "bottom", opacity: 0.85, autohide: false,
+                          pinned: "firefox,kitty,org.gnome.Nautilus" })
     // Desktop widgets shown (config.json widgets.*).
     property var widgets: ({ corner: "top-left", clock: true, audio: true, media: true, cpu: true, gpu: true, ram: true,
                              disk: true })
@@ -99,5 +102,7 @@ QtObject {
             theme.widgets = data.widgets;
         if (data.bar)
             theme.bar = data.bar;
+        if (data.dock)
+            theme.dock = data.dock;
     }
 }

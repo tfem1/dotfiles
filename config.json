@@ -13,6 +13,13 @@
     "position": "top",
     "transparent": false
   },
+  "dock": {
+    "enabled": true,
+    "position": "bottom",
+    "opacity": 0.85,
+    "autohide": false,
+    "pinned": "firefox,kitty,org.gnome.Nautilus"
+  },
   "widgets": {
     "corner": "top-left",
     "clock": true,

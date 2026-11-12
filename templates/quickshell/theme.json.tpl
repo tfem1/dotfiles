@@ -56,6 +56,13 @@
     "position": {{ bar.position | json }},
     "transparent": {{ bar.transparent }}
   },
+  "dock": {
+    "enabled": {{ dock.enabled }},
+    "position": {{ dock.position | json }},
+    "opacity": {{ dock.opacity }},
+    "autohide": {{ dock.autohide }},
+    "pinned": {{ dock.pinned | json }}
+  },
   "widgets": {
     "corner": {{ widgets.corner | json }},
     "clock": {{ widgets.clock }},

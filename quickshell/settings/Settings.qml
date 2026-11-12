@@ -54,6 +54,8 @@ Scope {
             Theme.widgets = Object.assign({}, Theme.widgets, { [key.slice(8)]: value });
         else if (key.startsWith("bar."))
             Theme.bar = Object.assign({}, Theme.bar, { [key.slice(4)]: value });
+        else if (key.startsWith("dock."))
+            Theme.dock = Object.assign({}, Theme.dock, { [key.slice(5)]: value });
         else if (key === "effects.game_mode")
             Theme.gameMode = value;
     }
@@ -62,7 +64,13 @@ Scope {
         if (name === "gamemode") {
             follow("effects.game_mode", value);
             store.change({ "effects.game_mode": value });
-        } else if (name.startsWith("widgets.") || name.startsWith("bar.")) {
+        } else if (name === "dock.opacity") {
+            // Many values while the slider moves: the dock follows each one,
+            // the file gets the last.
+            follow(name, value);
+            opacityWrite.value = value;
+            opacityWrite.restart();
+        } else if (name.startsWith("widgets.") || name.startsWith("bar.") || name.startsWith("dock.")) {
             follow(name, value);
             store.change({ [name]: value });
         } else if (name.startsWith("idle."))
@@ -116,6 +124,13 @@ Scope {
     DisplayControl {
         id: displayControl
         cli: root.cli
+    }
+
+    Timer {
+        id: opacityWrite
+        property real value: 0.85
+        interval: 400
+        onTriggered: store.change({ "dock.opacity": value })
     }
 
     // Long enough for NetworkManager or BlueZ to answer; then the switch

@@ -14,6 +14,7 @@ import "../../quickshell/music"
 import "../../quickshell/power"
 import "../../quickshell/system"
 import "../../quickshell/settings"
+import "../../quickshell/dock"
 import "../../quickshell/widgets"
 import "../../quickshell/lock"
 
@@ -73,6 +74,22 @@ Rectangle {
         now: sampleBar.now
         distro: "arch"
         status: sampleBar.status
+    }
+
+    // The dock at the bottom: pinned apps, two running, one focused.
+    DockContent {
+        visible: ["desktop", "widgets"].includes(scene.mode)
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 8
+        fill: 0.85
+        apps: [
+            { id: "firefox", name: "Firefox", running: 1, focused: true },
+            { id: "kitty", name: "Kitty", running: 2, focused: false },
+            { id: "files", name: "Files", running: 0 },
+            { id: "music", name: "Music", running: 1 },
+            { id: "settings", name: "Settings", running: 0 }
+        ]
     }
 
     // Desktop: volume OSD and two notifications (one urgent).

@@ -17,6 +17,11 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- **Dock** with its Settings page: pinned and running apps (Wayland
+  windows, desktop files), click to open or cycle windows, right click to
+  pin; colors from the theme, opacity from 20 to 100 %, bottom, left or
+  right, hidden until the pointer comes if you want (`dock.*` in
+  `config.json`).
 - **Install screen**: the installer opens on a TFEM banner and the list of
   what it will install (packages, wallpapers, icons, Monocraft, the login
   screen), to change with the keyboard before anything happens. Pure bash

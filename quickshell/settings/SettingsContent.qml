@@ -35,7 +35,7 @@ Item {
 
     function pageItem() {
         return ({ home: homePage, system: systemPage, display: displayPage, widgets: widgetsPage,
-                  tweaks: tweaksPage })[page] || appearancePage;
+                  dock: dockPage, tweaks: tweaksPage })[page] || appearancePage;
     }
 
     function scrollTo(id) {
@@ -178,6 +178,14 @@ Item {
                 WidgetsPage {
                     id: widgetsPage
                     visible: window.page === "widgets"
+                    x: 28
+                    width: flick.width - 56
+                    values: window.settings.values
+                    onAction: (name, value) => window.action(name, value)
+                }
+                DockPage {
+                    id: dockPage
+                    visible: window.page === "dock"
                     x: 28
                     width: flick.width - 56
                     values: window.settings.values

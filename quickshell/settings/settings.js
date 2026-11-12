@@ -20,6 +20,10 @@ const INDEX = [
     { page: "tweaks", id: "modes", title: "Modes", words: "gaming coffee night sleep focus presentation power saver do not disturb screenshot region" },
     { page: "tweaks", id: "bar-position", title: "Bar position", words: "top bottom left right side vertical edge panel" },
     { page: "tweaks", id: "bar-transparent", title: "Transparent bar", words: "see-through invisible background clear panel" },
+    { page: "dock", id: "dock-enabled", title: "Dock", words: "apps pinned taskbar launcher icons" },
+    { page: "dock", id: "dock-opacity", title: "Dock opacity", words: "transparent see-through dock" },
+    { page: "dock", id: "dock-position", title: "Dock position", words: "bottom left right side dock" },
+    { page: "dock", id: "dock-autohide", title: "Hide the dock", words: "autohide hidden dock" },
     { page: "home", id: "welcome", title: "Welcome", words: "home uptime system os greeting" },
     { page: "system", id: "gamemode", title: "Game mode", words: "games play performance fps roblox" },
     { page: "system", id: "sound", title: "Sound", words: "volume audio speaker mute" },
@@ -56,6 +60,8 @@ const PAGES = [
       note: "A change acts at once and asks to be kept: without an answer it goes back after 15 seconds." },
     { id: "widgets", title: "Widgets", icon: "grid_view", text: "Clock, music, CPU, GPU, RAM, disk",
       note: "On the desktop, under the windows, in the colors of the theme. These settings act at once." },
+    { id: "dock", title: "Dock", icon: "apps", text: "Pinned apps, opacity, position",
+      note: "In the theme's colors. These settings act at once." },
     { id: "tweaks", title: "Tweaks", icon: "tune", text: "Gaming, coffee, night, screenshots",
       note: "A click turns a mode on or off, at once." }
 ];

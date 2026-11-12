@@ -122,6 +122,12 @@ CONFIG_SCHEMA: dict[str, Field] = {
     # The bar: on which edge of the screen, and with or without its background.
     "bar.position": Field("choice", choices=("top", "bottom", "left", "right")),
     "bar.transparent": BOOL,
+    # The dock: apps pinned and running, its edge, how see-through, hidden or not.
+    "dock.enabled": BOOL,
+    "dock.position": Field("choice", choices=("bottom", "left", "right")),
+    "dock.opacity": _float(0.2, 1.0),
+    "dock.autohide": BOOL,
+    "dock.pinned": TEXT,      # desktop file ids, comma separated: "firefox,kitty"
     # Desktop widgets: which ones show, and in which corner of the screen.
     "widgets.corner": Field("choice", choices=("top-left", "top-right", "bottom-left", "bottom-right")),
     **{f"widgets.{name}": BOOL for name in ("clock", "audio", "media", "cpu", "gpu", "ram", "disk")},

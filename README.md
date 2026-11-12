@@ -437,6 +437,16 @@ folder name is `shell.name` in your `config.json`). Its colors follow
   widgets keep clear of it on every edge.
 
   ![The bar on the left, and a transparent one at the bottom](docs/images/bar-positions.png)
+- **Dock**: your pinned apps, then the ones running, with a mark under the
+  running ones (longer for the focused one). A click opens the app or brings
+  its window forward (again: the next window); a right click pins or unpins
+  it. Its colors are the theme's, so it changes with the theme and the
+  wallpaper; Settings → **Dock** sets how see-through it is (20 to 100 %),
+  its edge (bottom, left, right), and whether it hides until the pointer
+  touches that edge (`dock.*` in `config.json`; `dock.pinned` lists desktop
+  file ids, `"firefox,kitty,org.gnome.Nautilus"` by default).
+
+  ![Settings, Dock page](docs/images/settings-dock.png)
 - **Distro logo** (top left of the bar), in the theme's accent color: violet
   with a violet theme, green with a green one. A click opens the Settings
   window. The Arch Linux logo shows only on Arch itself, in one color and its

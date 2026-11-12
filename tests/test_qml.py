@@ -44,7 +44,7 @@ VISUAL = [
     "settings/SettingRow.qml", "settings/TextButton.qml", "settings/DisplayPage.qml",
     "settings/WidgetsPage.qml", "settings/ApplyBar.qml",
     "widgets/WidgetsContent.qml", "widgets/WidgetCard.qml", "widgets/ClockPill.qml", "widgets/ResourceCard.qml",
-    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "widgets/OrganicShape.qml", "settings/HomePage.qml", "settings/WelcomeBanner.qml", "settings/Moon.qml", "settings/TweaksPage.qml",
+    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "widgets/OrganicShape.qml", "dock/DockContent.qml", "settings/DockPage.qml", "settings/HomePage.qml", "settings/WelcomeBanner.qml", "settings/Moon.qml", "settings/TweaksPage.qml",
 ]
 
 
@@ -69,7 +69,7 @@ class VisualComponentsTest(unittest.TestCase):
                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(done.returncode, 0, done.stderr)
             modes = ["bar", "bar-positions", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "lock", "music",
-                     "power", "settings", "settings-display", "settings-home", "settings-system", "settings-tweaks",
+                     "power", "settings", "settings-display", "settings-home", "settings-dock", "settings-system", "settings-tweaks",
                      "settings-widgets", "system", "volume", "wallpaper", "widgets", "wifi"]
             self.assertEqual(sorted(p.name for p in Path(out).iterdir()), sorted(f"forest-moonlit-{m}.png" for m in modes))
 
@@ -246,6 +246,21 @@ class VisualComponentsTest(unittest.TestCase):
                          [True, False, False])
         self.assertIn("fill%3D'%23d19fe4'", self.probe(logos, 'Lib.source("arch", "#d19fe4")', None))
 
+    def test_dock_lists_pinned_apps_then_running_ones(self):
+        lib = SHELL / "dock/dock.js"
+        windows = [{"appId": "kitty", "activated": False}, {"appId": "kitty", "activated": True},
+                   {"appId": "org.gnome.Nautilus", "activated": False}, {"appId": "steam", "activated": False},
+                   {"appId": "", "activated": False}]
+        items = self.probe(lib, 'Lib.items("firefox, kitty,nautilus.desktop", input)', windows)
+        self.assertEqual([(i["id"], i["pinned"], i["running"], i["focused"]) for i in items], [
+            ("firefox", True, 0, False), ("kitty", True, 2, True), ("nautilus.desktop", True, 1, False),
+            ("steam", False, 1, False)])
+        # Pin and unpin; clicking a running app cycles its windows.
+        self.assertEqual(self.probe(lib, 'Lib.togglePin("firefox,kitty", "Kitty")', None), "firefox")
+        self.assertEqual(self.probe(lib, 'Lib.togglePin("firefox", "steam")', None), "firefox,steam")
+        self.assertEqual(self.probe(lib, 'Lib.nextWindow(input, "kitty")', windows), 0)
+        self.assertEqual(self.probe(lib, 'Lib.nextWindow(input, "firefox")', windows), -1)
+
     def test_organic_shapes_stay_in_their_box(self):
         lib = SHELL / "widgets/shapes.js"
         for kind in ("cookie", "flower", "clover", "circle", "unknown"):
@@ -342,7 +357,7 @@ class VisualComponentsTest(unittest.TestCase):
         self.assertEqual(self.probe(lib, 'Lib.screensOn(input, {"HDMI-A-1": "off"})', screens), 1)
         self.assertEqual(self.probe(lib, 'Lib.screensOn(input, {"eDP-1": "2560x1440@60.00"})', screens), 3)
         self.assertEqual(self.probe(lib, 'Lib.PAGES.map(p => p.id)', None),
-                         ["home", "appearance", "system", "display", "widgets", "tweaks"])
+                         ["home", "appearance", "system", "display", "widgets", "dock", "tweaks"])
 
     def test_every_search_result_leads_to_a_row(self):
         # Rows made by a Repeater are visual children only: they are walked
