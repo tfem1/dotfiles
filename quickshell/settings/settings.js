@@ -103,6 +103,11 @@ const MODES = [
 
 // "Good morning" from 5 h, "Good afternoon" from 12 h, "Good evening" from
 // 18 h, "Good night" from 22 h.
+// Daytime: the sun on the welcome banner, else the moon.
+function isDay(hour) {
+    return hour >= 7 && hour < 19;
+}
+
 function greeting(hour) {
     return hour >= 5 && hour < 12 ? "Good morning" : hour >= 12 && hour < 18 ? "Good afternoon"
         : hour >= 18 && hour < 22 ? "Good evening" : "Good night";

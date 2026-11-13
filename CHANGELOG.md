@@ -30,6 +30,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- The welcome banner of Settings shows the sun in the daytime (7:00 to
+  19:00), rays turning slowly with a few clouds, and the moon at night.
 - Settings → Glass: a style in one click (Clear, Frosted, Solid), the
   transparency of the shell, a touch of the accent color in its glass
   (`effects.glass_tint`), and Hyprland's blur: strength, smoothness,

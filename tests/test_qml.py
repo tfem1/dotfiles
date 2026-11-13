@@ -44,7 +44,7 @@ VISUAL = [
     "settings/SettingRow.qml", "settings/TextButton.qml", "settings/DisplayPage.qml",
     "settings/WidgetsPage.qml", "settings/ApplyBar.qml",
     "widgets/WidgetsContent.qml", "widgets/WidgetCard.qml", "widgets/ClockPill.qml", "widgets/ResourceCard.qml",
-    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "widgets/OrganicShape.qml", "dock/DockContent.qml", "overview/OverviewContent.qml", "widgets/CalendarCard.qml", "widgets/WidgetBlock.qml", "widgets/WidgetsDesktop.qml", "settings/DockPage.qml", "settings/FontsPage.qml", "settings/HomePage.qml", "settings/WelcomeBanner.qml", "settings/Moon.qml", "settings/TweaksPage.qml",
+    "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "widgets/OrganicShape.qml", "dock/DockContent.qml", "overview/OverviewContent.qml", "widgets/CalendarCard.qml", "widgets/WidgetBlock.qml", "widgets/WidgetsDesktop.qml", "settings/DockPage.qml", "settings/FontsPage.qml", "settings/HomePage.qml", "settings/WelcomeBanner.qml", "settings/Moon.qml", "settings/Sun.qml", "settings/TweaksPage.qml",
     "settings/BarLayoutEditor.qml", "bar/WorkspaceNotch.qml", "settings/KeybindsPage.qml", "settings/GlassPage.qml", "settings/SettingSlider.qml",
 ]
 

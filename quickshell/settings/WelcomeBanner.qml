@@ -63,13 +63,16 @@ Rectangle {
         color: Qt.alpha(Theme.bg, 0.62)
     }
 
-    Moon {
+    // The sun in the daytime, the moon at night.
+    Loader {
         anchors.right: parent.right
         anchors.rightMargin: 24
         anchors.verticalCenter: parent.verticalCenter
-        size: 110
         visible: banner.width > 640
+        sourceComponent: Settings.isDay(banner.now.getHours()) ? sunPicture : moonPicture
     }
+    Component { id: sunPicture; Sun { size: 110 } }
+    Component { id: moonPicture; Moon { size: 110 } }
 
     Column {
         x: 30
