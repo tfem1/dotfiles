@@ -75,6 +75,7 @@ Item {
             width: 270
             height: parent.height
             page: window.page
+            user: (window.about || {}).user || ""
             onPagePicked: page => {
                 window.page = page;
                 flick.contentY = 0;

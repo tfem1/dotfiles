@@ -30,6 +30,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Settings side list: your profile card at the top (initials, name; it
+  opens Home), the search, then the pages under Appearance, Desktop and
+  System, one line each.
 - New look for the bar: the workspaces as dots (the focused one a lit
   square; `bar.workspaces = "numbers"` for the numbered circles), a music
   pill ("Nothing playing" when nothing plays), the short date with the time

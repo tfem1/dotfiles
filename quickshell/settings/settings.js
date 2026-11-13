@@ -57,25 +57,28 @@ const INDEX = [
 
 // The pages of the window, in the order of the menu.
 const PAGES = [
-    { id: "home", title: "Home", icon: "home", text: "Welcome, theme, uptime",
+    { id: "home", group: "", title: "Home", icon: "home", text: "Welcome, theme, uptime",
       note: "Your desktop at a glance." },
-    { id: "appearance", title: "Appearance", icon: "wallpaper", text: "Theme, colors, wallpaper, effects",
+    { id: "appearance", group: "Appearance", title: "Appearance", icon: "wallpaper", text: "Theme, colors, wallpaper, effects",
       note: "Nothing changes until you press Apply: the preview shows it first." },
-    { id: "fonts", title: "Fonts", icon: "text_fields", text: "Interface and monospace fonts, sizes",
+    { id: "fonts", group: "Appearance", title: "Fonts", icon: "text_fields", text: "Interface and monospace fonts, sizes",
       note: "Every font installed, drawn in its own face. These settings act at once." },
-    { id: "system", title: "System", icon: "settings", text: "Sound, brightness, connections, sleep",
+    { id: "system", group: "System", title: "System", icon: "settings", text: "Sound, brightness, connections, sleep",
       note: "These settings act at once." },
-    { id: "display", title: "Display", icon: "computer", text: "Screens on or off, resolution, Hz",
+    { id: "display", group: "System", title: "Display", icon: "computer", text: "Screens on or off, resolution, Hz",
       note: "A change acts at once and asks to be kept: without an answer it goes back after 15 seconds." },
-    { id: "widgets", title: "Widgets", icon: "grid_view", text: "Clock, music, CPU, GPU, RAM, disk",
+    { id: "widgets", group: "Desktop", title: "Widgets", icon: "grid_view", text: "Clock, music, CPU, GPU, RAM, disk",
       note: "On the desktop, under the windows, in the colors of the theme. These settings act at once." },
-    { id: "dock", title: "Dock", icon: "apps", text: "Pinned apps, opacity, position",
+    { id: "dock", group: "Desktop", title: "Dock", icon: "apps", text: "Pinned apps, opacity, position",
       note: "In the theme's colors. These settings act at once." },
-    { id: "tweaks", title: "Tweaks", icon: "tune", text: "Gaming, coffee, night, screenshots",
+    { id: "tweaks", group: "Desktop", title: "Tweaks", icon: "tune", text: "Gaming, coffee, night, screenshots",
       note: "A click turns a mode on or off, at once." },
-    { id: "keys", title: "Keybinds", icon: "keyboard", text: "Shortcuts of the panels and tools",
+    { id: "keys", group: "Desktop", title: "Keybinds", icon: "keyboard", text: "Shortcuts of the panels and tools",
       note: "A new key acts at once, in Hyprland, Sway or Niri." }
 ];
+
+// The sections of the side list, in order; Home is the profile card above them.
+const GROUPS = ["Appearance", "Desktop", "System"];
 
 // The modes of the Tweaks page; ids are those of Modes.flip.
 const MODES = [
