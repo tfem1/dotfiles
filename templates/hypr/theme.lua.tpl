@@ -28,8 +28,10 @@ hl.config({
             enabled = {{ effects.blur }},
             size    = {{ effects.blur_size }},
             passes  = {{ effects.blur_passes }},
+            vibrancy = {{ effects.blur_vibrancy }},
+            noise    = {{ effects.blur_noise }},
             -- Right-click menus too, only where they are drawn.
-            popups  = true,
+            popups  = {{ effects.blur_popups }},
             popups_ignorealpha = 0.48,
         },
     },

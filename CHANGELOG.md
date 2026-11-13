@@ -30,6 +30,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Settings → Glass: a style in one click (Clear, Frosted, Solid), the
+  transparency of the shell, a touch of the accent color in its glass
+  (`effects.glass_tint`), and Hyprland's blur: strength, smoothness,
+  vibrancy (`effects.blur_vibrancy`), grain (`effects.blur_noise`) and the
+  right-click menus (`effects.blur_popups`). Transparency and blur moved
+  there from Appearance.
 - Settings side list: your profile card at the top (initials, name; it
   opens Home), the search, then the pages under Appearance, Desktop and
   System, one line each.

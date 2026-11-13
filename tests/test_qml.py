@@ -45,7 +45,7 @@ VISUAL = [
     "settings/WidgetsPage.qml", "settings/ApplyBar.qml",
     "widgets/WidgetsContent.qml", "widgets/WidgetCard.qml", "widgets/ClockPill.qml", "widgets/ResourceCard.qml",
     "widgets/SpectrumCard.qml", "widgets/MediaCard.qml", "lock/LockContent.qml", "widgets/OrganicShape.qml", "dock/DockContent.qml", "overview/OverviewContent.qml", "widgets/CalendarCard.qml", "widgets/WidgetBlock.qml", "widgets/WidgetsDesktop.qml", "settings/DockPage.qml", "settings/FontsPage.qml", "settings/HomePage.qml", "settings/WelcomeBanner.qml", "settings/Moon.qml", "settings/TweaksPage.qml",
-    "settings/BarLayoutEditor.qml", "bar/WorkspaceNotch.qml", "settings/KeybindsPage.qml",
+    "settings/BarLayoutEditor.qml", "bar/WorkspaceNotch.qml", "settings/KeybindsPage.qml", "settings/GlassPage.qml", "settings/SettingSlider.qml",
 ]
 
 
@@ -70,7 +70,7 @@ class VisualComponentsTest(unittest.TestCase):
                                   capture_output=True, text=True, timeout=120)
             self.assertEqual(done.returncode, 0, done.stderr)
             modes = ["bar", "bar-positions", "overview", "widgets-edit", "bluetooth", "calendar", "cheatsheet", "clipboard", "desktop", "launcher", "lock", "music",
-                     "power", "settings", "settings-display", "settings-home", "settings-dock", "settings-fonts", "settings-keys", "settings-system", "settings-tweaks",
+                     "power", "settings", "settings-display", "settings-home", "settings-dock", "settings-fonts", "settings-glass", "settings-keys", "settings-system", "settings-tweaks",
                      "settings-widgets", "system", "volume", "wallpaper", "widgets", "wifi"]
             self.assertEqual(sorted(p.name for p in Path(out).iterdir()), sorted(f"forest-moonlit-{m}.png" for m in modes))
 
@@ -507,7 +507,7 @@ Item {{
         self.assertEqual(self.probe(lib, 'Lib.screensOn(input, {"HDMI-A-1": "off"})', screens), 1)
         self.assertEqual(self.probe(lib, 'Lib.screensOn(input, {"eDP-1": "2560x1440@60.00"})', screens), 3)
         self.assertEqual(self.probe(lib, 'Lib.PAGES.map(p => p.id)', None),
-                         ["home", "appearance", "fonts", "system", "display", "widgets", "dock", "tweaks", "keys"])
+                         ["home", "appearance", "glass", "fonts", "system", "display", "widgets", "dock", "tweaks", "keys"])
 
     def test_every_search_result_leads_to_a_row(self):
         # Rows made by a Repeater are visual children only: they are walked

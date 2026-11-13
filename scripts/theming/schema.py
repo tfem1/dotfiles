@@ -108,6 +108,12 @@ THEME_SCHEMA: dict[str, Field] = {
     "effects.blur": BOOL,
     "effects.blur_size": _int(1, 20),
     "effects.blur_passes": _int(1, 4),
+    # Settings → Glass: how colorful and grainy the blur is, menus blurred too,
+    # and a touch of the accent color in the glass of the shell.
+    "effects.blur_vibrancy": _float(0.0, 1.0),
+    "effects.blur_noise": _float(0.0, 0.2),
+    "effects.blur_popups": BOOL,
+    "effects.glass_tint": _float(0.0, 0.3),
     "effects.shadow": BOOL,
     "effects.animations": BOOL,
     "effects.game_mode": BOOL,

@@ -26,34 +26,6 @@ Column {
     readonly property color accent: Settings.accentColor(theme, v("palette.accent"))
     readonly property var hues: ["red", "orange", "yellow", "green", "cyan", "blue", "purple", "brown"]
 
-    // A slider for a whole number or a step of `step`, with its value shown.
-    component Setting: Row {
-        id: setting
-
-        property real low: 0
-        property real high: 1
-        property real step: 1
-        property real current: low
-        property string unit: ""
-        signal picked(real value)
-
-        spacing: 12
-
-        Slider {
-            anchors.verticalCenter: parent.verticalCenter
-            width: 220
-            value: (setting.current - setting.low) / (setting.high - setting.low)
-            onMoved: fraction => setting.picked(Math.round((setting.low + fraction * (setting.high - setting.low))
-                                                           / setting.step) * setting.step)
-        }
-        Label {
-            anchors.verticalCenter: parent.verticalCenter
-            width: 52
-            text: setting.unit === "%" ? Math.round(setting.current * 100) + " %" : setting.current + setting.unit
-            horizontalAlignment: Text.AlignRight
-        }
-    }
-
     spacing: 12
 
     LivePreview {
@@ -140,13 +112,13 @@ Column {
         objectName: "corners"
         title: "Rounded corners"
         description: "Of the windows and of the shell."
-        Setting { high: 32; current: page.v("shape.radius") || 0; unit: " px"; onPicked: value => page.changed("shape.radius", value) }
+        SettingSlider { high: 32; current: page.v("shape.radius") || 0; unit: " px"; onPicked: value => page.changed("shape.radius", value) }
     }
     SettingRow {
         objectName: "gaps"
         title: "Space between windows"
         description: "Around them, the space is half as large again."
-        Setting {
+        SettingSlider {
             high: 24
             current: page.v("shape.gaps_in") || 0
             unit: " px"
@@ -156,15 +128,8 @@ Column {
             }
         }
     }
-    SettingRow {
-        objectName: "opacity"
-        title: "Transparency"
-        description: "How solid the bar and the panels are."
-        Setting { low: 0.5; step: 0.05; current: page.v("effects.opacity") || 1; unit: "%"; onPicked: value => page.changed("effects.opacity", Math.round(value * 100) / 100) }
-    }
     Repeater {
-        model: [["blur", "effects.blur", "Blur", "Frosted glass behind see-through windows."],
-                ["shadows", "effects.shadow", "Shadows", "A soft shadow under the windows."],
+        model: [["shadows", "effects.shadow", "Shadows", "A soft shadow under the windows."],
                 ["animations", "effects.animations", "Animations", "Windows and panels move smoothly."]]
 
         SettingRow {
@@ -183,6 +148,6 @@ Column {
         objectName: "textsize"
         title: "Text size"
         description: "Of the bar and the panels, in points."
-        Setting { low: 9; high: 16; current: page.v("font.size") || 11; unit: " pt"; onPicked: value => page.changed("font.size", value) }
+        SettingSlider { low: 9; high: 16; current: page.v("font.size") || 11; unit: " pt"; onPicked: value => page.changed("font.size", value) }
     }
 }

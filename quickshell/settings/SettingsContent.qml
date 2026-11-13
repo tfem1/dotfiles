@@ -39,7 +39,7 @@ Item {
     function pageItem() {
         return ({ home: homePage, system: systemPage, display: displayPage, widgets: widgetsPage,
                   dock: dockPage, tweaks: tweaksPage, fonts: fontsPage,
-                  keys: keybindsPage })[page] || appearancePage;
+                  keys: keybindsPage, glass: glassPage })[page] || appearancePage;
     }
 
     function scrollTo(id) {
@@ -161,6 +161,17 @@ Item {
                     wallpaper: window.wallpaper
                     onChanged: (key, value) => window.changed(key, value)
                     onChooseWallpaper: window.chooseWallpaper()
+                }
+                GlassPage {
+                    id: glassPage
+                    visible: window.page === "glass"
+                    x: 28
+                    width: flick.width - 56
+                    values: window.settings.values
+                    pending: window.pending
+                    themes: window.settings.themes
+                    wallpaper: window.wallpaper
+                    onChanged: (key, value) => window.changed(key, value)
                 }
                 FontsPage {
                     id: fontsPage

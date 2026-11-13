@@ -47,6 +47,7 @@
   },
   "effects": {
     "opacity": {{ effects.opacity }},
+    "tint": {{ effects.glass_tint }},
     "blur": {{ effects.blur }},
     "animations": {{ effects.animations }},
     "gameMode": {{ effects.game_mode }},

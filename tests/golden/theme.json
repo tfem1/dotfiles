@@ -47,6 +47,7 @@
   },
   "effects": {
     "opacity": 0.9,
+    "tint": 0.0,
     "blur": true,
     "animations": true,
     "gameMode": false,

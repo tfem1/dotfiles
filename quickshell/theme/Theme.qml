@@ -51,6 +51,7 @@ QtObject {
     property int radius: 12
     property int border: 0
     property real opacity: 0.9
+    property real tint: 0     // Settings → Glass: the accent color mixed into the glass
     property bool animations: true
     property bool gameMode: false      // no animations, no notification popups
     property bool powerSaver: false    // no animations, a dimmer screen
@@ -68,7 +69,7 @@ QtObject {
     // Derived values used everywhere.
     readonly property int duration: animations ? 180 : 0
     readonly property real fontPixels: fontSize * 4 / 3
-    readonly property color panel: Qt.alpha(bg, opacity)
+    readonly property color panel: Qt.alpha(Qt.tint(bg, Qt.alpha(accent, tint)), opacity)
 
     // Copies the values of a parsed theme.json; unknown keys are ignored.
     function apply(data) {
@@ -94,6 +95,7 @@ QtObject {
         }
         if (data.effects) {
             theme.opacity = data.effects.opacity;
+            theme.tint = data.effects.tint || 0;
             theme.animations = data.effects.animations;
             theme.gameMode = !!data.effects.gameMode;
             theme.powerSaver = !!data.effects.powerSaver;
