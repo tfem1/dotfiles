@@ -57,6 +57,17 @@ Pill {
         color: area.s.muted ? Theme.muted : Theme.modules.audio
         name: Icons.volume(area.s)
     }
+    Label {
+        visible: !area.vertical
+        text: area.s.muted ? "" : Math.round((area.s.volume || 0) * 100)
+        small: true
+        font.weight: Font.DemiBold
+    }
+    Icon {
+        visible: !!area.s.hasMic
+        color: area.s.micMuted ? Theme.muted : Theme.modules.audio
+        name: area.s.micMuted ? "mic_off" : "mic"
+    }
     Icon {
         color: area.s.network === "offline" || !area.s.network ? Theme.muted : Theme.modules.wifi
         name: Icons.network(area.s)
@@ -65,14 +76,25 @@ Pill {
         color: area.s.bluetoothOn ? Theme.modules.bluetooth : Theme.muted
         name: Icons.bluetooth(area.s)
     }
-    Icon {
-        visible: !!area.s.hasBattery
-        color: area.s.battery < 0.15 && !area.s.charging ? Theme.red : Theme.modules.battery
-        name: Icons.battery(area.s)
+    Icon {   // charging: the bolt before the level
+        visible: !!area.s.hasBattery && !!area.s.charging
+        color: Theme.modules.battery
+        name: "battery_charging_full"
     }
-    Label {
+    Rectangle {   // the battery level, on a badge red when low
         visible: !!area.s.hasBattery
-        text: Math.round((area.s.battery || 0) * 100) + (area.vertical ? "" : "%")
-        small: true
+        width: level.implicitWidth + 10
+        height: 18
+        radius: 5
+        color: area.s.battery < 0.15 && !area.s.charging ? Theme.red : Theme.modules.battery
+
+        Label {
+            id: level
+            anchors.centerIn: parent
+            text: Math.round((area.s.battery || 0) * 100)
+            small: true
+            font.weight: Font.Bold
+            color: Theme.bg
+        }
     }
 }

@@ -2,15 +2,15 @@
 
 // The bar's layout (config.json bar.layout): three zones, start | center | end
 // (left, middle, right; top, middle, bottom on a vertical bar), each a list
-// of modules: "logo|media,workspaces,clock|status,power". A module left out
+// of modules: "workspaces,media|clock|notifications,status". A module left out
 // is hidden; unknown names are skipped, a module named twice shows once.
 
-const MODULES = ["logo", "media", "workspaces", "clock", "status", "power"];
+const MODULES = ["logo", "workspaces", "media", "clock", "notifications", "status", "power"];
 const ZONES = ["start", "center", "end"];
-const DEFAULT = "logo|media,workspaces,clock|status,power";
+const DEFAULT = "workspaces,media|clock|notifications,status";
 const LABELS = {
     logo: "Distro logo", media: "Music", workspaces: "Workspaces", clock: "Clock",
-    status: "Status icons", power: "Power button"
+    notifications: "Notifications", status: "Status icons", power: "Power button"
 };
 
 function parse(text) {

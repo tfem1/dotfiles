@@ -28,7 +28,10 @@ ShellRoot {
 
     WallpaperLayer {}
     Widgets { id: widgetsLayer }
-    Dock {}
+    Dock {
+        onLauncherRequested: launcherLayer.toggle()
+        onSettingsRequested: settingsLayer.toggle()
+    }
     Overview {}
     Bars {
         id: barLayer

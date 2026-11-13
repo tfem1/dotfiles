@@ -16,6 +16,8 @@ Scope {
     id: root
 
     readonly property var settings: Theme.dock
+    signal launcherRequested
+    signal settingsRequested
     readonly property string edge: ["bottom", "left", "right"].includes(settings.position) ? settings.position : "bottom"
     readonly property var windows: ToplevelManager.toplevels.values
     readonly property string cli: Quickshell.env("HOME") + "/.local/bin/tfem"
@@ -109,6 +111,8 @@ Scope {
                 Behavior on y { NumberAnimation { duration: Theme.duration; easing.type: Easing.OutCubic } }
                 onActivated: id => root.activate(id)
                 onPinToggled: id => root.togglePin(id)
+                onLauncherClicked: root.launcherRequested()
+                onSettingsClicked: root.settingsRequested()
             }
 
             Item {

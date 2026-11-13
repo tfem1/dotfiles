@@ -30,6 +30,16 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- New look for the bar: the workspaces as dots (the focused one a lit
+  square; `bar.workspaces = "numbers"` for the numbered circles), a music
+  pill ("Nothing playing" when nothing plays), the short date with the time
+  on a lit chip (in your language, 12 or 24 h), a notifications button, the
+  volume in numbers, the microphone and the battery on a badge. Default
+  layout `workspaces,media|clock|notifications,status`; the distro logo and
+  the power button can be dragged back in Settings → Tweaks.
+- New look for the dock: an app grid button (the launcher) at the start,
+  each app on a rounded tile, lit while it runs, and a Settings button at
+  the end.
 - Fossa cursors (by adhe, CC BY-SA 4.0) as the default cursor, downloaded by
   the installer (`tfem cursors fetch`: link read from Pling's API, md5
   checked). `cursor.theme = "Adwaita"` brings GNOME's back.

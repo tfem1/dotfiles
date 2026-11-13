@@ -136,8 +136,10 @@ CONFIG_SCHEMA: dict[str, Field] = {
     # The bar: on which edge of the screen, and with or without its background.
     "bar.position": Field("choice", choices=("top", "bottom", "left", "right")),
     "bar.transparent": BOOL,
-    # Its modules in three zones, start|center|end: "logo|media,workspaces,clock|status,power".
+    # Its modules in three zones, start|center|end: "workspaces,media|clock|notifications,status".
     "bar.layout": TEXT,
+    # The workspaces: dots (the focused one a lit square) or numbered circles.
+    "bar.workspaces": Field("choice", choices=("dots", "numbers")),
     # The dock: apps pinned and running, its edge, how see-through, hidden or not.
     "dock.enabled": BOOL,
     "dock.position": Field("choice", choices=("bottom", "left", "right")),

@@ -22,6 +22,7 @@ Rectangle {
     property string distro: ""      // os-release ID, for the logo at the start
     property var status: ({})       // see StatusArea
     property string layout: ""      // config.json bar.layout, see layout.js
+    property string workspaceStyle: "dots"   // config.json bar.workspaces
     readonly property var zones: Layout.parse(layout)
     readonly property bool vertical: edge === "left" || edge === "right"
     // The notch hangs from the screen edge, unless the bar has no background.
@@ -52,10 +53,10 @@ Rectangle {
             model: parent.modules
             Loader {
                 required property string modelData
-                visible: modelData !== "media" || bar.hasMedia
                 // (ids end in "Module": inside a Loader, "status" is its own property)
                 sourceComponent: ({ logo: logoModule, media: mediaModule, workspaces: workspacesModule,
-                                    clock: clockModule, status: statusModule, power: powerModule })[modelData]
+                                    clock: clockModule, status: statusModule, power: powerModule,
+                                    notifications: notificationsModule })[modelData]
             }
         }
     }
@@ -99,7 +100,8 @@ Rectangle {
         WorkspaceNotch {
             edge: bar.edge
             vertical: bar.vertical
-            hanging: bar.notch
+            hanging: bar.notch && bar.workspaceStyle !== "dots"
+            style: bar.workspaceStyle
             workspaces: bar.workspaces
             barWidth: bar.width
             barHeight: bar.height
@@ -121,6 +123,21 @@ Rectangle {
             status: bar.status
             onClicked: bar.rightClicked()
             onUpdatesClicked: bar.updatesClicked()
+        }
+    }
+    // The notifications: a click opens the system panel and its history.
+    Component {
+        id: notificationsModule
+        Pill {
+            vertical: bar.vertical
+            padding: 8
+            onClicked: bar.rightClicked()
+
+            Icon {
+                name: (bar.status || {}).quiet ? "notifications_off" : "notifications"
+                color: Theme.fg
+                size: 17
+            }
         }
     }
     // Opens the power menu.

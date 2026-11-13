@@ -12,6 +12,7 @@ Item {
     property bool vertical: false
     property bool hanging: true
     property var workspaces: []
+    property string style: "dots"
     property int barWidth: 0
     property int barHeight: 0
     signal clicked(int id)
@@ -37,6 +38,7 @@ Item {
             id: workspaceRow
             anchors.centerIn: parent
             vertical: notch.vertical
+            style: notch.style
             model: notch.workspaces
             onClicked: id => notch.clicked(id)
         }

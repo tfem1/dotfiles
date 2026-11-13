@@ -82,6 +82,7 @@ PanelWindow {
         edge: window.edge
         transparent: !!Theme.bar.transparent
         layout: Theme.bar.layout || ""
+        workspaceStyle: Theme.bar.workspaces || "dots"
 
         workspaces: Desktop.workspaces
         hasMedia: Player.active
@@ -99,6 +100,7 @@ PanelWindow {
             hasBattery: Power.present, battery: Power.level, charging: Power.charging,
             quiet: Session.doNotDisturb, awake: Session.stayAwake, game: Theme.gameMode,
             recording: Session.recording, updates: Updates.count,
+            hasMic: !!Audio.source, micMuted: Audio.micMuted,
             modes: { saver: Theme.powerSaver, night: Session.night, presentation: Session.presentation,
                      focus: Session.focus }
         })
