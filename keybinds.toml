@@ -12,7 +12,7 @@
 # lock, media): not offered for these actions.
 reserved = [
   "SUPER + RETURN", "SUPER + F", "SUPER + E", "SUPER + Q", "SUPER + ALT + F", "SUPER + SHIFT + F",
-  "SUPER + TAB", "SUPER + R", "SUPER + L", "SUPER + SPACE",
+  "SUPER + TAB", "SUPER + R", "SUPER + L", "SUPER + SPACE", "SUPER + ALT + W",
   "SUPER + LEFT", "SUPER + RIGHT", "SUPER + UP", "SUPER + DOWN",
   "SUPER + CTRL + LEFT", "SUPER + CTRL + RIGHT", "SUPER + CTRL + UP", "SUPER + CTRL + DOWN",
   "SUPER + SHIFT + LEFT", "SUPER + SHIFT + RIGHT", "SUPER + SHIFT + UP", "SUPER + SHIFT + DOWN",

@@ -5,6 +5,9 @@ local keyboard = _G.keyboard or { layout = "us", options = "" }
 
 hl.config({
   general = {
+    -- Tiling: each new window splits the space of the focused one (two side
+    -- by side, a third under the second...), none takes the whole screen.
+    layout = "dwindle",
     float_gaps = 6,
     resize_on_border = true,
     extend_border_grab_area = 30,

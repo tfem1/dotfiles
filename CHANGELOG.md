@@ -7,6 +7,10 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- Niri: new windows no longer open full width. Columns take half the
+  screen by default (two terminals side by side, a third scrolls in on the
+  right); `SUPER + ALT + W` cycles a third, a half, two thirds. Hyprland's
+  tiling layout (dwindle) is now written in the config.
 - A dock on the left or right no longer pushes the top bar aside: the bar
   always spans the whole screen edge and stays symmetric, and the dock stands
   next to the bar when both are on the same edge. Invisible strips keep the

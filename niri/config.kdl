@@ -6,6 +6,19 @@
 
 include "theme.kdl"
 
+// New windows take half the screen, side by side, instead of choosing their
+// own (often full) width: two terminals share the screen, a third scrolls in
+// on the right (SUPER + arrows to go there). SUPER + ALT + W cycles the width
+// of the focused column: a third, a half, two thirds.
+layout {
+    default-column-width { proportion 0.5; }
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+}
+
 input {
     keyboard {
         xkb {
@@ -49,6 +62,7 @@ binds {
     // Windows
     Mod+Q repeat=false { close-window; }
     Mod+Alt+F { maximize-column; }
+    Mod+Alt+W { switch-preset-column-width; }
     Mod+Shift+F { toggle-window-floating; }
     Mod+Left  { focus-column-left; }
     Mod+Right { focus-column-right; }
