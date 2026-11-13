@@ -21,6 +21,6 @@ window-rule {
 }
 
 cursor {
-    xcursor-theme "Adwaita"
+    xcursor-theme "FossaCursors"
     xcursor-size 24
 }

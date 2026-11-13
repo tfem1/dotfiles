@@ -149,6 +149,15 @@ only its two themes (about 160 MB) into `~/.local/share/icons`, and the
 installer runs it for you. Papirus is installed too, as FairyWren falls back
 on it for the icons it does not draw.
 
+### Cursor
+
+The cursor is [Fossa Cursors](https://www.pling.com/p/1377483/) by adhe
+(CC BY-SA 4.0). It is not stored in this repository either: `tfem cursors
+fetch` reads its download link from Pling's API, checks the archive against
+the md5 Pling publishes and installs it as `~/.local/share/icons/FossaCursors`
+(the installer runs it). Hyprland, Sway, Niri and GTK apps use it
+(`cursor.theme` in `theme.toml`; `"Adwaita"` for GNOME's).
+
 - **Dark or light** follows the palette: `FairyWren_Dark` for dark themes,
   `FairyWren_Light` for light ones (Catppuccin Latte).
 - **Folders** take FairyWren's color that looks closest to the accent:

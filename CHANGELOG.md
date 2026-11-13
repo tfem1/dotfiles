@@ -21,6 +21,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Fossa cursors (by adhe, CC BY-SA 4.0) as the default cursor, downloaded by
+  the installer (`tfem cursors fetch`: link read from Pling's API, md5
+  checked). `cursor.theme = "Adwaita"` brings GNOME's back.
 - Keybind editor (Settings → Keybinds): click a shortcut, press the new
   keys, it acts at once on Hyprland, Sway and Niri. The panel, screenshot,
   recording and color picker shortcuts now come from one list

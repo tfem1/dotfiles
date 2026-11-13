@@ -53,7 +53,8 @@ power_saver = false             # to save the battery (SUPER + K): no animations
                                 # or shadows, CPU in power saving, a dimmer screen
 
 [cursor]
-theme = "Adwaita"
+theme = "FossaCursors"          # Fossa cursors by adhe (CC BY-SA), downloaded by the installer
+                                # (tfem cursors fetch); "Adwaita" for GNOME's
 size  = 24
 
 [icons]

@@ -146,6 +146,10 @@ if ((WITH_FONTS)); then
   info "downloading the Monocraft font"
   run "$ROOT/tfem" fonts fetch || warn "Monocraft could not be downloaded; run 'tfem fonts fetch' later"
 fi
+if ((WITH_ICONS)); then
+  info "downloading the Fossa cursors"
+  run "$ROOT/tfem" cursors fetch || warn "the Fossa cursors could not be downloaded; run 'tfem cursors fetch' later"
+fi
 seed_settings
 
 info "generating the theme files"
