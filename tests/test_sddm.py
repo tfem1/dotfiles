@@ -77,9 +77,11 @@ class InstallTest(SandboxTest):
         env = {**os.environ, **self.env, "TFEM_SUDO": "", "TFEM_SDDM_THEMES": str(system / "themes"),
                "TFEM_SDDM_CONF": str(system / "etc/sddm.conf.d/zz-login-theme.conf"),
                "TFEM_SDDM_MAIN_CONF": str(system / "etc/sddm.conf"), "TFEM_DM_LINK": str(link),
+               "TFEM_SDDM_SYSTEM_CONF_DIR": str(system / "usr/lib/sddm/sddm.conf.d"),
                "TFEM_SYSTEM_FONTS": str(system / "fonts/monocraft"),
                "PATH": f"{fake}:/usr/bin:/bin"}
-        done = subprocess.run([sys.executable, str(REPO / "scripts/sddm.py"), "install", *args], env=env,
+        command = list(args) if args[:1] == ("doctor",) else ["install", *args]
+        done = subprocess.run([sys.executable, str(REPO / "scripts/sddm.py"), *command], env=env,
                               capture_output=True, text=True, timeout=60)
         return done.returncode, done.stdout + done.stderr, system
 
@@ -126,16 +128,27 @@ class InstallTest(SandboxTest):
         self.assertEqual((system / "systemctl.log").read_text(), "systemctl enable sddm.service\n")
         self.assertIn("next start", output)
 
-    def test_enable_leaves_another_login_manager_as_is(self):
+    def test_enable_puts_sddm_in_place_of_another_login_manager(self):
         code, output, system = self.install("--enable", manager="gdm")
         self.assertEqual(code, 0, output)
-        self.assertFalse((system / "systemctl.log").exists())
-        self.assertIn("gdm is the login manager in use", output)
+        self.assertEqual((system / "systemctl.log").read_text(),
+                         "systemctl disable gdm.service\nsystemctl enable sddm.service\n")
+        self.assertIn("gdm was the login manager", output)
 
-    def test_a_theme_forced_by_sddm_conf_is_reported(self):
-        code, output, _ = self.install(main_conf="[Theme]\nCurrent=breeze\n")
+    def test_doctor_says_what_stands_in_the_way(self):
+        code, output, _ = self.install("doctor", manager="gdm", main_conf="[Theme]\nCurrent=breeze\n")
+        self.assertEqual(code, 1)
+        self.assertIn("gdm is the login manager", output)
+        self.assertIn("SDDM shows the theme 'breeze'", output)
+        self.assertIn("SDDM is not installed", output)
+
+    def test_a_theme_selected_by_sddm_conf_is_commented_out(self):
+        code, output, system = self.install(main_conf="[General]\nNumlock=on\n[Theme]\nCurrent=breeze\nCursorTheme=x\n")
         self.assertEqual(code, 0, output)
-        self.assertIn("selects 'breeze'", output)
+        self.assertEqual((system / "etc/sddm.conf").read_text(),
+                         "[General]\nNumlock=on\n[Theme]\n#Current=breeze\nCursorTheme=x\n")
+        self.assertIn("Current=breeze", (system / "etc/sddm.conf.tfem-backup").read_text())
+        self.assertNotIn("still selects", output)
 
 
 if QGuiApplication is not None:

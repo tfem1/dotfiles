@@ -481,9 +481,14 @@ tfem sddm install stacked-clock --enable   # install, select, turn SDDM on (sudo
 folder. SDDM runs as its own user and cannot read your home, so the colors
 and a copy of the wallpaper live in `/var/lib/tfem/sddm/`, a folder you own:
 `tfem generate` (and so the Settings window and `tfem wallpapers set`) keeps
-it up to date, without sudo. `--enable` turns SDDM on at the next start,
-unless another login manager (GDM, LightDM…) is on: that one is left as is,
-and the command tells you how to switch.
+it up to date, without sudo. `--enable` turns SDDM on at the next start; if
+another login manager (GDM, LightDM, ly…) is on, it is turned off (not
+removed: the command prints how to go back) and SDDM takes its place. A theme
+selected after ours, in `/etc/sddm.conf`, would win: its line is commented
+out and the file kept as `/etc/sddm.conf.tfem-backup`.
+
+If the login screen does not show, `tfem sddm doctor` says what SDDM will
+show at the next start and what stands in the way.
 
 ## Shell
 

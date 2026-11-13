@@ -160,7 +160,7 @@ run "$ROOT/tfem" generate
 if [[ -n $SDDM_THEME ]]; then
   info "installing the '$SDDM_THEME' login screen"
   run "$ROOT/tfem" sddm install "$SDDM_THEME" --enable ||
-    warn "the login screen was not installed; run 'tfem sddm install $SDDM_THEME --enable' later"
+    warn "the login screen was not installed; run 'tfem sddm install $SDDM_THEME --enable' later ('tfem sddm doctor' says why)"
 fi
 
 if ((DESKTOP)); then

@@ -7,6 +7,11 @@ All notable changes to this project are documented here. The format follows
 
 ### Fixed
 
+- The login screen picked in the installer now shows: SDDM takes the place
+  of another login manager (GDM, LightDM, ly... turned off, not removed),
+  and a theme another SDDM file selects after ours (`/etc/sddm.conf`) is
+  commented out (the file kept as `.tfem-backup`). `tfem sddm doctor` says
+  what SDDM will show at the next start and what stands in the way.
 - Niri: new windows no longer open full width. Columns take half the
   screen by default (two terminals side by side, a third scrolls in on the
   right); `SUPER + ALT + W` cycles a third, a half, two thirds. Hyprland's

@@ -33,6 +33,7 @@ Commands:
                 off NAME / on NAME: turn a screen off or on
   sddm          install [NAME]: install and select a login screen (sudo)
                 test [NAME]: show it in a window; NAME: welcome-panel, stacked-clock
+                doctor: why the login screen is (not) shown
   help          Show this help
 
 Your settings: \${XDG_CONFIG_HOME:-~/.config}/tfem/theme.toml and config.json
