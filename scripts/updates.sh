@@ -28,7 +28,7 @@ count() {
 
 install() {
   if command -v yone >/dev/null 2>&1; then
-    sudo yone update && sudo yone upgrade
+    sudo yone update   # indexes, then every package (like pacman -Syu)
   elif command -v pacman >/dev/null 2>&1; then
     sudo pacman -Syu
   elif command -v apt >/dev/null 2>&1; then
