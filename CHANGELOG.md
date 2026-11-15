@@ -30,6 +30,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- The volume panel is small (360 px) and see-through like the others: its
+  icons, rows and slider tracks let the glass show.
 - In glass, the tiles that are on (Wi-Fi, Bluetooth...) and the connected
   devices' icons are see-through too, with light text.
 - Small Wi-Fi and Bluetooth panels of their own, from the bar's icons

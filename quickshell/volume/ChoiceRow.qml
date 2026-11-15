@@ -14,7 +14,7 @@ Rectangle {
 
     height: 40
     radius: 12
-    color: current ? Qt.alpha(tint, 0.14) : hover.hovered ? Theme.surface : "transparent"
+    color: current ? Qt.alpha(tint, 0.14) : hover.hovered ? Qt.alpha(Theme.surface, 0.5) : "transparent"
     Behavior on color { ColorAnimation { duration: Theme.duration } }
 
     Icon {

@@ -24,7 +24,7 @@ Item {
         width: parent.width
         height: 6
         radius: 3
-        color: Theme.surface
+        color: Theme.glassy ? Qt.alpha(Theme.fg, 0.18) : Theme.surface   // the track
 
         Rectangle {
             width: Math.max(height, parent.width * slider.value)

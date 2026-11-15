@@ -27,7 +27,7 @@ Item {
         width: 40
         height: 40
         radius: 20
-        color: row.muted ? Theme.surface : Qt.alpha(row.tint, 0.2)
+        color: row.muted ? Theme.tile : Qt.alpha(row.tint, 0.2)
 
         Image {
             id: appIcon

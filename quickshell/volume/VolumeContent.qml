@@ -35,7 +35,7 @@ Rectangle {
         font.weight: Font.DemiBold
     }
 
-    implicitWidth: 440
+    implicitWidth: 360   // small, like the battery, Wi-Fi and Bluetooth panels
     implicitHeight: Math.min(column.implicitHeight + 32, 720)
     radius: Theme.radius + 8
     color: Theme.panel
