@@ -30,6 +30,8 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- In glass, the tiles that are on (Wi-Fi, Bluetooth...) and the connected
+  devices' icons are see-through too, with light text.
 - Small Wi-Fi and Bluetooth panels of their own, from the bar's icons
   (360 px wide, like the battery panel); SUPER + N keeps the full network
   panel with both tabs.

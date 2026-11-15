@@ -17,7 +17,7 @@ Rectangle {
 
     height: 54
     radius: 14
-    color: device.connected ? Qt.alpha(tint, 0.14) : hover.hovered ? Theme.surface : "transparent"
+    color: device.connected ? Qt.alpha(tint, 0.14) : hover.hovered ? Qt.alpha(Theme.surface, 0.5) : "transparent"
     Behavior on color { ColorAnimation { duration: Theme.duration } }
 
     Rectangle {
@@ -28,12 +28,12 @@ Rectangle {
         width: 34
         height: 34
         radius: 17
-        color: item.device.connected ? item.tint : Theme.surface
+        color: item.device.connected ? (Theme.glassy ? Qt.alpha(item.tint, 0.4) : item.tint) : Theme.tile
 
         Icon {
             anchors.centerIn: parent
             name: item.device.kind || "bluetooth"
-            color: item.device.connected ? Theme.bg : Theme.fg
+            color: item.device.connected ? (Theme.glassy ? Theme.fgBright : Theme.bg) : Theme.fg
             size: 18
         }
     }

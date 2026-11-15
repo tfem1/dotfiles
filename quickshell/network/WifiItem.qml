@@ -24,7 +24,7 @@ Rectangle {
 
     height: 54 + (expanded ? 50 : 0)
     radius: 14
-    color: network.connected ? Qt.alpha(tint, 0.14) : hover.hovered ? Theme.surface : "transparent"
+    color: network.connected ? Qt.alpha(tint, 0.14) : hover.hovered ? Qt.alpha(Theme.surface, 0.5) : "transparent"
     Behavior on height { NumberAnimation { duration: Theme.duration } }
     Behavior on color { ColorAnimation { duration: Theme.duration } }
     clip: true

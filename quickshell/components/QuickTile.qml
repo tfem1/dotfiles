@@ -15,7 +15,9 @@ Rectangle {
 
     height: 76
     radius: 18
-    color: on ? tint : hover.hovered ? Theme.surface : Theme.tile
+    // On: the module color, see-through in glass (Settings → Glass).
+    color: on ? (Theme.glassy ? Qt.alpha(tint, 0.38) : tint) : hover.hovered ? Theme.surface : Theme.tile
+    readonly property color onText: Theme.glassy ? Theme.fgBright : Theme.bg
     Behavior on color { ColorAnimation { duration: Theme.duration } }
 
     Column {
@@ -27,13 +29,13 @@ Rectangle {
 
         Icon {
             name: tile.icon
-            color: tile.on ? Theme.bg : Theme.fg
+            color: tile.on ? tile.onText : Theme.fg
             size: 22
         }
         Label {
             width: parent.width
             text: tile.title
-            color: tile.on ? Theme.bg : Theme.fg
+            color: tile.on ? tile.onText : Theme.fg
             font.weight: Font.DemiBold
         }
         Label {
@@ -41,7 +43,7 @@ Rectangle {
             text: tile.subtitle
             textFormat: Text.PlainText
             small: true
-            color: tile.on ? Qt.alpha(Theme.bg, 0.75) : Theme.subtle
+            color: tile.on ? Qt.alpha(tile.onText, 0.75) : Theme.subtle
         }
     }
 
