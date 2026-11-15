@@ -28,7 +28,7 @@ hl.config({
             enabled = true,
             size    = 8,
             passes  = 2,
-            vibrancy = 0.17,
+            vibrancy = 0.25,
             noise    = 0.01,
             -- Right-click menus too, only where they are drawn.
             popups  = true,

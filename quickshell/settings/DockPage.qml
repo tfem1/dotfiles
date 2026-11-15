@@ -23,7 +23,7 @@ Column {
         width: page.width
         height: 110
         radius: Theme.radius
-        color: Theme.bgAlt
+        color: Theme.tile
         clip: true
 
         Rectangle {   // a wallpaper-like stripe behind, so the opacity shows

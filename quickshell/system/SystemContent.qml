@@ -222,7 +222,7 @@ Rectangle {
                     iconSource: modelData.iconSource || ""
                     urgent: !!modelData.urgent
                     time: Qt.formatTime(modelData.time, "HH:mm")
-                    color: Theme.bgAlt
+                    color: Theme.tile
                     onClosed: panel.notificationDismissed(index)
                 }
             }

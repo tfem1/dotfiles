@@ -15,7 +15,7 @@ Rectangle {
 
     height: Object.keys(pending).length > 0 ? 68 : 0
     visible: height > 0
-    color: Theme.bgAlt
+    color: Theme.tile
 
     Label {
         x: 28

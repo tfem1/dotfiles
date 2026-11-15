@@ -102,7 +102,7 @@ Rectangle {
         anchors.topMargin: 0
         height: 38
         radius: 10
-        color: Theme.bgAlt
+        color: Theme.tile
         visible: item.expanded
 
         TextInput {

@@ -75,7 +75,7 @@ Rectangle {
             width: Math.max(72, title.implicitWidth + 20)
             height: 34
             radius: 9
-            color: Theme.bgAlt
+            color: Theme.tile
             visible: !bar.searching
             Label {
                 id: title

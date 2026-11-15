@@ -15,7 +15,7 @@ Rectangle {
 
     height: 76
     radius: 18
-    color: on ? tint : hover.hovered ? Theme.surface : Theme.bgAlt
+    color: on ? tint : hover.hovered ? Theme.surface : Theme.tile
     Behavior on color { ColorAnimation { duration: Theme.duration } }
 
     Column {

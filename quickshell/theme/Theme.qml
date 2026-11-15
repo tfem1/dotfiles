@@ -50,7 +50,7 @@ QtObject {
     property int fontSize: 11
     property int radius: 12
     property int border: 0
-    property real opacity: 0.9
+    property real opacity: 0.72
     property real tint: 0     // Settings → Glass: the accent color mixed into the glass
     property bool animations: true
     property bool gameMode: false      // no animations, no notification popups

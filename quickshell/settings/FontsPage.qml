@@ -28,7 +28,7 @@ Column {
         width: page.width
         height: sample.implicitHeight + 36
         radius: Theme.radius + 8
-        color: Theme.bgAlt
+        color: Theme.tile
 
         Column {
             id: sample
@@ -85,7 +85,7 @@ Column {
         width: page.width
         height: 330
         radius: Theme.radius + 8
-        color: Theme.bgAlt
+        color: Theme.tile
 
         SearchField {
             id: filter

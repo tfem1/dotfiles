@@ -41,11 +41,11 @@ gaps_in  = 4                    # px, between windows
 gaps_out = 6                    # px, between windows and screen edges
 
 [effects]
-opacity     = 0.9               # opacity of shell surfaces (0.5 to 1.0)
+opacity     = 0.72              # opacity of shell surfaces (0.5 to 1.0): glass by default
 blur        = true
 blur_size   = 8
 blur_passes = 2
-blur_vibrancy = 0.17            # how colorful the blur is (0 to 1)
+blur_vibrancy = 0.25            # how colorful the blur is (0 to 1)
 blur_noise  = 0.01              # grain over the blur (0 to 0.2)
 blur_popups = true              # right-click menus blurred too
 glass_tint  = 0.0               # a touch of the accent color in the shell's glass (0 to 0.3)

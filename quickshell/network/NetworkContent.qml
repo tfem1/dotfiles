@@ -96,7 +96,7 @@ Rectangle {
         visible: !panel.single
         height: panel.single ? 0 : 40
         radius: 20
-        color: Theme.bgAlt
+        color: Theme.tile
 
         Row {
             anchors.fill: parent

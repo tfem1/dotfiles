@@ -27,7 +27,7 @@ Column {
     // One click: [label, opacity, blur, size, passes, vibrancy, noise]
     readonly property var styles: [
         ["Clear", 0.55, true, 10, 3, 0.35, 0.02],
-        ["Frosted", 0.8, true, 8, 2, 0.17, 0.01],
+        ["Frosted", 0.72, true, 8, 2, 0.25, 0.01],
         ["Solid", 1.0, false, 8, 2, 0.17, 0.01]
     ]
     readonly property string style: {

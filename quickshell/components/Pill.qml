@@ -17,7 +17,7 @@ Rectangle {
     implicitWidth: vertical ? 36 : grid.implicitWidth + padding * 2
     implicitHeight: vertical ? grid.implicitHeight + padding * 2 : 32
     radius: Math.min(width, height) / 2
-    color: hovered ? Theme.surface : Theme.bgAlt
+    color: hovered ? Theme.surface : Theme.tile
     Behavior on color { ColorAnimation { duration: Theme.duration } }
 
     Grid {
