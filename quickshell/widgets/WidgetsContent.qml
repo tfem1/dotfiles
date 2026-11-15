@@ -22,7 +22,7 @@ Column {
     property bool hasMedia: false
     property var media: ({ song: "", artist: "", line: "", next: "" })
 
-    readonly property var names: ["clock", "resources", "audio", "media", "calendar"]
+    readonly property var names: ["clock", "resources", "audio", "media", "lyrics", "calendar"]
     readonly property bool rightSide: (show.corner || "").endsWith("right")   // the clock goes to that edge
     // Everything the widgets show, in one object (for WidgetBlock).
     readonly property var feed: ({

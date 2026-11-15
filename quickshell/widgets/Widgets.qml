@@ -21,7 +21,7 @@ Scope {
     readonly property var show: Theme.widgets
     readonly property string corner: show.corner || "top-left"
     readonly property bool resources: !!(show.cpu || show.gpu || show.ram || show.disk)
-    readonly property bool any: resources || !!(show.clock || show.audio || show.media)
+    readonly property bool any: resources || !!(show.clock || show.audio || show.media || show.lyrics)
     readonly property bool paused: Theme.gameMode || Theme.powerSaver || Session.focus || Session.presentation
     property var levels: Resources.spectrum("", 24)
 
@@ -35,7 +35,7 @@ Scope {
     LyricsSource {
         id: lyrics
         player: Player.player
-        active: !!root.show.media && Player.active && !root.paused
+        active: (!!root.show.media || !!root.show.lyrics) && Player.active && !root.paused
     }
 
     Process {
@@ -88,7 +88,7 @@ Scope {
             exclusionMode: ExclusionMode.Normal
             WlrLayershell.layer: root.editing ? WlrLayer.Top : WlrLayer.Bottom
             WlrLayershell.keyboardFocus: root.editing ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
-            WlrLayershell.namespace: "shell-widgets"
+            WlrLayershell.namespace: "glass-widgets"   // its own blur rule (theme.lua)
             color: "transparent"
             // Only while editing do they take clicks.
             mask: root.editing ? null : noInput
@@ -116,8 +116,14 @@ Scope {
                 media: ({
                     song: Player.title,
                     artist: Player.artist,
-                    line: at >= 0 ? lines[at].text : "",
-                    next: at >= 0 && at + 1 < lines.length ? lines[at + 1].text : ""
+                    art: player ? player.trackArtUrl : "",
+                    playing: Player.playing,
+                    progress: Player.progress,
+                    player: player,
+                    synced: lines.length > 0,
+                    // The current line (offset 0), the two before and the two after.
+                    lines: [-2, -1, 0, 1, 2].filter(offset => at + offset >= 0 && at + offset < lines.length)
+                        .map(offset => ({ text: lines[at + offset].text, offset: offset }))
                 })
                 onMoved: (name, x, y) => {
                     const places = Object.assign({}, root.show.places || {}, { [name]: [x, y] });
@@ -126,7 +132,7 @@ Scope {
                 }
                 onReset: {
                     Theme.widgets = Object.assign({}, Theme.widgets, { places: {} });
-                    root.save(["clock", "resources", "audio", "media", "calendar"].map(name => `widgets.places.${name}=auto`));
+                    root.save(["clock", "resources", "audio", "media", "lyrics", "calendar"].map(name => `widgets.places.${name}=auto`));
                 }
                 onDone: root.editing = false
             }

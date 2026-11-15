@@ -46,6 +46,9 @@ hl.config({
 -- corners and the light dimming around them (0.45 at most, panels are 0.5 or
 -- more), so no blurred rectangle shows.
 hl.layer_rule({ match = { namespace = "^shell-.*" }, blur = true, ignore_alpha = 0.48 })
+-- The desktop widgets have no dimming around them: blurred down to their
+-- most see-through (0.3 in glass mode, Settings → Widgets).
+hl.layer_rule({ match = { namespace = "^glass-widgets$" }, blur = true, ignore_alpha = 0.2 })
 
 -- Fullscreen windows (games) tear when allow_tearing is on (game mode).
 hl.window_rule({ match = { fullscreen = true }, immediate = true })

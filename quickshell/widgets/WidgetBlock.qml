@@ -4,7 +4,7 @@ import "../theme"
 import "resources.js" as Resources
 
 // One desktop widget, by name: clock, resources (CPU, GPU, RAM, disk two by
-// two, in organic shapes), audio (spectrum), media (now playing) or
+// two, in organic shapes), audio (spectrum), media (the player), lyrics or
 // calendar. `feed` holds what they show (see WidgetsContent).
 Item {
     id: block
@@ -29,11 +29,12 @@ Item {
     }
     readonly property bool shown: ({
         clock: !!show.clock, resources: resources.length > 0, audio: !!show.audio,
-        media: !!show.media && !!feed.hasMedia, calendar: !!show.calendar
+        media: !!show.media && !!feed.hasMedia, calendar: !!show.calendar,
+        lyrics: !!show.lyrics && !!feed.hasMedia
     })[name] || false
 
     objectName: name
-    implicitWidth: name === "clock" && loader.item ? loader.item.implicitWidth : 360
+    implicitWidth: name === "clock" && loader.item ? loader.item.implicitWidth : name === "media" || name === "lyrics" ? 300 : 360
     implicitHeight: loader.item ? loader.item.height : 0
     width: implicitWidth
     height: implicitHeight
@@ -41,7 +42,8 @@ Item {
     Loader {
         id: loader
         active: block.shown
-        sourceComponent: ({ clock: clock, resources: cards, audio: audio, media: media, calendar: calendar })[block.name] || null
+        sourceComponent: ({ clock: clock, resources: cards, audio: audio, media: media, calendar: calendar,
+                           lyrics: lyrics })[block.name] || null
     }
 
     Component {
@@ -79,12 +81,27 @@ Item {
     Component {
         id: media
         MediaCard {
-            width: 360
+            width: 300
             readonly property var info: block.feed.media || {}
             song: info.song || ""
             artist: info.artist || ""
-            line: info.line || ""
-            next: info.next || ""
+            art: info.art || ""
+            playing: !!info.playing
+            progress: info.progress || 0
+            player: info.player || null
+        }
+    }
+    Component {
+        id: lyrics
+        LyricsCard {
+            width: 300
+            readonly property var info: block.feed.media || {}
+            song: info.song || ""
+            art: info.art || ""
+            lines: info.lines || []
+            synced: !!info.synced
+            playing: !!info.playing
+            progress: info.progress || 0
         }
     }
     Component {

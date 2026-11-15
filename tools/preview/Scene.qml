@@ -177,8 +177,12 @@ Rectangle {
                  0.17, 0.11, 0.09, 0.13, 0.07, 0.05, 0.04, 0.03]
         device: "Speakers (Realtek Audio)"
         hasMedia: true
-        media: ({ song: "Night Forest", artist: "Pixel Dreams",
-                  line: "Under the pines the lanterns glow", next: "Walking home through falling snow" })
+        media: ({ song: "Night Forest", artist: "Pixel Dreams", playing: true, progress: 0.42, synced: true,
+                  lines: [{ text: "The river hums a quiet tune", offset: -2 },
+                          { text: "Beneath the silver of the moon", offset: -1 },
+                          { text: "Under the pines the lanterns glow", offset: 0 },
+                          { text: "Walking home through falling snow", offset: 1 },
+                          { text: "And every star knows where we go", offset: 2 }] })
     }
     SampleWidgets {
         x: 24

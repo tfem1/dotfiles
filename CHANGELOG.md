@@ -30,6 +30,13 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Music widgets remade: the player (the cover in a scalloped shape, a wave
+  around it as far as the song has played, the title, a wavy progress line,
+  previous / 10 s back / play-pause / 10 s on / next) and a separate lyrics
+  widget (the cover and title, the two lines before and after the one being
+  sung, which is larger and bright, and the wavy line). Glass widgets
+  (Settings → Widgets, `widgets.glass`): much more see-through with a light
+  edge, blurred behind by Hyprland.
 - The welcome banner of Settings shows the sun in the daytime (7:00 to
   19:00), rays turning slowly with a few clouds, and the moon at night.
 - Settings → Glass: a style in one click (Clear, Frosted, Solid), the

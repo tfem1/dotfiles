@@ -15,7 +15,8 @@ Column {
     readonly property var rows: [
         ["clock", "Clock", "The date and the time, in a pill of the accent color."],
         ["audio", "Audio spectrum", "The sound as bars, drawn by cava, with the device it plays on. Paused in game mode."],
-        ["media", "Now playing", "The song and its artist, and the line of the lyrics being sung (from lrclib.net)."],
+        ["media", "Music player", "The cover, a wave as far as the song has played, and the controls."],
+        ["lyrics", "Lyrics", "The lines around the one being sung, synced (from lrclib.net)."],
         ["cpu", "CPU", "How busy the processor is, and its number of cores."],
         ["gpu", "GPU", "How busy the graphics card is, and its memory (AMD and NVIDIA cards)."],
         ["ram", "RAM", "Memory in use by the apps."],
@@ -25,6 +26,15 @@ Column {
 
     spacing: 12
 
+    SettingRow {
+        objectName: "widget-glass"
+        title: "Glass widgets"
+        description: "Much more see-through, with a light glass edge; Hyprland blurs what is behind them."
+        Switch {
+            checked: !!page.values["widgets.glass"]
+            onToggled: checked => page.action("widgets.glass", checked)
+        }
+    }
     SettingRow {
         objectName: "widget-move"
         title: "Move the widgets"

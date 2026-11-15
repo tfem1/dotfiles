@@ -26,7 +26,7 @@ BASE16_KEYS = tuple(f"base0{digit}" for digit in "0123456789ABCDEF")
 _NAME = re.compile(r"[a-z0-9][a-z0-9_-]*")
 # A widget moved on the desktop: "x,y" in parts of the screen.
 PLACE = re.compile(r"(0(\.\d{1,4})?|1(\.0{1,4})?),(0(\.\d{1,4})?|1(\.0{1,4})?)")
-WIDGETS = ("clock", "resources", "audio", "media", "calendar")
+WIDGETS = ("clock", "resources", "audio", "media", "lyrics", "calendar")
 
 
 @dataclass(frozen=True)
@@ -156,7 +156,9 @@ CONFIG_SCHEMA: dict[str, Field] = {
     "record.audio": Field("choice", choices=("none", "computer", "microphone")),
     # Desktop widgets: which ones show, and in which corner of the screen.
     "widgets.corner": Field("choice", choices=("top-left", "top-right", "bottom-left", "bottom-right")),
-    **{f"widgets.{name}": BOOL for name in ("clock", "audio", "media", "calendar", "cpu", "gpu", "ram", "disk")},
+    **{f"widgets.{name}": BOOL for name in ("clock", "audio", "media", "lyrics", "calendar", "cpu", "gpu", "ram", "disk")},
+    # Glass widgets: much more see-through, the blur behind them (Hyprland).
+    "widgets.glass": BOOL,
 }
 
 # Keys that were renamed: old key -> (new key, old value -> new value). A

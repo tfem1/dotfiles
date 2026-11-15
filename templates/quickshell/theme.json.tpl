@@ -72,6 +72,8 @@
     "audio": {{ widgets.audio }},
     "media": {{ widgets.media }},
     "calendar": {{ widgets.calendar }},
+    "lyrics": {{ widgets.lyrics }},
+    "glass": {{ widgets.glass }},
     "places": {{ widgets.places | json }},
     "cpu": {{ widgets.cpu }},
     "gpu": {{ widgets.gpu }},

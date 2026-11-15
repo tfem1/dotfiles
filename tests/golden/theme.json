@@ -72,6 +72,8 @@
     "audio": true,
     "media": true,
     "calendar": true,
+    "lyrics": true,
+    "glass": false,
     "places": {},
     "cpu": true,
     "gpu": true,

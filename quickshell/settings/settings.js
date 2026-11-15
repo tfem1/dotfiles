@@ -32,6 +32,7 @@ const INDEX = [
     { page: "dock", id: "dock-opacity", title: "Dock opacity", words: "transparent see-through dock" },
     { page: "dock", id: "dock-position", title: "Dock position", words: "bottom left right side dock" },
     { page: "dock", id: "dock-autohide", title: "Hide the dock", words: "autohide hidden dock" },
+    { page: "widgets", id: "widget-glass", title: "Glass widgets", words: "glass transparent blur see-through widgets" },
     { page: "widgets", id: "widget-move", title: "Move the widgets", words: "drag place position free desktop" },
     { page: "widgets", id: "widget-calendar", title: "Calendar widget", words: "month days date desktop" },
     { page: "fonts", id: "font-sans", title: "Interface font", words: "font typeface text family monocraft inter" },

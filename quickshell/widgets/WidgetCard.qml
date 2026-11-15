@@ -13,9 +13,11 @@ Rectangle {
 
     implicitHeight: body.childrenRect.height + (title ? 50 : 32)
     radius: Math.min(height / 2, Theme.radius + 20)
-    color: Qt.alpha(Theme.bg, 0.62)
+    // Glass (widgets.glass): much more see-through, a light edge like glass.
+    readonly property bool glass: !!(Theme.widgets && Theme.widgets.glass)
+    color: Qt.alpha(Theme.bg, glass ? 0.3 : 0.62)
     border.width: 1
-    border.color: Qt.alpha(Theme.accent, 0.3)
+    border.color: glass ? Qt.alpha(Theme.fgBright, 0.22) : Qt.alpha(Theme.accent, 0.3)
 
     Label {
         id: heading
