@@ -498,6 +498,14 @@ Hyprland. The installer copies it to `~/.config/quickshell/desktop/` (the
 folder name is `shell.name` in your `config.json`). Its colors follow
 `theme.toml` live: run `tfem generate` and the shell recolors itself.
 
+| Wi-Fi panel (bar icon) | Volume panel | Music and lyrics widgets |
+|---|---|---|
+| ![Wi-Fi panel](docs/images/panel-wifi.png) | ![Volume panel](docs/images/panel-volume.png) | ![Music widgets](docs/images/music-widgets.png) |
+
+| Settings → Glass | Settings → Keybinds |
+|---|---|
+| ![Glass page](docs/images/settings-glass.png) | ![Keybinds page](docs/images/settings-keys.png) |
+
 - **Bar** (look of illogical-impulse): in the center now playing with a progress ring (click to play or pause), the
   workspaces 1 to 10 in a notch (click to switch), the clock and date; on the
   right the keyboard layout, sound, network, Bluetooth and battery, each in
