@@ -30,6 +30,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Glass by default: the shell's surfaces are 72 % solid (`effects.opacity`)
+  with a more colorful blur, and the cards, tiles, tabs and fields inside
+  the panels are see-through too, so the glass shows all over them.
 - Each status icon of the bar opens its own panel: Wi-Fi alone, Bluetooth
   alone, the sound panel, and a new battery panel (level, time left, health,
   power profile: saver, balanced, performance). The keyboard and mode icons
