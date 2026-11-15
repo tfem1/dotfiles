@@ -57,7 +57,7 @@ QtObject {
     property bool powerSaver: false    // no animations, a dimmer screen
     property string wallpaper: ""
     // The bar (config.json bar.*): "top", "bottom", "left" or "right".
-    property var bar: ({ position: "top", transparent: false, layout: "workspaces,media|clock|notifications,status",
+    property var bar: ({ position: "top", transparent: false, layout: "workspaces,media,lyrics|clock|notifications,status",
                              workspaces: "dots" })
     // The dock (config.json dock.*); its colors come from the theme.
     property var dock: ({ enabled: true, position: "bottom", opacity: 0.85, autohide: false,
@@ -70,6 +70,11 @@ QtObject {
     readonly property int duration: animations ? 180 : 0
     readonly property real fontPixels: fontSize * 4 / 3
     readonly property color panel: Qt.alpha(Qt.tint(bg, Qt.alpha(accent, tint)), opacity)
+    // See-through (Settings → Glass): cards inside the panels let the glass
+    // show too, and panels get a light glass edge.
+    readonly property bool glassy: opacity < 0.95
+    readonly property color tile: Qt.alpha(bgAlt, glassy ? 0.5 : 1)
+    readonly property color edge: glassy ? Qt.alpha(fgBright, 0.16) : surface
 
     // Copies the values of a parsed theme.json; unknown keys are ignored.
     function apply(data) {

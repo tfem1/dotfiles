@@ -15,6 +15,17 @@ Pill {
     //   modes: { saver, night, presentation, focus } }
     property var status: ({})
     signal updatesClicked   // the update icon: opens a terminal that updates
+    // Each part opens its own panel: "network", "bluetooth", "sound",
+    // "battery"; the others (keyboard, modes) "system".
+    signal partClicked(string part)
+
+    tappable: false
+
+    // A click anywhere on a part's icons: `part` is what it opens.
+    component Part: TapHandler {
+        property string part: "system"
+        onTapped: area.partClicked(part)
+    }
     readonly property var s: status || {}
 
     spacing: 10
@@ -34,6 +45,7 @@ Pill {
         TapHandler { onTapped: area.updatesClicked() }
     }
     Icon {   // recording the screen
+        Part { part: "system" }
         visible: !!area.s.recording
         name: "radio_button_checked"
         color: Theme.red
@@ -42,46 +54,55 @@ Pill {
         model: Icons.modes(area.s)
 
         Icon {
+            Part { part: "system" }
             required property string modelData
             name: modelData
             color: Theme.accent
         }
     }
     Label {
+        Part { part: "system" }
         visible: !area.vertical && !!area.s.keyboard
         text: area.s.keyboard || ""
         small: true
         font.weight: Font.Bold
     }
     Icon {
+        Part { part: "sound" }
         color: area.s.muted ? Theme.muted : Theme.modules.audio
         name: Icons.volume(area.s)
     }
     Label {
+        Part { part: "sound" }
         visible: !area.vertical
         text: area.s.muted ? "" : Math.round((area.s.volume || 0) * 100)
         small: true
         font.weight: Font.DemiBold
     }
     Icon {
+        Part { part: "sound" }
         visible: !!area.s.hasMic
         color: area.s.micMuted ? Theme.muted : Theme.modules.audio
         name: area.s.micMuted ? "mic_off" : "mic"
     }
     Icon {
+        Part { part: "network" }
         color: area.s.network === "offline" || !area.s.network ? Theme.muted : Theme.modules.wifi
         name: Icons.network(area.s)
     }
     Icon {
+        Part { part: "bluetooth" }
         color: area.s.bluetoothOn ? Theme.modules.bluetooth : Theme.muted
         name: Icons.bluetooth(area.s)
     }
     Icon {   // charging: the bolt before the level
+        Part { part: "battery" }
         visible: !!area.s.hasBattery && !!area.s.charging
         color: Theme.modules.battery
         name: "battery_charging_full"
     }
     Rectangle {   // the battery level, on a badge red when low
+        Part { part: "battery" }
         visible: !!area.s.hasBattery
         width: level.implicitWidth + 10
         height: 18

@@ -5,12 +5,12 @@
 // of modules: "workspaces,media|clock|notifications,status". A module left out
 // is hidden; unknown names are skipped, a module named twice shows once.
 
-const MODULES = ["logo", "workspaces", "media", "clock", "notifications", "status", "power"];
+const MODULES = ["logo", "workspaces", "media", "lyrics", "clock", "notifications", "status", "power"];
 const ZONES = ["start", "center", "end"];
-const DEFAULT = "workspaces,media|clock|notifications,status";
+const DEFAULT = "workspaces,media,lyrics|clock|notifications,status";
 const LABELS = {
     logo: "Distro logo", media: "Music", workspaces: "Workspaces", clock: "Clock",
-    notifications: "Notifications", status: "Status icons", power: "Power button"
+    lyrics: "Lyrics", notifications: "Notifications", status: "Status icons", power: "Power button"
 };
 
 function parse(text) {

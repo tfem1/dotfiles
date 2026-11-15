@@ -12,7 +12,7 @@
   "bar": {
     "position": "top",
     "transparent": false,
-    "layout": "workspaces,media|clock|notifications,status",
+    "layout": "workspaces,media,lyrics|clock|notifications,status",
     "workspaces": "dots"
   },
   "dock": {

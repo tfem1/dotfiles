@@ -37,6 +37,8 @@ Rectangle {
     implicitWidth: 420
     radius: Theme.radius + 8
     color: Theme.panel
+    border.width: 1
+    border.color: Theme.edge
     focus: true
     Keys.onEscapePressed: closed()
 

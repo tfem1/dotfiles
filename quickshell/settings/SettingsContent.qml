@@ -63,9 +63,9 @@ Item {
         width: Math.min(parent.width - 80, 1120)
         height: Math.min(parent.height - 80, 800)
         radius: Theme.radius + 8
-        color: Theme.bg
+        color: Theme.panel        // glass, as set in Settings → Glass
         border.width: 1
-        border.color: Theme.surface
+        border.color: Theme.edge
         clip: true
 
         MouseArea { anchors.fill: parent }   // clicks inside never close it

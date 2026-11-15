@@ -13,6 +13,7 @@ Scope {
 
     property bool open: false
     property string tab: "wifi"
+    property bool single: false   // opened from the Wi-Fi or Bluetooth icon: that one only
     property var failures: ({})        // network name or device address -> reason
     property var pendingNetwork: null  // last network asked to connect
     property var pendingDevice: null   // last device asked to pair
@@ -29,12 +30,21 @@ Scope {
     readonly property var unlocked: [WifiSecurityType.Open, WifiSecurityType.Owe]
 
     function toggle() {
+        single = false;
         open = !open;
     }
 
     function show(page) {
         tab = page;
+        single = false;
         open = true;
+    }
+
+    // From the bar's Wi-Fi or Bluetooth icon: that panel alone; again to close.
+    function showAlone(page) {
+        open = !(open && single && tab === page);
+        tab = page;
+        single = true;
     }
 
     function fail(key, reason) {
@@ -141,6 +151,7 @@ Scope {
                 width: implicitWidth
                 height: implicitHeight
                 tab: root.tab
+                single: root.single
                 onTabChanged: root.tab = tab
                 airplane: root.airplane
                 wifi: ({

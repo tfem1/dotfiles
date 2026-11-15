@@ -23,6 +23,7 @@ Rectangle {
     property var status: ({})       // see StatusArea
     property string layout: ""      // config.json bar.layout, see layout.js
     property string workspaceStyle: "dots"   // config.json bar.workspaces
+    property string lyricLine: ""   // the line being sung (lyrics module)
     readonly property var zones: Layout.parse(layout)
     readonly property bool vertical: edge === "left" || edge === "right"
     // The notch hangs from the screen edge, unless the bar has no background.
@@ -35,6 +36,7 @@ Rectangle {
     signal powerClicked
     signal logoClicked
     signal updatesClicked
+    signal partClicked(string part)   // a status icon: see StatusArea
 
     implicitHeight: vertical ? 600 : 44
     implicitWidth: vertical ? 52 : 1200
@@ -56,7 +58,9 @@ Rectangle {
                 // (ids end in "Module": inside a Loader, "status" is its own property)
                 sourceComponent: ({ logo: logoModule, media: mediaModule, workspaces: workspacesModule,
                                     clock: clockModule, status: statusModule, power: powerModule,
-                                    notifications: notificationsModule })[modelData]
+                                    notifications: notificationsModule, lyrics: lyricsModule })[modelData]
+                // The lyrics only while a line is sung.
+                visible: modelData !== "lyrics" || bar.lyricLine !== ""
             }
         }
     }
@@ -123,6 +127,30 @@ Rectangle {
             status: bar.status
             onClicked: bar.rightClicked()
             onUpdatesClicked: bar.updatesClicked()
+            onPartClicked: part => bar.partClicked(part)
+        }
+    }
+    // The line of the lyrics being sung, short, in the accent color.
+    Component {
+        id: lyricsModule
+        Pill {
+            vertical: bar.vertical
+            visible: !bar.vertical
+            spacing: 8
+            onClicked: bar.mediaToggled()
+
+            Icon {
+                name: "lyrics"
+                color: Theme.accent
+                size: 16
+            }
+            Label {
+                width: Math.min(320, implicitWidth)
+                text: bar.lyricLine
+                color: Theme.fgBright
+                font.weight: Font.DemiBold
+                elide: Text.ElideRight
+            }
         }
     }
     // The notifications: a click opens the system panel and its history.

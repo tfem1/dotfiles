@@ -10,6 +10,7 @@ import "cheatsheet"
 import "wallpaper"
 import "network"
 import "volume"
+import "battery"
 import "calendar"
 import "music"
 import "power"
@@ -35,7 +36,20 @@ ShellRoot {
     Overview {}
     Bars {
         id: barLayer
-        onStatusClicked: networkLayer.toggle()
+        onStatusClicked: systemLayer.toggle()   // the notifications button
+        // Each status icon opens its own panel.
+        onPartClicked: part => {
+            if (part === "network")
+                networkLayer.showAlone("wifi");
+            else if (part === "bluetooth")
+                networkLayer.showAlone("bluetooth");
+            else if (part === "sound")
+                volumeLayer.toggle();
+            else if (part === "battery")
+                batteryLayer.toggle();
+            else
+                systemLayer.toggle();
+        }
         onClockClicked: calendarLayer.toggle()
         onPowerClicked: powerLayer.toggle()
         onLogoClicked: settingsLayer.toggle()
@@ -48,6 +62,7 @@ ShellRoot {
     Selector { id: wallpaperLayer }
     NetworkPanel { id: networkLayer }
     VolumePanel { id: volumeLayer }
+    BatteryPanel { id: batteryLayer }
     Calendar { id: calendarLayer }
     MusicPanel { id: musicLayer }
     Lock { id: lockLayer }

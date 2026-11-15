@@ -11,6 +11,7 @@ Rectangle {
     property int spacing: 8
     property bool vertical: false
     property bool hovered: hover.hovered
+    property bool tappable: true    // false: its parts take the clicks themselves
     signal clicked
 
     implicitWidth: vertical ? 36 : grid.implicitWidth + padding * 2
@@ -32,5 +33,8 @@ Rectangle {
     }
 
     HoverHandler { id: hover }
-    TapHandler { onTapped: pill.clicked() }
+    TapHandler {
+        enabled: pill.tappable
+        onTapped: pill.clicked()
+    }
 }

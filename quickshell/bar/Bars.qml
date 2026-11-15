@@ -11,6 +11,7 @@ Scope {
     signal clockClicked
     signal powerClicked
     signal logoClicked     // the distro logo: opens the Settings window
+    signal partClicked(string part)   // a status icon: network, bluetooth, sound, battery, system
 
     function toggleAutohide() {
         autohide = !autohide;
@@ -31,6 +32,7 @@ Scope {
                 onClockClicked: root.clockClicked()
                 onPowerClicked: root.powerClicked()
                 onLogoClicked: root.logoClicked()
+                onPartClicked: part => root.partClicked(part)
             }
             // Windows stay clear of the bar; with autohide they use the whole screen.
             Reserve {

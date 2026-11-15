@@ -18,6 +18,7 @@ PanelWindow {
     signal clockClicked
     signal powerClicked
     signal logoClicked
+    signal partClicked(string part)
     readonly property bool pointerIn: barHover.hovered || edgeHover.hovered
     readonly property bool revealed: !autohide || pointerIn || hideDelay.running
     readonly property string edge: ["top", "bottom", "left", "right"].includes(Theme.bar.position)
@@ -83,6 +84,7 @@ PanelWindow {
         transparent: !!Theme.bar.transparent
         layout: Theme.bar.layout || ""
         workspaceStyle: Theme.bar.workspaces || "dots"
+        lyricLine: SongLyrics.line
 
         workspaces: Desktop.workspaces
         hasMedia: Player.active
@@ -112,6 +114,7 @@ PanelWindow {
         onPowerClicked: window.powerClicked()
         onLogoClicked: window.logoClicked()
         onUpdatesClicked: Updates.install()
+        onPartClicked: part => window.partClicked(part)
 
         HoverHandler { id: barHover }
     }

@@ -15,6 +15,8 @@ Rectangle {
     property var bluetooth: ({ available: false, active: false, discovering: false, discoverable: false, name: "", devices: [] })
     property bool airplane: false
     property string tab: "wifi"
+    // Opened from its own icon in the bar: only Wi-Fi or only Bluetooth.
+    property bool single: false
     signal wifiToggled(bool on)
     signal bluetoothToggled(bool on)
     signal airplaneToggled(bool on)
@@ -35,6 +37,8 @@ Rectangle {
     implicitHeight: 600
     radius: Theme.radius + 8
     color: Theme.panel
+    border.width: 1
+    border.color: Theme.edge
     focus: true
     Keys.onEscapePressed: closed()
 
@@ -51,7 +55,8 @@ Rectangle {
         spacing: 8
 
         QuickTile {
-            width: (tiles.width - 16) / 3
+            visible: !panel.single || panel.tab === "wifi"
+            width: panel.single ? tiles.width : (tiles.width - 16) / 3
             icon: panel.wifi.active ? "wifi" : "wifi_off"
             title: "Wi-Fi"
             subtitle: !panel.wifi.active ? "Off" : panel.current ? panel.current.name : "Not connected"
@@ -60,7 +65,8 @@ Rectangle {
             onClicked: panel.wifiToggled(!panel.wifi.active)
         }
         QuickTile {
-            width: (tiles.width - 16) / 3
+            visible: !panel.single || panel.tab === "bluetooth"
+            width: panel.single ? tiles.width : (tiles.width - 16) / 3
             icon: !panel.bluetooth.active ? "bluetooth_disabled" : panel.connectedDevices ? "bluetooth_connected" : "bluetooth"
             title: "Bluetooth"
             subtitle: !panel.bluetooth.active ? "Off" : panel.connectedDevices ? panel.connectedDevices + " connected" : "On"
@@ -69,6 +75,7 @@ Rectangle {
             onClicked: panel.bluetoothToggled(!panel.bluetooth.active)
         }
         QuickTile {
+            visible: !panel.single
             width: (tiles.width - 16) / 3
             icon: "airplanemode_active"
             title: "Airplane"
@@ -83,10 +90,11 @@ Rectangle {
     Rectangle {
         id: tabs
         anchors.top: tiles.bottom
-        anchors.topMargin: 14
+        anchors.topMargin: panel.single ? 0 : 14
         x: 16
         width: parent.width - 32
-        height: 40
+        visible: !panel.single
+        height: panel.single ? 0 : 40
         radius: 20
         color: Theme.bgAlt
 

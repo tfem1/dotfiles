@@ -21,7 +21,7 @@ Rectangle {
     implicitHeight: texts.implicitHeight + (wide ? slot.height + 14 : 0) + 30
     height: Math.max(implicitHeight, wide ? 0 : slot.height + 24)
     radius: Theme.radius + 8
-    color: Theme.bgAlt
+    color: Theme.tile
 
     Rectangle {
         id: highlight

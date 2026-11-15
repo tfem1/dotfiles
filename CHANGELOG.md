@@ -30,6 +30,15 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Each status icon of the bar opens its own panel: Wi-Fi alone, Bluetooth
+  alone, the sound panel, and a new battery panel (level, time left, health,
+  power profile: saver, balanced, performance). The keyboard and mode icons
+  and the notifications button open the system panel.
+- Glass everywhere: the Settings window, its rows and the panels follow
+  Settings → Glass (see-through, blurred, a light glass edge).
+- A lyrics module in the bar: the line being sung, shown only while one is
+  (default layout `workspaces,media,lyrics|clock|notifications,status`). The
+  lyrics are fetched once for the bar and the widgets (`SongLyrics`).
 - Google Sans Flex (OFL) is the default interface font, downloaded by
   `tfem fonts fetch` (pinned v5.000, SHA-256 checked) and copied for the
   login screen; Monocraft stays the terminals' font.

@@ -32,12 +32,6 @@ Scope {
         wantDisk: !!root.show.disk
     }
 
-    LyricsSource {
-        id: lyrics
-        player: Player.player
-        active: (!!root.show.media || !!root.show.lyrics) && Player.active && !root.paused
-    }
-
     Process {
         running: !!root.show.audio && !root.paused
         command: ["cava", "-p", Quickshell.shellDir + "/widgets/cava.conf"]
@@ -98,7 +92,7 @@ Scope {
                 id: content
 
                 readonly property var player: Player.player
-                readonly property var lines: lyrics.lyrics.kind === "synced" ? lyrics.lyrics.lines : []
+                readonly property var lines: SongLyrics.lines   // fetched once, shared with the bar
                 readonly property int at: player ? Lyrics.current(lines, player.position) : -1
 
                 anchors.fill: parent
