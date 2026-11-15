@@ -40,9 +40,9 @@ ShellRoot {
         // Each status icon opens its own panel.
         onPartClicked: part => {
             if (part === "network")
-                networkLayer.showAlone("wifi");
+                wifiLayer.showAlone("wifi");
             else if (part === "bluetooth")
-                networkLayer.showAlone("bluetooth");
+                bluetoothLayer.showAlone("bluetooth");
             else if (part === "sound")
                 volumeLayer.toggle();
             else if (part === "battery")
@@ -60,7 +60,9 @@ ShellRoot {
     Clipboard { id: clipboardLayer }
     Cheatsheet { id: cheatsheetLayer }
     Selector { id: wallpaperLayer }
-    NetworkPanel { id: networkLayer }
+    NetworkPanel { id: networkLayer }        // SUPER + N: Wi-Fi and Bluetooth tabs
+    NetworkPanel { id: wifiLayer }           // the bar's Wi-Fi icon: small, Wi-Fi only
+    NetworkPanel { id: bluetoothLayer }      // the bar's Bluetooth icon: small, Bluetooth only
     VolumePanel { id: volumeLayer }
     BatteryPanel { id: batteryLayer }
     Calendar { id: calendarLayer }

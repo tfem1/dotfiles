@@ -33,8 +33,9 @@ Rectangle {
     readonly property var current: wifi.networks.find(network => network.connected)
     readonly property int connectedDevices: bluetooth.devices.filter(device => device.connected).length
 
-    implicitWidth: 440
-    implicitHeight: 600
+    // On its own (from the bar): small, like the battery panel.
+    implicitWidth: single ? 360 : 440
+    implicitHeight: single ? 430 : 600
     radius: Theme.radius + 8
     color: Theme.panel
     border.width: 1

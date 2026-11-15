@@ -30,6 +30,9 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Small Wi-Fi and Bluetooth panels of their own, from the bar's icons
+  (360 px wide, like the battery panel); SUPER + N keeps the full network
+  panel with both tabs.
 - Glass by default: the shell's surfaces are 72 % solid (`effects.opacity`)
   with a more colorful blur, and the cards, tiles, tabs and fields inside
   the panels are see-through too, so the glass shows all over them.

@@ -306,6 +306,7 @@ Rectangle {
             width: implicitWidth
             height: implicitHeight
             tab: scene.mode === "bluetooth" ? "bluetooth" : "wifi"
+            single: true   // as opened from the bar: Wi-Fi or Bluetooth alone
             wifi: ({
                 active: true, scanning: false, wired: "", connectivity: "full",
                 networks: [
