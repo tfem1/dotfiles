@@ -6,6 +6,7 @@ import http.server
 import io
 import sys
 import threading
+import zipfile
 import unittest
 from functools import partial
 from pathlib import Path
@@ -28,17 +29,22 @@ class FetchTest(SandboxTest):
         served.mkdir()
         (served / "Monocraft.ttc").write_bytes(b"pixel font")
         (served / "LICENSE").write_text("SIL Open Font License 1.1\n")
+        (served / "OFL.txt").write_text("SIL Open Font License 1.1\n")
+        with zipfile.ZipFile(served / "flex.zip", "w") as bundle:
+            bundle.writestr("GoogleSansFlex[wght].ttf", b"flex font")
+        self.flex_sha = hashlib.sha256((served / "flex.zip").read_bytes()).hexdigest()
         server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), partial(Quiet, directory=str(served)))
         threading.Thread(target=server.serve_forever, daemon=True).start()
         self.addCleanup(server.shutdown)
         base = f"http://127.0.0.1:{server.server_address[1]}"
-        self.urls = {"BASE": base, "LICENSE_URL": f"{base}/LICENSE"}
+        self.urls = {"BASE": base, "LICENSE_URL": f"{base}/LICENSE", "FLEX_URL": f"{base}/flex.zip",
+                     "FLEX_LICENSE_URL": f"{base}/OFL.txt"}
         self.fonts = self.home / ".local/share/fonts"
 
     def fetch(self, sha256=hashlib.sha256(b"pixel font").hexdigest()):
         out = io.StringIO()
         env = {**self.env, "PATH": "/nonexistent"}   # no fc-cache: nothing else touched
-        with mock.patch.multiple(fonts, SHA256=sha256, **self.urls), \
+        with mock.patch.multiple(fonts, SHA256=sha256, FLEX_SHA256=self.flex_sha, **self.urls), \
                 contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
             return fonts.main(["fetch"], env=env), out.getvalue()
 
@@ -47,6 +53,8 @@ class FetchTest(SandboxTest):
         self.assertEqual(code, 0, output)
         self.assertEqual((self.fonts / "Monocraft/Monocraft.ttc").read_bytes(), b"pixel font")
         self.assertIn("Open Font License", (self.fonts / "Monocraft/LICENSE").read_text())
+        self.assertEqual((self.fonts / "GoogleSansFlex/GoogleSansFlex.ttf").read_bytes(), b"flex font")
+        self.assertIn("Open Font License", (self.fonts / "GoogleSansFlex/OFL.txt").read_text())
         code, output = self.fetch()
         self.assertEqual(code, 0)
         self.assertIn("already", output)

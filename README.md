@@ -307,14 +307,15 @@ need a Nerd Font symbol fallback (kitty has one).
 
 ### Font
 
-**[Monocraft](https://github.com/IdreesInc/Monocraft)**, a pixel font
-(SIL Open Font License 1.1), is the font of the whole desktop by default:
-the bar, the panels, the widgets and the lock screen, the terminal, GTK and
-Qt apps, Hyprland's own messages and the login screen. The installer
-downloads it (`tfem fonts fetch`, a pinned release checked against its
-SHA-256) into `~/.local/share/fonts/Monocraft`; `tfem sddm install` also
-copies it where the login screen can read it. Inter and JetBrains Mono stay
-installed: pick another font in `theme.toml`.
+**[Google Sans Flex](https://github.com/googlefonts/googlesans-flex)** is
+the interface font by default: the bar, the panels, the widgets, the lock
+screen, GTK and Qt apps and the login screen. The terminals use
+**[Monocraft](https://github.com/IdreesInc/Monocraft)**, a pixel font. Both
+are under the SIL Open Font License 1.1 and not stored in this repository:
+the installer downloads them (`tfem fonts fetch`, pinned releases checked
+against their SHA-256) into `~/.local/share/fonts`; `tfem sddm install` also
+copies them where the login screen can read them. Inter and JetBrains Mono
+stay installed: pick another font in Settings → Fonts or `theme.toml`.
 
 ```toml
 [font]

@@ -24,7 +24,7 @@ Usage: install.sh [options]
   --no-packages           skip package installation
   --no-wallpapers         skip the wallpaper download
   --no-icons              skip the FairyWren icons download
-  --no-fonts              skip the Monocraft font download
+  --no-fonts              skip the font downloads (Google Sans Flex, Monocraft)
   --no-tui                plain questions instead of the install screen
   --wm NAME               the window manager: hyprland (default), sway or niri
   --sddm NAME             the login screen to install: stacked-clock (default)
@@ -143,8 +143,8 @@ if ((WITH_ICONS)); then
   run "$ROOT/tfem" icons fetch || warn "the icons could not be downloaded; run 'tfem icons fetch' later"
 fi
 if ((WITH_FONTS)); then
-  info "downloading the Monocraft font"
-  run "$ROOT/tfem" fonts fetch || warn "Monocraft could not be downloaded; run 'tfem fonts fetch' later"
+  info "downloading the fonts (Google Sans Flex, Monocraft)"
+  run "$ROOT/tfem" fonts fetch || warn "the fonts could not be downloaded; run 'tfem fonts fetch' later"
 fi
 if ((WITH_ICONS)); then
   info "downloading the Fossa cursors"

@@ -30,6 +30,12 @@ All notable changes to this project are documented here. The format follows
 
 ### Added
 
+- Google Sans Flex (OFL) is the default interface font, downloaded by
+  `tfem fonts fetch` (pinned v5.000, SHA-256 checked) and copied for the
+  login screen; Monocraft stays the terminals' font.
+- The calendar widget in the style of the music ones: today's number in a
+  scalloped shape with the month and weekday, today in the grid in the same
+  shape, and a wave as far as the month has gone.
 - Music widgets remade: the player (the cover in a scalloped shape, a wave
   around it as far as the song has played, the title, a wavy progress line,
   previous / 10 s back / play-pause / 10 s on / next) and a separate lyrics

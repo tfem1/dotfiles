@@ -46,8 +46,8 @@ MAIN_CONF = Path(os.environ.get("TFEM_SDDM_MAIN_CONF", "/etc/sddm.conf"))
 # The packages' defaults, read first (sddm.conf(5)).
 SYSTEM_CONF_DIR = Path(os.environ.get("TFEM_SDDM_SYSTEM_CONF_DIR", "/usr/lib/sddm/sddm.conf.d"))
 SUDO = os.environ.get("TFEM_SUDO", "sudo")
-# The login screen runs as its own user, who cannot read your fonts: Monocraft
-# is copied here for it (every user may use it then).
+# The login screen runs as its own user, who cannot read your fonts: Google
+# Sans Flex and Monocraft are copied here for it (every user may use it then).
 SYSTEM_FONTS = Path(os.environ.get("TFEM_SYSTEM_FONTS", "/usr/local/share/fonts/monocraft"))
 # The login manager systemd starts; another one than SDDM is never replaced.
 DM_LINK = Path(os.environ.get("TFEM_DM_LINK", "/etc/systemd/system/display-manager.service"))
@@ -142,10 +142,13 @@ def install(name: str, paths: Paths, enable: bool, env: Mapping[str, str]) -> in
             f"chmod 755 {q(folder)} {q(folder.parent)}",
             f"mkdir -p {q(CONF.parent)}", f"printf '%s' {q(conf)} > {q(CONF)}",
         ]
-        font = paths.data_home / "fonts/Monocraft/Monocraft.ttc"   # `tfem fonts fetch`
-        if font.is_file():
-            steps += [f"mkdir -p {q(SYSTEM_FONTS)}", f"cp {q(font)} {q(SYSTEM_FONTS / font.name)}",
-                      f"chmod -R a+rX {q(SYSTEM_FONTS)}", "fc-cache -f >/dev/null 2>&1 || true"]
+        fonts = [paths.data_home / "fonts" / name for name in      # `tfem fonts fetch`
+                 ("Monocraft/Monocraft.ttc", "GoogleSansFlex/GoogleSansFlex.ttf")]
+        fonts = [font for font in fonts if font.is_file()]
+        if fonts:
+            steps += [f"mkdir -p {q(SYSTEM_FONTS)}"]
+            steps += [f"cp {q(font)} {q(SYSTEM_FONTS / font.name)}" for font in fonts]
+            steps += [f"chmod -R a+rX {q(SYSTEM_FONTS)}", "fc-cache -f >/dev/null 2>&1 || true"]
         # A theme selected after ours would win: its line is commented out.
         for path, _ in overriding(name):
             steps.append(f"sed -i.tfem-backup '/^\\[Theme\\]/,/^\\[/ s/^[[:space:]]*Current[[:space:]]*=/#&/' {q(path)}")

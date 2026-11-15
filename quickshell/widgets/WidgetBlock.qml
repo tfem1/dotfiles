@@ -34,7 +34,7 @@ Item {
     })[name] || false
 
     objectName: name
-    implicitWidth: name === "clock" && loader.item ? loader.item.implicitWidth : name === "media" || name === "lyrics" ? 300 : 360
+    implicitWidth: name === "clock" && loader.item ? loader.item.implicitWidth : name === "media" || name === "lyrics" || name === "calendar" ? 300 : 360
     implicitHeight: loader.item ? loader.item.height : 0
     width: implicitWidth
     height: implicitHeight
@@ -107,7 +107,7 @@ Item {
     Component {
         id: calendar
         CalendarCard {
-            width: 360
+            width: 300
             now: block.feed.now || new Date()
         }
     }

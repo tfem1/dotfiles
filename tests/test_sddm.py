@@ -42,7 +42,7 @@ class BuildTest(SandboxTest):
                 values = conf(dest / "theme.conf")
                 self.assertEqual(values["accent"], "#5fd0c0")   # Moonlit
                 self.assertEqual(values["background"], "")       # no wallpaper set
-                self.assertEqual(values["font"], "Monocraft")
+                self.assertEqual(values["font"], "Google Sans Flex")
 
     def test_the_wallpaper_is_copied_next_to_the_theme(self):
         image = self.home / "Pictures/Wallpapers/cats/tabby.png"

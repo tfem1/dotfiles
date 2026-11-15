@@ -36,7 +36,7 @@ tui_items() {
   items+=("Packages|WITH_PACKAGES|apps, the window manager, Quickshell, fonts (asks for sudo)"
     "Wallpapers|WITH_WALLPAPERS|pixel-art forests and cats from wallhaven.cc"
     "Icons|WITH_ICONS|FairyWren, folders in the theme's color"
-    "Monocraft|WITH_FONTS|the pixel font used everywhere")
+    "Fonts|WITH_FONTS|Google Sans Flex (interface) and Monocraft (terminals)")
   ((DESKTOP)) && items+=("Login screen|SDDM_THEME|SDDM theme, in the theme's colors (asks for sudo)")
   printf '%s\n' "${items[@]}"
 }
